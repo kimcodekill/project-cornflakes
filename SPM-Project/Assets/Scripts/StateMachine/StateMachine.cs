@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 
 public class StateMachine {
 
@@ -13,12 +10,12 @@ public class StateMachine {
 	public StateMachine(object controller, State[] states) {
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
-			instance.owner = controller;
-			instance.stateMachine = this;
+			instance.Owner = controller;
+			instance.StateMachine = this;
 			this.states.Add(instance.GetType(), instance);
-			if (stateStack.Peek() != null) stateStack.Push(instance.GetType());
+			if (stateStack.Count == 0) stateStack.Push(instance.GetType());
 		}
-		if (stateStack.Peek() != null) this.states[stateStack.Peek()].Enter();
+		if (stateStack.Count > 0) this.states[stateStack.Peek()].Enter();
 	}
 
 	public void Run() {
@@ -31,10 +28,10 @@ public class StateMachine {
 	}
 
 	public void Pop() {
-		if (stateStack.Peek() != null) states[stateStack.Pop()].Exit();
+		if (stateStack.Count > 0) states[stateStack.Pop()].Exit();
 	}
 
-	public void TransitionToState<T>() where T : State {
+	public void TransitionTo<T>() where T : State {
 		Pop();
 		Push<T>();
 	}
