@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -10,6 +8,14 @@ public class PlayerController : MonoBehaviour {
 
 	private void Start() {
 		stm = new StateMachine(this, states);
+	}
+
+	private void Update() {
+		stm.Run();
+	}
+
+	public Vector3 GetInput() {
+		return new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 	}
 
 }

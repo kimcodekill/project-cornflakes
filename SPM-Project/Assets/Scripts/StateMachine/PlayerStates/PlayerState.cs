@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class PlayerState : State {
 	
-	//private PlayerController player;
+	private PlayerController player;
 	
-	//public PlayerController Player => player = player != null ? player : (PlayerController) owner;
+	public PlayerController Player => player = player != null ? player : (PlayerController) Owner;
 
 }

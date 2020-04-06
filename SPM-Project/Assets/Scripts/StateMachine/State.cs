@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class State : ScriptableObject {
     
-    public object owner;
+    public object Owner;
 
-    public StateMachine stateMachine;
+    public StateMachine StateMachine;
 
     public virtual void Run() { }
 
