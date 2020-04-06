@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] private State[] states;
 
 	private void Start() {
-		stm = new StateMachine(this, states);
+		stm = new StateMachine(this, states) { ShowDebugInfo = true };
 	}
 
 	private void Update() {

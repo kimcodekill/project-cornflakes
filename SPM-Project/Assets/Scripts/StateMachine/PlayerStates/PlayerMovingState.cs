@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMovingState : PlayerGroundedState {
 
 	public override void Enter() {
-		Debug.Log("Entered PMT");
+		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PMT");
 	}
 
 	public override void Run() {
