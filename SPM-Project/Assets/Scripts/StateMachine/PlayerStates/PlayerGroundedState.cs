@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerGroundedState : PlayerState {
 
-	//TODO
+	public override void Run() {
+		if (Input.GetKeyDown(KeyCode.Space)) StateMachine.Push<PlayerJumpingState>();
+	}
 
 }

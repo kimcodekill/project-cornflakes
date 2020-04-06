@@ -29,6 +29,7 @@ public class StateMachine {
 
 	public void Pop() {
 		if (stateStack.Count > 0) states[stateStack.Pop()].Exit();
+		if (stateStack.Count > 0) states[stateStack.Peek()].Enter();
 	}
 
 	public void TransitionTo<T>() where T : State {
