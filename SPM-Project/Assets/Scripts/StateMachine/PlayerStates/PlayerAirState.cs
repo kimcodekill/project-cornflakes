@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAirState : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class PlayerAirState : PlayerState {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	//TODO
+	
 }
