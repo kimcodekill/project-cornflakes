@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Enter() {
-		Debug.Log("Entered PST");
+		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PST");
 	}
 
 	public override void Run() {

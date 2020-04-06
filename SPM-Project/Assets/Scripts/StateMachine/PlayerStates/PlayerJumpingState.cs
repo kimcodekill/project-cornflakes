@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerJumpingState : PlayerAirState {
 
 	public override void Enter() {
-		Debug.Log("Entered PJT");
+		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PJT");
 		Player.transform.position += Vector3.up * 2;
 	}
 
