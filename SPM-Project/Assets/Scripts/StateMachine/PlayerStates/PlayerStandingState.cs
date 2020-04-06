@@ -11,6 +11,8 @@ public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Run() {
 		if (Player.GetInput().magnitude > 0) StateMachine.TransitionTo<PlayerMovingState>();
+		
+		base.Run();
 	}
 
 }
