@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class PlayerController : MonoBehaviour {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private StateMachine stm;
+
+	[SerializeField] private State[] states;
+
+	private void Start() {
+		stm = new StateMachine(this, states);
+	}
+
 }
