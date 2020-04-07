@@ -11,8 +11,8 @@ public class DebugManagerDemo : MonoBehaviour {
 	private float someIntIWantToTrack;
 
 	void Start() {
-		DebugManager.AddSection(debugSectionName1, new string[] { someFloatIWantToTrack.ToString() });
-		DebugManager.AddSection(debugSectionName2, new string[] { "placeholder", null, someIntIWantToTrack.ToString() });
+		DebugManager.AddSection(debugSectionName1, someFloatIWantToTrack.ToString());
+		DebugManager.AddSection(debugSectionName2, "placeholder", null, someIntIWantToTrack.ToString());
 	}
 
 	void Update() {
