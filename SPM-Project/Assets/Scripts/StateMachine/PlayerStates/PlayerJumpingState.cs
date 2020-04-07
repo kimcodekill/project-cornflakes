@@ -9,7 +9,7 @@ public class PlayerJumpingState : PlayerAirState {
 
 	public override void Enter() {
 		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PJT");
-		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+		if (Input.GetKeyDown(KeyCode.Space) && Player.PhysicsBody.IsGrounded()) Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		
 		base.Enter();
 	}
