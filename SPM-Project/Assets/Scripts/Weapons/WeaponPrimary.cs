@@ -14,6 +14,7 @@ public class WeaponPrimary : WeaponBase
         }
 
         Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
+
         currentBulletsMagazine--;
     }
 }

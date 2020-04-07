@@ -17,21 +17,13 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] [Tooltip("Max Bullet Count")] protected float maxBullets;
     [SerializeField] [Tooltip("Degrees of Variability")] protected float spread;
     [SerializeField] [Tooltip("Time to Reload")] protected float reloadTime;
-
     [SerializeField] [Tooltip("Bullet Max Distance")] protected float range;
-
     [SerializeField] [Tooltip("Bullet Travel Distance")] protected WeaponType weaponType;
-
-    public bool IsReloading()
-    {
-        return false;
-    }
-
     [SerializeField] [Tooltip("Layers bullets can hit")] protected LayerMask bulletMask;
 
     protected float shotDelay;
     protected float currentBulletsMagazine;
-    protected float currentBulletsPack;
+    protected float currentBulletsPack; 
 
     private Ray lastShot;
 
