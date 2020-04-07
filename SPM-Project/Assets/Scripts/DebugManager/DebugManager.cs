@@ -43,11 +43,11 @@ public class DebugManager : MonoBehaviour {
 	/// To reserve a row, simply add it to the string parameter list as null.
 	/// </summary>
 	/// <param name="header">The name of the section.</param>
-	/// <param name="rows">The rows to be reserved for usage by the section</param>
+	/// <param name="contents">The rows to be reserved for usage by the section</param>
 	/// <exception cref="System.ArgumentException">Thrown if no rows have been provided.</exception>
-	public static void AddSection(string header, params string[] rows) {
-		if (rows == null || rows.Length == 0) throw new ArgumentException("You need to specify a value for every row you wish to reserve, even if each row only contains null for the time being.");
-		sectionDictionary.Add(header, new Section(header, rows));
+	public static void AddSection(string header, params string[] contents) {
+		if (contents == null || contents.Length == 0) throw new ArgumentException("You need to specify a value for every row you wish to reserve, even if some row(s) only contain null for the time being.");
+		sectionDictionary.Add(header, new Section(header, contents));
 	}
 
 	/// <summary>
@@ -58,6 +58,15 @@ public class DebugManager : MonoBehaviour {
 	/// <param name="content">The content to be placed on the specified row.</param>
 	public static void UpdateRow(string header, int row, string content) {
 		sectionDictionary[header].Rows[row] = content;
+	}
+
+	/// <summary>
+	/// Updates the first row with the specified content in the specified section.
+	/// </summary>
+	/// <param name="header">The name of the section whose row to update.</param>
+	/// <param name="content">The content to be placed on the first row.</param>
+	public static void UpdateRow(string header, string content) {
+		UpdateRow(header, 0, content);
 	}
 
 	/// <summary>
@@ -79,7 +88,7 @@ public class DebugManager : MonoBehaviour {
 	/// <param name="contents">The contents to be placed.</param>
 	/// <exception cref="System.ArgumentException">Thrown if not enough values have been provided.</exception>
 	public static void UpdateAll(string header, params string[] contents) {
-		if (contents.Length != sectionDictionary[header].Rows.Length) throw new ArgumentException("You need to provide a value for every row, even if it that value is null for the time being.");
+		if (contents.Length != sectionDictionary[header].Rows.Length) throw new ArgumentException("You need to provide a value for every row, even if some value(s) only contain null for the time being.");
 	}
 
 	private void Start() {
@@ -88,7 +97,7 @@ public class DebugManager : MonoBehaviour {
 
 	private void Update() {
 		contents.text = "";
-		foreach (KeyValuePair<string, Section> section in sectionDictionary) contents.text += section.Value.ToString();
+		foreach (KeyValuePair<string, Section> section in sectionDictionary) contents.text += section.Value.ToString() + "\n";
 	}
 
 }
