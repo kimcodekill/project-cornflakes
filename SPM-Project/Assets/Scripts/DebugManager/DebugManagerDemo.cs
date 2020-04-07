@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugManagerDemo : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class DebugManagerDemo : MonoBehaviour {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private readonly string debugSectionName1 = "MyDebugSectionAboutFloats";
+	private readonly string debugSectionName2 = "MyDebugSectionAboutInts";
+
+	private float someFloatIWantToTrack;
+	private float someIntIWantToTrack;
+
+	void Start() {
+		DebugManager.AddSection(debugSectionName1, new string[] { someFloatIWantToTrack.ToString() });
+		DebugManager.AddSection(debugSectionName2, new string[] { "placeholder", null, someIntIWantToTrack.ToString() });
+	}
+
+	void Update() {
+		someFloatIWantToTrack += Time.deltaTime;
+		DebugManager.UpdateRow(debugSectionName1, 0, someFloatIWantToTrack.ToString());
+
+		someIntIWantToTrack += 1;
+		DebugManager.UpdateRow(debugSectionName2, 2, someIntIWantToTrack.ToString());
+	}
 }
