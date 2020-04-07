@@ -12,7 +12,7 @@ public class PlayerMovingState : PlayerGroundedState {
 	public override void Run() {
 		Vector3 input = Player.GetInput();
 		if (input.magnitude == 0) StateMachine.TransitionTo<PlayerStandingState>();
-		else Player.transform.position += input * Time.deltaTime;
+		else Player.PhysicsBody.AddForce(input);
 		
 		base.Run();
 	}
