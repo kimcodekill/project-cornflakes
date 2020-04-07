@@ -50,7 +50,11 @@ public class StateMachine {
 	/// </summary>
 	/// <exception cref="System.InvalidOperationException">Thrown if a <c>Pop()</c> is attempted even if <c>Push&lt;T&gt;()</c> hasn't been used to add a state to the state stack.</exception>
 	public void Pop() {
-		if (stateStack.Count <= 1) throw new InvalidOperationException("No state to return to, use TransitionTo<T>() instead.");
+		DoPop(false);
+	}
+
+	private void DoPop(bool isInternal) {
+		if (stateStack.Count <= 1 && !isInternal) throw new InvalidOperationException("No state to return to, use TransitionTo<T>() instead.");
 		else {
 			if (stateStack.Count > 0) states[stateStack.Pop()].Exit();
 			if (stateStack.Count > 0) states[stateStack.Peek()].Enter();
@@ -62,7 +66,7 @@ public class StateMachine {
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
 	public void TransitionTo<T>() where T : State {
-		Pop();
+		DoPop(true);
 		Push<T>();
 	}
 
