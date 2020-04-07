@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: DefaultPlayerMovingState
   m_EditorClassIdentifier: 
   Acceleration: 10
+  TopSpeed: 3

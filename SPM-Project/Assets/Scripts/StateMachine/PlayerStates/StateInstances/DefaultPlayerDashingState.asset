@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3870b6ff5e577f469871d4ecb12ee4b, type: 3}
   m_Name: DefaultPlayerDashingState
   m_EditorClassIdentifier: 
-  DashPower: 10
+  DashPower: 7
   Cooldown: 3

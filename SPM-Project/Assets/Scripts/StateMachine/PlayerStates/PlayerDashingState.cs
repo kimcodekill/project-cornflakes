@@ -5,11 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
 public class PlayerDashingState : PlayerState {
 
-	public float DashPower = 10f;
+	public float DashPower = 7f;
 
 	public float Cooldown = 3f;
 
-	private float startTime;
+	private float startTime = -1;
 
 	public override void Enter() {
 		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PDT");
@@ -22,12 +22,17 @@ public class PlayerDashingState : PlayerState {
 
 	private void Dash() {
 		Player.PhysicsBody.ResetVelocity();
-		Player.PhysicsBody.AddForce(Player.GetInput().normalized * DashPower, ForceMode.Impulse);
+		Vector3 input = Player.GetInput();
+		if (input.magnitude == 0 && !Player.PhysicsBody.IsGrounded()) Player.PhysicsBody.AddForce(Vector3.up * DashPower, ForceMode.Impulse);
+		else Player.PhysicsBody.AddForce(Vector3.up + input.normalized * DashPower, ForceMode.Impulse);
 	}
 
 	private bool OffCooldown(float currentTime) {
-		startTime = startTime == 0 ? currentTime : 0;
-		return startTime == currentTime || currentTime - startTime > Cooldown;
+		if (startTime == -1 || currentTime - startTime > Cooldown) {
+			startTime = currentTime;
+			return true;
+		}
+		else return false;
 	}
 
 }
