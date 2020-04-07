@@ -5,16 +5,14 @@ using UnityEngine;
 public class DebugTool : MonoBehaviour
 {
     public bool enabled;
+    
+    private void Awake() { if (enabled) { OnAwake(); } }
 
-    private void Update()
-    {
-        if(enabled) { OnUpdate(); }
-    }
+    private void Update() { if (enabled) { OnUpdate(); } }
 
-    private void FixedUpdate()
-    {
-        if(enabled) { OnFixedUpdate(); }
-    }
+    private void FixedUpdate() { if (enabled) { OnFixedUpdate(); } }
+
+    protected virtual void OnAwake() { }
 
     protected virtual void OnUpdate() { }
 
