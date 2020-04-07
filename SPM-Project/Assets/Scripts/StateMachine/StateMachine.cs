@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class StateMachine {
 
-	/// <summary>
-	/// Toggles whether or not state debug info should be shown.
-	/// </summary>
-	public bool ShowDebugInfo = false;
-
 	private Stack<Type> stateStack = new Stack<Type>();
 
 	private Dictionary<Type, State> states = new Dictionary<Type, State>();
+
+	/// <summary>
+	/// Toggles whether or not state debug info should be shown.
+	/// </summary>
+	public bool ShowDebugInfo { get; set; } = false;
 
 	/// <summary>
 	/// Creates a new pushdown automata state machine and begins running the state on index 0 in the passed array.

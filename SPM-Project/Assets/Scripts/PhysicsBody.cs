@@ -5,18 +5,20 @@ using UnityEngine;
 public class PhysicsBody : MonoBehaviour {
 
 	private Collider collider;
+
 	private Rigidbody rigidBody;
+	
 	[SerializeField] private LayerMask mask;
 
 	/// <summary>
 	/// The position of the left foot of the PhysicsBody relative to the gameObject transform.
 	/// </summary>
-	public Vector3 LeftFoot { get; set; } = new Vector3(0, 0, 0);
+	public Vector3 LeftFoot { get; set; } = new Vector3(-0.5f, 0, 0);
 	
 	/// <summary>
 	/// The position of the left foot of the PhysicsBody relative to the gameObject transform.
 	/// </summary>
-	public Vector3 RightFoot { get; set; } = new Vector3(0, 0, 0);
+	public Vector3 RightFoot { get; set; } = new Vector3(0.5f, 0, 0);
 	
 	/// <summary>
 	/// The distance to which to determine if the PhysicsObject is grounded or not.
@@ -27,7 +29,13 @@ public class PhysicsBody : MonoBehaviour {
 	private void Start() {
 		collider = GetComponent<Collider>();
 		GroundedDistance = collider.bounds.extents.y;
+
 		rigidBody = gameObject.AddComponent<Rigidbody>();
+		rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+	}
+
+	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
+		rigidBody.AddForce(impulse, mode);
 	}
 
 	/// <summary>
