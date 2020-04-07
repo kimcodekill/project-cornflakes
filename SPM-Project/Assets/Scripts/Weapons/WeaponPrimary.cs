@@ -6,16 +6,25 @@ public class WeaponPrimary : WeaponBase
 {
     public override void Trigger()
     {
-        //Do ammo checks first
-        Shoot();        
+        if (shotDelay >= fireRate * Time.deltaTime)
+        {
+            Shoot();
+            shotDelay = 0;
+        }
     }
 
     private void Shoot()
     {
-        if (Physics.Raycast(Camera.main.transform.position, AddSpread(Camera.main.transform.forward), out RaycastHit hit, range, bulletMask))
+        Vector3 spreadForward = AddSpread(Camera.main.transform.forward);
+
+        if (Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
         {
+            Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
+
             if (bulletDebug) { DrawBulletDebug(hit); }
         }
+
+        currentBulletsMagazine--;
     }
 
     private Vector3 AddSpread(Vector3 v)
