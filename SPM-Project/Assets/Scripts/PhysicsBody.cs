@@ -49,6 +49,14 @@ public class PhysicsBody : MonoBehaviour {
 		return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
+	/// <summary>
+	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.0</c>.
+	/// </summary>
+	public void ResetVelocity() {
+		rigidBody.velocity = Vector3.zero;
+		rigidBody.angularVelocity = Vector3.zero;
+	}
+
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}

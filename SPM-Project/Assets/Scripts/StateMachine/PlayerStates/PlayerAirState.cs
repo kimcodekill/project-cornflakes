@@ -17,6 +17,8 @@ public class PlayerAirState : PlayerState {
 
 	public override void Run() {
 		if (physicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold ) StateMachine.Pop();
+		
+		base.Run();
 	}
 
 }

@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void Start() {
 		PhysicsBody = GetComponent<PhysicsBody>();
-		stateMachine = new StateMachine(this, states) { ShowDebugInfo = true };
+		stateMachine = new StateMachine(this, states) { ShowDebugInfo = false };
 	}
 
 	private void Update() {
