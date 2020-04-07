@@ -34,6 +34,11 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 	}
 
+	/// <summary>
+	/// Adds a certain amount of force to the PhysicsBody.
+	/// </summary>
+	/// <param name="impulse">The desired impulse.</param>
+	/// <param name="mode">The force mode to use.</param>
 	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
 		rigidBody.AddForce(impulse, mode);
 	}
