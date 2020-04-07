@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PhysicsBody : MonoBehaviour {
 
@@ -44,7 +42,7 @@ public class PhysicsBody : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Determines whether or not the PhysicsBody is grounded.
+	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
 	/// </summary>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
 	public bool IsGrounded() {
