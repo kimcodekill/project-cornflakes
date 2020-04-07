@@ -57,6 +57,11 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.angularVelocity = Vector3.zero;
 	}
 
+	public void CapVelocity(float topSpeed) {
+		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
+		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
+	}
+
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}
