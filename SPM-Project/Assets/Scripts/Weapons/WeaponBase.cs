@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,8 +16,17 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] [Tooltip("Single Magazine Bullet Amount")] protected float magazineSize;
     [SerializeField] [Tooltip("Max Bullet Count")] protected float maxBullets;
     [SerializeField] [Tooltip("Degrees of Variability")] protected float spread;
+    [SerializeField] [Tooltip("Time to Reload")] protected float reloadTime;
 
-    [SerializeField] [Tooltip("Bullet Travel Distance")] protected float range;
+    [SerializeField] [Tooltip("Bullet Max Distance")] protected float range;
+
+    [SerializeField] [Tooltip("Bullet Travel Distance")] protected WeaponType weaponType;
+
+    public bool IsReloading()
+    {
+        return false;
+    }
+
     [SerializeField] [Tooltip("Layers bullets can hit")] protected LayerMask bulletMask;
 
     protected float shotDelay;
@@ -27,7 +35,17 @@ public abstract class WeaponBase : MonoBehaviour
 
     private Ray lastShot;
 
-    public virtual void Trigger() { }
+    public virtual void Trigger() 
+    {
+        if (shotDelay >= GetTimeBetweenShots())
+        {
+            Debug.Log(string.Format("SPS: {0} | TBS: {1} sec ", GetTimeBetweenShots(), shotDelay));
+            Shoot();
+            shotDelay = 0;
+        }
+    }
+
+    protected virtual void Shoot() { }
 
     private void Awake()
     {
@@ -35,10 +53,10 @@ public abstract class WeaponBase : MonoBehaviour
         currentBulletsPack = maxBullets;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (shotDelay < fireRate * Time.deltaTime)
-            shotDelay += Time.deltaTime * 60;
+        if (shotDelay < GetTimeBetweenShots())
+            shotDelay += Time.fixedDeltaTime;
     }
 
     public void DrawBulletDebug(RaycastHit hit) 
@@ -74,9 +92,18 @@ public abstract class WeaponBase : MonoBehaviour
         }
     }
 
-
     public bool HasAmmo()
     {
         return currentBulletsMagazine > 0;
+    }
+
+    protected Vector3 AddSpread(Vector3 v)
+    {
+        return new Vector3(Random.Range(-spread, spread) + v.x, Random.Range(-spread, spread) + v.y, Random.Range(-spread, spread) + v.z).normalized;
+    }
+
+    private float GetTimeBetweenShots()
+    {
+        return 60.0f / fireRate;
     }
 }

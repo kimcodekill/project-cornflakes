@@ -7,23 +7,40 @@ public class AbilityTrigger : DebugTool
     public WeaponBase[] weapons;
     private WeaponBase currentWeapon;
 
+    protected override void OnAwake()
+    {
+        if (weapons.Length > 0 && currentWeapon == null)
+        {
+            currentWeapon = weapons[0];
+        }
+        else
+        {
+            Debug.LogError("NO WEAPON");
+        }
+    }
+
     protected override void OnUpdate()
     {
         for (int i = 0; i < weapons.Length; i++)
         {
-            if (Input.GetKeyDown((i + 1).ToString()) || Input.GetKey((i + 1).ToString())) currentWeapon = weapons[i];
-        }
-
-        if (weapons[i].GetComponent<WeaponBase>().HasAmmo())
-        {
-            if (Input.GetKeyDown((i + 1).ToString()) || Input.GetKey((i + 1).ToString()))
+            if (Input.GetKeyDown((i + 1).ToString())) 
             {
-                weapons[i].GetComponent<WeaponBase>().Trigger();
+                currentWeapon = weapons[i];
+
+                Debug.Log(currentWeapon.gameObject.name);
             }
         }
-        else
+        
+        if (currentWeapon.HasAmmo() && !currentWeapon.IsReloading()) //currentWeapon.IsReloading() should be replaced with PlayerState "PlayerReloading"
         {
-            weapons[i].GetComponent<WeaponBase>().DoReload();
-        }    
+            if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse0))
+            {
+                currentWeapon.GetComponent<WeaponBase>().Trigger();
+            }
+        }
+        //else
+        //{
+        //    currentWeapon.GetComponent<WeaponBase>().DoReload();
+        //}    
     }
 }
