@@ -31,16 +31,16 @@ public class AbilityTrigger : DebugTool
             }
         }
         
-        if (currentWeapon.HasAmmo() && !currentWeapon.IsReloading()) //currentWeapon.IsReloading() should be replaced with PlayerState "PlayerReloading"
+        if (currentWeapon.HasAmmo())
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse0))
             {
                 currentWeapon.GetComponent<WeaponBase>().Trigger();
             }
         }
-        //else
-        //{
-        //    currentWeapon.GetComponent<WeaponBase>().DoReload();
-        //}    
+        else
+        {
+            currentWeapon.GetComponent<WeaponBase>().DoReload();
+        }
     }
 }
