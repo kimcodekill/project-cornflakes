@@ -22,7 +22,7 @@ public class StateMachine {
 	/// <param name="states">The different kinds of states the state machine can utilize.</param>
 	public StateMachine(object controller, State[] states) {
 		
-		DebugManager.AddSection("STM", "", "");
+		DebugManager.AddSection("STM" + controller.GetHashCode(), "", "");
 
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
@@ -66,7 +66,6 @@ public class StateMachine {
 	}
 
 	public bool IsPreviousState<T>() {
-		DebugManager.UpdateRow("STM", 1, previousState.ToString());
 		return previousState.GetType() == typeof(T);
 	}
 
