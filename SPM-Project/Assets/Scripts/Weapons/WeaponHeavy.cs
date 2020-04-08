@@ -16,6 +16,7 @@ public class WeaponHeavy : WeaponBase
         {
             rockets[iterator].Send(hit.transform, spreadForward);
             if (bulletDebug) { DrawBulletDebug(hit); }
+
         }
         else
         {
@@ -25,7 +26,6 @@ public class WeaponHeavy : WeaponBase
         //Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
         currentBulletsMagazine--;
 
-        if (iterator == rockets.Length) { iterator = 0; }
-        else { iterator++; }
+        if (++iterator == rockets.Length) { iterator = 0; }
     }
 }
