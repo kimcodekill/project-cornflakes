@@ -36,7 +36,7 @@ public class PhysicsBody : MonoBehaviour {
 
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-
+    
 		DebugManager.AddSection("Physics", "", "", "", "");
 	}
 
