@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StateMachine {
 
 	private Stack<Type> stateStack = new Stack<Type>();
 
 	private Dictionary<Type, State> states = new Dictionary<Type, State>();
+
+	private State previousState;
 
 	/// <summary>
 	/// Toggles whether or not state debug info should be shown.
@@ -19,7 +22,7 @@ public class StateMachine {
 	/// <param name="states">The different kinds of states the state machine can utilize.</param>
 	public StateMachine(object controller, State[] states) {
 		
-		DebugManager.AddSection("STM", "");
+		DebugManager.AddSection("STM", "", "");
 
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
@@ -44,7 +47,10 @@ public class StateMachine {
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
 	public void Push<T>() where T : State {
-		if (stateStack.Count > 0) states[stateStack.Peek()].Exit();
+		if (stateStack.Count > 0) {
+			previousState = states[stateStack.Peek()];
+			states[stateStack.Peek()].Exit();
+		}
 		stateStack.Push(typeof(T));
 		states[stateStack.Peek()].Enter();
 	}
@@ -57,6 +63,11 @@ public class StateMachine {
 	/// <exception cref="System.InvalidOperationException">Thrown if a <c>Pop()</c> is attempted even if <c>Push&lt;T&gt;()</c> hasn't been used to add a state to the state stack.</exception>
 	public void Pop(bool skipEnter = false) {
 		DoPop(false, skipEnter);
+	}
+
+	public bool IsPreviousState<T>() {
+		DebugManager.UpdateRow("STM", 1, previousState.ToString());
+		return previousState.GetType() == typeof(T);
 	}
 
 	private void DoPop(bool isInternal, bool skipEnter = false) {
