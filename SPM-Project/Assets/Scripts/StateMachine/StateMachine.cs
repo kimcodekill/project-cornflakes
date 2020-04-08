@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StateMachine {
 
 	private Stack<Type> stateStack = new Stack<Type>();
 
 	private Dictionary<Type, State> states = new Dictionary<Type, State>();
+
+	private State previousState;
 
 	/// <summary>
 	/// Toggles whether or not state debug info should be shown.
@@ -18,6 +21,9 @@ public class StateMachine {
 	/// <param name="controller">The host of the state machine.</param>
 	/// <param name="states">The different kinds of states the state machine can utilize.</param>
 	public StateMachine(object controller, State[] states) {
+		
+		DebugManager.AddSection("STM", "", "");
+
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
 			instance.Owner = controller;
@@ -26,6 +32,7 @@ public class StateMachine {
 			if (stateStack.Count == 0) stateStack.Push(instance.GetType());
 		}
 		if (stateStack.Count > 0) this.states[stateStack.Peek()].Enter();
+
 	}
 
 	/// <summary>
@@ -40,6 +47,10 @@ public class StateMachine {
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
 	public void Push<T>() where T : State {
+		if (stateStack.Count > 0) {
+			previousState = states[stateStack.Peek()];
+			states[stateStack.Peek()].Exit();
+		}
 		stateStack.Push(typeof(T));
 		states[stateStack.Peek()].Enter();
 	}
@@ -48,16 +59,22 @@ public class StateMachine {
 	/// Removes the topmost element of the state stack, calling <c>Exit()</c> on the removed state in the process.
 	/// If any elements remain in the stack, that state is entered, <c>Enter()</c> is called on the topmost state.
 	/// </summary>
+	/// <param name="skipEnter">Whether or not the <c>Enter()</c> function of the switched to state should be called.</param>
 	/// <exception cref="System.InvalidOperationException">Thrown if a <c>Pop()</c> is attempted even if <c>Push&lt;T&gt;()</c> hasn't been used to add a state to the state stack.</exception>
-	public void Pop() {
-		DoPop(false);
+	public void Pop(bool skipEnter = false) {
+		DoPop(false, skipEnter);
 	}
 
-	private void DoPop(bool isInternal) {
+	public bool IsPreviousState<T>() {
+		DebugManager.UpdateRow("STM", 1, previousState.ToString());
+		return previousState.GetType() == typeof(T);
+	}
+
+	private void DoPop(bool isInternal, bool skipEnter = false) {
 		if (stateStack.Count <= 1 && !isInternal) throw new InvalidOperationException("No state to return to, use TransitionTo<T>() instead.");
 		else {
 			if (stateStack.Count > 0) states[stateStack.Pop()].Exit();
-			if (stateStack.Count > 0) states[stateStack.Peek()].Enter();
+			if (stateStack.Count > 0 && !skipEnter) states[stateStack.Peek()].Enter();
 		}
 	}
 
