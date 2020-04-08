@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour {
-	Vector3 cameraOffset;
 	float rotationX, rotationY;
 	float camRadius = 0.25f; 
 	[SerializeField] float lookSensitivity = 1f;
 	[SerializeField] float minCameraDistance = 2f;
-	[SerializeField] bool cameraIsFirstPerson;
 	[SerializeField] LayerMask collisionLayer;
 	[SerializeField] Transform player;
+	[SerializeField] Vector3 cameraOffset;
 
 	public Quaternion GetRotation() { return transform.rotation; }
 
@@ -20,8 +19,6 @@ public class PlayerCamera : MonoBehaviour {
 	}
 
 	void Update() {
-
-		cameraOffset = cameraIsFirstPerson ? Vector3.zero : new Vector3(0, 1, -7);
 		RotateCamera();
 		transform.position = player.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 	}

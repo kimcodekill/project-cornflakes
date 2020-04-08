@@ -79,9 +79,18 @@ public class SimpleEnemy : MonoBehaviour {
 	/// <returns></returns>
 	public bool CanSeeTarget(Vector3 vectorToTarget) {
 		Vector3 enemyEyes = transform.position + collider.center + Vector3.up * (collider.height / 2 - collider.radius);
-		Physics.SphereCast(enemyEyes, collider.radius / 4, vectorToTarget, out RaycastHit hit, vectorToTarget.magnitude, layerMask);
-		if (hit.collider != null && hit.collider.gameObject.CompareTag("Player")) {
-			//Debug.Log(hit.collider.gameObject);
+		Physics.Raycast(enemyEyes, vectorToTarget, out RaycastHit hit, vectorToTarget.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), out RaycastHit hit2, vectorToTarget.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), out RaycastHit hit3, vectorToTarget.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), out RaycastHit hit4, vectorToTarget.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, vectorToTarget.magnitude, layerMask);
+		Debug.DrawRay(enemyEyes, vectorToTarget, Color.blue);
+		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), Color.blue);
+		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), Color.blue);
+		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), Color.blue);
+		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(-0.25f,0, 0), Color.blue);
+		Debug.DrawRay(transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius), vectorToTarget);
+		if (hit.collider == null || hit2.collider == null || hit3.collider == null || hit4.collider == null || hit5.collider == null) {
 			return true;
 		}
 		else return false;
@@ -94,9 +103,7 @@ public class SimpleEnemy : MonoBehaviour {
 	private void AttackTarget(Vector3 vectorToTarget) {
 		Bullet instance;
 		Vector3 gunPosition = transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius);
-		if (Physics.Raycast(gunPosition, vectorToTarget, vectorToTarget.magnitude, layerMask)) {
-			//Player.TakeDamage();
-			//Debug.Log("shot " + target);
+		if (!Physics.SphereCast(gunPosition, collider.radius / 4, vectorToTarget, out _, vectorToTarget.magnitude, layerMask)) {
 			instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, Quaternion.identity);
 			instance.Initialize(vectorToTarget, vectorToTarget.magnitude);
 		}
