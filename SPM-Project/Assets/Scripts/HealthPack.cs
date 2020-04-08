@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthPack : MonoBehaviour
 {
     private BoxCollider bc;
+    [SerializeField] float healAmount;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,7 @@ public class HealthPack : MonoBehaviour
         if(other.gameObject.CompareTag("Player")) {
             Debug.Log(other + " picked up healthpack. Healing " + other);
             Destroy(gameObject);
-            //other.GetComponent<Player>().HealthRegen();
+            other.GetComponent<PlayerController>().HealthRegen(healAmount);
         }
            
     }
