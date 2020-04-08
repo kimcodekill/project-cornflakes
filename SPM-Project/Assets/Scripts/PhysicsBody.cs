@@ -49,6 +49,10 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.AddForce(impulse, mode);
 	}
 
+	public void Move(Vector3 movement) {
+		rigidBody.MovePosition(transform.position + movement);
+	}
+
 	/// <summary>
 	/// Sets the drag of the PhysicsBody. 0 is no drag, 10 is usually enough to prevent sliding.
 	/// </summary>
@@ -59,14 +63,6 @@ public class PhysicsBody : MonoBehaviour {
 
 	public void SetGravityEnabled(bool enabled) {
 		rigidBody.useGravity = enabled;
-	}
-
-	/// <summary>
-	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
-	/// </summary>
-	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded() {
-		return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
 	/// <summary>
@@ -91,6 +87,26 @@ public class PhysicsBody : MonoBehaviour {
 	public void CapVelocity(float topSpeed) {
 		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
 		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
+	}
+
+	public void CapHorizontalVelocity(float topSpeed) {
+		float velocityY = rigidBody.velocity.y;
+		float angularVelocityY = rigidBody.angularVelocity.y;
+		CapVelocity(topSpeed);
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, velocityY, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, angularVelocityY, rigidBody.velocity.z);
+	}
+
+	/// <summary>
+	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
+	/// </summary>
+	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
+	public bool IsGrounded(bool useTemporaryMethod = true) {
+		if (useTemporaryMethod) {
+			BoxCollider c = (BoxCollider) collider;
+			return Physics.BoxCast(transform.position + c.bounds.center, transform.localScale, Vector3.down, Quaternion.identity, GroundedDistanceOffset + Physics.defaultContactOffset, mask);
+		}
+		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
 	/// <summary>
