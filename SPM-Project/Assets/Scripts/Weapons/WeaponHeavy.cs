@@ -18,8 +18,6 @@ public class WeaponHeavy : WeaponBase
 
         if (Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
         {
-            Debug.Log("Hit");
-
             objectPooler.SpawnFromPool("Rocket", transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
                         .SetTarget(hit.point, hit.normal);
 
