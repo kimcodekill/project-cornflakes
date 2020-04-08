@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
-public class PlayerDashingState : PlayerState {
+public class PlayerDashingState : PlayerAirState {
 
 	public float DashSpeed = 7f;
 
@@ -19,13 +19,19 @@ public class PlayerDashingState : PlayerState {
 
 	public override void Enter() {
 		DebugManager.UpdateRow("STM", "PDS");
+		base.Enter();
 		if (OffCooldown(Time.time)) Dash();
 		else StateMachine.Pop(true);
+		skipEnter = true;
 	}
 
 	public override void Run() {
 		if (dashed) currentDashTime += Time.deltaTime;
-		if (currentDashTime > DashDuration) Player.PhysicsBody.SetGravityEnabled(true);
+		if (currentDashTime > DashDuration) {
+			Player.PhysicsBody.SetGravityEnabled(true);
+			
+			base.Run();
+		}
 		if (Player.PhysicsBody.IsGrounded() && currentDashTime > DashDuration) {
 			currentDashTime = 0f;
 			dashed = false;
