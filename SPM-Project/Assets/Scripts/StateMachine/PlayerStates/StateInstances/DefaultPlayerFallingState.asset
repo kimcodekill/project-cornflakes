@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DefaultPlayerFallingState
   m_EditorClassIdentifier: 
   AirAcceleration: 10
-  TopAirSpeed: 5
+  TopAirSpeed: 7

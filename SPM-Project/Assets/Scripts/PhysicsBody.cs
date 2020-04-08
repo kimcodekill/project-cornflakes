@@ -37,7 +37,7 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
 
-		DebugManager.AddSection("Physics", "", "", "", "");
+		DebugManager.AddSection("Physics", "", "", "", "", "");
 	}
 
 	/// <summary>
@@ -101,12 +101,8 @@ public class PhysicsBody : MonoBehaviour {
 	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
 	/// </summary>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded(bool useTemporaryMethod = true) {
-		if (useTemporaryMethod) {
-			BoxCollider c = (BoxCollider) collider;
-			return Physics.BoxCast(transform.position + c.bounds.center, transform.localScale, Vector3.down, Quaternion.identity, GroundedDistanceOffset + Physics.defaultContactOffset, mask);
-		}
-		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
+	public bool IsGrounded() {
+		return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
 	/// <summary>
