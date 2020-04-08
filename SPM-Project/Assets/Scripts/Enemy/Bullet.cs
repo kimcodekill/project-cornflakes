@@ -5,9 +5,6 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 	[SerializeField] private float projectileSpeed;
 	private Vector3 movementDirection;
-	//[SerializeField] private float maxLifeTime;
-	//private float lifeTime;
-	[SerializeField] LayerMask layerMask;
 	float distanceToTravel;
 	float totalDistanceTravelled;
 
