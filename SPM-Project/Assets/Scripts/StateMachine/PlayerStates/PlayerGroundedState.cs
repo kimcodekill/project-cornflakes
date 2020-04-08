@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerGroundedState : PlayerState {
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space)) StateMachine.Push<PlayerJumpingState>();
+		if (Input.GetKeyDown(KeyCode.Space) && Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerJumpingState>();
+		
+		base.Run();
 	}
 
 }
