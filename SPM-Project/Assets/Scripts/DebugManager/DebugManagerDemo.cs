@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class DebugManagerDemo : MonoBehaviour {
 
-	private readonly string debugSectionName1 = "MyDebugSectionAboutFloats";
-	private readonly string debugSectionName2 = "MyDebugSectionAboutInts";
-	private readonly string debugSectionName3 = "MyDebugSectionAboutBools";
+	private string debugSectionName1 = "MyDebugSectionAboutFloats";
+	private string debugSectionName2 = "MyDebugSectionAboutInts";
+	private string debugSectionName3 = "MyDebugSectionAboutBools";
 
 	private float someFloatIWantToTrack;
 	private float someIntIWantToTrack;
 	private bool someBoolIWantToTrack;
 
 	void Start() {
+		debugSectionName1 += gameObject.GetInstanceID();
+		debugSectionName2 += gameObject.GetInstanceID();
+		debugSectionName3 += gameObject.GetInstanceID();
 		DebugManager.AddSection(debugSectionName1, someFloatIWantToTrack.ToString());
 		DebugManager.AddSection(debugSectionName2, "placeholder", null, someIntIWantToTrack.ToString());
 		DebugManager.AddSection(debugSectionName3, someBoolIWantToTrack.ToString());

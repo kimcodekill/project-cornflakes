@@ -37,7 +37,7 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
     
-		DebugManager.AddSection("Physics", "", "", "", "");
+		DebugManager.AddSection("Physics" + gameObject.GetInstanceID(), "", "", "", "");
 	}
 
 	/// <summary>
@@ -77,10 +77,10 @@ public class PhysicsBody : MonoBehaviour {
 	/// Sets the Y component of the PhysicsBody velocity to 0.
 	/// </summary>
 	public void ResetVerticalSpeed() {
-		DebugManager.UpdateRows("Physics", new int[] { 0, 1 }, "rbvy1"+rigidBody.velocity.y, "rbavy1"+rigidBody.angularVelocity.y);
+		DebugManager.UpdateRows("Physics" + gameObject.GetInstanceID(), new int[] { 0, 1 }, "rbvy1"+rigidBody.velocity.y, "rbavy1"+rigidBody.angularVelocity.y);
 		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
 		rigidBody.angularVelocity.Set(rigidBody.angularVelocity.x, -1f, rigidBody.angularVelocity.z);
-		DebugManager.UpdateRows("Physics", new int[] { 2, 3 }, "rbvy2" + rigidBody.velocity.y, "rbavy2" + rigidBody.angularVelocity.y);
+		DebugManager.UpdateRows("Physics" + gameObject.GetInstanceID(), new int[] { 2, 3 }, "rbvy2" + rigidBody.velocity.y, "rbavy2" + rigidBody.angularVelocity.y);
 	}
 
 	/// <summary>
