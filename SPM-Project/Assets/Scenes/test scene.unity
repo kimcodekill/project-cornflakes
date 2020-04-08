@@ -751,6 +751,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
   playerMaxHealth: 20
+  cam: {fileID: 1222141018}
 --- !u!1 &1201316682
 GameObject:
   m_ObjectHideFlags: 0
