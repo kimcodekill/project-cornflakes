@@ -23,7 +23,8 @@ public class WeaponSpecial : WeaponBase
                 pelletHits.Add(hit);
 
                 if (bulletDebug) { DrawBulletDebug(hit); }
-            }
+				if (hit.collider.gameObject.CompareTag("Target")) hit.collider.gameObject.GetComponent<SimpleEnemy>().TakeDamage(damage);
+			}
         }
 
         Camera.main.transform.forward = (recoil / pelletCount) + Camera.main.transform.forward;

@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 1520948460}
   - component: {fileID: 1520948461}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -435,6 +435,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 662d43fc8e1abe545b759575076d5f4f, type: 2}
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
+  playerMaxHealth: 0
+  cam: {fileID: 0}
 --- !u!114 &1520948461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,7 +667,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ecaf3c503aac4439ae43bf053347a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  someBoolIWantToTrack: 0
 --- !u!4 &1938377299
 Transform:
   m_ObjectHideFlags: 0
