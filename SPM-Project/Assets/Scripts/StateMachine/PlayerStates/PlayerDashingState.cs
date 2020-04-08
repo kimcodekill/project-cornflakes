@@ -5,26 +5,42 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
 public class PlayerDashingState : PlayerState {
 
-	public float DashPower = 7f;
+	public float DashSpeed = 7f;
 
 	public float Cooldown = 3f;
 
+	public float DashDuration = 0.5f;
+
 	private float startTime = -1;
 
+	private float currentDashTime = 0;
+
+	private bool dashed = false;
+
 	public override void Enter() {
-		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PDT");
+		DebugManager.UpdateRow("STM", "PDS");
 		if (OffCooldown(Time.time)) Dash();
+		else StateMachine.Pop(true);
 	}
 
 	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded()) StateMachine.Pop();
+		if (dashed) currentDashTime += Time.deltaTime;
+		if (currentDashTime > DashDuration) Player.PhysicsBody.SetGravityEnabled(true);
+		if (Player.PhysicsBody.IsGrounded() && currentDashTime > DashDuration) {
+			currentDashTime = 0f;
+			dashed = false;
+			StateMachine.Pop(true);
+		}
 	}
 
 	private void Dash() {
 		Player.PhysicsBody.ResetVelocity();
-		Vector3 input = Player.GetInput();
-		if (input.magnitude == 0 && !Player.PhysicsBody.IsGrounded()) Player.PhysicsBody.AddForce(Vector3.up * DashPower, ForceMode.Impulse);
-		else Player.PhysicsBody.AddForce(Vector3.up + input.normalized * DashPower, ForceMode.Impulse);
+		Vector3 impulse = Player.GetInput().normalized * DashSpeed;
+		impulse.y = 0;
+		Player.PhysicsBody.AddForce(impulse, ForceMode.Impulse);
+		Player.PhysicsBody.SetGravityEnabled(false);
+		Player.PhysicsBody.ResetVerticalSpeed();
+		dashed = true;
 	}
 
 	private bool OffCooldown(float currentTime) {

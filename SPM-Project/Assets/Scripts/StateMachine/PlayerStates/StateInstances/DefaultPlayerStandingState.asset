@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2e1b7f23c84694fb3d5474ad838223, type: 3}
   m_Name: DefaultPlayerStandingState
   m_EditorClassIdentifier: 
+  Drag: 10
