@@ -53,6 +53,7 @@ public class StateMachine {
 	/// Removes the topmost element of the state stack, calling <c>Exit()</c> on the removed state in the process.
 	/// If any elements remain in the stack, that state is entered, <c>Enter()</c> is called on the topmost state.
 	/// </summary>
+	/// <param name="skipEnter">Whether or not the <c>Enter()</c> function of the switched to state should be called.</param>
 	/// <exception cref="System.InvalidOperationException">Thrown if a <c>Pop()</c> is attempted even if <c>Push&lt;T&gt;()</c> hasn't been used to add a state to the state stack.</exception>
 	public void Pop(bool skipEnter = false) {
 		DoPop(false, skipEnter);
