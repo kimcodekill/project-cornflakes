@@ -37,7 +37,7 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
 
-		DebugManager.AddSection("Physics", "", "", "", "", "");
+		DebugManager.AddSection("Physics", "", "", "", "");
 	}
 
 	/// <summary>
@@ -49,10 +49,6 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.AddForce(impulse, mode);
 	}
 
-	public void Move(Vector3 movement) {
-		rigidBody.MovePosition(transform.position + movement);
-	}
-
 	/// <summary>
 	/// Sets the drag of the PhysicsBody. 0 is no drag, 10 is usually enough to prevent sliding.
 	/// </summary>
@@ -61,6 +57,10 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.drag = drag;
 	}
 
+	/// <summary>
+	/// Enables or disables the application of gravity to the PhysicsBody.
+	/// </summary>
+	/// <param name="enabled">Whether or not gravity should be enabled.</param>
 	public void SetGravityEnabled(bool enabled) {
 		rigidBody.useGravity = enabled;
 	}
@@ -73,6 +73,9 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.angularVelocity = Vector3.zero;
 	}
 
+	/// <summary>
+	/// Sets the Y component of the PhysicsBody velocity to 0.
+	/// </summary>
 	public void ResetVerticalSpeed() {
 		DebugManager.UpdateRows("Physics", new int[] { 0, 1 }, "rbvy1"+rigidBody.velocity.y, "rbavy1"+rigidBody.angularVelocity.y);
 		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
@@ -89,6 +92,10 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
 	}
 
+	/// <summary>
+	/// Prevents the PhysicsBody from exceeding the specified horizontal velocity.
+	/// </summary>
+	/// <param name="topSpeed">The speed limit.</param>
 	public void CapHorizontalVelocity(float topSpeed) {
 		float velocityY = rigidBody.velocity.y;
 		float angularVelocityY = rigidBody.angularVelocity.y;
