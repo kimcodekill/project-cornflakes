@@ -2,16 +2,19 @@
 
 public class PlayerController : MonoBehaviour {
 
-	private StateMachine stm;
-
+	private StateMachine stateMachine;
+	
 	[SerializeField] private State[] states;
 
+	public PhysicsBody PhysicsBody { get; private set; }
+
 	private void Start() {
-		stm = new StateMachine(this, states) { ShowDebugInfo = true };
+		PhysicsBody = GetComponent<PhysicsBody>();
+		stateMachine = new StateMachine(this, states) { ShowDebugInfo = false };
 	}
 
 	private void Update() {
-		stm.Run();
+		stateMachine.Run();
 	}
 
 	public Vector3 GetInput() {
