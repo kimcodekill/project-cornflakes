@@ -30,12 +30,14 @@ public class PhysicsBody : MonoBehaviour {
 	/// </summary>
 	public float GroundedDistanceOffset { get; set; } = 0.01f;
 
-	private void Start() {
+	private void Awake() {
 		collider = GetComponent<Collider>();
 		GroundedDistance = collider.bounds.extents.y;
 
 		rigidBody = gameObject.AddComponent<Rigidbody>();
-		rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+
+		DebugManager.AddSection("Physics", "", "", "", "");
 	}
 
 	/// <summary>
@@ -45,6 +47,18 @@ public class PhysicsBody : MonoBehaviour {
 	/// <param name="mode">The force mode to use.</param>
 	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
 		rigidBody.AddForce(impulse, mode);
+	}
+
+	/// <summary>
+	/// Sets the drag of the PhysicsBody. 0 is no drag, 10 is usually enough to prevent sliding.
+	/// </summary>
+	/// <param name="drag">The amount of drag that will affect the PhysicsBody.</param>
+	public void SetSlideRate(float drag) {
+		rigidBody.drag = drag;
+	}
+
+	public void SetGravityEnabled(bool enabled) {
+		rigidBody.useGravity = enabled;
 	}
 
 	/// <summary>
@@ -61,6 +75,13 @@ public class PhysicsBody : MonoBehaviour {
 	public void ResetVelocity() {
 		rigidBody.velocity = Vector3.zero;
 		rigidBody.angularVelocity = Vector3.zero;
+	}
+
+	public void ResetVerticalSpeed() {
+		DebugManager.UpdateRows("Physics", new int[] { 0, 1 }, "rbvy1"+rigidBody.velocity.y, "rbavy1"+rigidBody.angularVelocity.y);
+		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
+		rigidBody.angularVelocity.Set(rigidBody.angularVelocity.x, -1f, rigidBody.angularVelocity.z);
+		DebugManager.UpdateRows("Physics", new int[] { 2, 3 }, "rbvy2" + rigidBody.velocity.y, "rbavy2" + rigidBody.angularVelocity.y);
 	}
 
 	/// <summary>

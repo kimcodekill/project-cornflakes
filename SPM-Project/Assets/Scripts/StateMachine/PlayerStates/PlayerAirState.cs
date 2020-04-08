@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAirState : PlayerState {
 
+	public float AirAcceleration = 10f;
+
 	private PhysicsBody physicsBody;
 
 	private const float recheckTimeTreshold = 0.1f;
@@ -16,9 +18,8 @@ public class PlayerAirState : PlayerState {
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space) && Player.GetInput().magnitude == 0) StateMachine.Push<PlayerDashingState>();
 		if (physicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
-		
+		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
 		base.Run();
 	}
 
