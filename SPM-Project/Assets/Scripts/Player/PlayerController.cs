@@ -6,8 +6,9 @@ public class PlayerController : MonoBehaviour {
 	
 	[SerializeField] private State[] states;
 	[SerializeField] private float playerMaxHealth;
-	private float playerCurrentHealth;
+	[SerializeField] private float playerCurrentHealth;
 	[SerializeField] PlayerCamera cam;
+	
 
 	public PhysicsBody PhysicsBody { get; private set; }
 
