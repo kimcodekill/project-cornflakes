@@ -338,7 +338,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 175c665f7a9d9d64b8961eac24ecfc7d, type: 2}
+  - {fileID: 2100000, guid: 1f1d039dd713ea54dab78bdb6f1797d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1030,7 +1030,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471980102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.46, y: 1.28, z: 13.89}
+  m_LocalPosition: {x: 14.46, y: 1.28, z: 15.43}
   m_LocalScale: {x: 1, y: 2.2336729, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1048,21 +1048,6 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1031641612}
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: fieldOfView
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: maxDistanceToTarget
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2561279706908460090, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 2d15ccda700af4140b3ab955d3642c57, type: 2}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name

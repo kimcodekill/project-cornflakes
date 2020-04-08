@@ -90,11 +90,16 @@ public class SimpleEnemy : MonoBehaviour
     /// <summary>
     /// Creates bullets shooting towards the target along the given vector
     /// </summary>
-    /// <param name="shootDir"> The vector leading to the target, passed to the fired bullet from the enemy.</param>
-    private void AttackTarget(Vector3 shootDir) {
+    /// <param name="vectorToTarget"> The vector leading to the target, passed to the fired bullet from the enemy.</param>
+    private void AttackTarget(Vector3 vectorToTarget) {
         Bullet instance;
-        instance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        instance.Initialize(shootDir);
+        Vector3 gunPosition = transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius);
+        if (Physics.Raycast(gunPosition, vectorToTarget, vectorToTarget.magnitude, layerMask)) {
+            //Player.DoDamage();
+            //Debug.Log("shot " + target);
+            instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, Quaternion.identity);
+            instance.Initialize(vectorToTarget, vectorToTarget.magnitude);
+        }
 
     }
 

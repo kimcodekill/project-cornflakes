@@ -4,41 +4,36 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private SphereCollider sc;
     [SerializeField] private float projectileSpeed;
     private Vector3 movementDirection;
-    [SerializeField] private float maxLifeTime;
-    private float lifeTime;
+    //[SerializeField] private float maxLifeTime;
+    //private float lifeTime;
     [SerializeField] LayerMask layerMask;
+    float distanceToTravel;
+    float totalDistanceTravelled;
     
 
-    public void Initialize(Vector3 shootDir) {
+    public void Initialize(Vector3 shootDir, float distanceToTarget) {
         movementDirection = shootDir;
+        distanceToTravel = distanceToTarget;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        sc = GetComponent<SphereCollider>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckImpact();
+        CheckDistance(totalDistanceTravelled, distanceToTravel);
+        totalDistanceTravelled += projectileSpeed * Time.deltaTime;
         transform.position += movementDirection.normalized * projectileSpeed * Time.deltaTime;
     }
 
-    private void CheckImpact() {
-        Physics.SphereCast(transform.position, sc.radius/3, movementDirection, out RaycastHit hit, 0.25f, layerMask);
-        if (hit.collider != null) {
-            if (hit.collider.gameObject.CompareTag("Player")) {
-                Debug.Log("hit player");
-            }
-            Debug.Log(hit.collider.gameObject);
-            Destroy(gameObject);
-        }
-        else if ((lifeTime += Time.deltaTime) > maxLifeTime)
+    private void CheckDistance(float distance, float maxDistance) {
+        if (distance >= maxDistance)
             Destroy(gameObject);
     }
 }
