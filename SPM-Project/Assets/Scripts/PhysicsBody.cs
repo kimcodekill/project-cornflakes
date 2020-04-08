@@ -108,8 +108,14 @@ public class PhysicsBody : MonoBehaviour {
 	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
 	/// </summary>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded() {
-		return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
+	public bool IsGrounded(bool useTempMethod = true) {
+		if (useTempMethod) {
+			CapsuleCollider c = (CapsuleCollider) collider;
+			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
+			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius);
+			return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
+		}
+		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
 	/// <summary>

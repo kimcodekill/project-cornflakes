@@ -6,6 +6,8 @@ public class PlayerGroundedState : PlayerState {
 
 	public float Drag = 10f;
 
+	public float AirDrag = 5f;
+
 	public override void Enter() {
 		Player.PhysicsBody.SetSlideRate(Drag);
 	}
@@ -18,7 +20,7 @@ public class PlayerGroundedState : PlayerState {
 	}
 
 	public override void Exit() {
-		Player.PhysicsBody.SetSlideRate(0);
+		Player.PhysicsBody.SetSlideRate(AirDrag);
 	}
 
 }

@@ -12,12 +12,15 @@ public class PlayerAirState : PlayerState {
 
 	private float startAirTime;
 
+	protected bool skipEnter = false;
+
 	public override void Enter() {
+		skipEnter = false;
 		startAirTime = Time.time;
 	}
 
 	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
+		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop(skipEnter);
 		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
 
 		Player.PhysicsBody.CapHorizontalVelocity(TopAirSpeed);
