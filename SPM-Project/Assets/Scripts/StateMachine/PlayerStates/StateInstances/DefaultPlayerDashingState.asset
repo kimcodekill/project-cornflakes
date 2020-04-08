@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cd808b0ef7ea640bb0d25d5c6bb41b, type: 3}
-  m_Name: DefaultPlayerJumpingState
+  m_Script: {fileID: 11500000, guid: d3870b6ff5e577f469871d4ecb12ee4b, type: 3}
+  m_Name: DefaultPlayerDashingState
   m_EditorClassIdentifier: 
-  JumpHeight: 6
+  DashPower: 7
+  Cooldown: 3

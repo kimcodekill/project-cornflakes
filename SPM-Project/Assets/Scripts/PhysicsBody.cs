@@ -49,6 +49,23 @@ public class PhysicsBody : MonoBehaviour {
 		return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
 
+	/// <summary>
+	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.0</c>.
+	/// </summary>
+	public void ResetVelocity() {
+		rigidBody.velocity = Vector3.zero;
+		rigidBody.angularVelocity = Vector3.zero;
+	}
+
+	/// <summary>
+	/// Prevents the PhysicsBody from exceeding the specified velocity.
+	/// </summary>
+	/// <param name="topSpeed">The speed limit.</param>
+	public void CapVelocity(float topSpeed) {
+		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
+		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
+	}
+
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}
