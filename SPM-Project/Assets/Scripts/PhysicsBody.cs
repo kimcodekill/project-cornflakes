@@ -22,7 +22,13 @@ public class PhysicsBody : MonoBehaviour {
 	/// The distance to which to determine if the PhysicsObject is grounded or not.
 	/// Initialized to the extents of the collider once it has been retrieved.
 	/// </summary>
-	public float GroundedDistance { get; set; }
+	public float GroundedDistance { get => groundedDistance + GroundedDistanceOffset; set => groundedDistance = value; }
+	private float groundedDistance;
+
+	/// <summary>
+	/// The extra margin of collider distance to account for any rigidbody imperfections or inaccuracies.
+	/// </summary>
+	public float GroundedDistanceOffset { get; set; } = 0.01f;
 
 	private void Start() {
 		collider = GetComponent<Collider>();
@@ -64,6 +70,23 @@ public class PhysicsBody : MonoBehaviour {
 	public void CapVelocity(float topSpeed) {
 		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
 		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
+	}
+
+	/// <summary>
+	/// Sets feet to collider width so that the player is grounded as long as his side is < 100% off the ground.
+	/// </summary>
+	public void SetFeetToColliderWidth() {
+		LeftFoot = new Vector3(-collider.bounds.extents.x, 0, 0);
+		RightFoot = new Vector3(collider.bounds.extents.x, 0, 0);
+	}
+
+	/// <summary>
+	/// Returns the normal of the current surface the player is standing on.
+	/// </summary>
+	/// <returns>The normal of the hit surface.</returns>
+	public Vector3 GetCurrentSurfaceNormal() {
+		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance, mask);
+		return hit.normal;
 	}
 
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
