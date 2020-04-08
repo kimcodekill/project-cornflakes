@@ -31,4 +31,5 @@ public class PlayerController : MonoBehaviour {
 		playerCurrentHealth = playerCurrentHealth + healAmount > playerMaxHealth ? playerMaxHealth : playerCurrentHealth + healAmount;
 
 	}
+
 }

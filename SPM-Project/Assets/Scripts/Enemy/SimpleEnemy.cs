@@ -14,10 +14,13 @@ public class SimpleEnemy : MonoBehaviour {
 	[SerializeField] Bullet bulletPrefab;
 	private float attackSpeed = 0.5f;
 	private float attackCooldown;
+	[SerializeField] private float enemyMaxHealth;
+	private float enemyHealth;
 
 	void Start() {
 		collider = GetComponent<CapsuleCollider>();
 		stm = new StateMachine(this, states);
+		enemyHealth = enemyMaxHealth;
 	}
 
 	void Update() {
@@ -92,12 +95,24 @@ public class SimpleEnemy : MonoBehaviour {
 		Bullet instance;
 		Vector3 gunPosition = transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius);
 		if (Physics.Raycast(gunPosition, vectorToTarget, vectorToTarget.magnitude, layerMask)) {
-			//Player.DoDamage();
+			//Player.TakeDamage();
 			//Debug.Log("shot " + target);
 			instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, Quaternion.identity);
 			instance.Initialize(vectorToTarget, vectorToTarget.magnitude);
 		}
 
 	}
+
+	public void TakeDamage(float damage) {
+		enemyHealth -= damage;
+		if (enemyHealth <= 0)
+			Die();
+	}
+
+	private void Die() {
+		Destroy(gameObject);
+		//death sound & animations
+	}
+
 
 }
