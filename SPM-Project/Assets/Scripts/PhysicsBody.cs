@@ -35,7 +35,7 @@ public class PhysicsBody : MonoBehaviour {
 		GroundedDistance = collider.bounds.extents.y;
 
 		rigidBody = gameObject.AddComponent<Rigidbody>();
-		rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
 	}
 
 	/// <summary>
