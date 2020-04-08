@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 		Vector3 inputDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 		inputDirection = inputDirection.magnitude > 1 ? inputDirection.normalized : inputDirection;
 		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * inputDirection, PhysicsBody.StandingSurface().normal).normalized;
+		Debug.DrawRay(transform.position, planarProjection*3, Color.blue);
 		Vector3 inputVector = planarProjection;
 		return inputVector;
 
