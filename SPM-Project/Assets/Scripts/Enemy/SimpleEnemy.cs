@@ -90,7 +90,7 @@ public class SimpleEnemy : MonoBehaviour
     /// <summary>
     /// Creates bullets shooting towards the target along the given vector
     /// </summary>
-    /// <param name="shootDir"></param>
+    /// <param name="shootDir"> The vector leading to the target, passed to the fired bullet from the enemy.</param>
     private void AttackTarget(Vector3 shootDir) {
         Bullet instance;
         instance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);

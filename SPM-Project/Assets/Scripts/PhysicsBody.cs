@@ -53,4 +53,16 @@ public class PhysicsBody : MonoBehaviour {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}
 
+	/// <summary>
+	/// Returns the current surface the PhysicsBody is standing on, if either left or right foot is touching a surface.
+	/// </summary>
+	/// <returns></returns>
+	public RaycastHit StandingSurface() {
+		Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, out RaycastHit hit1, GroundedDistance, mask);
+		Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, out RaycastHit hit2, GroundedDistance, mask);
+		if (hit1.collider != null)
+			return hit1;
+		else return hit2;
+	}
+
 }

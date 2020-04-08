@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     private SphereCollider sc;
     [SerializeField] private float projectileSpeed;
     private Vector3 movementDirection;
-    private float maxLifeTime = 1f;
+    [SerializeField] private float maxLifeTime;
     private float lifeTime;
     [SerializeField] LayerMask layerMask;
     
@@ -25,15 +25,15 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += movementDirection * projectileSpeed * Time.deltaTime;
         CheckImpact();
+        transform.position += movementDirection.normalized * projectileSpeed * Time.deltaTime;
     }
 
     private void CheckImpact() {
-        Physics.SphereCast(transform.position, sc.radius, movementDirection, out RaycastHit hit, 0.01f, layerMask);
-        if (hit.collider) {
+        Physics.SphereCast(transform.position, sc.radius/3, movementDirection, out RaycastHit hit, 0.25f, layerMask);
+        if (hit.collider != null) {
             if (hit.collider.gameObject.CompareTag("Player")) {
-                //do things to player
+                Debug.Log("hit player");
             }
             Debug.Log(hit.collider.gameObject);
             Destroy(gameObject);
