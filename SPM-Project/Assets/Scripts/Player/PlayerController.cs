@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
 	public PhysicsBody PhysicsBody { get; private set; }
 
 	private void Start() {
+		playerCurrentHealth = playerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		stateMachine = new StateMachine(this, states) { ShowDebugInfo = true };
 	}
@@ -32,4 +33,15 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
+	public void TakeDamage(float damage) {
+		playerCurrentHealth -= damage;
+		if (playerCurrentHealth <= 0)
+			Die();
+	}
+
+	private void Die() {
+		Debug.Log("You died");
+		playerCurrentHealth = playerMaxHealth;
+		//GameController respawn player
+	}
 }
