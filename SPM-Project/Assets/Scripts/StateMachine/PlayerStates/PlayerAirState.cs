@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class PlayerAirState : PlayerState {
 
+	private PhysicsBody physicsBody;
+
+	private const float recheckTimeTreshold = 0.1f;
+
+	private float startAirTime;
+
+	public override void Enter() {
+		physicsBody = Player.gameObject.GetComponent<PhysicsBody>();
+		startAirTime = Time.time;
+	}
+
 	public override void Run() {
-		Player.transform.position += Vector3.down * Time.deltaTime;
-		if (Player.transform.position.y < 0) {
-			Player.transform.position = new Vector3(Player.transform.position.x, 0, Player.transform.position.z);
-			StateMachine.Pop();
-		}
+		if (Input.GetKeyDown(KeyCode.Space) && Player.GetInput().magnitude == 0) StateMachine.Push<PlayerDashingState>();
+		if (physicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
+		
+		base.Run();
 	}
 
 }
