@@ -29,13 +29,12 @@ public class PlayerDashingState : PlayerAirState {
 		if (dashed) currentDashTime += Time.deltaTime;
 		if (currentDashTime > DashDuration) {
 			Player.PhysicsBody.SetGravityEnabled(true);
-			
-			base.Run();
-		}
-		if (Player.PhysicsBody.IsGrounded() && currentDashTime > DashDuration) {
-			currentDashTime = 0f;
-			dashed = false;
-			StateMachine.Pop(true);
+			if (!Player.PhysicsBody.IsGrounded()) base.Run();
+			else {
+				currentDashTime = 0f;
+				dashed = false;
+				StateMachine.Pop(true);
+			}
 		}
 	}
 

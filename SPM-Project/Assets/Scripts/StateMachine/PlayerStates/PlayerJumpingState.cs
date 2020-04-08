@@ -13,6 +13,13 @@ public class PlayerJumpingState : PlayerAirState {
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		
 		base.Enter();
+		skipEnter = true;
+	}
+
+	public override void Run() {
+		if (Input.GetKeyDown(KeyCode.Space) && !Player.PhysicsBody.IsGrounded() && !StateMachine.IsPreviousState<PlayerJumpingState>()) StateMachine.Push<PlayerJumpingState>();
+		
+		base.Run();
 	}
 
 }
