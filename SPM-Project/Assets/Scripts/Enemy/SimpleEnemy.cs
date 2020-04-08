@@ -12,7 +12,7 @@ public class SimpleEnemy : MonoBehaviour {
 	private CapsuleCollider collider;
 	[SerializeField] private LayerMask layerMask;
 	[SerializeField] Bullet bulletPrefab;
-	private float attackSpeed = 0.5f;
+	[SerializeField] private float attackSpeed;
 	private float attackCooldown;
 	[SerializeField] private float enemyMaxHealth;
 	private float enemyHealth;
