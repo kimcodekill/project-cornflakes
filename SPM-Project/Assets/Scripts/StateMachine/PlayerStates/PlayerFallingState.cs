@@ -9,13 +9,4 @@ public class PlayerFallingState : PlayerAirState {
 		DebugManager.UpdateRow("STM", "PFS");
 	}
 
-	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded()) {
-			if (Player.GetInput().magnitude > 0) StateMachine.TransitionTo<PlayerMovingState>();
-			else StateMachine.TransitionTo<PlayerStandingState>();
-		}
-
-		base.Run();
-	}
-
 }
