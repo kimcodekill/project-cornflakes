@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 465033337}
   - component: {fileID: 465033336}
   - component: {fileID: 465033335}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 465033334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.5, y: 2, z: 6.5}
+  m_LocalPosition: {x: 13.5, y: 0.31, z: 6.5}
   m_LocalScale: {x: 7, y: 4, z: 7}
   m_Children: []
   m_Father: {fileID: 0}
@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 1394707724}
   - component: {fileID: 1394707723}
   - component: {fileID: 1394707722}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +523,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1394707721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11, y: 1, z: 2}
+  m_LocalPosition: {x: 8.77, y: 0.2, z: 0.78}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -642,6 +642,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 662d43fc8e1abe545b759575076d5f4f, type: 2}
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
+  - {fileID: 11400000, guid: db4b5d507fe558a4c8b7375400d537f8, type: 2}
   playerMaxHealth: 0
   cam: {fileID: 873829151}
 --- !u!114 &1520948461
@@ -658,7 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 1536
 --- !u!1 &1591855791
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +764,7 @@ GameObject:
   - component: {fileID: 1788875025}
   - component: {fileID: 1788875024}
   - component: {fileID: 1788875023}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

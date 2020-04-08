@@ -6,20 +6,22 @@ public class PlayerAirState : PlayerState {
 
 	public float AirAcceleration = 10f;
 
-	private PhysicsBody physicsBody;
+	public float TopAirSpeed = 5f;
 
 	private const float recheckTimeTreshold = 0.1f;
 
 	private float startAirTime;
 
 	public override void Enter() {
-		physicsBody = Player.gameObject.GetComponent<PhysicsBody>();
 		startAirTime = Time.time;
 	}
 
 	public override void Run() {
-		if (physicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
+		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
 		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
+
+		Player.PhysicsBody.CapHorizontalVelocity(TopAirSpeed);
+
 		base.Run();
 	}
 
