@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour {
 	private StateMachine stateMachine;
 	
 	[SerializeField] private State[] states;
+	[SerializeField] private float playerMaxHealth;
+	private float playerCurrentHealth;
 
 	public PhysicsBody PhysicsBody { get; private set; }
 
@@ -21,4 +23,8 @@ public class PlayerController : MonoBehaviour {
 		return new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 	}
 
+	public void HealthRegen(float healAmount) {
+		playerCurrentHealth = playerCurrentHealth + healAmount > playerMaxHealth ? playerMaxHealth : playerCurrentHealth + healAmount;
+
+	}
 }
