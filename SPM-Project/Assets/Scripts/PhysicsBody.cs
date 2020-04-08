@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SocialPlatforms.GameCenter;
 
 public class PhysicsBody : MonoBehaviour {
 
@@ -113,6 +114,7 @@ public class PhysicsBody : MonoBehaviour {
 			CapsuleCollider c = (CapsuleCollider) collider;
 			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
 			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius);
+			return Physics.SphereCast(topCircle, c.radius, Vector3.down, out _, (c.height / 2) + GroundedDistanceOffset, mask);
 			return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
 		}
 		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
