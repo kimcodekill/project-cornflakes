@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1091223010669509780}
   - component: {fileID: 2402394085674157532}
   m_Layer: 0
-  m_Name: enemy
+  m_Name: Enemy_Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,6 +113,8 @@ MonoBehaviour:
   states: []
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1536
   bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
     type: 3}
+  enemyMaxHealth: 25
+  enemyAttackDamage: 1

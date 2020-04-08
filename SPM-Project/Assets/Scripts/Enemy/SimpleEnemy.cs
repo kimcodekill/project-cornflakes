@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SimpleEnemy : MonoBehaviour {
-	[SerializeField] Transform target; //should probably be made so that the enemy loads player as target through something like FindObjectWithTag
 
+	[SerializeField] Transform target; //should probably be made so that the enemy loads player as target through something like FindObjectWithTag
 	[SerializeField] float maxDistanceToTarget = 20f;
 	[SerializeField] float fieldOfView = 0.7f;
 	private StateMachine stm;
@@ -16,6 +16,7 @@ public class SimpleEnemy : MonoBehaviour {
 	private float attackCooldown;
 	[SerializeField] private float enemyMaxHealth;
 	private float enemyHealth;
+	[SerializeField] float enemyAttackDamage;
 
 	void Start() {
 		collider = GetComponent<CapsuleCollider>();
@@ -106,6 +107,8 @@ public class SimpleEnemy : MonoBehaviour {
 		if (!Physics.SphereCast(gunPosition, collider.radius / 4, vectorToTarget, out _, vectorToTarget.magnitude, layerMask)) {
 			instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, Quaternion.identity);
 			instance.Initialize(vectorToTarget, vectorToTarget.magnitude);
+			target.gameObject.GetComponent<PlayerController>().TakeDamage(enemyAttackDamage);
+
 		}
 
 	}
