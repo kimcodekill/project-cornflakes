@@ -1,72 +1,53 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rocket : MonoBehaviour
+public class Rocket : MonoBehaviour, IPooledObject
 {
     [SerializeField] private LayerMask collisionMask;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private float maxLifeTime;
+    
+    private Vector3 targetPos;
+    private Vector3 targetSurfaceNormal;
+    private float lifeTime;
 
-    private Transform transformTarget;
-    private Vector3 vectorTarget;
-
-    private Vector3 currentTargetPos;
-
-    private void Awake()
+    public void SetTarget(Vector3 position, Vector3 surfaceNormal)
     {
-        ResetTarget();
-        Return();
-    }
+        targetPos = position;
+        targetSurfaceNormal = -surfaceNormal;
 
-    public void Send(Transform target, Vector3 forward)
-    {
-        transformTarget = target;
-        Send(target.position, forward);
-    }
-
-    public void Send(Vector3 target, Vector3 forward)
-    {
-        Debug.Log(target);
-        vectorTarget = target; 
-        transform.forward = forward;
-
-        transform.localScale = Vector3.one;
-    }
-
-    private void Return()
-    {
-        transform.localPosition = Vector3.zero;
-        transform.localScale = Vector3.one * 0.01f;
-        ResetTarget();
     }
 
     private void FixedUpdate()
     {
-        if ((currentTargetPos = GetTargetPos()) != transform.position)
+        if (targetPos != Vector3.zero)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, currentTargetPos - transform.position, rotationSpeed * Time.fixedDeltaTime, 0.0f));
-            transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime; 
-            //transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, moveSpeed * Time.fixedDeltaTime) + transform.forward;
+            if(Physics.SphereCast(transform.position, 0.2f, transform.forward, out RaycastHit hit, 0.2f, collisionMask) ||
+               lifeTime > maxLifeTime)
+            { 
+                Explode(); 
+            }
+            else
+            {
+                transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetPos - transform.position, rotationSpeed, 0.0f));
+                transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+            }
         }
-    }
 
-    private Vector3 GetTargetPos()
-    {
-        return transformTarget != transform ? transformTarget.position :
-               vectorTarget != transform.position ? vectorTarget :
-               transform.position;
-    }
-
-    private void ResetTarget()
-    {
-        transformTarget = transform;
-        vectorTarget = transform.position;
-        currentTargetPos = transform.position;
+        lifeTime += Time.fixedDeltaTime;
     }
 
     private void Explode()
     {
         Debug.Log("boom");
+        gameObject.SetActive(false);
+    }
+
+    public void OnObjectSpawn()
+    {
+        
     }
 }
