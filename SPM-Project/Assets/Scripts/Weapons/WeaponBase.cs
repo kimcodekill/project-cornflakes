@@ -39,7 +39,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected virtual void Shoot() { }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         currentBulletsMagazine = magazineSize;
         currentBulletsPack = maxBullets;
