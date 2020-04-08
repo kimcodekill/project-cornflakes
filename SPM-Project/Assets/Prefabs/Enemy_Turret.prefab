@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 175c665f7a9d9d64b8961eac24ecfc7d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,5 +116,6 @@ MonoBehaviour:
     m_Bits: 1536
   bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
     type: 3}
-  enemyMaxHealth: 25
-  enemyAttackDamage: 1
+  attackSpeed: 0.25
+  enemyMaxHealth: 50
+  enemyAttackDamage: 2

@@ -20,6 +20,7 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] [Tooltip("Bullet Max Distance")] protected float range;
     [SerializeField] [Tooltip("Bullet Travel Distance")] protected WeaponType weaponType;
     [SerializeField] [Tooltip("Layers bullets can hit")] protected LayerMask bulletMask;
+	[SerializeField] protected float damage;
 
     protected float shotDelay;
     protected float currentBulletsMagazine;
