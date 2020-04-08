@@ -5,20 +5,21 @@ public class PlayerController : MonoBehaviour {
 	private StateMachine stateMachine;
 	
 	[SerializeField] private State[] states;
-	[SerializeField] private float playerMaxHealth;
-	[SerializeField] private float playerCurrentHealth;
+	public float PlayerMaxHealth { get; private set; } = 100;
+	public float PlayerCurrentHealth { get; private set; }
 	[SerializeField] PlayerCamera cam;
-	
+	[SerializeField] PlayerHud playerHud;
 
 	public PhysicsBody PhysicsBody { get; private set; }
 
 	private void Start() {
-		playerCurrentHealth = playerMaxHealth;
+		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		stateMachine = new StateMachine(this, states) { ShowDebugInfo = true };
 	}
 
 	private void Update() {
+		//Debug.Log(PlayerCurrentHealth);
 		stateMachine.Run();
 	}
 
@@ -30,19 +31,20 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void HealthRegen(float healAmount) {
-		playerCurrentHealth = playerCurrentHealth + healAmount > playerMaxHealth ? playerMaxHealth : playerCurrentHealth + healAmount;
+		PlayerCurrentHealth = PlayerCurrentHealth + healAmount > PlayerMaxHealth ? PlayerMaxHealth : PlayerCurrentHealth + healAmount;
 
 	}
 
 	public void TakeDamage(float damage) {
-		playerCurrentHealth -= damage;
-		if (playerCurrentHealth <= 0)
+		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
+		PlayerCurrentHealth -= damage;
+		if (PlayerCurrentHealth <= 0)
 			Die();
 	}
 
 	private void Die() {
 		Debug.Log("You died");
-		playerCurrentHealth = playerMaxHealth;
+		PlayerCurrentHealth = PlayerMaxHealth;
 		//GameController respawn player
 	}
 }
