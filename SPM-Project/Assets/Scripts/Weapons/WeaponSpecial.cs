@@ -10,24 +10,21 @@ public class WeaponSpecial : WeaponBase
     {
         Vector3 spreadForward;
         Vector3 recoil = Vector3.zero;
+        IPawn pawn;
 
-        List<RaycastHit> pelletHits = new List<RaycastHit>();
-        
-        for(int i = 0; i < pelletCount; i++)
+        for (int i = 0; i < pelletCount; i++)
         {
             spreadForward = AddSpread(Camera.main.transform.forward);
             recoil += spreadForward;
             
             if(Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
             {
-                pelletHits.Add(hit);
-
+                HurtPawn(hit.collider.gameObject.GetComponent<IPawn>());
                 if (bulletDebug) { DrawBulletDebug(hit); }
-				if (hit.collider.gameObject.CompareTag("Target")) hit.collider.gameObject.GetComponent<SimpleEnemy>().TakeDamage(damage);
 			}
         }
 
-        Camera.main.transform.forward = (recoil / pelletCount) + Camera.main.transform.forward;
+        //Camera.main.transform.forward = (recoil / pelletCount) + Camera.main.transform.forward;
 
         currentBulletsMagazine--;
     }

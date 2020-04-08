@@ -10,11 +10,12 @@ public class WeaponPrimary : WeaponBase
 
         if (Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
         {
+            HurtPawn(hit.collider.gameObject.GetComponent<IPawn>());
+
             if (bulletDebug) { DrawBulletDebug(hit); }
-			if (hit.collider.gameObject.CompareTag("Target")) hit.collider.gameObject.GetComponent<SimpleEnemy>().TakeDamage(damage);
         }
 
-        Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
+        //Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
 
         currentBulletsMagazine--;
     }
