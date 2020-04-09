@@ -2,6 +2,8 @@
 
 public class PlayerController : MonoBehaviour {
 
+	public static PlayerController PlayerInstance;
+
 	private StateMachine stateMachine;
 	
 	[SerializeField] private State[] states;
@@ -13,6 +15,10 @@ public class PlayerController : MonoBehaviour {
 	public PhysicsBody PhysicsBody { get; private set; }
 
 	private void Start() {
+
+		if (PlayerInstance == null) { PlayerInstance = this; }
+
+
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		stateMachine = new StateMachine(this, states) { ShowDebugInfo = true };
@@ -32,7 +38,6 @@ public class PlayerController : MonoBehaviour {
 
 	public void HealthRegen(float healAmount) {
 		PlayerCurrentHealth = PlayerCurrentHealth + healAmount > PlayerMaxHealth ? PlayerMaxHealth : PlayerCurrentHealth + healAmount;
-
 	}
 
 	public void TakeDamage(float damage) {

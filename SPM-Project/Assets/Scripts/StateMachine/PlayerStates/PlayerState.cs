@@ -11,5 +11,4 @@ public class PlayerState : State {
 	public override void Run() {
 		if (Input.GetKeyDown(KeyCode.LeftShift)) StateMachine.Push<PlayerDashingState>();
 	}
-
 }

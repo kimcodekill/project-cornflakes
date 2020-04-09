@@ -129,8 +129,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
   - {fileID: 11400000, guid: db4b5d507fe558a4c8b7375400d537f8, type: 2}
-  playerMaxHealth: 0
   cam: {fileID: 3214542842143053980}
+  playerHud: {fileID: 0}
 --- !u!114 &3214542840369799022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,8 +244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookSensitivity: 1
   minCameraDistance: 2
-  cameraIsFirstPerson: 0
   collisionLayer:
     serializedVersion: 2
     m_Bits: 512
   player: {fileID: 3214542840369799016}
+  cameraOffset: {x: 0, y: 0, z: 0}
