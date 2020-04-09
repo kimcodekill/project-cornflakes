@@ -50,10 +50,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
+    m_Bits: 1792
+  damageMask:
+    serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 3
+  moveSpeed: 9
   rotationSpeed: 1
   maxLifeTime: 5
+  explosionRadius: 5
+  damage: 100
 --- !u!136 &9128490235951760484
 CapsuleCollider:
   m_ObjectHideFlags: 0
