@@ -352,7 +352,6 @@ GameObject:
   - component: {fileID: 1394707722}
   m_Layer: 10
   m_Name: Cube (1)
-  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -432,8 +431,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  playerMaxHealth: 0
-  cam: {fileID: 0}
 --- !u!1 &1591855791
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +660,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1829916822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3214542840369799012, guid: ddef9478bc9132b498f4229ed7ace51f,
+    type: 3}
+  m_PrefabInstance: {fileID: 3214542841269422979}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1829916823
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829916822}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1938377297
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +743,7 @@ PrefabInstance:
     - target: {fileID: 3214542840369799016, guid: ddef9478bc9132b498f4229ed7ace51f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.37
+      value: 3.66
       objectReference: {fileID: 0}
     - target: {fileID: 3214542840369799016, guid: ddef9478bc9132b498f4229ed7ace51f,
         type: 3}
@@ -773,5 +790,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3214542840369799017, guid: ddef9478bc9132b498f4229ed7ace51f,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+    m_RemovedComponents:
+    - {fileID: 3214542840369799021, guid: ddef9478bc9132b498f4229ed7ace51f, type: 3}
+    - {fileID: 3214542840369799019, guid: ddef9478bc9132b498f4229ed7ace51f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ddef9478bc9132b498f4229ed7ace51f, type: 3}

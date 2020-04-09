@@ -13,6 +13,7 @@ public class PlayerJumpingState : PlayerAirState {
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		
 		base.Enter();
+
 		skipEnter = true;
 	}
 

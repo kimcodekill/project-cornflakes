@@ -7,7 +7,7 @@ public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Enter() {
 		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PSS");
-		
+
 		base.Enter();
 	}
 

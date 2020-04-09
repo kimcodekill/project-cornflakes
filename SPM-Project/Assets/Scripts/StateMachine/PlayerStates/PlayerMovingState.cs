@@ -25,8 +25,4 @@ public class PlayerMovingState : PlayerGroundedState {
 		base.Run();
 	}
 
-	public override void Exit() {
-		base.Exit();
-	}
-
 }
