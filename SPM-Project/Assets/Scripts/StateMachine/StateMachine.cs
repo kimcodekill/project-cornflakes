@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class StateMachine {
 
@@ -9,11 +8,6 @@ public class StateMachine {
 	private Dictionary<Type, State> states = new Dictionary<Type, State>();
 
 	private State previousState;
-
-	/// <summary>
-	/// Toggles whether or not state debug info should be shown.
-	/// </summary>
-	public bool ShowDebugInfo { get; set; } = false;
 
 	/// <summary>
 	/// Creates a new pushdown automata state machine and begins running the state on index 0 in the passed array.
@@ -65,6 +59,11 @@ public class StateMachine {
 		DoPop(false, skipEnter);
 	}
 
+	/// <summary>
+	/// Checks if the previous state is equal to the type parameter.
+	/// </summary>
+	/// <typeparam name="T">The type to compare to.</typeparam>
+	/// <returns>Whether or not the type is equal to the previous state type.</returns>
 	public bool IsPreviousState<T>() {
 		return previousState.GetType() == typeof(T);
 	}
