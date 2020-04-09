@@ -105,7 +105,9 @@ public class SimpleEnemy : MonoBehaviour, IPawn
 	}
 
 	public float TakeDamage(float amount) 
-	{		
+	{
+		//DebugManager.AddSection("Enemy Health", health.ToString());
+		Debug.Log(health.ToString());
 		health -= amount;
 		if (health <= 0) { Die(); }
 		return health;

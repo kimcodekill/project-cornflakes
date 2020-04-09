@@ -12,7 +12,7 @@ public class Rocket : MonoBehaviour, IPooledObject
     [SerializeField] private float maxLifeTime;
     [SerializeField] private float explosionRadius;
     [SerializeField] private float damage;
-    
+
     private Vector3 targetPos;
     private Vector3 targetSurfaceNormal;
     private float lifeTime;
@@ -21,17 +21,16 @@ public class Rocket : MonoBehaviour, IPooledObject
     {
         targetPos = position;
         targetSurfaceNormal = -surfaceNormal;
-
     }
 
     private void FixedUpdate()
     {
         if (targetPos != Vector3.zero)
         {
-            if(Physics.SphereCast(transform.position, 0.2f, transform.forward, out RaycastHit hit, 0.2f, collisionMask) ||
+            if (Physics.SphereCast(transform.position, 0.2f, transform.forward, out RaycastHit hit, 0.2f, collisionMask) ||
                lifeTime > maxLifeTime)
-            { 
-                Explode(); 
+            {
+                Explode();
             }
             else
             {
@@ -57,7 +56,7 @@ public class Rocket : MonoBehaviour, IPooledObject
         for (int i = 0; i < hits.Length; i++)
         {
             IPawn pawn = hits[i].gameObject.GetComponent<IPawn>();
-                                
+
             if (pawn != null && !hitPawns.Contains(pawn)) //probably dont need to look at hitpawns
             {
                 pawn.TakeDamage(damage);
@@ -66,12 +65,12 @@ public class Rocket : MonoBehaviour, IPooledObject
 
             Debug.Log(hits[i].gameObject.name);
         }
-        
+
         gameObject.SetActive(false);
     }
 
     public void OnObjectSpawn()
     {
-        
+
     }
 }

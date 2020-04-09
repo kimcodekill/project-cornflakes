@@ -18,7 +18,7 @@ public class WeaponHeavy : WeaponBase
 
         if (Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
         {
-            objectPooler.SpawnFromPool("Rocket", transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
+            objectPooler.SpawnFromPool("Rocket", Camera.main.transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
                         .SetTarget(hit.point, hit.normal);
 
             if (bulletDebug) { DrawBulletDebug(hit); }
@@ -27,7 +27,7 @@ public class WeaponHeavy : WeaponBase
         {
             Debug.Log("Didnt hit");
 
-            objectPooler.SpawnFromPool("Rocket", transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
+            objectPooler.SpawnFromPool("Rocket", Camera.main.transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
                         .SetTarget(Camera.main.transform.forward * range, Camera.main.transform.forward);
         }
 
