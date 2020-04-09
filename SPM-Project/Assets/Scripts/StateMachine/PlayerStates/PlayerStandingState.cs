@@ -6,8 +6,9 @@ using UnityEngine;
 public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Enter() {
-		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PSS");
-		
+		try { DebugManager.AddSection("PlayerSTM" + Player.gameObject.GetInstanceID(), ""); } catch (System.ArgumentException) { }
+		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+
 		base.Enter();
 	}
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAirState : PlayerState {
+public abstract class PlayerAirState : PlayerState {
 
 	public float AirAcceleration = 10f;
 

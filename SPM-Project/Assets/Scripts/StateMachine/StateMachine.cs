@@ -11,18 +11,11 @@ public class StateMachine {
 	private State previousState;
 
 	/// <summary>
-	/// Toggles whether or not state debug info should be shown.
-	/// </summary>
-	public bool ShowDebugInfo { get; set; } = false;
-
-	/// <summary>
 	/// Creates a new pushdown automata state machine and begins running the state on index 0 in the passed array.
 	/// </summary>
 	/// <param name="controller">The host of the state machine.</param>
 	/// <param name="states">The different kinds of states the state machine can utilize.</param>
 	public StateMachine(object controller, State[] states) {
-		
-		DebugManager.AddSection("STM" + controller.GetHashCode(), "", "");
 
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
@@ -65,8 +58,21 @@ public class StateMachine {
 		DoPop(false, skipEnter);
 	}
 
+	/// <summary>
+	/// Checks if the previous state is equal to the type parameter.
+	/// </summary>
+	/// <typeparam name="T">The type to compare to.</typeparam>
+	/// <returns>Whether or not the type is equal to the previous state type.</returns>
 	public bool IsPreviousState<T>() {
 		return previousState.GetType() == typeof(T);
+	}
+
+	/// <summary>
+	/// Returns the type of the current state.
+	/// </summary>
+	/// <returns>The type of the current state.</returns>
+	public Type GetCurrentState() {
+		return states[stateStack.Peek()].GetType();
 	}
 
 	private void DoPop(bool isInternal, bool skipEnter = false) {
