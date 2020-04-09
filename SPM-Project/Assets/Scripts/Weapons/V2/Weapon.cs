@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour {
 	
 	/// <summary>
-	/// The possible types of ammo the weapon may use.
+	/// The possible types of ammunition the weapon may use.
 	/// </summary>
 	public enum EAmmoType {
 		Primary,
@@ -42,7 +42,7 @@ public abstract class Weapon : MonoBehaviour {
 	public bool OverrideRequestedReload { get; set; }
 
 	/// <summary>
-	/// The type of ammo the weapon uses.
+	/// The type of ammunition the weapon uses.
 	/// </summary>
 	public EAmmoType AmmoType { get => ammoType; protected set => ammoType = value; }
 
@@ -52,7 +52,7 @@ public abstract class Weapon : MonoBehaviour {
 	public bool FullAuto { get => fullAuto; protected set => fullAuto = value; }
 
 	/// <summary>
-	/// The size of the magazine of the weapon.
+	/// The size of the magazine.
 	/// </summary>
 	public int MagazineSize { get => magazineSize; protected set => magazineSize = value; }
 
@@ -61,9 +61,15 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	public float FireRate { get => fireRate; protected set => fireRate = value; }
 	
+	/// <summary>
+	/// The amount of ammunition remaining in the magazine.
+	/// </summary>
 	public int AmmoInMagazine { get => ammoInMagazine; protected set => ammoInMagazine = value; }
 
-	public int Reserve { get => reserve; private set => reserve = value; }
+	/// <summary>
+	/// The amount of ammunition remaining in the reserve.
+	/// </summary>
+	public int AmmoInReserve { get => reserve; private set => reserve = value; }
 
 	#endregion
 
@@ -89,31 +95,54 @@ public abstract class Weapon : MonoBehaviour {
 
 	private void Update() {
 		weaponMachine.Run();
-		DebugManager.UpdateRows("WeaponSTM" + gameObject.GetInstanceID(), new int[] { 1, 2}, "Magazine: " + AmmoInMagazine, "Reserve: " + GetRemainingAmmoInReserve());
+		DebugManager.UpdateRows("WeaponSTM" + gameObject.GetInstanceID(), new int[] { 1, 2 }, "Magazine: " + AmmoInMagazine, "Reserve: " + GetRemainingAmmoInReserve());
 	}
 
+	/// <summary>
+	/// Calculates the amount of ammunition remaining in the magazine.
+	/// </summary>
+	/// <returns>The amount of ammunition remaining in the magazine.</returns>
 	public int GetRemainingAmmoInReserve() {
-		return Reserve - MagazineSize;
+		return AmmoInReserve - MagazineSize;
 	}
 
+	/// <summary>
+	/// Decides whether or not there remains ammunition in the magazine.
+	/// </summary>
+	/// <returns>Whether or not there remains ammunition in the magazine.</returns>
 	public bool HasAmmoInMagazine() {
 		return AmmoInMagazine > 0;
 	}
 
+	/// <summary>
+	/// Decides whether or not there remains ammunition in the reserve.
+	/// </summary>
+	/// <returns>Whether or not there remains ammunition in the reserve.</returns>
 	public bool HasAmmoInReserve() {
-		return Reserve > 0;
+		return AmmoInReserve > 0;
 	}
 
+
+	/// <summary>
+	/// Calculates the time between shots as according to the RPM of the weapon.
+	/// </summary>
+	/// <returns></returns>
 	public float GetTimeBetweenShots() {
 		return 60.0f / FireRate;
 	}
 
+	/// <summary>
+	/// Called when the weapon state machine enters the WeaponFiringState state.
+	/// </summary>
 	public abstract void Fire();
 
+	/// <summary>
+	/// Reloads the weapon.
+	/// </summary>
 	public void Reload() {
 		int usedBullets = MagazineSize - AmmoInMagazine;
-		Reserve -= usedBullets;
-		AmmoInMagazine = Reserve > MagazineSize ? MagazineSize : Reserve;
+		AmmoInReserve -= usedBullets;
+		AmmoInMagazine = AmmoInReserve > MagazineSize ? MagazineSize : AmmoInReserve;
 	}
 
 }
