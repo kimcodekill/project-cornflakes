@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerState : State {
+public abstract class PlayerState : State {
 	
 	private PlayerController player;
 	
