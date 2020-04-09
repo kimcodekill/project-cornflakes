@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponSpecial : WeaponBase
 {
-    [SerializeField][Tooltip("Pellet Amount per Shell")] private float pelletCount;
+    [SerializeField] [Tooltip("Pellet Amount per Shell")] private float pelletCount;
 
     protected override void Shoot()
     {
