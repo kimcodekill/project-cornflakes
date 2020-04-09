@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecef1d2c82f7397458a55a479c0e9a8b, type: 3}
   m_Name: DefaultPlayerMovingState
   m_EditorClassIdentifier: 
-  Acceleration: 10
-  TopSpeed: 3
+  Drag: 10
+  AirDrag: 1
+  Acceleration: 100
+  TopSpeed: 5

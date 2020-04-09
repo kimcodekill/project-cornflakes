@@ -10,7 +10,9 @@ public class PlayerMovingState : PlayerGroundedState {
 	public float TopSpeed = 5f;
 
 	public override void Enter() {
-		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PMT");
+		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PMS");
+
+		base.Enter();
 	}
 
 	public override void Run() {
@@ -21,6 +23,10 @@ public class PlayerMovingState : PlayerGroundedState {
 		Player.PhysicsBody.CapVelocity(TopSpeed);
 
 		base.Run();
+	}
+
+	public override void Exit() {
+		base.Exit();
 	}
 
 }

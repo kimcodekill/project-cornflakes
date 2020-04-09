@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Enter() {
-		if (StateMachine.ShowDebugInfo) Debug.Log("Entered PST");
+		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PSS");
+		
+		base.Enter();
 	}
 
 	public override void Run() {
