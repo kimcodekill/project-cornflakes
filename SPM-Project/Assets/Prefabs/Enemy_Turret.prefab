@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2402394085674157532}
   m_Layer: 0
   m_Name: Enemy_Turret
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  maxDistanceToTarget: 20
+  maxDistanceToTarget: 30
   fieldOfView: 0.7
   states: []
   layerMask:
@@ -116,6 +116,6 @@ MonoBehaviour:
     m_Bits: 1536
   bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
     type: 3}
-  attackSpeed: 0.25
-  enemyMaxHealth: 50
-  enemyAttackDamage: 2
+  attackSpeed: 0.2
+  maxHealth: 50
+  enemyAttackDamage: 1
