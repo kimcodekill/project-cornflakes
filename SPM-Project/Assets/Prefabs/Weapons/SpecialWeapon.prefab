@@ -54,5 +54,6 @@ MonoBehaviour:
   bulletMask:
     serializedVersion: 2
     m_Bits: 256
+  bulletOrigin: {fileID: 0}
   damage: 10
-  pelletCount: 6
+  pelletCount: 10

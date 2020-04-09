@@ -12,6 +12,7 @@ public class Rocket : MonoBehaviour, IPooledObject
     [SerializeField] private float maxLifeTime;
     [SerializeField] private float explosionRadius;
     [SerializeField] private float damage;
+	[SerializeField] private ParticleSystem ps;
 
     private Vector3 targetPos;
     private Vector3 targetSurfaceNormal;
@@ -30,7 +31,8 @@ public class Rocket : MonoBehaviour, IPooledObject
             if (Physics.SphereCast(transform.position, 0.2f, transform.forward, out RaycastHit hit, 0.2f, collisionMask) ||
                lifeTime > maxLifeTime)
             {
-                Explode();
+				ps.Play();
+                Invoke("Explode", 0.5f);
             }
             else
             {
@@ -44,7 +46,7 @@ public class Rocket : MonoBehaviour, IPooledObject
 
     private void Explode()
     {
-        Debug.Log("boom");
+		//Debug.Log("boom");
 
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius, damageMask);
 

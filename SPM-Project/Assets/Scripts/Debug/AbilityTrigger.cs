@@ -7,6 +7,8 @@ public class AbilityTrigger : DebugTool
     public WeaponBase[] weapons;
     private WeaponBase currentWeapon;
 
+	public WeaponBase GetEquippedWeapon() { return currentWeapon; }
+
     protected override void OnAwake()
     {
         if (weapons.Length > 0 && currentWeapon == null)
@@ -15,7 +17,7 @@ public class AbilityTrigger : DebugTool
         }
         else
         {
-            Debug.LogError("NO WEAPON");
+            //Debug.LogError("NO WEAPON");
         }
     }
 
@@ -27,7 +29,7 @@ public class AbilityTrigger : DebugTool
             {
                 currentWeapon = weapons[i];
 
-                Debug.Log(currentWeapon.gameObject.name);
+                //Debug.Log(currentWeapon.gameObject.name);
             }
         }
         
@@ -35,12 +37,12 @@ public class AbilityTrigger : DebugTool
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse0))
             {
-                currentWeapon.GetComponent<WeaponBase>().Trigger();
+                currentWeapon.Trigger();
             }
         }
         else
         {
-            currentWeapon.GetComponent<WeaponBase>().DoReload();
+            currentWeapon.DoReload();
         }
     }
 }
