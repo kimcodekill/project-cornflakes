@@ -2,141 +2,110 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemy : MonoBehaviour, IPawn 
+public class SimpleEnemy : Pawn, IPawn 
 {
+	[Header("Enemy attributes")]
+	[SerializeField] [Tooltip("How often/fast the enemy attacks.")] private float attackCooldown;
+	[SerializeField] [Tooltip("How much damage the enemy deals per shot.")] private float attackDamage;
+	[SerializeField] [Tooltip("Enemy's maximum attack range.")] private float attackRange = 20f;
+	[SerializeField] [Tooltip("Enemy's current health")] private float currentHealth;
+	[SerializeField] [Tooltip("Enemy's max health.")] private float maxHealth;
+	[SerializeField] [Tooltip("Bullet object to instantiate when enemy attacks.")] private Bullet bulletPrefab;
+	private float interalAttackCD;
 
-	[SerializeField] Transform target; //should probably be made so that the enemy loads player as target through something like FindObjectWithTag
-	[SerializeField] float maxDistanceToTarget = 20f;
-	[SerializeField] float fieldOfView = 0.7f;
-	private StateMachine stm;
-	[SerializeField] private State[] states;
+	[Header("Target acquisition")]
+	[SerializeField] [Tooltip("Enemy's target.")] private Transform target; //should probably be made so that the enemy loads player as target through something like FindObjectWithTag
+	[SerializeField] [Tooltip("Enemy's field of view (dot product).")] private float fieldOfView = 0.7f;
+	[SerializeField] [Tooltip("Layers that enemy can't see through.")] private LayerMask layerMask;
+	
 	private CapsuleCollider collider;
-	[SerializeField] private LayerMask layerMask;
-	[SerializeField] Bullet bulletPrefab;
-	[SerializeField] private float attackSpeed;
-	private float attackCooldown;
-	[SerializeField] private float maxHealth;
-	private float health;
-	[SerializeField] float enemyAttackDamage;
 
-	void Start() {
+	private void Start() {
 		collider = GetComponent<CapsuleCollider>();
-		stm = new StateMachine(this, states);
-		health = maxHealth;
+		currentHealth = maxHealth;
 	}
 
-	void Update() {
-		attackCooldown += Time.deltaTime;
+	private void Update() {
+		interalAttackCD += Time.deltaTime;
 		Vector3 vectorToTarget = CalculateVectorToTarget();
-		if (TargetIsInFOV(vectorToTarget, fieldOfView) && TargetIsInRange(vectorToTarget, maxDistanceToTarget) && CanSeeTarget(vectorToTarget)) {
-			if (attackCooldown > attackSpeed) {
+		if (TargetIsAttackable(vectorToTarget)) {
+			if (interalAttackCD > attackCooldown) {
 				AttackTarget(vectorToTarget);
-				attackCooldown = 0;
+				interalAttackCD = 0;
 			}
-
 		}
 	}
-
-	/// <summary>
-	/// Creates relationship vector to the target Transform
-	/// </summary>
-	/// <returns></returns>
+	
 	private Vector3 CalculateVectorToTarget() {
-		Vector3 targetVector = target.position - transform.position;
-		//Debug.Log(targetVector);
-		return targetVector;
+		Vector3 v = target.position - transform.position;
+		return v;
 	}
 
-	/// <summary>
-	/// Checks if the target is in the field of view
-	/// </summary>
-	/// <param name="vectorToTarget"></param>
-	/// <param name="fov"></param>
-	/// <returns></returns>
-	public bool TargetIsInFOV(Vector3 vectorToTarget, float fov) {
-		float angleToTarget = Vector3.Dot(transform.forward, vectorToTarget.normalized);
-		//Debug.Log(gameObject + "" + angleToTarget);
-		if (angleToTarget >= fov)
-			return true;
-		else return false;
+	private bool TargetIsAttackable(Vector3 v) {
+		if (TargetIsInFOV(v) && TargetIsInRange(v) && CanSeeTarget(v)) { return true; }
+		else { return false; }
 	}
 
-	/// <summary>
-	/// Checks that the target is within the specified max range
-	/// </summary>
-	/// <param name="vectorToTarget"></param>
-	/// <param name="maxDistance"></param>
-	/// <returns></returns>
-	public bool TargetIsInRange(Vector3 vectorToTarget, float maxDistance) {
-		float distanceToTarget = vectorToTarget.magnitude;
-		//Debug.Log(gameObject + "" + distanceToTarget);
-		if (distanceToTarget <= maxDistance)
-			return true;
-		else return false;
+	private bool TargetIsInFOV(Vector3 v) {
+		float angleToTarget = Vector3.Dot(transform.forward, v.normalized);
+		if (angleToTarget >= fieldOfView) { return true; }
+		else { return false; }
 	}
 
-	/// <summary>
-	/// Checks if there is an object between the enemy and its target which does not have the Player tag
-	/// </summary>
-	/// <returns></returns>
-	public bool CanSeeTarget(Vector3 vectorToTarget) {
+	private bool TargetIsInRange(Vector3 v) {
+		float distanceToTarget = v.magnitude;
+		if (distanceToTarget <= attackRange) { return true; }
+		else { return false; }
+	}
+
+	private bool CanSeeTarget(Vector3 v) {
 		Vector3 enemyEyes = transform.position + collider.center + Vector3.up * (collider.height / 2 - collider.radius);
-		Physics.Raycast(enemyEyes, vectorToTarget, out RaycastHit hit, vectorToTarget.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), out RaycastHit hit2, vectorToTarget.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), out RaycastHit hit3, vectorToTarget.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), out RaycastHit hit4, vectorToTarget.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, vectorToTarget.magnitude, layerMask);
-		//Debug.DrawRay(enemyEyes, vectorToTarget, Color.blue);
-		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), Color.blue);
-		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), Color.blue);
-		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), Color.blue);
-		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(-0.25f,0, 0), Color.blue);
-		//Debug.DrawRay(transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius), vectorToTarget);
+		Physics.Raycast(enemyEyes, v, out RaycastHit hit, v.magnitude, layerMask);
+		///Casts Raycasts in a cone to look for the player even if the player is only peeking around a corner.
+		Physics.Raycast(enemyEyes, v + new Vector3(0,-0.25f,0), out RaycastHit hit2, v.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, v + new Vector3(0,0.25f,0), out RaycastHit hit3, v.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, v + new Vector3(0.25f, 0, 0), out RaycastHit hit4, v.magnitude, layerMask);
+		Physics.Raycast(enemyEyes, v + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, v.magnitude, layerMask);
 		if (hit.collider == null || hit2.collider == null || hit3.collider == null || hit4.collider == null || hit5.collider == null) {
 			return true;
 		}
-		else return false;
+		else { return false; }
+	}
+
+	private void AttackTarget(Vector3 v) {
+		Bullet instance;
+		Vector3 gunPosition = transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius);
+		if (!Physics.SphereCast(gunPosition, collider.radius / 4, v, out _, v.magnitude, layerMask)) {
+			instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, transform.rotation);
+			instance.Initialize(v, v.magnitude);
+			target.gameObject.GetComponent<PlayerController>().TakeDamage(attackDamage);
+		}
 	}
 
 	/// <summary>
-	/// Creates bullets shooting towards the target along the given vector
+	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the gameObject.
 	/// </summary>
-	/// <param name="vectorToTarget"> The vector leading to the target, passed to the fired bullet from the enemy.</param>
-	private void AttackTarget(Vector3 vectorToTarget) {
-		Bullet instance;
-		Vector3 gunPosition = transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius);
-		if (!Physics.SphereCast(gunPosition, collider.radius / 4, vectorToTarget, out _, vectorToTarget.magnitude, layerMask)) {
-			instance = Instantiate(bulletPrefab, gunPosition + Vector3.up * 0.1f, transform.rotation);
-			instance.Initialize(vectorToTarget, vectorToTarget.magnitude);
-			target.gameObject.GetComponent<PlayerController>().TakeDamage(enemyAttackDamage);
-
-		}
-
+	/// <param name="amount">The amount of damage the gameObject should take.</param>
+	/// <returns></returns>
+	public float TakeDamage(float amount) {
+		currentHealth -= amount;
+		if (currentHealth <= 0) { KillEnemy(); }
+		return currentHealth;
 	}
 
-	public float TakeDamage(float amount) 
-	{
-		//DebugManager.AddSection("Enemy Health", health.ToString());
-		//Debug.Log(health.ToString());
-		health -= amount;
-		if (health <= 0) { Die(); }
-		return health;
+	/// <summary>
+	/// Implements <c>Heal()</c> from IPawn interface to heal the gameObject.
+	/// </summary>
+	/// <param name="amount">The amount of healing the gameObject should receive.</param>
+	/// <returns></returns>
+	public float Heal(float amount) {
+		currentHealth += amount;
+		if (currentHealth > maxHealth) { currentHealth = maxHealth; }
+		return currentHealth;
 	}
 
-	private void Die() {
-
-		//Debug.LogWarning("Object '" + gameObject.name + "' gets removed using Destroy. This is illegal.");
-		Destroy(gameObject);
-
-		//gameObject.SetActive(false);
-
-		//death sound & animations
-	}
-
-	public float Heal(float amount)
-	{
-		health += amount;
-		if (health > maxHealth) { health = maxHealth; }
-		return health;
+	private void KillEnemy() {
+		//Destroy(gameObject);
+		gameObject.SetActive(false);
 	}
 }
