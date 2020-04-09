@@ -8,7 +8,7 @@ public class PlayerJumpingState : PlayerAirState {
 	public float JumpHeight = 6f;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("STM", "PJS");
+		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PJS");
 
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		
