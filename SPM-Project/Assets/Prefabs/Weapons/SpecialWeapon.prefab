@@ -47,7 +47,7 @@ MonoBehaviour:
   fireRate: 171
   magazineSize: 7
   maxBullets: 32
-  spread: 0.25
+  spread: 0.05
   reloadTime: 0
   range: 25
   weaponType: 1

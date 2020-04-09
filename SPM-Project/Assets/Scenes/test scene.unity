@@ -440,20 +440,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (1)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -709,6 +709,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7841059610537404106, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: hudBorder
+      value: 
+      objectReference: {fileID: 361396648}
     - target: {fileID: 7841059610958226992, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_Name
@@ -781,12 +786,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09c76aa4a4f019c41a45cfc9c75d0027, type: 3}
---- !u!4 &326106032 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7841059610958226996, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+--- !u!114 &361396648 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7841059611166161776, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
     type: 3}
   m_PrefabInstance: {fileID: 326106031}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &422394928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,20 +1317,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (3)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -1391,11 +1402,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
@@ -1404,7 +1410,7 @@ PrefabInstance:
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_TagString
-      value: Target
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -1817,20 +1823,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (6)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -2391,20 +2397,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (5)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -2579,20 +2585,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (2)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
@@ -2970,20 +2976,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1234685094}
     m_Modifications:
-    - target: {fileID: 2402394085674157532, guid: 25cf4ab7b4d31714680675660bfdf1d0,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 326106032}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Turret (4)
+      value: Enemy_Turret
       objectReference: {fileID: 0}
     - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387611928025315229, guid: 25cf4ab7b4d31714680675660bfdf1d0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9063918479456915649, guid: 25cf4ab7b4d31714680675660bfdf1d0,
         type: 3}
