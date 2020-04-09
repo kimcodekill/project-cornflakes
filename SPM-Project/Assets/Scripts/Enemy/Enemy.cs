@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IPawn 
 {
+	#region variables & getters
 	[Header("Enemy attributes")]
 	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
-	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView = 0.7f;
-	[SerializeField] [Tooltip("This enemy's maximum sight range.")] private float sightRange = 30f;
+	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
+	[SerializeField] [Tooltip("This enemy's maximum sight range.")] private float sightRange;
 	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] private Vector3 gunPositionOffset;
 	
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour, IPawn
 	/// </summary>
 	/// <returns></returns>
 	public Vector3 TargetVector { get; private set; }
+	#endregion
 
 	private void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -39,7 +41,6 @@ public class Enemy : MonoBehaviour, IPawn
 		TargetVector = CalculateVectorToTarget();
 		enemyStateMachine.Run();
 	}
-
 
 	private Vector3 CalculateVectorToTarget() {
 		Vector3 v = Target.transform.position - transform.position;
@@ -83,15 +84,6 @@ public class Enemy : MonoBehaviour, IPawn
 	}
 
 	/// <summary>
-	/// Returns this enemy's gunPosition;
-	/// </summary>
-	/// <returns></returns>
-	public Vector3 GetGunPosition() {
-		Vector3 gunPosition = transform.position + gunPositionOffset;
-		return gunPosition;
-	}
-
-	/// <summary>
 	/// Checks if the enemy can attack its target by SphereCasting from the given gun position, to the target, checking for collisions on the way.
 	/// </summary>
 	/// <returns></returns>
@@ -100,6 +92,12 @@ public class Enemy : MonoBehaviour, IPawn
 		else { return false; }
 		///if the enemy can't attack the player, move to position where it can attack player
 	}
+
+	/// <summary>
+	/// Returns this enemy's gunPosition;
+	/// </summary>
+	/// <returns></returns>
+	public Vector3 GetGunPosition() { return transform.position + gunPositionOffset; }
 
 	/// <summary>
 	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the enemy.

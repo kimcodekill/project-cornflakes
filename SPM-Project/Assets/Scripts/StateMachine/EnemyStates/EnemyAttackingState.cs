@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "EnemyState/EnemyAttackingState")]
 public class EnemyAttackingState : EnemyBaseState
 {
 	[SerializeField] [Tooltip("Bullet object to instantiate when enemy attacks.")] private Bullet bulletPrefab;

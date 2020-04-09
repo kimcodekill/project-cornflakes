@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void Die() {
 		///Unfinished
-		Debug.Log("You died");
+		//Debug.Log("You died");
 		PlayerCurrentHealth = PlayerMaxHealth;
 	}
 }
