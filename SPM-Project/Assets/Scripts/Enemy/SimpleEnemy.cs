@@ -86,12 +86,12 @@ public class SimpleEnemy : MonoBehaviour, IPawn
 		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), out RaycastHit hit3, vectorToTarget.magnitude, layerMask);
 		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), out RaycastHit hit4, vectorToTarget.magnitude, layerMask);
 		Physics.Raycast(enemyEyes, vectorToTarget + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, vectorToTarget.magnitude, layerMask);
-		Debug.DrawRay(enemyEyes, vectorToTarget, Color.blue);
-		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), Color.blue);
-		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), Color.blue);
-		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), Color.blue);
-		Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(-0.25f,0, 0), Color.blue);
-		Debug.DrawRay(transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius), vectorToTarget);
+		//Debug.DrawRay(enemyEyes, vectorToTarget, Color.blue);
+		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,0.25f,0), Color.blue);
+		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0,-0.25f,0), Color.blue);
+		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(0.25f, 0, 0), Color.blue);
+		//Debug.DrawRay(enemyEyes, vectorToTarget + new Vector3(-0.25f,0, 0), Color.blue);
+		//Debug.DrawRay(transform.position + collider.center + Vector3.up * (collider.height / 3 - collider.radius), vectorToTarget);
 		if (hit.collider == null || hit2.collider == null || hit3.collider == null || hit4.collider == null || hit5.collider == null) {
 			return true;
 		}
