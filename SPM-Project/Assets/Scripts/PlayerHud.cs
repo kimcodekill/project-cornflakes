@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerHud : MonoBehaviour
 {
 	[SerializeField] Image panel;
-	[SerializeField] Text remainingBullets, magSize;
+	[SerializeField] Text bulletsInMag, bulletsInReserve;
 	[SerializeField] Slider healthBar;
 	[SerializeField] PlayerController player;
 	// Start is called before the first frame update
@@ -25,6 +25,9 @@ public class PlayerHud : MonoBehaviour
 		//Debug.Log(player.PlayerCurrentHealth);
 		if ((Time.time - flashTime) > flashDuration)
 			ResetColor();
+		bulletsInMag.text = player.CurrentPlayerWeapon().GetBulletsLeftInMagazine().ToString();
+		bulletsInReserve.text = player.CurrentPlayerWeapon().GetBulletsInReserve().ToString();
+
     }
 
 	public void FlashColor(Color color) {

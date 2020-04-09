@@ -25,10 +25,10 @@ public class WeaponHeavy : WeaponBase
         }
         else
         {
-            Debug.Log("Didnt hit");
+            //Debug.Log("Didnt hit");
 
             objectPooler.SpawnFromPool("Rocket", Camera.main.transform.position, Quaternion.Euler(Camera.main.transform.forward)).GetComponent<Rocket>()
-                        .SetTarget(Camera.main.transform.forward * range, Camera.main.transform.forward);
+				.SetTarget(Camera.main.transform.forward * range, Camera.main.transform.forward);
         }
 
         //Camera.main.transform.forward = spreadForward + Camera.main.transform.forward;
