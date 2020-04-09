@@ -20,8 +20,9 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] [Tooltip("Bullet Max Distance")] protected float range;
     [SerializeField] [Tooltip("Bullet Travel Distance")] protected WeaponType weaponType;
     [SerializeField] [Tooltip("Layers bullets can hit")] protected LayerMask bulletMask;
+    [SerializeField] protected Transform bulletOrigin;
+
 	[SerializeField] protected float damage;
-	[SerializeField] protected Transform bulletOrigin;
     protected float shotDelay;
     protected float currentBulletsMagazine;
     protected float currentBulletsPack; 
@@ -32,7 +33,7 @@ public abstract class WeaponBase : MonoBehaviour
     {
         if (shotDelay >= GetTimeBetweenShots())
         {
-            Debug.Log(string.Format("SPS: {0} | TBS: {1} sec ", GetTimeBetweenShots(), shotDelay));
+            if(bulletDebug) Debug.Log(string.Format("SPS: {0} | TBS: {1} sec ", GetTimeBetweenShots(), shotDelay));
             Shoot();
             shotDelay = 0;
         }
@@ -54,7 +55,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     public void DrawBulletDebug(RaycastHit hit) 
     { 
-        Instantiate(Resources.Load("Debug/BulletHit"), hit.point, Quaternion.identity, hit.collider.gameObject.transform);
+        Instantiate(Resources.Load("Debug/BulletHit"), hit.point, Quaternion.identity);
         lastShot = new Ray(transform.position, (hit.point - transform.position).normalized);
     }
 
@@ -98,5 +99,12 @@ public abstract class WeaponBase : MonoBehaviour
     private float GetTimeBetweenShots()
     {
         return 60.0f / fireRate;
+    }
+
+    protected float HurtPawn(IPawn pawn)
+    {
+        if (pawn != null) { return pawn.TakeDamage(damage); }
+
+        return -1;
     }
 }

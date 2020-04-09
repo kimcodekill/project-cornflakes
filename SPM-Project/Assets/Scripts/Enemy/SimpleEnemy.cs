@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemy : MonoBehaviour {
+public class SimpleEnemy : MonoBehaviour, IPawn 
+{
 
 	[SerializeField] Transform target; //should probably be made so that the enemy loads player as target through something like FindObjectWithTag
 	[SerializeField] float maxDistanceToTarget = 20f;
@@ -14,14 +15,14 @@ public class SimpleEnemy : MonoBehaviour {
 	[SerializeField] Bullet bulletPrefab;
 	[SerializeField] private float attackSpeed;
 	private float attackCooldown;
-	[SerializeField] private float enemyMaxHealth;
-	private float enemyHealth;
+	[SerializeField] private float maxHealth;
+	private float health;
 	[SerializeField] float enemyAttackDamage;
 
 	void Start() {
 		collider = GetComponent<CapsuleCollider>();
 		stm = new StateMachine(this, states);
-		enemyHealth = enemyMaxHealth;
+		health = maxHealth;
 	}
 
 	void Update() {
@@ -113,16 +114,29 @@ public class SimpleEnemy : MonoBehaviour {
 
 	}
 
-	public void TakeDamage(float damage) {
-		enemyHealth -= damage;
-		if (enemyHealth <= 0)
-			Die();
+	public float TakeDamage(float amount) 
+	{
+		//DebugManager.AddSection("Enemy Health", health.ToString());
+		Debug.Log(health.ToString());
+		health -= amount;
+		if (health <= 0) { Die(); }
+		return health;
 	}
 
 	private void Die() {
+
+		Debug.LogWarning("Object '" + gameObject.name + "' gets removed using Destroy. This is illegal.");
 		Destroy(gameObject);
+
+		//gameObject.SetActive(false);
+
 		//death sound & animations
 	}
 
-
+	public float Heal(float amount)
+	{
+		health += amount;
+		if (health > maxHealth) { health = maxHealth; }
+		return health;
+	}
 }
