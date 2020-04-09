@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "EnemyState/EnemyPatrollingState")]
 public class EnemyPatrollingState : EnemyBaseState
 {
 	[SerializeField] [Tooltip("The patrol points.")] private Transform[] points;

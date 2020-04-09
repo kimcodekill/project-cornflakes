@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "EnemyState/EnemyAlertedState")]
 public class EnemyAlertedState : EnemyBaseState
 {
 	public override void Enter() {
