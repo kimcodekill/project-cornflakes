@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class PlayerAirState : PlayerState {
 
-	private PhysicsBody physicsBody;
+	public float AirAcceleration = 10f;
+
+	public float TopAirSpeed = 5f;
 
 	private const float recheckTimeTreshold = 0.1f;
 
 	private float startAirTime;
 
+	protected bool skipEnter = false;
+
 	public override void Enter() {
-		physicsBody = Player.gameObject.GetComponent<PhysicsBody>();
+		skipEnter = false;
 		startAirTime = Time.time;
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space) && Player.GetInput().magnitude == 0) StateMachine.Push<PlayerDashingState>();
-		if (physicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop();
-		
+		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop(skipEnter);
+		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
+
+		Player.PhysicsBody.CapHorizontalVelocity(TopAirSpeed);
+
 		base.Run();
 	}
 

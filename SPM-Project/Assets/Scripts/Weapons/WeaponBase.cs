@@ -23,7 +23,6 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] protected Transform bulletOrigin;
 
 	[SerializeField] protected float damage;
-
     protected float shotDelay;
     protected float currentBulletsMagazine;
     protected float currentBulletsPack; 
