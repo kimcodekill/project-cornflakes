@@ -27,13 +27,15 @@ public abstract class WeaponBase : MonoBehaviour
     protected float currentBulletsMagazine;
     protected float currentBulletsPack; 
 
+	public float GetBulletsLeftInMagazine() { return currentBulletsMagazine < 0 ? 0 : currentBulletsMagazine; }
+	public float GetBulletsInReserve() { return currentBulletsPack - magazineSize < 0 ? 0 : currentBulletsPack - magazineSize; }
     private Ray lastShot;
 
     public virtual void Trigger() 
     {
         if (shotDelay >= GetTimeBetweenShots())
         {
-            if(bulletDebug) Debug.Log(string.Format("SPS: {0} | TBS: {1} sec ", GetTimeBetweenShots(), shotDelay));
+            //if(bulletDebug) Debug.Log(string.Format("SPS: {0} | TBS: {1} sec ", GetTimeBetweenShots(), shotDelay));
             Shoot();
             shotDelay = 0;
         }

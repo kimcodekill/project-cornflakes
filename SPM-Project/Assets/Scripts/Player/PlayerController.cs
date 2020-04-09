@@ -9,10 +9,13 @@ public class PlayerController : MonoBehaviour {
 	public float PlayerCurrentHealth { get; private set; }
 	[SerializeField] PlayerCamera cam;
 	[SerializeField] PlayerHud playerHud;
+	private AbilityTrigger weaponArray;
 
 	public PhysicsBody PhysicsBody { get; private set; }
+	public WeaponBase CurrentPlayerWeapon() { return weaponArray.GetEquippedWeapon(); }
 
 	private void Start() {
+		weaponArray = GetComponent<AbilityTrigger>();
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		stateMachine = new StateMachine(this, states) { ShowDebugInfo = true };

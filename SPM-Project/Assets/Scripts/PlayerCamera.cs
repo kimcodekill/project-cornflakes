@@ -21,7 +21,7 @@ public class PlayerCamera : MonoBehaviour {
 	void Update() {
 		RotateCamera();
 		transform.position = player.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
-		//Debug.DrawRay(transform.position, transform.forward * 10);
+		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
 	Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
