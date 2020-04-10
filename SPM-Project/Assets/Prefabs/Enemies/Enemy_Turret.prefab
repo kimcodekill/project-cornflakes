@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5728468072943944433}
   - component: {fileID: 2561279706908460090}
   - component: {fileID: 1091223010669509780}
-  - component: {fileID: 2402394085674157532}
-  m_Layer: 0
+  - component: {fileID: 8657923228792832645}
+  m_Layer: 8
   m_Name: Enemy_Turret
   m_TagString: Target
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7387611928025315229}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2561279706908460090
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -95,7 +95,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2402394085674157532
+--- !u!114 &8657923228792832645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,18 +104,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 7387611928025315229}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0935f12cfcdb4a340a39f47135e2cac2, type: 3}
+  m_Script: {fileID: 11500000, guid: 7afa3232f36120a41b539706db67401d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  maxDistanceToTarget: 30
+  currentHealth: 0
+  maxHealth: 50
   fieldOfView: 0.7
-  states: []
+  sightRange: 25
+  gunPositionOffset: {x: 0, y: 1, z: 0}
+  states:
+  - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
+  - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
+  - {fileID: 11400000, guid: 3ca2d6befd4aed24884ea1184f4c825f, type: 2}
   layerMask:
     serializedVersion: 2
     m_Bits: 1536
-  bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
-    type: 3}
-  attackSpeed: 0.2
-  maxHealth: 50
-  enemyAttackDamage: 1

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyShootingState : EnemyBaseState
+public class EnemyTurret : Enemy
 {
     
 }

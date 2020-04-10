@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
-	[SerializeField] private float projectileSpeed;
+
+	[Header("Bullet attributes")]
+	[SerializeField] [Tooltip("How fast the bullet travels.")] private float projectileSpeed;
+	private float distanceToTravel;
+	private float totalDistanceTravelled;
 	private Vector3 movementDirection;
-	float distanceToTravel;
-	float totalDistanceTravelled;
 
-
+	/// <summary>
+	/// Gives the Bullet some number of starting values through parameters.
+	/// </summary>
+	/// <param name="shootDir"> The vector the bullet should travel along.</param>
+	/// <param name="distanceToTarget">How far the bullet should travel before destroying.</param>
 	public void Initialize(Vector3 shootDir, float distanceToTarget) {
 		movementDirection = shootDir;
 		distanceToTravel = distanceToTarget;
 	}
 
-	// Start is called before the first frame update
-	void Start() {
-
-	}
-
-	// Update is called once per frame
 	void Update() {
 		CheckDistance(totalDistanceTravelled, distanceToTravel);
 		totalDistanceTravelled += projectileSpeed * Time.deltaTime;
@@ -28,6 +28,7 @@ public class Bullet : MonoBehaviour {
 
 	private void CheckDistance(float distance, float maxDistance) {
 		if (distance >= maxDistance)
-			Destroy(gameObject);
+			//Destroy(gameObject);
+			gameObject.SetActive(false);
 	}
 }
