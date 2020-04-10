@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGroundedState : PlayerState {
+public abstract class PlayerGroundedState : PlayerState {
 
 	public float Drag = 10f;
 

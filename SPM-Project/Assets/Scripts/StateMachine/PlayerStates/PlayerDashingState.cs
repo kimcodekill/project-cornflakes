@@ -18,7 +18,8 @@ public class PlayerDashingState : PlayerAirState {
 	private bool dashed = false;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PDS");
+		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+		
 		base.Enter();
 		if (OffCooldown(Time.time)) Dash();
 		else StateMachine.Pop(true);

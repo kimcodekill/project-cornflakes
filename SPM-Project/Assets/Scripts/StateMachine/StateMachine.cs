@@ -15,8 +15,6 @@ public class StateMachine {
 	/// <param name="controller">The host of the state machine.</param>
 	/// <param name="states">The different kinds of states the state machine can utilize.</param>
 	public StateMachine(object controller, State[] states) {
-		
-		DebugManager.AddSection("STM" + controller.GetHashCode(), "", "");
 
 		for (int i = 0; i < states.Length; i++) {
 			State instance = UnityEngine.Object.Instantiate(states[i]);
@@ -66,6 +64,14 @@ public class StateMachine {
 	/// <returns>Whether or not the type is equal to the previous state type.</returns>
 	public bool IsPreviousState<T>() {
 		return previousState.GetType() == typeof(T);
+	}
+
+	/// <summary>
+	/// Returns the type of the current state.
+	/// </summary>
+	/// <returns>The type of the current state.</returns>
+	public Type GetCurrentState() {
+		return states[stateStack.Peek()].GetType();
 	}
 
 	private void DoPop(bool isInternal, bool skipEnter = false) {

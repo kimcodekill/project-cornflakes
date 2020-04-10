@@ -10,7 +10,7 @@ public class PlayerMovingState : PlayerGroundedState {
 	public float TopSpeed = 5f;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PMS");
+		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 
 		base.Enter();
 	}
