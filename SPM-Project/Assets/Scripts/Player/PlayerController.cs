@@ -36,7 +36,9 @@ public class PlayerController : MonoBehaviour {
 		weaponArray = GetComponent<AbilityTrigger>();
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
+
 		stateMachine = new StateMachine(this, states); 
+
 	}
 
 	private void Update() {

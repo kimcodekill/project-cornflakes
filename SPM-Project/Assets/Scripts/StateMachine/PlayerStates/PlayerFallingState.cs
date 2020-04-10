@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerFallingState : PlayerAirState {
 
 	public override void Enter() {
-		DebugManager.UpdateRow("STM" + Player.GetHashCode(), "PFS");
+		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 	}
 
 }
