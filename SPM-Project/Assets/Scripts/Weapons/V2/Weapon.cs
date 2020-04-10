@@ -19,27 +19,27 @@ public abstract class Weapon : MonoBehaviour {
 	/// <summary>
 	/// Whether or not the trigger is being pulled.
 	/// </summary>
-	public bool TriggerDown { get { return Input.GetKeyDown(KeyCode.Mouse0) || OverrideTriggerDown; } }
+	public bool TriggerDown { get { return Input.GetKey(KeyCode.Mouse0) || OverrideTriggerDown; } }
 
 	/// <summary>
 	/// Whether or not input is required to fire.
 	/// </summary>
-	public bool OverrideTriggerDown { get; set; }
+	public bool OverrideTriggerDown { get; set; } = false;
 
 	/// <summary>
 	/// Whether or not the weapon is being aimed down sights with.
 	/// </summary>
-	public bool AimingDownSights { get { return Input.GetKeyDown(KeyCode.Mouse1); } }
+	public bool AimingDownSights { get { return Input.GetKey(KeyCode.Mouse1); } }
 
 	/// <summary>
 	/// Whether or not the reload key is being pressed.
 	/// </summary>
-	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.Mouse0) || OverrideRequestedReload; } }
+	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R) || OverrideRequestedReload; } }
 
 	/// <summary>
 	/// Whether or not input is required to reload.
 	/// </summary>
-	public bool OverrideRequestedReload { get; set; }
+	public bool OverrideRequestedReload { get; set; } = false;
 
 	/// <summary>
 	/// The type of ammunition the weapon uses.
@@ -52,15 +52,15 @@ public abstract class Weapon : MonoBehaviour {
 	public bool FullAuto { get => fullAuto; protected set => fullAuto = value; }
 
 	/// <summary>
+	/// The fire rate of the weapon.
+	/// </summary>
+	public float FireRate { get => fireRate; protected set => fireRate = value; }
+
+	/// <summary>
 	/// The size of the magazine.
 	/// </summary>
 	public int MagazineSize { get => magazineSize; protected set => magazineSize = value; }
 
-	/// <summary>
-	/// The fire rate of the weapon.
-	/// </summary>
-	public float FireRate { get => fireRate; protected set => fireRate = value; }
-	
 	/// <summary>
 	/// The amount of ammunition remaining in the magazine.
 	/// </summary>
@@ -69,7 +69,9 @@ public abstract class Weapon : MonoBehaviour {
 	/// <summary>
 	/// The amount of ammunition remaining in the reserve.
 	/// </summary>
-	public int AmmoInReserve { get => reserve; private set => reserve = value; }
+	public int AmmoInReserve { get => ammoInReserve; protected set => ammoInReserve = value; }
+
+	public float ReloadTime { get => reloadTime; protected set => reloadTime = value; }
 
 	#endregion
 
@@ -78,10 +80,11 @@ public abstract class Weapon : MonoBehaviour {
 	[Header("Attributes")]
 	[SerializeField] private EAmmoType ammoType;
 	[SerializeField] private bool fullAuto;
-	[SerializeField] private int magazineSize;
 	[SerializeField] private float fireRate;
+	[SerializeField] private int magazineSize;
 	[SerializeField] private int ammoInMagazine;
-	[SerializeField] private int reserve;
+	[SerializeField] private int ammoInReserve;
+	[SerializeField] private float reloadTime;
 	[Header("States")]
 	[SerializeField] private State[] states;
 
@@ -103,7 +106,7 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	/// <returns>The amount of ammunition remaining in the magazine.</returns>
 	public int GetRemainingAmmoInReserve() {
-		return AmmoInReserve - MagazineSize;
+		return ammoInReserve;
 	}
 
 	/// <summary>
@@ -111,7 +114,7 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	/// <returns>Whether or not there remains ammunition in the magazine.</returns>
 	public bool HasAmmoInMagazine() {
-		return AmmoInMagazine > 0;
+		return ammoInMagazine > 0;
 	}
 
 	/// <summary>
@@ -119,7 +122,7 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	/// <returns>Whether or not there remains ammunition in the reserve.</returns>
 	public bool HasAmmoInReserve() {
-		return AmmoInReserve > 0;
+		return ammoInReserve > 0;
 	}
 
 
@@ -128,21 +131,24 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	/// <returns></returns>
 	public float GetTimeBetweenShots() {
-		return 60.0f / FireRate;
+		return 60.0f / fireRate;
 	}
 
 	/// <summary>
-	/// Called when the weapon state machine enters the WeaponFiringState state.
+	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
 	/// </summary>
-	public abstract void Fire();
+	public virtual void Fire() {
+		AmmoInMagazine--;
+	}
 
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>
 	public void Reload() {
-		int usedBullets = MagazineSize - AmmoInMagazine;
-		AmmoInReserve -= usedBullets;
-		AmmoInMagazine = AmmoInReserve > MagazineSize ? MagazineSize : AmmoInReserve;
+		int usedBullets = magazineSize - ammoInMagazine;
+		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
+		ammoInReserve -= canTakeAmount;
+		ammoInMagazine += canTakeAmount;
 	}
 
 }
