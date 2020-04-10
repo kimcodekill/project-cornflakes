@@ -7,21 +7,30 @@ public class WeaponFiringState : WeaponState {
 
 	private float delay;
 
+	private bool waitForSemi;
+
 	public override void Enter() {
 		DebugManager.UpdateRow("WeaponSTM" + Weapon.gameObject.GetInstanceID(), GetType().ToString());
+		
 		delay = Weapon.GetTimeBetweenShots();
+		waitForSemi = false;
 	}
 
 	public override void Run() {
-		if ((Weapon.FullAuto && (delay += Time.deltaTime) > Weapon.GetTimeBetweenShots()) || !Weapon.FullAuto) {
+		delay += Time.deltaTime;
+		if (!waitForSemi && ((Weapon.FullAuto && delay > Weapon.GetTimeBetweenShots()) || !Weapon.FullAuto)) {
 			Weapon.Fire();
 			delay = 0f;
+			if (!Weapon.FullAuto) waitForSemi = true;
 		}
+		if (delay > Weapon.GetTimeBetweenShots()) waitForSemi = false;
 		if (!Weapon.HasAmmoInMagazine()) {
 			if (Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
 			else StateMachine.TransitionTo<WeaponIdleState>();
 		}
-		else if (!Weapon.FullAuto || !Weapon.TriggerDown) StateMachine.TransitionTo<WeaponIdleState>();
+		else if (!Weapon.FullAuto || !Weapon.TriggerDown) {
+			if (!waitForSemi) StateMachine.TransitionTo<WeaponIdleState>();
+		}
 
 		base.Run();
 	}
