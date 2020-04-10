@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "WeaponState/ReloadingState")]
 public class WeaponReloadingState : WeaponState {
 
-	public float ReloadTime = 2f;
-
 	private float currentTime;
 
 	public override void Enter() {
@@ -16,7 +14,7 @@ public class WeaponReloadingState : WeaponState {
 	}
 
 	public override void Run() {
-		if ((currentTime += Time.deltaTime) > ReloadTime) {
+		if ((currentTime += Time.deltaTime) > Weapon.ReloadTime) {
 			Weapon.Reload();
 			StateMachine.TransitionTo<WeaponIdleState>();
 		}
