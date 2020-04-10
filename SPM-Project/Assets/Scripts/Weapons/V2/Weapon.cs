@@ -71,6 +71,9 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	public int AmmoInReserve { get => ammoInReserve; protected set => ammoInReserve = value; }
 
+	/// <summary>
+	/// The amount of time it takes to reload.
+	/// </summary>
 	public float ReloadTime { get => reloadTime; protected set => reloadTime = value; }
 
 	#endregion
