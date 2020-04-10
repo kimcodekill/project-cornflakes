@@ -47,10 +47,12 @@ MonoBehaviour:
   fireRate: 60
   magazineSize: 1
   maxBullets: 9
-  spread: 1
+  spread: 0
   reloadTime: 0
   range: 200
   weaponType: 2
   bulletMask:
     serializedVersion: 2
     m_Bits: 256
+  bulletOrigin: {fileID: 0}
+  damage: 0

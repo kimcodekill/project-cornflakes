@@ -5,37 +5,48 @@ using UnityEngine.UI;
 
 public class PlayerHud : MonoBehaviour
 {
-	[SerializeField] Image panel;
-	[SerializeField] Text bulletsInMag, bulletsInReserve;
-	[SerializeField] Slider healthBar;
-	[SerializeField] PlayerController player;
-	// Start is called before the first frame update
+	[Header("Player attributes")]
+	[SerializeField] [Tooltip("The slider field for player healthbar.")] private Slider healthBar;
+	[SerializeField] [Tooltip("Text for bullets left in current magazine.")] private Text bulletsInMag; 
+	[SerializeField] [Tooltip("Text for bullets in reserve, not counting magazine.")] private Text bulletsInReserve;
+
+	[Header("Hud behaviour controls")]
+	[SerializeField] [Tooltip("HUD border image.")] private Image hudBorder;
+	[SerializeField] [Tooltip("The Player the HUD belongs to.")] private PlayerController player;
 	private Color defaultPanelColour = new Color(1, 1, 1, 0);
-	private float flashTime;
 	private float flashDuration = 0.1f;
-    void Start()
+
+    private void Start()
     {
-		panel.color = defaultPanelColour;
+		hudBorder.color = defaultPanelColour;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-		healthBar.value = player.PlayerCurrentHealth;
-		//Debug.Log(player.PlayerCurrentHealth);
-		if ((Time.time - flashTime) > flashDuration)
-			ResetColor();
-		bulletsInMag.text = player.CurrentPlayerWeapon().GetBulletsLeftInMagazine().ToString();
-		bulletsInReserve.text = player.CurrentPlayerWeapon().GetBulletsInReserve().ToString();
-
+		UpdateHealthBar();
+		UpdateBulletCount();
     }
 
+	/// <summary>
+	/// Flashes the HUD border in the given colour for flashDuration.
+	/// </summary>
+	/// <param name="color">The desired colour to flash the HUD border (RGBA).</param>
 	public void FlashColor(Color color) {
-		panel.color = color;
-		flashTime = Time.time;
+		hudBorder.color = color;
+		Invoke("ResetColor", flashDuration);
 	}
 
 	private void ResetColor() {
-		panel.color = defaultPanelColour;
+		hudBorder.color = defaultPanelColour;
+	}
+
+	private void UpdateBulletCount() {
+		bulletsInMag.text = player.CurrentPlayerWeapon().GetBulletsLeftInMagazine().ToString();
+		bulletsInReserve.text = player.CurrentPlayerWeapon().GetBulletsInReserve().ToString();
+	}
+
+	private void UpdateHealthBar() {
+		healthBar.value = player.PlayerCurrentHealth;
+
 	}
 }
