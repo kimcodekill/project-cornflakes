@@ -21,7 +21,9 @@ public class PlayerDashingState : PlayerAirState {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		
 		base.Enter();
-		if (OffCooldown(Time.time)) Dash();
+		
+		//if (OffCooldown(Time.time)) Dash();
+		if (!dashed) Dash();
 		else StateMachine.Pop(true);
 		skipEnter = true;
 	}
