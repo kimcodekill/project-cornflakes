@@ -36,8 +36,6 @@ public class PhysicsBody : MonoBehaviour {
 
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-    
-		DebugManager.AddSection("Physics" + gameObject.GetInstanceID(), "", "", "", "");
 	}
 
 	/// <summary>
@@ -77,10 +75,8 @@ public class PhysicsBody : MonoBehaviour {
 	/// Sets the Y component of the PhysicsBody velocity to 0.
 	/// </summary>
 	public void ResetVerticalSpeed() {
-		DebugManager.UpdateRows("Physics" + gameObject.GetInstanceID(), new int[] { 0, 1 }, "rbvy1"+rigidBody.velocity.y, "rbavy1"+rigidBody.angularVelocity.y);
 		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
 		rigidBody.angularVelocity.Set(rigidBody.angularVelocity.x, -1f, rigidBody.angularVelocity.z);
-		DebugManager.UpdateRows("Physics" + gameObject.GetInstanceID(), new int[] { 2, 3 }, "rbvy2" + rigidBody.velocity.y, "rbavy2" + rigidBody.angularVelocity.y);
 	}
 
 	/// <summary>
@@ -114,7 +110,7 @@ public class PhysicsBody : MonoBehaviour {
 			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
 			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius);
 			return Physics.SphereCast(topCircle, c.radius, Vector3.down, out _, (c.height / 2) + GroundedDistanceOffset, mask);
-			return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
+			//return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
 		}
 		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
 	}
