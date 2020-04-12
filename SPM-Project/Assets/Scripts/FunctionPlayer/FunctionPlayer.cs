@@ -19,21 +19,21 @@ public class FunctionPlayer : MonoBehaviour {
 			Lifetime
 		}
 
-		public DisposalMode mode;
+		public DisposalMode Mode { get; private set; }
 		
 		public int iterations;
 
 		public float lifeTime;
 
-		public DisposalTracker() => mode = DisposalMode.Keep;
+		public DisposalTracker() => Mode = DisposalMode.Keep;
 
 		public DisposalTracker(int iterations) {
-			mode = DisposalMode.Iterations;
+			Mode = DisposalMode.Iterations;
 			this.iterations = iterations;
 		}
 
 		public DisposalTracker(float lifeTime) {
-			mode = DisposalMode.Lifetime;
+			Mode = DisposalMode.Lifetime;
 			this.lifeTime = lifeTime;
 		}
 	
@@ -43,7 +43,7 @@ public class FunctionPlayer : MonoBehaviour {
 		toRemove = new List<FunctionToPlay>();
 		foreach (KeyValuePair<FunctionToPlay, DisposalTracker> function in functionDictionary) {
 			function.Key();
-			switch (function.Value.mode) {
+			switch (function.Value.Mode) {
 				case DisposalTracker.DisposalMode.Keep:
 					break;
 				case DisposalTracker.DisposalMode.Iterations:
@@ -64,13 +64,12 @@ public class FunctionPlayer : MonoBehaviour {
 	/// Adds a function to the Function Player.
 	/// </summary>
 	/// <param name="function">The function to be added.</param>
-	/// <param name="mode">The disposal mode.</param>
 	public static void AddFunction(FunctionToPlay function) {
 		functionDictionary.Add(function, new DisposalTracker());
 	}
 
 	/// <summary>
-	/// Adds a function to the Function Player.
+	/// Adds a function to the Function Player that is removed after the specified iterations.
 	/// </summary>
 	/// <param name="function">The function to be added.</param>
 	/// <param name="iterations">The amount of times it should be played.</param>
@@ -79,7 +78,7 @@ public class FunctionPlayer : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Adds a function to the Function Player.
+	/// Adds a function to the Function Player that is removed after the specified lifetime.
 	/// </summary>
 	/// <param name="function">The function to be added.</param>
 	/// <param name="lifeTime">The amount of time it should be played.</param>
