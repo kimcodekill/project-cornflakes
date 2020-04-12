@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour {
@@ -14,7 +13,7 @@ public abstract class Weapon : MonoBehaviour {
 		Special
 	}
 
-	#region Parameters
+	#region Properties
 
 	/// <summary>
 	/// Whether or not the trigger is being pulled.
@@ -76,11 +75,23 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	public float ReloadTime { get => reloadTime; protected set => reloadTime = value; }
 
+	/// <summary>
+	/// The amount of recoil caused by the firing of the weapon.
+	/// </summary>
+	public float Recoil { get => recoil; protected set => reloadTime = value; }
+
+	/// <summary>
+	/// The amount of variance in the bullet path.
+	/// </summary>
+	public float Spread { get => spread; protected set => spread = value; }
+
 	#endregion
 
 	#region Serialized
 
-	[Header("Attributes")]
+	[Header("States")]
+	[SerializeField] private State[] states;
+	[Header("Base Attributes")]
 	[SerializeField] private EAmmoType ammoType;
 	[SerializeField] private bool fullAuto;
 	[SerializeField] private float fireRate;
@@ -88,15 +99,20 @@ public abstract class Weapon : MonoBehaviour {
 	[SerializeField] private int ammoInMagazine;
 	[SerializeField] private int ammoInReserve;
 	[SerializeField] private float reloadTime;
-	[Header("States")]
-	[SerializeField] private State[] states;
+	[SerializeField] private float recoil;
+	[SerializeField] private float spread;
 
 	#endregion
 
 	private StateMachine weaponMachine;
 
+	private PlayerCamera playerCamera;
+
+	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+
 	private void Start() {
-		weaponMachine = new StateMachine(this, states);	
+		weaponMachine = new StateMachine(this, states);
+		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
 	private void Update() {
@@ -138,10 +154,24 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
+	/// Calculates the point the crosshair is currently looking at.
 	/// </summary>
-	public virtual void Fire() {
-		AmmoInMagazine--;
+	/// <returns>The point the crosshair is looking at.</returns>
+	public RaycastHit GetCrosshairHit() {
+		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
+		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue);
+		return cameraHit;
+	}
+
+	/// <summary>
+	/// Returns the normalized direction from a point to another.
+	/// </summary>
+	/// <param name="origin">The first point.</param>
+	/// <param name="target">The second point.</param>
+	/// <returns>The direction from <c>origin</c> to <c>target</c>.</returns>
+	public Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
+		Vector3 direction = target - origin;
+		return direction /= direction.magnitude;
 	}
 
 	/// <summary>
@@ -152,6 +182,29 @@ public abstract class Weapon : MonoBehaviour {
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
 		ammoInReserve -= canTakeAmount;
 		ammoInMagazine += canTakeAmount;
+	}
+
+	/// <summary>
+	/// Adds recoil by adjusting camera X rotation.
+	/// </summary>
+	public virtual void AddRecoil() {
+		playerCamera.InjectRotation(recoil, 0);
+	}
+
+	/// <summary>
+	/// Adds a random variance to a vector in the range of the negative to positive <c>Spread</c> property.
+	/// </summary>
+	/// <param name="direction">The direction to adjust.</param>
+	/// <returns>The input vector with added variance.</returns>
+	public virtual Vector3 AddSpread(Vector3 direction) {
+		return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
+	}
+
+	/// <summary>
+	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
+	/// </summary>
+	public virtual void Fire() {
+		AmmoInMagazine--;
 	}
 
 }
