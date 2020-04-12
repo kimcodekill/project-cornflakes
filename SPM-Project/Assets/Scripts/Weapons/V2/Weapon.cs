@@ -188,7 +188,8 @@ public abstract class Weapon : MonoBehaviour {
 	/// Adds recoil by adjusting camera X rotation.
 	/// </summary>
 	public virtual void AddRecoil() {
-		playerCamera.InjectRotation(recoil, 0);
+		
+		playerCamera.InjectRotation(Mathf.Lerp(playerCamera.transform.rotation.x,  recoil, 0.01f), 0);
 	}
 
 	/// <summary>
