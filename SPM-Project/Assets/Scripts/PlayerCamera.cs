@@ -11,6 +11,7 @@ public class PlayerCamera : MonoBehaviour {
 	[SerializeField] [Tooltip("Cameram radius for collision detection.")] private float camRadius = 0.25f; 
 	[SerializeField] [Tooltip("Minimum allowed distance between camera and objects behind it.")] private float minCollisionDistance = 2f;
 	private float rotationX, rotationY;
+	private Camera camera;
 
 	[SerializeField] [Tooltip("The Player object the camera attaches to.")] private Transform player;
 
@@ -22,13 +23,13 @@ public class PlayerCamera : MonoBehaviour {
 
 	private void Start() {
 		Cursor.lockState = CursorLockMode.Locked;
-		
+		camera = GetComponent<Camera>();
 	}
 
 	private void Update() {
 		RotateCamera();
 		transform.position = player.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
-		Debug.DrawRay(transform.position, transform.forward * 10);
+		GetActualLook();
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
@@ -46,5 +47,11 @@ public class PlayerCamera : MonoBehaviour {
 		rotationX = Mathf.Clamp(rotationX, -60f, 60f);
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 	}
-}
+	
+	private void GetActualLook() {
+		Ray r = camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+		Physics.Raycast(r, out RaycastHit hit, float.MaxValue);
+		Debug.DrawRay(r.origin, r.direction * hit.distance, Color.red);
+	}
 
+}

@@ -704,6 +704,11 @@ PrefabInstance:
       propertyPath: spread
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4494917905583777919, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: bulletMask.m_Bits
+      value: 1792
+      objectReference: {fileID: 0}
     - target: {fileID: 7841059610537404105, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_LocalPosition.z
