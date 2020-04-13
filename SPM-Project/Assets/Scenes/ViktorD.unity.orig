@@ -387,7 +387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &698384165
 Transform:
   m_ObjectHideFlags: 0
@@ -724,7 +724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1638404429
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -822,9 +822,15 @@ MonoBehaviour:
   ammoInMagazine: 5
   ammoInReserve: 14
   reloadTime: 2
-  recoil: 20
+<<<<<<< HEAD
+  recoil: 5
   spread: 0
   pelletCount: 0
+=======
+  states:
+  - {fileID: 11400000, guid: 1d9291ea25c200846a2888e1c988e07a, type: 2}
+  - {fileID: 11400000, guid: ba9806ebee8f1af43be4a7d827b2db09, type: 2}
+  - {fileID: 11400000, guid: c90e08d5d467f8c4d8697e06bd6d377c, type: 2}
 --- !u!1 &1694186100
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,6 +861,7 @@ Transform:
   m_Father: {fileID: 652961280}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+>>>>>>> 94d6b617321cbf5796becea128ec0af87bab7ee8
 --- !u!1 &1788875022
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,7 +975,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &1840079162
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1067,7 +1074,7 @@ MonoBehaviour:
   ammoInMagazine: 50
   ammoInReserve: 150
   reloadTime: 3
-  recoil: 30
+  recoil: 0.3
   spread: 0
 --- !u!1 &1938377297
 GameObject:

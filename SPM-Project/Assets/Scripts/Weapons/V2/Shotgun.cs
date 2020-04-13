@@ -18,7 +18,7 @@ public class Shotgun : Weapon {
 	#endregion
 
 	public override void Fire() {
-		AddRecoil();
+		FunctionPlayer.AddFunction(AddRecoil, 0.1f);
 		AmmoInMagazine--;
 	}
 
