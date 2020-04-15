@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DefaultPlayerJumpingState
   m_EditorClassIdentifier: 
   AirAcceleration: 10
-  TopAirSpeed: 7
+  TopAirSpeed: 10
   JumpHeight: 10
