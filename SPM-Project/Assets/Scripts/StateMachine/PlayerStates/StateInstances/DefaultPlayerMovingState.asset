@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DefaultPlayerMovingState
   m_EditorClassIdentifier: 
   Drag: 10
-  AirDrag: 1
+  AirDrag: 0
   Acceleration: 100
   TopSpeed: 5
