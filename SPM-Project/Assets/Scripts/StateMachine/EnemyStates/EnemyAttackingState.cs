@@ -12,7 +12,9 @@ public class EnemyAttackingState : EnemyBaseState
 
 	private float internalAttackCD;
 
-
+	public override void Enter() {
+		Enemy.StartAttackBehaviour();
+	}
 	public override void Run() {
 		if(!Enemy.PlayerIsInSight()) { StateMachine.Pop(); }
 		internalAttackCD += Time.deltaTime;
@@ -25,9 +27,14 @@ public class EnemyAttackingState : EnemyBaseState
 
 	private void AttackTarget(Vector3 v) {
 		Bullet instance;
-		instance = Instantiate(bulletPrefab, Enemy.GetGunPosition(), Enemy.transform.rotation);
+		instance = Instantiate(bulletPrefab, Enemy.GetGunPosition().position, Enemy.transform.rotation);
 		instance.Initialize(v, v.magnitude);
 		Enemy.Target.TakeDamage(attackDamage);
+
+	}
+
+	public override void Exit() {
+		Enemy.StopAttackBehaviour();
 	}
 }
 
