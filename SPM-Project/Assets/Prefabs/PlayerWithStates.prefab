@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3214542840369799017}
   - component: {fileID: 3214542840369799018}
   - component: {fileID: 3214542840369799019}
-  - component: {fileID: 3214542840369799021}
   - component: {fileID: 3214542840369799023}
   - component: {fileID: 3214542840369799022}
   m_Layer: 0
@@ -44,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3214542840369799012}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &3214542840369799018
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -95,21 +94,8 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &3214542840369799021
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3214542840369799012}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3214542840369799023
 MonoBehaviour:
@@ -129,8 +115,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
   - {fileID: 11400000, guid: db4b5d507fe558a4c8b7375400d537f8, type: 2}
-  playerMaxHealth: 0
   cam: {fileID: 3214542842143053980}
+  playerHud: {fileID: 0}
 --- !u!114 &3214542840369799022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +144,7 @@ GameObject:
   - component: {fileID: 3214542842143053982}
   - component: {fileID: 3214542842143053983}
   - component: {fileID: 3214542842143053980}
+  - component: {fileID: 3214542841269422982}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -242,10 +229,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5defdd5c8885e47a11a2924e46cac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSensitivity: 1
-  minCameraDistance: 2
-  cameraIsFirstPerson: 0
+  cameraOffset: {x: 0, y: 1, z: -10}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 512
+  lookSensitivity: 1
+  camRadius: 0.25
+  minCollisionDistance: 2
   player: {fileID: 3214542840369799016}
+--- !u!114 &3214542841269422982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214542842143053976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 3214542842143053981}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 1
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
