@@ -17,11 +17,16 @@ public class PlayerDashingState : PlayerAirState {
 
 	private bool dashed = false;
 
+	private Afterburner afterburner;
+
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
-		
+		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
+		if (afterburner == null) Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
+
 		base.Enter();
-		if (OffCooldown(Time.time)) Dash();
+
+		if (!dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire())) Dash();
 		else StateMachine.Pop(true);
 		skipEnter = true;
 	}
@@ -34,14 +39,16 @@ public class PlayerDashingState : PlayerAirState {
 			else {
 				currentDashTime = 0f;
 				dashed = false;
-				StateMachine.Pop(true);
+				StateMachine.Pop(StateMachine.IsPreviousState<PlayerJumpingState>());
 			}
 		}
 	}
 
 	private void Dash() {
+		if (afterburner != null) afterburner.Fire();
 		Player.PhysicsBody.ResetVelocity();
-		Vector3 impulse = Player.GetInput().normalized * DashSpeed;
+		Vector3 input = Player.GetInput();
+		Vector3 impulse = (input.magnitude != 0 ? input.normalized : Vector3.ProjectOnPlane(Camera.main.transform.rotation * Vector3.forward, Vector3.up).normalized) * DashSpeed;
 		impulse.y = 0;
 		Player.PhysicsBody.AddForce(impulse, ForceMode.Impulse);
 		Player.PhysicsBody.SetGravityEnabled(false);

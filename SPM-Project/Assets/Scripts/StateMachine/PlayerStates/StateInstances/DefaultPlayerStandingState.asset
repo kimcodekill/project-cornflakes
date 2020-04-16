@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DefaultPlayerStandingState
   m_EditorClassIdentifier: 
   Drag: 10
-  AirDrag: 1
+  AirDrag: 0
