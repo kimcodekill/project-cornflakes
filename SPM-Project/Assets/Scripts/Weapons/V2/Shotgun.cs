@@ -6,6 +6,9 @@ public class Shotgun : Weapon {
 
 	#region Properties
 
+	/// <summary>
+	/// How many pellets the shotgun should fire per shot.
+	/// </summary>
 	public int PelletCount { get => pelletCount; protected set => pelletCount = value; }
 
 	#endregion
@@ -18,7 +21,20 @@ public class Shotgun : Weapon {
 	#endregion
 
 	public override void Fire() {
-		FunctionPlayer.AddFunction(AddRecoil, 0.1f);
+		Vector3 direction = GetDirectionToPoint(Muzzle.forward, GetCrosshairHit().point);
+
+		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
+			Description = "Shotgun fired a shot", GameObject = gameObject
+		});
+		
+		for (int i = 0; i < pelletCount; i++) {
+			if (Physics.Raycast(Muzzle.forward, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask)) {
+				EventSystem.Current.FireEvent(new HitEvent() {
+					Description = "Shotgun hit " + hit.collider.gameObject,
+					Source = gameObject, Target = hit.collider.gameObject
+				});
+			}
+		}
 		AmmoInMagazine--;
 	}
 
