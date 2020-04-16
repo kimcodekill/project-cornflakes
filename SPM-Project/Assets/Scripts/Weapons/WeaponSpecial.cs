@@ -19,7 +19,7 @@ public class WeaponSpecial : WeaponBase
             
             if(Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
             {
-                HurtPawn(hit.collider.gameObject.GetComponent<IPawn>());
+                HurtPawn(hit.collider.gameObject.GetComponentInParent<IPawn>());
                 if (bulletDebug) { DrawBulletDebug(hit); }
 			}
         }

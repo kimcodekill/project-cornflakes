@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 4}
   m_SizeDelta: {x: 20, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8910984368462758515
@@ -265,10 +265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f790a2e2cadc94d8af6e2cfcb1b2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 7841059611166161776}
+  healthBar: {fileID: 7841059611332117718}
   bulletsInMag: {fileID: 7841059611183370172}
   bulletsInReserve: {fileID: 7841059611711259450}
-  healthBar: {fileID: 7841059611332117718}
+  hudBorder: {fileID: 7841059611166161776}
   player: {fileID: 7841059610958226998}
 --- !u!1 &7841059610752469684
 GameObject:
@@ -570,7 +570,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71, y: 0}
+  m_AnchoredPosition: {x: -70, y: 0}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7841059611183370173
@@ -943,13 +943,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5defdd5c8885e47a11a2924e46cac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSensitivity: 1
-  minCameraDistance: 2
+  cameraOffset: {x: 0.5, y: 1, z: -2}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 768
+  lookSensitivity: 1
+  camRadius: 0.25
+  minCollisionDistance: 2
   player: {fileID: 7841059610958226996}
-  cameraOffset: {x: 0.5, y: 1, z: -2}
 --- !u!1 &7841059611711259448
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,7 +985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 74.4, y: 0}
+  m_AnchoredPosition: {x: 70, y: 0}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7841059611711259451
