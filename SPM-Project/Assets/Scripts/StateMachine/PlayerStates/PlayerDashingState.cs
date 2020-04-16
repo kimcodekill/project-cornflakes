@@ -26,7 +26,7 @@ public class PlayerDashingState : PlayerAirState {
 
 		base.Enter();
 
-		if (!dashed && OffCooldown(Time.time) && (afterburner.CanFire() || afterburner == null)) Dash();
+		if (!dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire())) Dash();
 		else StateMachine.Pop(true);
 		skipEnter = true;
 	}
