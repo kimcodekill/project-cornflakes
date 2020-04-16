@@ -26,11 +26,6 @@ public abstract class Weapon : MonoBehaviour {
 	public bool OverrideTriggerDown { get; set; } = false;
 
 	/// <summary>
-	/// Whether or not the weapon is being aimed down sights with.
-	/// </summary>
-	public bool AimingDownSights { get { return Input.GetKey(KeyCode.Mouse1); } }
-
-	/// <summary>
 	/// Whether or not the reload key is being pressed.
 	/// </summary>
 	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R) || OverrideRequestedReload; } }
@@ -49,6 +44,11 @@ public abstract class Weapon : MonoBehaviour {
 	/// Whether or not the weapon is in full auto mode.
 	/// </summary>
 	public bool FullAuto { get => fullAuto; protected set => fullAuto = value; }
+
+	/// <summary>
+	/// The damage the weapon deals per bullet.
+	/// </summary>
+	public float Damage { get => damage; protected set => damage = value; }
 
 	/// <summary>
 	/// The fire rate of the weapon.
@@ -85,15 +85,29 @@ public abstract class Weapon : MonoBehaviour {
 	/// </summary>
 	public float Spread { get => spread; protected set => spread = value; }
 
+	/// <summary>
+	/// What the weapon should be able to hit.
+	/// </summary>
+	public LayerMask BulletHitMask { get => bulletHitMask; protected set => bulletHitMask = value; }
+
+	/// <summary>
+	/// The transform of the muzzle of the weapon.
+	/// </summary>
+	public Transform Muzzle { get => muzzle; protected set => muzzle = value; }
+
 	#endregion
 
 	#region Serialized
 
 	[Header("States")]
 	[SerializeField] private State[] states;
+	[Header("Misc. Attributes")]
+	[SerializeField] private LayerMask bulletHitMask;
+	[SerializeField] private Transform muzzle;
 	[Header("Base Attributes")]
 	[SerializeField] private EAmmoType ammoType;
 	[SerializeField] private bool fullAuto;
+	[SerializeField] private float damage;
 	[SerializeField] private float fireRate;
 	[SerializeField] private int magazineSize;
 	[SerializeField] private int ammoInMagazine;
@@ -159,7 +173,7 @@ public abstract class Weapon : MonoBehaviour {
 	/// <returns>The point the crosshair is looking at.</returns>
 	public RaycastHit GetCrosshairHit() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
-		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue);
+		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
 		return cameraHit;
 	}
 
