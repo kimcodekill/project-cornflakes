@@ -35,7 +35,7 @@ public class PlayerDashingState : PlayerAirState {
 			else {
 				currentDashTime = 0f;
 				dashed = false;
-				StateMachine.Pop(true);
+				StateMachine.Pop(StateMachine.IsPreviousState<PlayerJumpingState>());
 			}
 		}
 	}
