@@ -23,11 +23,7 @@ public class Enemy : MonoBehaviour, IPawn
 	/// </summary>
 	public PlayerController Target { get; private set; }
 	
-	/// <summary>
-	/// Returns this enemy's collision layers.
-	/// </summary>
-	/// <returns></returns>
-	public Vector3 TargetVector { get; private set; }
+	public Vector3 VectorToTarget { get; private set; }
 
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -36,7 +32,7 @@ public class Enemy : MonoBehaviour, IPawn
 	}
 
 	protected void Update() {
-		TargetVector = CalculateVectorToTarget();
+		VectorToTarget = CalculateVectorToTarget();
 		enemyStateMachine.Run();
 	}
 
@@ -51,19 +47,24 @@ public class Enemy : MonoBehaviour, IPawn
 	/// <param name="v"></param>
 	/// <returns></returns>
 	public bool PlayerIsInSight() {
-		if (TargetIsInFOV(TargetVector) && TargetIsInRange(TargetVector) && CanSeeTarget(TargetVector)) { return true; }
+		if (TargetIsInRange() && CanSeeTarget(VectorToTarget) && TargetIsInFOV(VectorToTarget)) { return true; }
 		else { return false; }
 	}
 
 	private bool TargetIsInFOV(Vector3 v) {
 		float angleToTarget = Vector3.Dot(transform.forward, v.normalized);
-		if (angleToTarget >= fieldOfView) { return true; }
+		if (angleToTarget >= fieldOfView) {
+			//Debug.Log(Target.gameObject.name + " is in FOV of " + gameObject.name);
+			return true; 
+		}
 		else { return false; }
 	}
 
-	private bool TargetIsInRange(Vector3 v) {
-		float distanceToTarget = v.magnitude;
-		if (distanceToTarget <= sightRange) { return true; }
+	private bool TargetIsInRange() {
+		if (Vector3.Distance(transform.position, Target.transform.position) < sightRange) {
+			//Debug.Log(Target.gameObject.name + " in range of " + gameObject.name);
+			return true;
+		}
 		else { return false; }
 	}
 
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour, IPawn
 		Physics.Raycast(enemyEyes, v + new Vector3(0.25f, 0, 0), out RaycastHit hit4, v.magnitude, layerMask);
 		Physics.Raycast(enemyEyes, v + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, v.magnitude, layerMask);*/
 		if (hit.collider == null/* || hit2.collider == null || hit3.collider == null || hit4.collider == null || hit5.collider == null*/) {
+			//Debug.Log(Target.gameObject.name + " is seen by " + gameObject.name);
 			return true;
 		}
 		else { return false; }
@@ -86,7 +88,7 @@ public class Enemy : MonoBehaviour, IPawn
 	/// </summary>
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
-		if (!Physics.SphereCast(GetGunPosition().position, 0.5f, TargetVector, out _, TargetVector.magnitude, layerMask)) { return true; }
+		if (!Physics.SphereCast(GetGunPosition().position, 0.5f, VectorToTarget, out _, VectorToTarget.magnitude, layerMask)) { return true; }
 		else { return false; }
 		///if the enemy can't attack the player, move to position where it can attack player
 	}
