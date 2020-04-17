@@ -32,7 +32,6 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	protected void Update() {
-		Debug.Log(Target.transform.position);
 		VectorToTarget = CalculateVectorToTarget();
 		enemyStateMachine.Run();
 	}
