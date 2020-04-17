@@ -128,7 +128,7 @@ public class PhysicsBody : MonoBehaviour {
 	/// </summary>
 	/// <returns>The normal of the hit surface.</returns>
 	public Vector3 GetCurrentSurfaceNormal() {
-		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance, mask);
+		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance*float.MaxValue, mask);
 		return hit.normal;
 	}
 
