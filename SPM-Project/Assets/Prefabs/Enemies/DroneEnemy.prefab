@@ -367,7 +367,7 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 20
   fieldOfView: 0.3
-  sightRange: 15
+  sightRange: 20
   gunPosition: {fileID: 39769688967627567}
   eyePosition: {fileID: 3245006856651615628}
   states:
@@ -379,6 +379,8 @@ MonoBehaviour:
     m_Bits: 1536
   patrolBungeeDistance: 5
   movementSpeed: 3
+  maxDistanceToTarget: 15
+  minDistanceToTarget: 5
   body: {fileID: 8626059835950779692}
 --- !u!135 &8626059835950779692
 SphereCollider:
