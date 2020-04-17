@@ -22,6 +22,7 @@ public class Shotgun : Weapon {
 
 	public override void Fire() {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
+		
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
 			Description = gameObject + " fired a shot", GameObject = gameObject
 		});
@@ -35,6 +36,7 @@ public class Shotgun : Weapon {
 				});
 			}
 		}
+
 		AmmoInMagazine--;
 	}
 
