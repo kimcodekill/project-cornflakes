@@ -93,7 +93,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The transform of the muzzle of the weapon.
 	/// </summary>
-	public Transform Muzzle { get => muzzle; protected set => muzzle = value; }
+	public Transform Muzzle { get => muzzle; set => muzzle = value; }
 
 	#endregion
 
