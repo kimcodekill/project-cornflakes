@@ -10,8 +10,8 @@ public class InteractionListener : MonoBehaviour {
 	}
 
 	private void OnHit(Event e) {
-		HitEvent he = e.GetReal();
-		if (he.Target.GetComponentInParent<IEntity>() != null) {
+		HitEvent he = (HitEvent) e;
+		if (he.Target.GetComponent<IEntity>() != null) {
 			EventSystem.Current.FireEvent(new DamageEvent() {
 				Description = he.Source + " damaged " + he.Target,
 				Source = he.Source,
@@ -22,8 +22,8 @@ public class InteractionListener : MonoBehaviour {
 	}
 
 	private void OnDamage(Event e) {
-		DamageEvent de = e.GetReal();
-		de.Target.GetComponentInParent<IEntity>().TakeDamage(de.Damage);
+		DamageEvent de = (DamageEvent) e;
+		de.Target.GetComponent<IEntity>().TakeDamage(de.Damage);
 	}
 
 }

@@ -26,14 +26,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
-	/// <summary>
-	/// Returns the player's currently equipped weapon.
-	/// </summary>
-	/// <returns></returns>
-	public WeaponBase CurrentPlayerWeapon() { return weaponArray.GetEquippedWeapon(); }
-
 	private void Start() {
-		weaponArray = GetComponent<AbilityTrigger>();
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 

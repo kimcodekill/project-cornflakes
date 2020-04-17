@@ -16,7 +16,8 @@ public class AutoRifle : Weapon {
 			EventSystem.Current.FireEvent(new HitEvent() {
 				Description = this + " hit " + hit.collider.gameObject,
 				Source = gameObject,
-				Target = hit.collider.gameObject
+				Target = hit.collider.gameObject,
+				HitPoint = hit.point
 			});
 		}
 		AmmoInMagazine--;

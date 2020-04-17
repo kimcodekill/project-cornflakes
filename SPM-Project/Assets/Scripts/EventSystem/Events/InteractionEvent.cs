@@ -21,3 +21,7 @@ public class DamageEvent : InteractionEvent {
 	public float Damage;
 
 }
+
+public class PickUpEvent : InteractionEvent {
+
+}
