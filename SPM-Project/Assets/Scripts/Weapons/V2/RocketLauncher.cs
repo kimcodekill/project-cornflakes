@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The rocket launcher fires relatively slow moving rockets instead of bullets.
+/// </summary>
 public class RocketLauncher : Weapon {
 
 	#region Properties

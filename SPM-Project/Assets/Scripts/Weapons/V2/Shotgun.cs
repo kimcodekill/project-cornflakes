@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The shotgun fires shells, containing some amount of pellets per shot.
+/// </summary>
 public class Shotgun : Weapon {
 
 	#region Properties
