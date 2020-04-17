@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The sniper rifle has the ability to aim down sights.
+/// </summary>
 public class SniperRifle : Weapon {
 
 	#region Properties

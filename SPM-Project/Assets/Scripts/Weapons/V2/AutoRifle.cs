@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The auto rifle fires automatically, has infinite ammo but can overheat.
+/// If AmmoInMagazine is 0, then the weapon has overheated.
+/// The reload time here becomes the "cooldown" stage.
+/// Ammo in reserve is irrelevant, so we refill it all the time.
+/// </summary>
 public class AutoRifle : Weapon {
 
 	protected override void Fire() {
@@ -14,6 +20,7 @@ public class AutoRifle : Weapon {
 			});
 		}
 		AmmoInMagazine--;
+		if (AmmoInReserve < MagazineSize) AmmoInReserve = MagazineSize;
 	}
 
 }

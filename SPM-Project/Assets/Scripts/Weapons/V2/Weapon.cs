@@ -63,7 +63,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of ammunition remaining in the magazine.
 	/// </summary>
-	public int AmmoInMagazine { get => ammoInMagazine; protected set => ammoInMagazine = value; }
+	public int AmmoInMagazine { get => ammoInMagazine; set => ammoInMagazine = value; }
 
 	/// <summary>
 	/// The amount of ammunition remaining in the reserve.
@@ -124,6 +124,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
+	#region Attribute Status Functions
+
 	/// <summary>
 	/// Implements <c>IDamaging.GetDamage()</c>.
 	/// </summary>
@@ -165,6 +167,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		return 60.0f / fireRate;
 	}
 
+	#endregion
+
+	#region Helper Functions
+
 	/// <summary>
 	/// Calculates the point the crosshair is currently looking at.
 	/// </summary>
@@ -186,6 +192,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		return direction /= direction.magnitude;
 	}
 
+	/// <summary>
+	/// Casts a ray from the muzzle of the gun to whatever the player is aiming at and returns the result.
+	/// </summary>
+	/// <returns>The resulting RaycastHit</returns>
 	protected RaycastHit MuzzleCast() {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
 		Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask);
@@ -217,6 +227,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	protected virtual Vector3 AddSpread(Vector3 direction) {
 		return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
 	}
+
+	#endregion
 
 	/// <summary>
 	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.

@@ -29,7 +29,8 @@ public class WeaponIdleState : WeaponState {
 			if (Weapon.HasAmmoInMagazine()) StateMachine.TransitionTo<WeaponFiringState>();
 			else if (Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
 		}
-
+		//"Cool down" auto rifle if idle
+		if (Weapon is AutoRifle) Weapon.AmmoInMagazine = Weapon.AmmoInMagazine + 1 > Weapon.MagazineSize ? Weapon.MagazineSize : Weapon.AmmoInMagazine + 1;
 		base.Run();
 	}
 
