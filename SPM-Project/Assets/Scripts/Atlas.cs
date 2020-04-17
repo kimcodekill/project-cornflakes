@@ -4,11 +4,13 @@ using UnityEngine;
 
 public static class Atlas {
 
-	private class AtlasEntry {
+	public class AtlasEntry {
 		public AudioClip HitSound;
 		public ParticleSystem HitSystem;
 		public Texture HitDecal;
 	}
+
+	public static AtlasEntry defaultEntry = new AtlasEntry();
 
 	private static Dictionary<Material, AtlasEntry> atlas = new Dictionary<Material, AtlasEntry>();
 
@@ -48,6 +50,15 @@ public static class Atlas {
 	/// <param name="hitDecal">The decal that should be placed when the material is hit.</param>
 	public static void AddEntry(Material key, AudioClip hitSound, ParticleSystem hitSystem, Texture hitDecal) {
 		atlas.Add(key, new AtlasEntry() { HitSound = hitSound, HitSystem = hitSystem, HitDecal = hitDecal });
+	}
+
+	/// <summary>
+	/// Adds an AtlasEntry to the material atlas.
+	/// </summary>
+	/// <param name="key">The material to be associated with the passed AtlasEntry.</param>
+	/// <param name="atlasEntry">The parameters associated with the material.</param>
+	public static void AddEntry(Material key, AtlasEntry atlasEntry) {
+		atlas.Add(key, atlasEntry);
 	}
 
 }

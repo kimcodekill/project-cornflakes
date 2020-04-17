@@ -14,7 +14,7 @@ public class AutoRifle : Weapon {
 
 		if (Physics.Raycast(Muzzle.forward, direction, out RaycastHit hit, float.MaxValue, BulletHitMask)) {
 			EventSystem.Current.FireEvent(new HitEvent() {
-				Description = gameObject + " hit " + hit.collider.gameObject,
+				Description = this + " hit " + hit.collider.gameObject,
 				Source = gameObject,
 				Target = hit.collider.gameObject
 			});

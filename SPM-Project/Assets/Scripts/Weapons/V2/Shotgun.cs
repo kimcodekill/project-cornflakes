@@ -30,7 +30,7 @@ public class Shotgun : Weapon {
 		for (int i = 0; i < pelletCount; i++) {
 			if (Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask)) {
 				EventSystem.Current.FireEvent(new HitEvent() {
-					Description = gameObject + " hit " + hit.collider.gameObject,
+					Description = this + " hit " + hit.collider.gameObject,
 					Source = gameObject,
 					Target = hit.collider.gameObject
 				});
