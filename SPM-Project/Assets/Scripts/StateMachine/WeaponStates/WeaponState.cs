@@ -6,7 +6,7 @@ public abstract class WeaponState : State {
 
 	private Weapon weapon;
 
-	public Weapon Weapon => weapon = weapon != null ? weapon : (Weapon) Owner;
+	public Weapon Weapon => weapon = weapon != null ? weapon : ((PlayerWeapon) Owner).CurrentWeapon;
 
 	public override void Run() {
 		if (Weapon.RequestedReload && Weapon.AmmoInMagazine < Weapon.MagazineSize && Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();

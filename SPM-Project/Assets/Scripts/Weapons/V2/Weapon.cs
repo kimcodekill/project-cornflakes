@@ -99,8 +99,6 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	#region Serialized
 
-	[Header("States")]
-	[SerializeField] private State[] states;
 	[Header("Misc. Attributes")]
 	[SerializeField] private LayerMask bulletHitMask;
 	[SerializeField] private Transform muzzle;
@@ -118,20 +116,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	#endregion
 
-	private StateMachine weaponMachine;
-
 	private PlayerCamera playerCamera;
 
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
 	private void Start() {
-		weaponMachine = new StateMachine(this, states);
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
-	}
-
-	private void Update() {
-		weaponMachine.Run();
-		DebugManager.UpdateRows("WeaponSTM" + gameObject.GetInstanceID(), new int[] { 1, 2 }, "Magazine: " + AmmoInMagazine, "Reserve: " + GetRemainingAmmoInReserve());
 	}
 
 	/// <summary>
@@ -170,7 +160,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Calculates the time between shots as according to the RPM of the weapon.
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>The time until a shot can be fired after a previous shot.</returns>
 	public float GetTimeBetweenShots() {
 		return 60.0f / fireRate;
 	}
