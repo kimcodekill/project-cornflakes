@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public Vector3 GetInput() {
 		Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
-		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, Vector3.up).normalized;
+		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, PhysicsBody.GetCurrentSurfaceNormal()).normalized;
 		return planarProjection;
 	}
 
