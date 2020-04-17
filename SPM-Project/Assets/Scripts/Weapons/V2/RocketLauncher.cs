@@ -25,10 +25,9 @@ public class RocketLauncher : Weapon {
 
 	#endregion
 
-	public override void Fire() {
-		Vector3 direction = AddSpread(GetDirectionToPoint(Muzzle.forward, GetCrosshairHitPoint()));
-		//firegunevent
-		if (Physics.Raycast(Muzzle.forward, direction, out RaycastHit hit, float.MaxValue, BulletHitMask)) {
+	protected override void Fire() {
+		RaycastHit hit = MuzzleCast();
+		if (hit.collider != null) {
 			//hitsomethingevent
 		}
 		AmmoInMagazine--;

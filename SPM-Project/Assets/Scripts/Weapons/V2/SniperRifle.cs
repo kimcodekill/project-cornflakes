@@ -25,22 +25,15 @@ public class SniperRifle : Weapon {
 
 	#endregion
 
-	public override void Fire() {
-		Vector3 direction = AddSpread(GetDirectionToPoint(Muzzle.forward, GetCrosshairHitPoint()));
-
-		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
-			Description = gameObject + " fired a shot",
-			GameObject = gameObject
-		});
-
-		if (Physics.Raycast(Muzzle.forward, direction, out RaycastHit hit, float.MaxValue, BulletHitMask)) {
+	protected override void Fire() {
+		RaycastHit hit = MuzzleCast();
+		if (hit.collider != null) {
 			EventSystem.Current.FireEvent(new HitEvent() {
 				Description = this + " hit " + hit.collider.gameObject,
 				Source = gameObject,
 				Target = hit.collider.gameObject
 			});
 		}
-
 		AmmoInMagazine--;
 	}
 
