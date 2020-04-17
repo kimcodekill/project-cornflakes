@@ -203,16 +203,6 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	}
 
 	/// <summary>
-	/// Reloads the weapon.
-	/// </summary>
-	public void Reload() {
-		int usedBullets = magazineSize - ammoInMagazine;
-		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
-		ammoInReserve -= canTakeAmount;
-		ammoInMagazine += canTakeAmount;
-	}
-
-	/// <summary>
 	/// Adds recoil by adjusting camera X rotation.
 	/// </summary>
 	protected virtual void AddRecoil() {
@@ -231,12 +221,26 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	#endregion
 
 	/// <summary>
+	/// Reloads the weapon.
+	/// </summary>
+	public void Reload() {
+		EventSystem.Current.FireEvent(new WeaponReloadingEvent() {
+			Description = this + " is reloading",
+			GameObject = gameObject
+		});
+		int usedBullets = magazineSize - ammoInMagazine;
+		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
+		ammoInReserve -= canTakeAmount;
+		ammoInMagazine += canTakeAmount;
+	}
+
+	/// <summary>
 	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
 	/// Fires an event and then lets the <c>Fire()</c> function assume control.
 	/// </summary>
 	public void DoFire() {
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
-			Description = gameObject + " fired a shot",
+			Description = this + " fired a shot",
 			GameObject = gameObject
 		});
 		Fire();

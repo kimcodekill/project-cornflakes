@@ -10,6 +10,20 @@ using UnityEngine;
 /// </summary>
 public class AutoRifle : Weapon {
 
+	#region Properties
+
+	public float CooldownWait { get => cooldownWait; set => cooldownWait = value; }
+	
+	public float CurrentCooldownTime { get; set; }
+
+	#endregion
+
+	#region Serialized
+
+	[SerializeField] private float cooldownWait;
+
+	#endregion
+
 	protected override void Fire() {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {

@@ -26,11 +26,14 @@ public class WeaponIdleState : WeaponState {
 			ignoredTriggerDown = true;
 		}
 		if (Weapon.TriggerDown && ignoredTriggerDown) {
-			if (Weapon.HasAmmoInMagazine()) StateMachine.TransitionTo<WeaponFiringState>();
+			if (Weapon.HasAmmoInMagazine()) {
+				StateMachine.TransitionTo<WeaponFiringState>();
+				if (Weapon is AutoRifle) (Weapon as AutoRifle).CurrentCooldownTime = 0f;
+			}
 			else if (Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
 		}
 		//"Cool down" auto rifle if idle
-		if (Weapon is AutoRifle) Weapon.AmmoInMagazine = Weapon.AmmoInMagazine + 1 > Weapon.MagazineSize ? Weapon.MagazineSize : Weapon.AmmoInMagazine + 1;
+		if (Weapon is AutoRifle && ((Weapon as AutoRifle).CurrentCooldownTime += Time.deltaTime) > (Weapon as  AutoRifle).CooldownWait) Weapon.AmmoInMagazine = Weapon.AmmoInMagazine + 1 > Weapon.MagazineSize ? Weapon.MagazineSize : Weapon.AmmoInMagazine + 1;
 		base.Run();
 	}
 
