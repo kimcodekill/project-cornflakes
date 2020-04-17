@@ -43,10 +43,11 @@ public class EnemyDrone : Enemy {
 		float[] potentialYCoords = { Random.Range(targetPosition.y + minDistance, targetPosition.y + maxDistance), Random.Range(targetPosition.y - minDistance, targetPosition.y - maxDistance) };
 		float[] potentialZCoords = { Random.Range(targetPosition.z + minDistance, targetPosition.x + maxDistance), Random.Range(targetPosition.z - minDistance, targetPosition.x - maxDistance) };
 		Vector3 pos = new Vector3(potentialXCoords[Random.Range(0,2)], potentialYCoords[Random.Range(0,2)], potentialZCoords[Random.Range(0,2)]);
+		//Debug.Log(pos);
 		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (pos - transform.position).normalized, (pos - transform.position).magnitude + 1f, layerMask);
 		for (int i = 0; i < hits.Length; i++) {
 			if (hits[i].collider != null) {
-				return FindPositionAroundTarget(targetPosition + hits[i].normal, minDistance, maxDistance);
+				return FindPositionAroundTarget(targetPosition, minDistance, maxDistance);
 			}
 		}
 		return pos;
