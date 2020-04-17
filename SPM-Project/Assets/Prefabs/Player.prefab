@@ -268,7 +268,7 @@ MonoBehaviour:
   healthBar: {fileID: 7841059611332117718}
   bulletsInMag: {fileID: 7841059611183370172}
   bulletsInReserve: {fileID: 7841059611711259450}
-  hudBorder: {fileID: 7841059611166161776}
+  hudBorder: {fileID: 0}
   player: {fileID: 7841059610958226998}
 --- !u!1 &7841059610752469684
 GameObject:
