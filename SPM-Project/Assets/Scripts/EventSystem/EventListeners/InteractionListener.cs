@@ -11,19 +11,19 @@ public class InteractionListener : MonoBehaviour {
 
 	private void OnHit(Event e) {
 		HitEvent he = e.GetReal();
-		if (he.Target.GetComponent<IPawn>() != null) {
+		if (he.Target.GetComponent<IEntity>() != null) {
 			EventSystem.Current.FireEvent(new DamageEvent() {
-				Description = "blah",
+				Description = he.Source + " damaged " + he.Target,
 				Source = he.Source,
 				Target = he.Target,
-				Damage = he.Source.GetComponent<Weapon>().Damage
+				Damage = he.Source.GetComponent<IDamaging>().GetDamage()
 			});
 		}
 	}
 
 	private void OnDamage(Event e) {
 		DamageEvent de = e.GetReal();
-		de.Target.GetComponent<IPawn>().TakeDamage(de.Damage);
+		de.Target.GetComponent<IEntity>().TakeDamage(de.Damage);
 	}
 
 }

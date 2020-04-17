@@ -21,17 +21,17 @@ public class Shotgun : Weapon {
 	#endregion
 
 	public override void Fire() {
-		Vector3 direction = GetDirectionToPoint(Muzzle.forward, GetCrosshairHit().point);
-
+		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
-			Description = "Shotgun fired a shot", GameObject = gameObject
+			Description = gameObject + " fired a shot", GameObject = gameObject
 		});
 		
 		for (int i = 0; i < pelletCount; i++) {
-			if (Physics.Raycast(Muzzle.forward, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask)) {
+			if (Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask)) {
 				EventSystem.Current.FireEvent(new HitEvent() {
-					Description = "Shotgun hit " + hit.collider.gameObject,
-					Source = gameObject, Target = hit.collider.gameObject
+					Description = gameObject + " hit " + hit.collider.gameObject,
+					Source = gameObject,
+					Target = hit.collider.gameObject
 				});
 			}
 		}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour {
+public abstract class Weapon : MonoBehaviour, IDamaging {
 	
 	/// <summary>
 	/// The possible types of ammunition the weapon may use.
@@ -135,6 +135,14 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Implements <c>IDamaging.GetDamage()</c>.
+	/// </summary>
+	/// <returns>Returns the damage of the weapon.</returns>
+	public float GetDamage() {
+		return Damage;
+	}
+
+	/// <summary>
 	/// Calculates the amount of ammunition remaining in the magazine.
 	/// </summary>
 	/// <returns>The amount of ammunition remaining in the magazine.</returns>
@@ -171,10 +179,10 @@ public abstract class Weapon : MonoBehaviour {
 	/// Calculates the point the crosshair is currently looking at.
 	/// </summary>
 	/// <returns>The point the crosshair is looking at.</returns>
-	public RaycastHit GetCrosshairHit() {
+	public Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit;
+		return cameraHit.collider == null ? playerCamera.transform.forward : cameraHit.point;
 	}
 
 	/// <summary>

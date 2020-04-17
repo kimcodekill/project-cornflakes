@@ -6,6 +6,10 @@ public abstract class WeaponEvent : Event {
 
 	public GameObject GameObject;
 
+	public Weapon Weapon { get => weapon == null ? weapon = GameObject.GetComponent<Weapon>() : weapon; }
+
+	private Weapon weapon;
+
 }
 
 public class WeaponFiredEvent : WeaponEvent {
