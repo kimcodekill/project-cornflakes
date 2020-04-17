@@ -16,7 +16,7 @@ public class WeaponPrimary : WeaponBase
 
         if (Physics.Raycast(Camera.main.transform.position, spreadForward, out RaycastHit hit, range, bulletMask))
         {
-            HurtPawn(hit.collider.gameObject.GetComponent<IPawn>());
+            HurtPawn(hit.collider.gameObject.GetComponentInParent<IEntity>());
 
             if (bulletDebug) { DrawBulletDebug(hit); }
 			//if (hit.collider.gameObject.CompareTag("Target")) hit.collider.gameObject.GetComponent<SimpleEnemy>().TakeDamage(damage);

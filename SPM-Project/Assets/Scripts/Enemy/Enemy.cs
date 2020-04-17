@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IPawn 
+public class Enemy : MonoBehaviour, IEntity 
 {
 	#region variables & getters
 	[Header("Enemy attributes")]

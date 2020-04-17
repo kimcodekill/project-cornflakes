@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour, IEntity {
 
 
 
@@ -57,23 +57,24 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Regenerats the player's health.
+	/// Regenerats the player's health. Implements <c>IEntity.TakeDamage()</c>
 	/// </summary>
-	/// <param name="healAmount"> The amount the player should heal.</param>
-	public void HealthRegen(float healAmount) {
-		PlayerCurrentHealth = PlayerCurrentHealth + healAmount > PlayerMaxHealth ? PlayerMaxHealth : PlayerCurrentHealth + healAmount;
-
+	/// <param name="amount"> The amount the player should heal.</param>
+	public float Heal(float amount) {
+		PlayerCurrentHealth = PlayerCurrentHealth + amount > PlayerMaxHealth ? PlayerMaxHealth : PlayerCurrentHealth + amount;
+		return PlayerCurrentHealth;
 	}
 
 	/// <summary>
-	/// Makes the player take damage.
+	/// Makes the player take damage. Implements <c>IEntity.TakeDamage()</c>.
 	/// </summary>
-	/// <param name="damage">The amount of damage the player will take.</param>
-	public void TakeDamage(float damage) {
+	/// <param name="amount">The amount of damage the player will take.</param>
+	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
-		PlayerCurrentHealth -= damage;
+		PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
+		return PlayerCurrentHealth;
 	}
 
 	private void Die() {
