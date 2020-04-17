@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour {
 
-	public Weapon CurrentWeapon;
+	public Weapon CurrentWeapon { get; private set; }
 
 	[SerializeField] private State[] states;
 

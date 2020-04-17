@@ -19,7 +19,7 @@ public class WeaponFiringState : WeaponState {
 	public override void Run() {
 		delay += Time.deltaTime;
 		if (!waitForSemi && ((Weapon.FullAuto && delay > Weapon.GetTimeBetweenShots()) || !Weapon.FullAuto)) {
-			Weapon.Fire();
+			Weapon.DoFire();
 			delay = 0f;
 			if (!Weapon.FullAuto) waitForSemi = true;
 		}

@@ -20,15 +20,10 @@ public class Shotgun : Weapon {
 
 	#endregion
 
-	public override void Fire() {
-		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
-		
-		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
-			Description = gameObject + " fired a shot", GameObject = gameObject
-		});
-		
+	protected override void Fire() {
 		for (int i = 0; i < pelletCount; i++) {
-			if (Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask)) {
+			RaycastHit hit = MuzzleCast();
+			if (hit.collider != null) {
 				EventSystem.Current.FireEvent(new HitEvent() {
 					Description = this + " hit " + hit.collider.gameObject,
 					Source = gameObject,
@@ -36,7 +31,6 @@ public class Shotgun : Weapon {
 				});
 			}
 		}
-
 		AmmoInMagazine--;
 	}
 

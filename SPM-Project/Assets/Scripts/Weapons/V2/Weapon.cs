@@ -78,7 +78,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of recoil caused by the firing of the weapon.
 	/// </summary>
-	public float Recoil { get => recoil; protected set => reloadTime = value; }
+	public float Recoil { get => recoil; protected set => recoil = value; }
 
 	/// <summary>
 	/// The amount of variance in the bullet path.
@@ -169,7 +169,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// Calculates the point the crosshair is currently looking at.
 	/// </summary>
 	/// <returns>The point the crosshair is looking at.</returns>
-	public Vector3 GetCrosshairHitPoint() {
+	protected Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
 		return cameraHit.collider == null ? playerCamera.transform.forward : cameraHit.point;
@@ -181,9 +181,15 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="origin">The first point.</param>
 	/// <param name="target">The second point.</param>
 	/// <returns>The direction from <c>origin</c> to <c>target</c>.</returns>
-	public Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
+	protected Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
 		Vector3 direction = target - origin;
 		return direction /= direction.magnitude;
+	}
+
+	protected RaycastHit MuzzleCast() {
+		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
+		Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask);
+		return hit;
 	}
 
 	/// <summary>
@@ -199,7 +205,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Adds recoil by adjusting camera X rotation.
 	/// </summary>
-	public virtual void AddRecoil() {
+	protected virtual void AddRecoil() {
 		playerCamera.InjectRotation(Mathf.Lerp(playerCamera.transform.rotation.x,  recoil, 0.01f), 0);
 	}
 
@@ -208,14 +214,26 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// </summary>
 	/// <param name="direction">The direction to adjust.</param>
 	/// <returns>The input vector with added variance.</returns>
-	public virtual Vector3 AddSpread(Vector3 direction) {
+	protected virtual Vector3 AddSpread(Vector3 direction) {
 		return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
 	}
 
 	/// <summary>
 	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
+	/// Fires an event and then lets the <c>Fire()</c> function assume control.
 	/// </summary>
-	public virtual void Fire() {
+	public void DoFire() {
+		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
+			Description = gameObject + " fired a shot",
+			GameObject = gameObject
+		});
+		Fire();
+	}
+
+	/// <summary>
+	/// Logic for what actually happens when a weapon is fired.
+	/// </summary>
+	protected virtual void Fire() {
 		AmmoInMagazine--;
 	}
 
