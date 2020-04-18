@@ -39,14 +39,14 @@ public class SniperRifle : Weapon {
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Mouse0) && !wasAiming) {
+		if (Input.GetKeyDown(KeyCode.Mouse1) && !wasAiming) {
 			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
 				IsAiming = true,
 				ZoomFactor = zoomFactor
 			});
 			wasAiming = true;
 		}
-		if (Input.GetKeyUp(KeyCode.Mouse0) && wasAiming) {
+		if (Input.GetKeyUp(KeyCode.Mouse1) && wasAiming) {
 			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
 				IsAiming = false,
 				ZoomFactor = zoomFactor
