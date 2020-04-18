@@ -178,7 +178,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	protected Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit.collider == null ? playerCamera.transform.forward : cameraHit.point;
+		return cameraHit.collider == null ? playerCamera.transform.forward + Vector3.forward : cameraHit.point;
 	}
 
 	/// <summary>
