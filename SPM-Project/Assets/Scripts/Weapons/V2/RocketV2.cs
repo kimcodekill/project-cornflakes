@@ -40,6 +40,7 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 
 	private void OnTriggerEnter(Collider other) {
 		Explode();
+		gameObject.SetActive(false);
 	}
 
 }

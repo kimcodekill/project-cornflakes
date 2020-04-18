@@ -128,7 +128,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   muzzle: {fileID: 0}
-  ammoType: 2
+  ammoType: 3
   fullAuto: 0
   damage: 40
   fireRate: 50
@@ -138,7 +138,7 @@ MonoBehaviour:
   reloadTime: 3
   recoil: 0
   spread: 0
-  zoomFactor: 0
+  zoomFactor: 10
 --- !u!114 &7794975306305105568
 MonoBehaviour:
   m_ObjectHideFlags: 0

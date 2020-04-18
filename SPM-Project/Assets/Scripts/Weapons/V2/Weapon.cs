@@ -8,8 +8,9 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// The possible types of ammunition the weapon may use.
 	/// </summary>
 	public enum EAmmoType {
-		Primary,
-		Secondary,
+		Infinite,
+		Shells,
+		Rockets,
 		Special
 	}
 
