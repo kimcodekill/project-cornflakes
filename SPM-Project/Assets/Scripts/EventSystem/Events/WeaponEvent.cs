@@ -19,3 +19,11 @@ public class WeaponFiredEvent : WeaponEvent {
 public class WeaponReloadingEvent : WeaponEvent {
 
 }
+
+public class WeaponAimingDownSightsEvent : Event {
+
+	public bool IsAiming;
+
+	public float ZoomFactor;
+
+}

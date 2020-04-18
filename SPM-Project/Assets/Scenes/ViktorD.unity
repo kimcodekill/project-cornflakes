@@ -1480,11 +1480,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5878737985512538768, guid: e1f4414e9eb7d564f9e475c074a1a833,
-        type: 3}
-      propertyPath: rocket
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5878737985512538774, guid: e1f4414e9eb7d564f9e475c074a1a833,
         type: 3}
       propertyPath: m_Name
