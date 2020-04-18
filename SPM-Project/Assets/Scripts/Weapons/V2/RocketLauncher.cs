@@ -12,27 +12,31 @@ public class RocketLauncher : Weapon {
 	/// <summary>
 	/// The speed of the launched projectile.
 	/// </summary>
-	public float ProjectileSpeed { get => projectileSpeed; protected set => projectileSpeed = value; }
+	public float RocketSpeed { get => rocketSpeed; protected set => rocketSpeed = value; }
 
 	/// <summary>
 	/// The area of effect of the launched projectile, once it hits something.
 	/// </summary>
-	public float ProjectileAreaOfEffect { get => projectileAreaOfEffect; protected set => projectileAreaOfEffect = value; }
+	public float RocketAreaOfEffect { get => rocketAreaOfEffect; protected set => rocketAreaOfEffect = value; }
 
 	#endregion
 
 	#region Serialized
 
-	[SerializeField] private float projectileSpeed;
-	[SerializeField] private float projectileAreaOfEffect;
+	[Header("Rocket Launcher Properties")]
+	[SerializeField] private float rocketSpeed;
+	[SerializeField] private float rocketAreaOfEffect;
+	[SerializeField] private GameObject rocket;
 
 	#endregion
 
 	protected override void Fire() {
-		RaycastHit hit = MuzzleCast();
-		if (hit.collider != null) {
-			//hitsomethingevent
-		}
+		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
+		RocketV2 launchedRocket = Instantiate(rocket, Muzzle.position, Quaternion.LookRotation(direction, Vector3.up)).GetComponent<RocketV2>();
+		launchedRocket.Damage = Damage;
+		launchedRocket.Speed = rocketSpeed;
+		launchedRocket.AreaOfEffect = rocketAreaOfEffect;
+		launchedRocket.Target = MuzzleCast().point;
 		AmmoInMagazine--;
 	}
 
