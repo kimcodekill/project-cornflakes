@@ -10,11 +10,6 @@ public class SniperRifle : Weapon {
 	#region Properties
 
 	/// <summary>
-	/// Whether or not the weapon is being aimed down sights with.
-	/// </summary>
-	public bool AimingDownSights { get { return Input.GetKey(KeyCode.Mouse1); } }
-
-	/// <summary>
 	/// The amount the camera should zoom in if the weapon is being aimed down sights with.
 	/// </summary>
 	public float ZoomFactor { get => zoomFactor; protected set => zoomFactor = value; }
@@ -28,6 +23,8 @@ public class SniperRifle : Weapon {
 
 	#endregion
 
+	private bool wasAiming;
+
 	protected override void Fire() {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {
@@ -39,6 +36,23 @@ public class SniperRifle : Weapon {
 			});
 		}
 		AmmoInMagazine--;
+	}
+
+	private void Update() {
+		if (Input.GetKeyDown(KeyCode.Mouse0) && !wasAiming) {
+			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
+				IsAiming = true,
+				ZoomFactor = zoomFactor
+			});
+			wasAiming = true;
+		}
+		if (Input.GetKeyUp(KeyCode.Mouse0) && wasAiming) {
+			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
+				IsAiming = false,
+				ZoomFactor = zoomFactor
+			});
+			wasAiming = false;
+		}
 	}
 
 }
