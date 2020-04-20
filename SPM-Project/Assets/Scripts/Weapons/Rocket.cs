@@ -53,11 +53,11 @@ public class Rocket : MonoBehaviour, IPooledObject
         //RaycastHit[] hits = Physics.SphereCastAll(transform.position, explosionRadius, Vector3.zero, explosionRadius, damageMask);
 
         //Probably unnecessary
-        List<IPawn> hitPawns = new List<IPawn>();
+        List<IEntity> hitPawns = new List<IEntity>();
 
         for (int i = 0; i < hits.Length; i++)
         {
-            IPawn pawn = hits[i].gameObject.GetComponent<IPawn>();
+            IEntity pawn = hits[i].gameObject.GetComponent<IEntity>();
 
             if (pawn != null && !hitPawns.Contains(pawn)) //probably dont need to look at hitpawns
             {
