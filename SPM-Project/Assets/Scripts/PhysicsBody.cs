@@ -129,8 +129,8 @@ public class PhysicsBody : MonoBehaviour {
 	/// <returns>The normal of the hit surface.</returns>
 	public Vector3 GetCurrentSurfaceNormal() {
 		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance + 2f, mask);
-		Debug.DrawRay(transform.position, Vector3.down * (GroundedDistance + 2f), Color.red);
-		return hit.normal;
+		Debug.DrawRay(hit.point, hit.normal, Color.red);
+		return hit.collider != null ? hit.normal : Vector3.up;
 	}
 
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
