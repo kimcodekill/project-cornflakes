@@ -103,7 +103,7 @@ public abstract class WeaponBase : MonoBehaviour
         return 60.0f / fireRate;
     }
 
-    protected float HurtPawn(IPawn pawn)
+    protected float HurtPawn(IEntity pawn)
     {
         if (pawn != null) { return pawn.TakeDamage(damage); }
 

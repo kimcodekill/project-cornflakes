@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : MonoBehaviour, IPawn
+public class Pawn : MonoBehaviour, IEntity
 {
     protected float maxHealth;
     protected float currentHealth;

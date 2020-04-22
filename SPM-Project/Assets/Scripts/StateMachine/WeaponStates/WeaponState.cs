@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class WeaponState : State {
 
-	private Weapon weapon;
+	private PlayerWeapon weaponOwner;
 
-	public Weapon Weapon => weapon = weapon != null ? weapon : (Weapon) Owner;
+	public Weapon Weapon => weaponOwner == null ? (weaponOwner = (PlayerWeapon)Owner).CurrentWeapon : weaponOwner.CurrentWeapon;
 
 	public override void Run() {
 		if (Weapon.RequestedReload && Weapon.AmmoInMagazine < Weapon.MagazineSize && Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
