@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AirAcceleration: 10
   TopAirSpeed: 10
-  JumpHeight: 10
+  JumpHeight: 11
