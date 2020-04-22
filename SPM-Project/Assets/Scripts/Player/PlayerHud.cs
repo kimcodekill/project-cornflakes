@@ -15,10 +15,12 @@ public class PlayerHud : MonoBehaviour
 	[SerializeField] [Tooltip("The Player the HUD belongs to.")] private PlayerController player;
 	private Color defaultPanelColour = new Color(1, 1, 1, 0);
 	private float flashDuration = 0.1f;
+	private PlayerWeapon playerWeapon;
 
     private void Start()
     {
 		hudBorder.color = defaultPanelColour;
+		playerWeapon = player.gameObject.GetComponent<PlayerWeapon>();
     }
 
     private void Update()
@@ -41,8 +43,8 @@ public class PlayerHud : MonoBehaviour
 	}
 
 	private void UpdateBulletCount() {
-		bulletsInMag.text = player.CurrentPlayerWeapon().GetBulletsLeftInMagazine().ToString();
-		bulletsInReserve.text = player.CurrentPlayerWeapon().GetBulletsInReserve().ToString();
+		bulletsInMag.text = playerWeapon.CurrentWeapon?.AmmoInMagazine.ToString();
+		bulletsInReserve.text = playerWeapon.CurrentWeapon?.AmmoInReserve.ToString();
 	}
 
 	private void UpdateHealthBar() {
