@@ -69,7 +69,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of ammunition remaining in the reserve.
 	/// </summary>
-	public int AmmoInReserve { get => ammoInReserve; protected set => ammoInReserve = value; }
+	public int AmmoInReserve { get => ammoInReserve; set => ammoInReserve = value; }
 
 	/// <summary>
 	/// The amount of time it takes to reload.
