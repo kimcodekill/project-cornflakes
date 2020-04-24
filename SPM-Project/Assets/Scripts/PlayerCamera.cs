@@ -20,12 +20,17 @@ public class PlayerCamera : MonoBehaviour {
 	/// <returns></returns>
 	public Quaternion GetRotation() { return transform.rotation; }
 
+	/// <summary>
+	/// The actual camera attached to the PlayerCamera.
+	/// </summary>
+	public Camera Camera { get; private set; }
+
 	private void Start() {
 		Cursor.lockState = CursorLockMode.Locked;
-		
+		Camera = GetComponent<Camera>();
 	}
 
-	private void Update() {
+	private void LateUpdate() {
 		RotateCamera();
 		transform.position = player.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 		Debug.DrawRay(transform.position, transform.forward * 10);
@@ -46,5 +51,17 @@ public class PlayerCamera : MonoBehaviour {
 		rotationX = Mathf.Clamp(rotationX, -60f, 60f);
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 	}
-}
 
+	/// <summary>
+	/// Adds rotation values to the camera that won't be overwritten by the internal rotation script.
+	/// </summary>
+	/// <param name="rotationX">The desired rotation around the X axis.</param>
+	/// <param name="rotationY">The desired rotation around the Y axis.</param>
+	public void InjectRotation(float rotationX, float rotationY) {
+		this.rotationY += rotationY;
+		this.rotationX -= rotationX;
+		this.rotationX = Mathf.Clamp(this.rotationX, -60f, 60f);
+		transform.rotation = Quaternion.Euler(this.rotationX, this.rotationY, 0);
+	}	
+
+}
