@@ -9,11 +9,18 @@ public class WeaponListener : MonoBehaviour {
 	private void OnPickUp(Event e) {
 		PickUpEvent pue = (PickUpEvent) e;
 		Debug.Log(pue.Description);
-		Weapon w;
 		PlayerWeapon pw;
-		if ((w = pue.Source.GetComponent<Weapon>()) != null && (pw = pue.Target.GetComponent<PlayerWeapon>()) != null) {
-			pw.PickUpWeapon(w);
-			pue.Source.SetActive(false);
+		if ((pw = pue.Target.GetComponent<PlayerWeapon>()) != null) {
+			Weapon w;
+			AmmoPickup ap;
+			if ((w = pue.Source.GetComponent<Weapon>()) != null) {
+				pw.PickUpWeapon(w);
+				pue.Source.SetActive(false);
+			}
+			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
+				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
+				pue.Source.SetActive(false);
+			}
 		}
 	}
 
