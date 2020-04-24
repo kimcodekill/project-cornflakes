@@ -63,4 +63,15 @@ public class PlayerWeapon : MonoBehaviour {
 		WeaponIsActive = isActive;
 	}
 
+	/// <summary>
+	/// Adds the specified amount of ammunition to the specified ammo pool.
+	/// </summary>
+	/// <param name="ammoType">The type of ammunition to add.</param>
+	/// <param name="amount">The amount of ammunition to add.</param>
+	public void AddAmmo(Weapon.EAmmoType ammoType, int amount) {
+		for (int i = 0; i < weapons.Count; i++) {
+			if (weapons[i].AmmoType == ammoType) weapons[i].AmmoInReserve += amount;
+		}
+	}
+
 }
