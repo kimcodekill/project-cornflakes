@@ -397,7 +397,6 @@ GameObject:
   - component: {fileID: 7841059610958226993}
   - component: {fileID: 7841059610958226998}
   - component: {fileID: 7841059610958226997}
-  - component: {fileID: 415226148777200506}
   - component: {fileID: 2726617569804467269}
   m_Layer: 11
   m_Name: Player
@@ -472,25 +471,6 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1536
---- !u!114 &415226148777200506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7841059610958226992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b499c99b237a02c46bcea2d5b64f8ad2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logThis: 1
-  message: "PlayerMesh holds the mesh for the player gameobject and scaling this
-    does not affect how the object is affected by transform modification. \nThe Player
-    object however holds the collider and thus, it must be modified manually when
-    PlayerMesh Scale is modified. CapsuleCollider radius is half the x-/z-scale and
-    height is half the y-scale.\nThe camera is for now set to a different offset
-    since a close up cam made it way too hard to see how you were platforming. "
 --- !u!114 &2726617569804467269
 MonoBehaviour:
   m_ObjectHideFlags: 0
