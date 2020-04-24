@@ -10,7 +10,7 @@ public class WeaponFiringState : WeaponState {
 	private bool waitForSemi;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("WeaponSTM" + Weapon.gameObject.GetInstanceID(), GetType().ToString());
+		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 		
 		delay = Weapon.GetTimeBetweenShots();
 		waitForSemi = false;
@@ -19,7 +19,7 @@ public class WeaponFiringState : WeaponState {
 	public override void Run() {
 		delay += Time.deltaTime;
 		if (!waitForSemi && ((Weapon.FullAuto && delay > Weapon.GetTimeBetweenShots()) || !Weapon.FullAuto)) {
-			Weapon.Fire();
+			Weapon.DoFire();
 			delay = 0f;
 			if (!Weapon.FullAuto) waitForSemi = true;
 		}
