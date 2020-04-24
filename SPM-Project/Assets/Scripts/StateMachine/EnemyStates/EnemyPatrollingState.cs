@@ -5,13 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "EnemyState/EnemyPatrollingState")]
 public class EnemyPatrollingState : EnemyBaseState
 {
-	[SerializeField] [Tooltip("The patrol points.")] private Transform[] points;
+	public override void Enter() {
+		Debug.Log("" + Enemy.gameObject.name + " patrolling");
+		Enemy.StartPatrolBehaviour();
+	}
 
 	public override void Run() {
-		///do patrol things
 		base.Run();
 	}
 
-	private void DoPatrol() { }
+	public override void Exit() {
+		Enemy.StopPatrolBehaviour();
+	}
+
 
 }

@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyDrone : Enemy {
 
 	[SerializeField] private float patrolBungeeDistance;
 	[SerializeField] private float movementSpeed;
 	[SerializeField] private SphereCollider body;
+	private NavMeshAgent agent;
+	private float bodyRadius = 0.5f;
 
 	private Vector3 origin;
 
 	private void Awake() {
+		agent = GetComponent<NavMeshAgent>();
 		origin = transform.position;
 	}
 	private void Start() {
@@ -19,6 +23,7 @@ public class EnemyDrone : Enemy {
 
 	private void Update() {
 		base.Update();
+		
 	}
 
 	//private float DistanceToGround() {
@@ -26,74 +31,79 @@ public class EnemyDrone : Enemy {
 	//	return hit.distance;
 	//}
 
-	private Vector3 FindRandomPosition(Vector3 startingPos, float moveRange) {
-		Vector3 randomPos = startingPos + new Vector3(Random.Range(-moveRange, moveRange), Random.Range(-moveRange/3, moveRange/3), Random.Range(-moveRange, moveRange));
-		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (randomPos - transform.position).normalized, (randomPos - transform.position).magnitude + 1f, layerMask);
-		for (int i = 0; i < hits.Length; i++) {
-			if (hits[i].collider != null) {
-				//Debug.Log("Hit " + hits[i].collider.gameObject.name);
-				return FindRandomPosition(startingPos + hits[i].normal, moveRange);
-			}
-		}
-		return randomPos;
-	}
+	//private Vector3 FindRandomPosition(Vector3 startingPos, float moveRange) {
+	//	Vector3 randomPos = startingPos + new Vector3(Random.Range(-moveRange, moveRange), Random.Range(-moveRange/3, moveRange/3), Random.Range(-moveRange, moveRange));
+	//	RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (randomPos - transform.position).normalized, (randomPos - transform.position).magnitude + 1f, layerMask);
+	//	for (int i = 0; i < hits.Length; i++) {
+	//		if (hits[i].collider != null) {
+	//			//Debug.Log("Hit " + hits[i].collider.gameObject.name);
+	//			return FindRandomPosition(startingPos + hits[i].normal, moveRange);
+	//		}
+	//	}
+	//	return randomPos;
+	//}
 
-	private Vector3 FindPositionAroundTarget(Vector3 targetPosition, float minDistance, float maxDistance) {
-		float[] potentialXCoords = { Random.Range(targetPosition.x + minDistance, targetPosition.x + maxDistance), Random.Range(targetPosition.x - minDistance, targetPosition.x - maxDistance) };
-		float[] potentialYCoords = { Random.Range(targetPosition.y + minDistance, targetPosition.y + maxDistance), Random.Range(targetPosition.y - minDistance, targetPosition.y - maxDistance) };
-		float[] potentialZCoords = { Random.Range(targetPosition.z + minDistance, targetPosition.x + maxDistance), Random.Range(targetPosition.z - minDistance, targetPosition.x - maxDistance) };
-		Vector3 pos = new Vector3(potentialXCoords[Random.Range(0,2)], potentialYCoords[Random.Range(0,2)], potentialZCoords[Random.Range(0,2)]);
-		//Debug.Log(pos);
-		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (pos - transform.position).normalized, (pos - transform.position).magnitude + 1f, layerMask);
-		for (int i = 0; i < hits.Length; i++) {
-			if (hits[i].collider != null) {
-				return FindPositionAroundTarget(targetPosition, minDistance, maxDistance);
-			}
-		}
-		return pos;
-	}
-
-	private IEnumerator Idle() {
-		Vector3 newPos = FindRandomPosition(origin, patrolBungeeDistance);
-		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
-			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));
-			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed);
+	private IEnumerator Patrol() {
+		agent.destination = FindNewRandomNavPoint(origin, patrolBungeeDistance);
+		while (agent.remainingDistance > 0.5f) {
 			yield return null;
 		}
-
 		yield return null;
-		StartCoroutine("Idle");
+		StartCoroutine("Patrol");
 	}
 
-	private IEnumerator AttackBehaviour() {
-		Vector3 newPos = FindPositionAroundTarget(Target.transform.position, 2f, 3f);
-		while(Vector3.Distance(transform.position, newPos) > 0.05f) {
-			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
-			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed*4f);
-			yield return null;
+	private IEnumerator Attack() {
+		if ((Vector3.Distance(transform.position, Target.transform.position) > 2.0f)) {
+			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
 		}
-
+		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
 		yield return null;
-		StartCoroutine("AttackBehaviour");
+		StartCoroutine("Attack");
 	}
 
-	public override void StartIdleBehaviour() {
-		//Debug.Log("Drone idling");
-		StartCoroutine("Idle");
+	private IEnumerator Alerted() {
+		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
+		if ((Vector3.Distance(transform.position, Target.transform.position) > attackRange)) {
+			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
+		}
+		yield return null;
+		StartCoroutine("Alerted");
 	}
 
-	public override void StopIdleBehaviour() {
-		//Debug.Log("Drone stopping idling");
-		StopCoroutine("Idle");
+	private Vector3 FindNewRandomNavPoint(Vector3 startPos, float patrolRange) {
+		Vector3 newPoint = Random.insideUnitSphere * patrolRange;
+		newPoint = startPos + newPoint;
+		//Debug.Log(newPoint);
+		Vector3 finalPosition = startPos + Vector3.zero;
+		if (NavMesh.SamplePosition(newPoint, out NavMeshHit hit, patrolRange + agent.height, 1)) {
+			//Debug.Log(hit.position);
+			finalPosition = hit.position;
+		}
+		return finalPosition;
+	}
+
+	public override void StartPatrolBehaviour() {
+		StartCoroutine("Patrol");
+	}
+
+	public override void StopPatrolBehaviour() {
+		
+		StopCoroutine("Patrol");
 	}
 
 	public override void StartAttackBehaviour() {
-		//Debug.Log("Drone attacking");
-		StartCoroutine("AttackBehaviour");
+		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
-		//Debug.Log("Drone stopping attacking");
-		StopCoroutine("AttackBehaviour");
+		StopCoroutine("Attack");
+	}
+
+	public override void StartAlertedBehaviour() {
+		StartCoroutine("Alerted");
+	}
+
+	public override void StopAlertedBehaviour() {
+		StopCoroutine("Alerted");
 	}
 }

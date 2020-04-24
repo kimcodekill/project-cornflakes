@@ -184,7 +184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3245006856651615629}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.455}
+  m_LocalPosition: {x: 0, y: 0.489, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 3245006857513409221}
@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 3245006857513409221}
   - component: {fileID: 3245006857513409222}
   - component: {fileID: 8626059835950779692}
+  - component: {fileID: 4471466647061426705}
   m_Layer: 8
   m_Name: DroneEnemy
   m_TagString: Enemy
@@ -366,12 +367,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 20
-  fieldOfView: 0.3
-  sightRange: 20
-  gunPosition: {fileID: 39769688967627567}
-  eyePosition: {fileID: 3245006856651615628}
+  fieldOfView: -2
+  attackRange: 20
+  visionRange: 30
+  gunTransform: {fileID: 0}
+  eyeTransform: {fileID: 0}
   states:
-  - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
+  - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: fc19eadcf4b02c64298f995eb9dfc7af, type: 2}
   layerMask:
@@ -379,8 +381,6 @@ MonoBehaviour:
     m_Bits: 1536
   patrolBungeeDistance: 5
   movementSpeed: 3
-  maxDistanceToTarget: 15
-  minDistanceToTarget: 5
   body: {fileID: 8626059835950779692}
 --- !u!135 &8626059835950779692
 SphereCollider:
@@ -395,3 +395,25 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &4471466647061426705
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3245006857513409223}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
