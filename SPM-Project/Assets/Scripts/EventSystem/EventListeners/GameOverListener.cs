@@ -28,8 +28,6 @@ public class GameOverListener : MonoBehaviour
 
     private void OnLevelEnd(Event e)
     {
-        
-        Debug.Log("Level ended, start transition to next scene");
         Debug.Log(e.Description);
 
         //Not sure if this should be done here, probably should be sent to some other class that likes taking care of scenes
@@ -38,7 +36,7 @@ public class GameOverListener : MonoBehaviour
 
     private void OnPlayerDead(Event e)
     {
-        Debug.Log("Player is dead, start Respawn logic");
+        Debug.Log(e.Description);        
 
         ReloadCurrentScene();
     }
