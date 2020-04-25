@@ -12,5 +12,10 @@ public class DebugTrigger : DebugTool
         {
             player.GetComponent<PlayerController>().TakeDamage(float.PositiveInfinity);
         }
+        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Camera.main.GetComponent<PlayerCamera>().
+        }
     }
 }

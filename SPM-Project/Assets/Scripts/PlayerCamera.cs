@@ -10,9 +10,11 @@ public class PlayerCamera : MonoBehaviour {
 	[SerializeField] [Tooltip("The speed with which the camera moves.")] private float lookSensitivity = 1f;
 	[SerializeField] [Tooltip("Cameram radius for collision detection.")] private float camRadius = 0.25f; 
 	[SerializeField] [Tooltip("Minimum allowed distance between camera and objects behind it.")] private float minCollisionDistance = 2f;
+	[SerializeField] [Tooltip("The Player object the camera attaches to.")] private Transform player;
+
 	private float rotationX, rotationY;
 
-	[SerializeField] [Tooltip("The Player object the camera attaches to.")] private Transform player;
+	private StateMachine stateMachine;
 
 	/// <summary>
 	/// Returns the camera's current rotation.
