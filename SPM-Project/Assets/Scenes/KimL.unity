@@ -747,27 +747,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c69ff102103f8a34ba0e12172a40c911, type: 3}
---- !u!1 &952490262 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3271478430421325704, guid: c69ff102103f8a34ba0e12172a40c911,
-    type: 3}
-  m_PrefabInstance: {fileID: 621138080}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &952490264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952490262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4beb8d9423af15488c11e39210978da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextSceneName: ERIKS EGNA SCEN
-  inspectorSceneExample:
-    m_Handle: 0
 --- !u!1 &1130725597
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,16 +1614,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8656339553945875046, guid: a995378be5c94154186493bd1e56816e,
-        type: 3}
-      propertyPath: visualizeVolume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8656339553945875047, guid: a995378be5c94154186493bd1e56816e,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8656339553945875065, guid: a995378be5c94154186493bd1e56816e,
         type: 3}
