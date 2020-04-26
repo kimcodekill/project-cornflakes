@@ -15,7 +15,7 @@ public class DebugTrigger : DebugTool
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Camera.main.GetComponent<PlayerCamera>().
+            //Camera.main.GetComponent<PlayerCamera>().
         }
     }
 }

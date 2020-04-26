@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour {
 
+	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
+
 	[Header("Camera attributes")]
 	[SerializeField] [Tooltip("Defines offset to player.")] private Vector3 cameraOffset;
 	[SerializeField] [Tooltip("Layers the camera collides with.")] private LayerMask collisionLayer;
