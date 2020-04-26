@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 769754310401971625}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 8310594721209522270}
   - component: {fileID: 8331699732792632616}
   - component: {fileID: 6778963786563479761}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 1979058393133199751}
   - component: {fileID: 3784685213516340889}
   - component: {fileID: 7619007772896021002}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 4158185577854580710}
   - component: {fileID: 6349337650506007068}
   - component: {fileID: 7996494247212177560}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

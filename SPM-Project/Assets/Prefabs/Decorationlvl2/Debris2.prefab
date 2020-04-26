@@ -289,7 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 740995161843052440}
   m_Layer: 0
-  m_Name: Debris 1
+  m_Name: Debris2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
