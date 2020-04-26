@@ -46,9 +46,9 @@ public class EnemyDrone : Enemy {
 	}
 
 	private IEnumerator Attack() {
-		if ((Vector3.Distance(transform.position, Target.transform.position) > 2.0f)) {
+		/*if ((Vector3.Distance(transform.position, Target.transform.position) > 2.0f)) {
 			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
-		}
+		}*/
 		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
 		yield return null;
 		StartCoroutine("Attack");
