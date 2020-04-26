@@ -14,7 +14,7 @@ public class HealthPack : MonoBehaviour {
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
 			//Debug.Log(other + " picked up healthpack. Healing " + other);
-			other.GetComponent<PlayerController>().HealthRegen(healAmount);
+			other.GetComponent<PlayerController>().Heal(healAmount);
 			Destroy(gameObject);
 		}
 
