@@ -71,8 +71,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void Die() {
-		///Unfinished
-		//Debug.Log("You died");
-		PlayerCurrentHealth = PlayerMaxHealth;
+
+		//Changed so player death now fires deathevent which (currently) reloads the scene instantly
+		EventSystem.Current.FireEvent(new PlayerDeadEvent()
+		{
+			Description = "Player fricking died, yo."
+		});
 	}
 }
