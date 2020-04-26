@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IPawn 
+public class Enemy : MonoBehaviour, IEntity 
 {
 	
 	[Header("Enemy attributes")]
@@ -33,7 +33,6 @@ public class Enemy : MonoBehaviour, IPawn
 	}
 
 	protected void Update() {
-		//Debug.Log(Target.transform.position);
 		VectorToTarget = GetVectorToTarget();
 		enemyStateMachine.Run();
 		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));

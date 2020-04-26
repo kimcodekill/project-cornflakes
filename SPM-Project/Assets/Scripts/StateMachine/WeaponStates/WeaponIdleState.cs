@@ -10,8 +10,8 @@ public class WeaponIdleState : WeaponState {
 	private bool ignoredTriggerDown;
 
 	public override void Enter() {
-		try { DebugManager.AddSection("WeaponSTM" + Weapon.gameObject.GetInstanceID(), "", "", ""); } catch (System.ArgumentException) { }
-		DebugManager.UpdateRow("WeaponSTM" + Weapon.gameObject.GetInstanceID(), GetType().ToString());
+		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
+		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 
 		if (!Weapon.FullAuto && Weapon.TriggerDown) {
 			ignoreTriggerDown = true;
@@ -26,10 +26,15 @@ public class WeaponIdleState : WeaponState {
 			ignoredTriggerDown = true;
 		}
 		if (Weapon.TriggerDown && ignoredTriggerDown) {
-			if (Weapon.HasAmmoInMagazine()) StateMachine.TransitionTo<WeaponFiringState>();
+			if (Weapon.HasAmmoInMagazine()) {
+				StateMachine.TransitionTo<WeaponFiringState>();
+				if (Weapon is AutoRifle) (Weapon as AutoRifle).CurrentCooldownTime = 0f;
+			}
 			else if (Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
 		}
-
+		//"Cool down" auto rifle if idle
+		if (Weapon is AutoRifle && ((Weapon as AutoRifle).CurrentCooldownTime += Time.deltaTime) > (Weapon as  AutoRifle).CooldownWait)
+			Weapon.AmmoInMagazine = Weapon.AmmoInMagazine + 1 > Weapon.MagazineSize ? Weapon.MagazineSize : Weapon.AmmoInMagazine + 1;
 		base.Run();
 	}
 
