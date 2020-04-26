@@ -290,7 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6988601559970654936}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Truck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

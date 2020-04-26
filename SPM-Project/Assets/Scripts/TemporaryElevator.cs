@@ -8,7 +8,9 @@ public class TemporaryElevator : MonoBehaviour
     public GameObject playerMech;
 
     private void OnTriggerEnter(Collider other)
-    {
-        playerMech.transform.position = elevatorTarget.transform.position;
+    { 
+		if (other.GetComponent<PlayerController>()) {
+			playerMech.transform.position = elevatorTarget.transform.position;
+		}
     }
 }

@@ -15,9 +15,9 @@ TagManager:
   - UI
   - 
   - 
-  - Target
+  - Enemy
   - Terrain
-  - Geometry
+  - Prop
   - Player
   - PostProcessing
   - Pickups
