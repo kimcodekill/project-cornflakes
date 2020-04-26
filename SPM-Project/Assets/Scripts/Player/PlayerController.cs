@@ -29,10 +29,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 
 		stateMachine = new StateMachine(this, states); 
-
 	}
 
-	private void Update() {
+	private void FixedUpdate() {
 		stateMachine.Run();
 	}
 
