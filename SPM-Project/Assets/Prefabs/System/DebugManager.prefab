@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6571422599667150346}
   - component: {fileID: 6571422599667150345}
   - component: {fileID: 6571422599667150344}
-  - component: {fileID: 6571422599667150347}
   m_Layer: 0
   m_Name: DebugManager
   m_TagString: Untagged
@@ -72,21 +71,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &6571422599667150347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6571422599667150343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
 --- !u!1 &6571422600008029261
 GameObject:
   m_ObjectHideFlags: 0
