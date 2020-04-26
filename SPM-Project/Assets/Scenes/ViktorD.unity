@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPS: 20
-  limitEnabled: 1
+  limitEnabled: 0
 --- !u!4 &983948300
 Transform:
   m_ObjectHideFlags: 0
