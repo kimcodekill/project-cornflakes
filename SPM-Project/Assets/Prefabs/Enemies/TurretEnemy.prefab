@@ -287,9 +287,10 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 50
   fieldOfView: 0.6
-  sightRange: 30
-  gunPosition: {fileID: 3162995321448651758}
-  eyePosition: {fileID: 7066388641637553334}
+  attackRange: 30
+  visionRange: 30
+  gunTransform: {fileID: 3162995321448651758}
+  eyeTransform: {fileID: 7066388641637553334}
   states:
   - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
