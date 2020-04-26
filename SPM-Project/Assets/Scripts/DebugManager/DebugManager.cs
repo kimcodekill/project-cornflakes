@@ -47,7 +47,11 @@ public class DebugManager : MonoBehaviour {
 	/// <exception cref="System.ArgumentException">Thrown if no rows have been provided.</exception>
 	public static void AddSection(string header, params string[] contents) {
 		if (contents == null || contents.Length == 0) throw new ArgumentException("You need to specify a value for every row you wish to reserve, even if some row(s) only contain null for the time being.");
-		sectionDictionary.Add(header, new Section(header, contents));
+		try {
+			sectionDictionary.Add(header, new Section(header, contents));
+		} catch (ArgumentException) {
+			Debug.LogWarning("A debug section with this header already exists. If you only have one instance writing to the section, ignore this message.");
+		}
 	}
 
 	/// <summary>
