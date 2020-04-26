@@ -2,8 +2,6 @@
 
 public class PlayerController : MonoBehaviour, IEntity {
 
-
-
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;

@@ -886,6 +886,7 @@ GameObject:
   - component: {fileID: 7841059611673499744}
   - component: {fileID: 7841059611673499759}
   - component: {fileID: 7841059611673499746}
+  - component: {fileID: 1061389764}
   m_Layer: 11
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -970,7 +971,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5defdd5c8885e47a11a2924e46cac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraOffset: {x: 1.75, y: 1.5, z: -7}
+  states:
+  - {fileID: 11400000, guid: c43b97c21bde63d4d8756d31b67aa428, type: 2}
+  - {fileID: 11400000, guid: c53acc6cd254e304a8a77ab9988fa508, type: 2}
+  - {fileID: 11400000, guid: 01166ec7491247445b59e4e0d07efd0b, type: 2}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 768
@@ -978,6 +982,30 @@ MonoBehaviour:
   camRadius: 0.25
   minCollisionDistance: 2
   player: {fileID: 7841059610958226996}
+--- !u!114 &1061389764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841059611673499758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b499c99b237a02c46bcea2d5b64f8ad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logThis: 1
+  message: 'Camera is in defaultState by default.
+
+    When weapon is picked up or
+    equipped (using E or 1>4) it switches to HipfireState.
+
+    If E is pressed again,
+    the weapon is unequipped and Camera returns to DefaultState.
+
+    If equipped
+    weapon is sniper and RightMouse is clicked, the camera goes into ScopedState.
+    Clicking RightMouse in this state returns to HipFireState.'
 --- !u!1 &7841059611711259448
 GameObject:
   m_ObjectHideFlags: 0

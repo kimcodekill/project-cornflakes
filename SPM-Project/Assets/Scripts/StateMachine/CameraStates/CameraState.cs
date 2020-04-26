@@ -1,0 +1,24 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class CameraState : State
+{
+	public int CameraFOV;
+	public Vector3 CameraOffset;
+
+    private PlayerCamera camera;
+
+    public PlayerCamera Camera => camera = camera != null ? camera : (PlayerCamera)Owner;
+
+	public override void Enter()
+	{
+		Camera.SetFOV(CameraFOV);
+		Camera.SetOffset(CameraOffset);
+	}
+
+	public override void Run()
+	{
+		DebugManager.UpdateRow("CameraState", StateMachine.GetCurrentState().ToString());
+	}
+}

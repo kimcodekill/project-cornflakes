@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour {
 
+	//Singleton
+	//Needed (atm) for PlayerCamera StateMachine to get the current weapon
+	public static PlayerWeapon Instance;
+
 	/// <summary>
 	/// The weapon the player is currently using.
 	/// </summary>
@@ -12,7 +16,7 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <summary>
 	/// Whether or not the weapon is active.
 	/// </summary>
-	public bool WeaponIsActive { get; private set; } = true;
+	public bool WeaponIsActive { get; private set; } = false;
 
 	[SerializeField] private State[] states;
 
@@ -20,19 +24,37 @@ public class PlayerWeapon : MonoBehaviour {
 
 	private StateMachine weaponStateMachine;
 
+	private void OnEnable()
+	{
+		//Just sets the static instance to this if it's null
+		if (Instance == null) { Instance = this; }
+	}
+
 	private void Update() {
+		//Moved CheckInputs here because why wouldn't we do that first
+		CheckInputs();
+
 		if (WeaponIsActive) {
 			if (weaponStateMachine != null) {
 				weaponStateMachine.Run();
 				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 			}
-			CheckInputs();
 		}
 	}
 
 	private void CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
-			if (Input.GetKeyDown((i + 1).ToString())) SwitchTo(i);
+			if (Input.GetKeyDown((i + 1).ToString()))
+			{
+				SwitchTo(i);
+				//Let player equip weapon by clicking the corresponding button
+				WeaponIsActive = true;
+				return;
+			}
+
+		//Doing this here bc there isnt a better way to do it at this time
+		if(CurrentWeapon == null) { WeaponIsActive = false; }
+		else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
 	}
 
 	private void SwitchTo(int index) {
@@ -45,7 +67,11 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="weapon">The weapon to pick up.</param>
 	public void PickUpWeapon(Weapon weapon) {
-		if (weapons.Count == 0) CurrentWeapon = weapon;
+		if (weapons.Count == 0)
+		{
+			CurrentWeapon = weapon;
+			WeaponIsActive = true;
+		}
 		weapons.Add(weapon);
 		weapon.Muzzle = Camera.main.transform;
 		if (weaponStateMachine == null) {
