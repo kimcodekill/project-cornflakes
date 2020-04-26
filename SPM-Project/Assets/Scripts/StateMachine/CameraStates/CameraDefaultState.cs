@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "CameraState/DefaultState")]
 public class CameraDefaultState : CameraState
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+{
+	//public int CameraFOV = 60;
+	//public Vector3 CameraOffset = new Vector3(0f, 1.5f, -7f);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public override void Run()
+	{
+		// Weapon? Hipfire.
+		if(PlayerWeapon.Instance.WeaponIsActive) { 
+			StateMachine.Push<CameraHipfireState>(); 
+		}
+
+		base.Run();
+	}
 }
