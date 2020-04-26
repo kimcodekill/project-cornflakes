@@ -28,7 +28,7 @@ public class PhysicsBody : MonoBehaviour {
 	/// <summary>
 	/// The extra margin of collider distance to account for any rigidbody imperfections or inaccuracies.
 	/// </summary>
-	public float GroundedDistanceOffset { get; set; } = 0.01f;
+	public float GroundedDistanceOffset { get; set; } = 0.1f;
 
 	private void Awake() {
 		collider = GetComponent<Collider>();
