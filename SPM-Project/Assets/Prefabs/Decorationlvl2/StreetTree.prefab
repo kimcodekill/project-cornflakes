@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8881739119734006340}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StreetTree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
