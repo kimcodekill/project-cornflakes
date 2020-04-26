@@ -369,8 +369,8 @@ MonoBehaviour:
   fieldOfView: -2
   attackRange: 20
   visionRange: 30
-  gunTransform: {fileID: 0}
-  eyeTransform: {fileID: 0}
+  gunTransform: {fileID: 39769688967627567}
+  eyeTransform: {fileID: 3245006856651615628}
   states:
   - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
