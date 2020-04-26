@@ -75,10 +75,8 @@ public class PhysicsBody : MonoBehaviour {
 	/// Sets the Y component of the PhysicsBody velocity to 0.
 	/// </summary>
 	public void ResetVerticalSpeed() {
-		Debug.Log(rigidBody.velocity.y);
-		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
-		rigidBody.angularVelocity.Set(rigidBody.angularVelocity.x, -1f, rigidBody.angularVelocity.z);
-		Debug.Log(rigidBody.velocity.y);
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, 0f, rigidBody.angularVelocity.z);
 	}
 
 	/// <summary>

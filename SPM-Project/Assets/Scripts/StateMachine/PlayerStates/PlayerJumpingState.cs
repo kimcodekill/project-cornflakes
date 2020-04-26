@@ -10,7 +10,7 @@ public class PlayerJumpingState : PlayerAirState {
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 
-		//Player.PhysicsBody.ResetVelocity();
+		Player.PhysicsBody.ResetVerticalSpeed();
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		
 		base.Enter();
