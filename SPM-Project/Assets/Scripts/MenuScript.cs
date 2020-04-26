@@ -6,9 +6,11 @@ public class MenuScript : MonoBehaviour
 {
     public void NewGame()
     {
-        EventSystem.Current.FireEvent(new LevelEndEvent()
-        {
-            Description = "Starting New Game"
-        });
+		
+		EventSystem.Current.FireEvent(new LevelEndEvent()
+		{
+
+			Description = "Starting New Game"
+		}) ;
     }
 }
