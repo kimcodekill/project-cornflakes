@@ -9,9 +9,10 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
 	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
-	[SerializeField] [Tooltip("This enemy's maximum sight range.")] private float sightRange;
-	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] private Transform gunPosition;
-	[SerializeField] public Transform eyePosition;
+	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
+	[SerializeField] protected float visionRange;
+	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] public Transform gunTransform;
+	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
 	
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask layerMask;
@@ -32,11 +33,12 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	protected void Update() {
-		VectorToTarget = CalculateVectorToTarget();
+		VectorToTarget = GetVectorToTarget();
 		enemyStateMachine.Run();
+		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
 	}
 
-	private Vector3 CalculateVectorToTarget() {
+	private Vector3 GetVectorToTarget() {
 		Vector3 v = Target.transform.position - transform.position;
 		return v;
 	}
@@ -47,12 +49,12 @@ public class Enemy : MonoBehaviour, IEntity
 	/// <param name="v"></param>
 	/// <returns></returns>
 	public bool PlayerIsInSight() {
-		if (TargetIsInRange() && CanSeeTarget(VectorToTarget) && TargetIsInFOV(VectorToTarget)) { return true; }
+		if (TargetIsInRange() && TargetIsInFOV(VectorToTarget) && CanSeeTarget(VectorToTarget)) { return true; }
 		else { return false; }
 	}
 
 	private bool TargetIsInFOV(Vector3 v) {
-		float angleToTarget = Vector3.Dot(transform.forward, v.normalized);
+		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
 		if (angleToTarget >= fieldOfView) {
 			//Debug.Log(Target.gameObject.name + " is in FOV of " + gameObject.name);
 			return true; 
@@ -61,7 +63,7 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	private bool TargetIsInRange() {
-		if (Vector3.Distance(transform.position, Target.transform.position) < sightRange) {
+		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
 			//Debug.Log(Target.gameObject.name + " in range of " + gameObject.name);
 			return true;
 		}
@@ -69,15 +71,9 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	private bool CanSeeTarget(Vector3 v) {
-		Vector3 enemyEye = transform.position + eyePosition.position;
-		Physics.Raycast(enemyEye, v, out RaycastHit hit, v.magnitude, layerMask);
-		///Casts Raycasts in a cone to look for the player even if the player is only peeking around a corner.
-		/*Physics.Raycast(enemyEyes, v + new Vector3(0, -0.25f, 0), out RaycastHit hit2, v.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, v + new Vector3(0, 0.25f, 0), out RaycastHit hit3, v.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, v + new Vector3(0.25f, 0, 0), out RaycastHit hit4, v.magnitude, layerMask);
-		Physics.Raycast(enemyEyes, v + new Vector3(-0.25f, 0, 0), out RaycastHit hit5, v.magnitude, layerMask);*/
-		if (hit.collider == null/* || hit2.collider == null || hit3.collider == null || hit4.collider == null || hit5.collider == null*/) {
-			//Debug.Log(Target.gameObject.name + " is seen by " + gameObject.name);
+		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, layerMask);
+		if (!hit.collider) {
+			Debug.DrawRay(eyeTransform.position, v, Color.red);
 			return true;
 		}
 		else { return false; }
@@ -88,16 +84,13 @@ public class Enemy : MonoBehaviour, IEntity
 	/// </summary>
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
-		if (!Physics.SphereCast(GetGunPosition().position, 0.5f, VectorToTarget, out _, VectorToTarget.magnitude, layerMask)) { return true; }
-		else { return false; }
-		///if the enemy can't attack the player, move to position where it can attack player
+		if (PlayerIsInSight() && VectorToTarget.magnitude <= attackRange) {
+			if (!Physics.SphereCast(gunTransform.position, 0.1f, VectorToTarget, out _, VectorToTarget.magnitude, layerMask)) { return true; }
+			else { return false; }
+		}
+		else return false;
+		
 	}
-
-	/// <summary>
-	/// Returns this enemy's gunPosition;
-	/// </summary>
-	/// <returns></returns>
-	public Transform GetGunPosition() { return gunPosition; }
 
 	/// <summary>
 	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the enemy.
@@ -126,19 +119,14 @@ public class Enemy : MonoBehaviour, IEntity
 		gameObject.SetActive(false);
 	}
 
-	public virtual void StartIdleBehaviour() {
+	public virtual void StartIdleBehaviour() { }
+	public virtual void StopIdleBehaviour() { }
+	public virtual void StartPatrolBehaviour() { }
+	public virtual void StopPatrolBehaviour() { }
+	public virtual void StartAlertedBehaviour() { }
+	public virtual void StopAlertedBehaviour() { }
+	public virtual void StartAttackBehaviour() { }
+	public virtual void StopAttackBehaviour() { }
 
-	}
-
-	public virtual void StopIdleBehaviour() {
-
-	}
-
-	public virtual void StartAttackBehaviour() {
-
-	}
-
-	public virtual void StopAttackBehaviour() {
-
-	}
+	
 }
