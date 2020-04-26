@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultPlayerDashingState
   m_EditorClassIdentifier: 
   AirAcceleration: 10
-  TopAirSpeed: 10
+  TopAirSpeed: 15
   DashSpeed: 20
-  Cooldown: 0
+  Cooldown: 0.1
   DashDuration: 0.3
