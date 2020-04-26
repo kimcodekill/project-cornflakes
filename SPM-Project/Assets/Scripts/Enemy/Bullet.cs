@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour {
 
 	private void CheckDistance(float distance, float maxDistance) {
 		if (distance >= maxDistance)
-			//Destroy(gameObject);
-			gameObject.SetActive(false);
+			Destroy(gameObject);
+			//gameObject.SetActive(false);
 	}
 }
