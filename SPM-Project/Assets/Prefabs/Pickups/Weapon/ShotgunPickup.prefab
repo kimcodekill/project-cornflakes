@@ -130,7 +130,7 @@ MonoBehaviour:
   muzzle: {fileID: 0}
   ammoType: 1
   fullAuto: 0
-  damage: 1
+  damage: 3
   fireRate: 100
   magazineSize: 10
   ammoInMagazine: 10
