@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:SPM-Project/Assets/Prefabs/Decorationlvl2/Computer.prefab.orig.meta
 guid: 27884f12e38bac044b346a081792dba7
+=======
+guid: e70669c2b84318f499d80ab00675c2d1
+folderAsset: yes
+>>>>>>> f01b297b85fbfba5474a544b8666648c01f193bb:SPM-Project/Assets/Prefabs/FetchableScenes.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
