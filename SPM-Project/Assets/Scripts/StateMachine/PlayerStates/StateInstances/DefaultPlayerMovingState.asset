@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Drag: 10
   AirDrag: 0
-  Acceleration: 100
-  TopSpeed: 5
+  Acceleration: 200
+  TopSpeed: 15
