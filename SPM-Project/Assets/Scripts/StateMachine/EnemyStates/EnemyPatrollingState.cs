@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyPatrollingState : EnemyBaseState
 {
 	public override void Enter() {
-		Debug.Log("" + Enemy.gameObject.name + " patrolling");
+		//Debug.Log("" + Enemy.gameObject.name + " patrolling");
 		Enemy.StartPatrolBehaviour();
 	}
 

@@ -13,7 +13,7 @@ public class EnemyAttackingState : EnemyBaseState
 	private float internalAttackCD;
 
 	public override void Enter() {
-		Debug.Log("attacking");
+		//Debug.Log("attacking");
 		Enemy.StartAttackBehaviour();
 	}
 
