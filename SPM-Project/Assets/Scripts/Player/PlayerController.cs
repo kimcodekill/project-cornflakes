@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+	[SerializeField] private PauseMenu pauseMenu;
 
 	private AbilityTrigger weaponArray;
 	private StateMachine stateMachine;
@@ -29,6 +31,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 
 		stateMachine = new StateMachine(this, states); 
+	}
+
+	private void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) pauseMenu.PauseGame();
 	}
 
 	private void FixedUpdate() {
