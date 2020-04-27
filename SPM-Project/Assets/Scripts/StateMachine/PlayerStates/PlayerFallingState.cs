@@ -10,7 +10,7 @@ public class PlayerFallingState : PlayerAirState {
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space)) StateMachine.Push<PlayerJumpingState>();
+		//if (Input.GetKeyDown(KeyCode.Space)) StateMachine.Push<PlayerJumpingState>();
 		base.Run();
 	}
 

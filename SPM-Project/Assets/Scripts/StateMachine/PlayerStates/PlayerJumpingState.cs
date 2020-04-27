@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,24 +8,24 @@ public class PlayerJumpingState : PlayerAirState {
 
 	public float JumpHeight = 6f;
 
+	public float JumpCooldown = 0.01f;
+
+	private float startTime = -1;
+
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+		
+		if (Time.time - startTime < JumpCooldown) StateMachine.Pop();
+		else if (param != null && jumpCount < 2 || startTime == -1) {
+			startTime = Time.time;
+			param = null;
+			jumpCount++;
 
-		if (Input.GetKey(KeyCode.Space) && jumpCount < 2) {
 			Player.PhysicsBody.ResetVerticalSpeed();
 			Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
-			jumpCount++;
 		}
-		
-		base.Enter();
-	}
 
-	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			StateMachine.Push<PlayerJumpingState>();
-		}
-		
-		base.Run();
+		base.Enter();
 	}
 
 }

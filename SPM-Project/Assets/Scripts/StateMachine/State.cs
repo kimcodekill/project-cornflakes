@@ -27,4 +27,9 @@ public abstract class State : ScriptableObject {
 	/// </summary>
     public virtual void Exit() { }
 
+	/// <summary>
+	/// Some variable that can be sent with a <c>Push()</c>
+	/// </summary>
+	public object param;
+
 }

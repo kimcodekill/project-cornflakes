@@ -36,15 +36,11 @@ public class PlayerDashingState : PlayerAirState {
 		bool spacePressed = Input.GetKeyDown(KeyCode.Space);
 		if (currentDashTime > DashDuration || spacePressed) {
 			Player.PhysicsBody.SetGravityEnabled(true);
-			if (spacePressed) {
-				StateMachine.Push<PlayerJumpingState>();
-			}
-			else {
-				dashed = false;
-				currentDashTime = 0f;
-				if (Player.PhysicsBody.IsGrounded()) base.Run();
-				else StateMachine.Pop(StateMachine.IsPreviousState<PlayerJumpingState>());
-			}
+			dashed = false;
+			currentDashTime = 0f;
+			if (spacePressed && jumpCount < 2) StateMachine.Push<PlayerJumpingState>(new object());
+			else StateMachine.Pop();
+			
 		}
 	}
 
