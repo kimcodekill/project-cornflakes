@@ -17,6 +17,8 @@ public abstract class PlayerAirState : PlayerState {
 	public override void Enter() {
 		skipEnter = false;
 		startAirTime = Time.time;
+
+		base.Enter();
 	}
 
 	public override void Run() {

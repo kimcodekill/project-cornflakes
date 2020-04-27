@@ -12,10 +12,12 @@ public abstract class PlayerGroundedState : PlayerState {
 		Player.PhysicsBody.SetSlideRate(Drag);
 		jumpCount = 0;
 		dashCount = 0;
+
+		base.Enter();
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space) && Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerJumpingState>();
+		//if (Input.GetKeyDown(KeyCode.Space) && Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerJumpingState>();
 		if (!Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerFallingState>();
 
 		base.Run();

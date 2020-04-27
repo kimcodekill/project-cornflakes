@@ -38,12 +38,13 @@ public class StateMachine {
 	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process.
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
-	public void Push<T>() where T : State {
+	public void Push<T>(object param = null) where T : State {
 		if (stateStack.Count > 0) {
 			previousState = states[stateStack.Peek()];
 			states[stateStack.Peek()].Exit();
 		}
 		stateStack.Push(typeof(T));
+		states[stateStack.Peek()].param = param;
 		states[stateStack.Peek()].Enter();
 	}
 
