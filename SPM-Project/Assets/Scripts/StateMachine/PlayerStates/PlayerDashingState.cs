@@ -19,32 +19,42 @@ public class PlayerDashingState : PlayerAirState {
 
 	private Afterburner afterburner;
 
+	private bool warned;
+
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+		
 		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
-		if (afterburner == null) Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
-
-		base.Enter();
-
-		if (!dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire())) Dash();
+		if (afterburner == null && !warned) {
+			warned = true;
+			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
+		}
+		bool res = OffCooldown(Time.time);
+		if (Input.GetKey(KeyCode.LeftShift) && !dashed && res && (afterburner == null || afterburner.CanFire()) && dashCount < 1) Dash();
 		else StateMachine.Pop(true);
-		skipEnter = true;
+		
+		base.Enter();
 	}
 
 	public override void Run() {
 		if (dashed) currentDashTime += Time.deltaTime;
-		bool spacePressed = Input.GetKeyDown(KeyCode.Space);
-		if (currentDashTime > DashDuration || spacePressed) {
-			Player.PhysicsBody.SetGravityEnabled(true);
-			dashed = false;
-			currentDashTime = 0f;
-			if (spacePressed && jumpCount < 2) StateMachine.Push<PlayerJumpingState>(new object());
-			else StateMachine.Pop();
-			
+		if (dashed && currentDashTime > DashDuration) {
+			StateMachine.Pop();
 		}
+
+		base.Run();
+	}
+
+	public override void Exit() {
+		Player.PhysicsBody.SetGravityEnabled(true);
+		dashed = false;
+		currentDashTime = 0f;
+
+		base.Exit();
 	}
 
 	private void Dash() {
+		dashCount++;
 		if (afterburner != null) afterburner.Fire();
 		Player.PhysicsBody.ResetVelocity();
 		Vector3 input = Player.GetInput();

@@ -8,7 +8,7 @@ public class PlayerJumpingState : PlayerAirState {
 
 	public float JumpHeight = 6f;
 
-	public float JumpCooldown = 0.01f;
+	public float JumpCooldown = 0.05f;
 
 	private float startTime = -1;
 
@@ -21,6 +21,7 @@ public class PlayerJumpingState : PlayerAirState {
 			param = null;
 			jumpCount++;
 
+			Player.PhysicsBody.ChangeVelocityDirection(Player.GetInput());
 			Player.PhysicsBody.ResetVerticalSpeed();
 			Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 		}

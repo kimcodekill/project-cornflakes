@@ -10,13 +10,12 @@ public abstract class PlayerAirState : PlayerState {
 
 	private const float recheckTimeTreshold = 0.1f;
 
-	private float startAirTime;
+	private static float startAirTime = -1;
 
 	protected bool skipEnter = false;
 
 	public override void Enter() {
-		skipEnter = false;
-		startAirTime = Time.time;
+		if (startAirTime == -1) startAirTime = Time.time;
 
 		base.Enter();
 	}
@@ -25,6 +24,7 @@ public abstract class PlayerAirState : PlayerState {
 		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) {
 			jumpCount = 0;
 			dashCount = 0;
+			startAirTime = -1;
 			StateMachine.Pop(skipEnter);
 		}
 		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
