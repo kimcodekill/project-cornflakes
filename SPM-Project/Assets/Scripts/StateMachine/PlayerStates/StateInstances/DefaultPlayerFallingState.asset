@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6fd65d6946ebc43a5ca8cce817051e, type: 3}
   m_Name: DefaultPlayerFallingState
   m_EditorClassIdentifier: 
-  AirAcceleration: 15
+  AirAcceleration: 10
   TopAirSpeed: 15

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 public class StateMachine {
 
 	private Stack<Type> stateStack = new Stack<Type>();

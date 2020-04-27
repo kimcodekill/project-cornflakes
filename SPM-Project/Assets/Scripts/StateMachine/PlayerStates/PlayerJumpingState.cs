@@ -10,16 +10,17 @@ public class PlayerJumpingState : PlayerAirState {
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 
-		Player.PhysicsBody.ResetVerticalSpeed();
-		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+		if (Input.GetKey(KeyCode.Space) && jumpCount < 2) {
+			Player.PhysicsBody.ResetVerticalSpeed();
+			Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+			jumpCount++;
+		}
 		
 		base.Enter();
-		skipEnter = true;
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space) && !Player.PhysicsBody.IsGrounded() && !StateMachine.IsPreviousState<PlayerJumpingState>()) {
-			Player.PhysicsBody.ResetVerticalSpeed();
+		if (Input.GetKeyDown(KeyCode.Space)) {
 			StateMachine.Push<PlayerJumpingState>();
 		}
 		

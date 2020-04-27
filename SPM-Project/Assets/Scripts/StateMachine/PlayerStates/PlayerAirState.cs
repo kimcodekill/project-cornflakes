@@ -20,7 +20,11 @@ public abstract class PlayerAirState : PlayerState {
 	}
 
 	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop(skipEnter);
+		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) {
+			jumpCount = 0;
+			dashCount = 0;
+			StateMachine.Pop(skipEnter);
+		}
 		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
 
 		Player.PhysicsBody.CapHorizontalVelocity(TopAirSpeed);

@@ -8,7 +8,13 @@ public abstract class PlayerState : State {
 	
 	public PlayerController Player => player = player != null ? player : (PlayerController) Owner;
 
+	protected int jumpCount = 0;
+	protected int dashCount = 0;
+
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.LeftShift)) StateMachine.Push<PlayerDashingState>();
+		if (dashCount < 1 && Input.GetKeyDown(KeyCode.LeftShift)) {
+			dashCount++;
+			StateMachine.Push<PlayerDashingState>();
+		}
 	}
 }
