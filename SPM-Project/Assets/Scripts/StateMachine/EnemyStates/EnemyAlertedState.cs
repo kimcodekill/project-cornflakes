@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyAlertedState : EnemyBaseState
 {
 	public override void Enter() {
-		Debug.Log("alerted");
+		//Debug.Log("alerted");
 		Enemy.StartAlertedBehaviour();
 		///alert other nearby enemies???
 
