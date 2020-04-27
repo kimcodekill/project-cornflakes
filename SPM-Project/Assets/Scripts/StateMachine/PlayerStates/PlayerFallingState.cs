@@ -9,4 +9,9 @@ public class PlayerFallingState : PlayerAirState {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 	}
 
+	public override void Run() {
+		if (Input.GetKeyDown(KeyCode.Space)) StateMachine.Push<PlayerJumpingState>();
+		base.Run();
+	}
+
 }
