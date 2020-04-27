@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PhysicsBody : MonoBehaviour {
 
@@ -89,6 +90,17 @@ public class PhysicsBody : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Changes the direction of velocity.
+	/// </summary>
+	/// <param name="direction">The new direction the velocity will be heading.</param>
+	public void ChangeVelocityDirection(Vector3 direction) {
+		float magnitude = rigidBody.velocity.magnitude;
+		float angularMagnitude = rigidBody.angularVelocity.magnitude;
+		rigidBody.velocity = direction.normalized * magnitude;
+		rigidBody.angularVelocity = direction.normalized * angularMagnitude;
+	}
+
+	/// <summary>
 	/// Prevents the PhysicsBody from exceeding the specified horizontal velocity.
 	/// </summary>
 	/// <param name="topSpeed">The speed limit.</param>
@@ -104,11 +116,13 @@ public class PhysicsBody : MonoBehaviour {
 	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
 	/// </summary>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded(bool useTempMethod = true) {
+	public bool IsGrounded(bool useTempMethod = false) {
 		if (useTempMethod) {
 			CapsuleCollider c = (CapsuleCollider) collider;
 			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
-			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius);
+			Vector3 bottomCircle = transform.position + c.center + Vector3.down * ((c.height / 2 - c.radius) - GroundedDistanceOffset);
+			//float dot = Vector3.Dot(GetCurrentSurfaceNormal().normalized, Vector3.down);
+			//return Physics.CheckCapsule(topCircle, bottomCircle, c.radius, mask) && dot < -0.5f;
 			return Physics.SphereCast(topCircle, c.radius, Vector3.down, out _, (c.height / 2) + GroundedDistanceOffset, mask);
 			//return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
 		}
@@ -130,7 +144,7 @@ public class PhysicsBody : MonoBehaviour {
 	public Vector3 GetCurrentSurfaceNormal() {
 		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance + 2f, mask);
 		Debug.DrawRay(hit.point, hit.normal, Color.red);
-		return hit.collider != null ? hit.normal : Vector3.up;
+		return hit.collider ? hit.normal : Vector3.up;
 	}
 
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
