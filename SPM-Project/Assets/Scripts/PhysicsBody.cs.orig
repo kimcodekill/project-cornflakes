@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PhysicsBody : MonoBehaviour {
 
@@ -27,7 +28,11 @@ public class PhysicsBody : MonoBehaviour {
 	/// The maximum dot product allowed for <c>Vector3.Dot(Vector3.down, GetCurrentSurfaceNormal())</c>,
 	/// to determine whether or not the player should count as "grounded".
 	/// </summary>
+<<<<<<< HEAD
 	public float DotProductTreshold { get; set; } = -0.5f;
+=======
+	public float GroundedDistanceOffset { get; set; } = 0.1f;
+>>>>>>> master
 
 	private void Awake() {
 		collider = GetComponent<Collider>();
