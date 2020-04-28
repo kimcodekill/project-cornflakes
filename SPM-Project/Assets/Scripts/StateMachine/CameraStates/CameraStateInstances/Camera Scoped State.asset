@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraFOV: 10
   CameraOffset: {x: 0, y: 3, z: -10}
-  CameraSensitivity: 0
+  CameraSensitivity: 0.5
