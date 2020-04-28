@@ -8,7 +8,7 @@ public abstract class EnemyBaseState : State
     public Enemy Enemy => enemy = enemy != null ? enemy : (Enemy)Owner;
 
 	public override void Run() {
-		if(Enemy.PlayerIsInSight()) { StateMachine.Push<EnemyAlertedState>(); }
+		if (Enemy.PlayerIsInSight()) { StateMachine.TransitionTo<EnemyAlertedState>(); }
 	}
 
 }
