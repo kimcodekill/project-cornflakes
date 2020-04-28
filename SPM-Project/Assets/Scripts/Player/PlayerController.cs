@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
 		stateMachine = new StateMachine(this, states);
+
+		DebugManager.AddSection("Input", "Horizontal plane movement: ", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
@@ -62,7 +64,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void Update() {
-		Input = Input.discard ? new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) : Input;
+		if (Input.discard) {
+			Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
+			DebugManager.UpdateAll("Input", "Horizontal plane movement: " + Input.horizontal.ToString(), "Jump: " + Input.doJump.ToString(), "Dash: " + Input.doDash.ToString());
+		}
+		//Input = Input.discard ? new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) : Input;
 	}
 
 	/// <summary>
