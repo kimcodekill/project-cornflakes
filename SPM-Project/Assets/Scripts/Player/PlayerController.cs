@@ -37,39 +37,30 @@ public class PlayerController : MonoBehaviour, IEntity {
 		public Vector3 directional;
 		public bool doJump;
 		public bool doDash;
-
-		public bool discard;
-		
-		public CurrentInput(Vector3 directional, bool doJump, bool doDash) {
-			this.directional = directional;
-			this.doJump = doJump;
-			this.doDash = doDash;
-
-			discard = false;
-		}
 	
 	}
 
 	private void Start() {
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
-		Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
+		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
 
-		DebugManager.AddSection("Input", "Horizontal plane movement: ", "Jump: ", "Dash: ");
+		DebugManager.AddSection("Input", "Directional input: ", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
-		Input.discard = true;
+		Input.directional = Vector3.zero;
+		Input.doJump = false;
+		Input.doDash = false;
 	}
 
 	private void Update() {
-		if (Input.discard) {
-			Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
-			DebugManager.UpdateAll("Input", "Directional: " + Input.directional.ToString(), "Jump: " + Input.doJump.ToString(), "Dash: " + Input.doDash.ToString());
-		}
-		//Input = Input.discard ? new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) : Input;
+		DebugManager.UpdateAll("Input", "Directional input: " + Input.directional, "Jump: " + Input.doJump, "Dash: " + Input.doJump);
+		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
+		if (GetInput().magnitude > 0) Input.directional = GetInput();
 	}
 
 	/// <summary>

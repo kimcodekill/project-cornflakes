@@ -35,7 +35,8 @@ public class StateMachine {
 	}
 
 	/// <summary>
-	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process.
+	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process,
+	/// and <c>Exit()</c> on the previous state, if exists.
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
 	/// <param name="param">Used freely to transfer information between states.</param>
