@@ -15,5 +15,5 @@ MonoBehaviour:
   AirAcceleration: 40
   TopAirSpeed: 40
   DashSpeed: 40
-  Cooldown: 0
+  Cooldown: 0.1
   DashDuration: 0.3
