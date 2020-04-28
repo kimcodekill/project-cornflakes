@@ -57,10 +57,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void Update() {
-		DebugManager.UpdateAll("Input", "Directional input: " + Input.directional, "Jump: " + Input.doJump, "Dash: " + Input.doJump);
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 		if (GetInput().magnitude > 0) Input.directional = GetInput();
+
+		DebugManager.UpdateAll("Input", "Directional input: " + Input.directional, "Jump: " + Input.doJump, "Dash: " + Input.doDash);
 	}
 
 	/// <summary>
