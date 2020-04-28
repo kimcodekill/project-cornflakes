@@ -15,17 +15,22 @@ public class PlayerJumpingState : PlayerAirState {
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		
-		if (Time.time - startTime < JumpCooldown) StateMachine.Pop();
-		else if (param != null && jumpCount < 2 || startTime == -1) {
-			startTime = Time.time;
-			param = null;
-			jumpCount++;
-			Player.PhysicsBody.ChangeVelocityDirection(Player.Input.horizontal);
-			Player.PhysicsBody.ResetVerticalSpeed();
-			Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
-		}
+		startTime = Time.time;
+		Player.PhysicsBody.ChangeVelocityDirection(Player.Input.horizontal);
+		Player.PhysicsBody.ResetVerticalSpeed();
+		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 
-		base.Enter();
+		StateMachine.TransitionTo<PlayerFallingState>();
+	}
+
+	public override bool CanEnter() {
+		return !(Time.time - startTime < JumpCooldown) && (jumpCount < 2 || startTime == -1);
+	}
+
+	public override void Exit() {
+		jumpCount++;
+
+		base.Exit();
 	}
 
 }

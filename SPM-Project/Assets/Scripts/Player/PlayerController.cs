@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 
-	private AbilityTrigger weaponArray;
 	private StateMachine stateMachine;
 
 	/// <summary>
@@ -24,8 +23,14 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
+	/// <summary>
+	/// The inputs the player decided on for the current fixed update interval.
+	/// </summary>
 	public CurrentInput Input { get; private set; }
 
+	/// <summary>
+	/// The container class for all the input parameters.
+	/// </summary>
 	public class CurrentInput {
 
 		public Vector3 horizontal;
@@ -54,7 +59,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void FixedUpdate() {
 		stateMachine.Run();
 		Input.discard = true;
-
 	}
 
 	private void Update() {
@@ -68,7 +72,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public Vector3 GetInput() {
 		Vector3 movementInput = new Vector3(UnityEngine.Input.GetAxisRaw("Horizontal"), 0, UnityEngine.Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
-		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
+		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.transform.rotation * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
 		return planarProjection;
 	}
 

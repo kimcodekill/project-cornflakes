@@ -29,17 +29,15 @@ public class PlayerDashingState : PlayerAirState {
 			warned = true;
 			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
 		}
-		if (Player.Input.doDash && !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1) Dash();
-		else StateMachine.Pop(true);
 		
+		Dash();
+
 		base.Enter();
 	}
 
 	public override void Run() {
 		if (dashed) currentDashTime += Time.deltaTime;
-		if (dashed && currentDashTime > DashDuration) {
-			StateMachine.Pop();
-		}
+		if (dashed && currentDashTime > DashDuration) StateMachine.TransitionTo<PlayerFallingState>();
 
 		base.Run();
 	}
@@ -50,6 +48,10 @@ public class PlayerDashingState : PlayerAirState {
 		currentDashTime = 0f;
 
 		base.Exit();
+	}
+
+	public override bool CanEnter() {
+		return !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1;
 	}
 
 	private void Dash() {
