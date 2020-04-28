@@ -7,7 +7,8 @@ public class EnemyIdleState : EnemyBaseState
 {
 
 	public override void Enter() {
-		
+		Debug.Log("idling");
+		Enemy.StartIdleBehaviour();
 	}
 
 	public override void Run() {
@@ -15,7 +16,7 @@ public class EnemyIdleState : EnemyBaseState
 	}
 
 	public override void Exit() {
-		
+		Enemy.StopIdleBehaviour();
 	}
 
 

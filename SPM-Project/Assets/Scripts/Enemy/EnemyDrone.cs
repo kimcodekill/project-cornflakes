@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyDrone : Enemy {
 
 	[SerializeField] private float patrolBungeeDistance;
-	[SerializeField] private float movementSpeed;
 	[SerializeField] private SphereCollider body;
 	
 	private Vector3 origin;

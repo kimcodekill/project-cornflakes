@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// Returns the player's max health, but can never be set outside of the player script.
 	/// </summary>
-	public float PlayerMaxHealth { get; private set; } = 100;
+	public float PlayerMaxHealth { get; private set; } = 10000;
 
 	/// <summary>
 	/// Returns the PhysicsBody attached to the player, but can never be set outside the player script.
@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void Start() {
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
-
 		stateMachine = new StateMachine(this, states); 
 	}
 
@@ -42,7 +41,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public Vector3 GetInput() {
 		Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
-		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, PhysicsBody.GetCurrentSurfaceNormal()).normalized;
+		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.transform.rotation * movementInput, PhysicsBody.GetCurrentSurfaceNormal()).normalized;
 		return planarProjection;
 	}
 
