@@ -16,8 +16,8 @@ public class PlayerJumpingState : PlayerAirState {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		
 		startTime = Time.time;
-		if (Player.Input.horizontal.magnitude > 0f) Player.PhysicsBody.ChangeVelocityDirection(Player.Input.horizontal);
-		Player.PhysicsBody.ResetVerticalSpeed();
+		if (Player.Input.directional.magnitude > 0f) Player.PhysicsBody.ChangeVelocityDirection(Player.Input.directional);
+		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 
 		StateMachine.TransitionTo<PlayerFallingState>();
