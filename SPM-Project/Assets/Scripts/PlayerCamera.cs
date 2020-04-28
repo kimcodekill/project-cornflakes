@@ -90,4 +90,8 @@ public class PlayerCamera : MonoBehaviour {
 	{
 		cameraOffset = offset;
 	}
+
+	public void SetSensitivity(float sensitivty) {
+		lookSensitivity = sensitivty;
+	}
 }
