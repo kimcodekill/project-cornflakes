@@ -12,11 +12,11 @@ public abstract class PlayerState : State {
 	protected static int dashCount = 0;
 
 	public override void Run() {
-		if (dashCount < 1 && Player.Input.doDash) {
-			StateMachine.Push<PlayerDashingState>();
+		if (Player.Input.doDash && StateMachine.CanEnterState<PlayerDashingState>()) {
+			StateMachine.TransitionTo<PlayerDashingState>();
 		}
-		else if (Player.Input.doJump && jumpCount < 2) {
-			StateMachine.Push<PlayerJumpingState>(new object());
+		else if (Player.Input.doJump && StateMachine.CanEnterState<PlayerJumpingState>()) {
+			StateMachine.TransitionTo<PlayerJumpingState>();
 		}
 		
 	}

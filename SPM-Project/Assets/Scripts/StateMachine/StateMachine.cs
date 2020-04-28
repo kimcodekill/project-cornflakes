@@ -38,13 +38,12 @@ public class StateMachine {
 	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process.
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
-	public void Push<T>(object param = null) where T : State {
+	public void Push<T>() where T : State {
 		if (stateStack.Count > 0) {
 			previousState = states[stateStack.Peek()];
 			states[stateStack.Peek()].Exit();
 		}
 		stateStack.Push(typeof(T));
-		states[stateStack.Peek()].param = param;
 		states[stateStack.Peek()].Enter();
 	}
 
@@ -65,6 +64,10 @@ public class StateMachine {
 	/// <returns>Whether or not the type is equal to the previous state type.</returns>
 	public bool IsPreviousState<T>() {
 		return previousState.GetType() == typeof(T);
+	}
+
+	public bool CanEnterState<T>() {
+		return states[typeof(T)].CanEnter();
 	}
 
 	/// <summary>

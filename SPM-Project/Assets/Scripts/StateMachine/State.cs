@@ -27,6 +27,8 @@ public abstract class State : ScriptableObject {
 	/// </summary>
     public virtual void Exit() { }
 
+	public virtual bool CanEnter() { return true; }
+
 	/// <summary>
 	/// Some variable that can be sent with a <c>Push()</c>
 	/// </summary>
