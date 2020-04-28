@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
-public class PlayerDashingState : PlayerAirState {
+public class PlayerDashingState : PlayerState {
 
 	public float DashSpeed;
 
@@ -53,8 +53,8 @@ public class PlayerDashingState : PlayerAirState {
 			currentDashTime += Time.deltaTime;
 			if (currentDashTime > DashDuration || Vector3.Dot(Vector3.down, Player.PhysicsBody.GetCurrentSurfaceNormal()) > StopDotTreshold) StateMachine.TransitionTo<PlayerFallingState>();
 		}
-
-		//base.Run();
+		
+		base.Run();
 	}
 
 	public override void Exit() {
