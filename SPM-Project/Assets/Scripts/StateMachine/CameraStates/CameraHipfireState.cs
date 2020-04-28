@@ -11,8 +11,8 @@ public class CameraHipfireState : CameraState
 	public override void Run()
 	{
 		//No weapon? No hipfire.
-		if (!PlayerWeapon.Instance.WeaponIsActive) { StateMachine.Pop(); }
-		else if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerWeapon.Instance.CurrentWeapon.AmmoType == Weapon.EAmmoType.Special) { StateMachine.Push<CameraScopedState>(); }
+		//if (!PlayerWeapon.Instance.WeaponIsActive) { StateMachine.Pop(); }
+		if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerWeapon.Instance.CurrentWeapon.AmmoType == Weapon.EAmmoType.Special) { StateMachine.Push<CameraScopedState>(); }
 		// ^: If the sniper is equipped and mouse1 is clicked, scope in.
 
 		base.Run();
