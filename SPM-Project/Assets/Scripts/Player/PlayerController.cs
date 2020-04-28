@@ -24,15 +24,41 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
+	public CurrentInput Input { get; private set; }
+
+	public class CurrentInput {
+
+		public Vector3 horizontal;
+		public bool doJump;
+		public bool doDash;
+
+		public bool discard;
+		
+		public CurrentInput(Vector3 horizontal, bool doJump, bool doDash) {
+			this.horizontal = horizontal;
+			this.doJump = doJump;
+			this.doDash = doDash;
+
+			discard = false;
+		}
+	
+	}
+
 	private void Start() {
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
-
-		stateMachine = new StateMachine(this, states); 
+		Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
+		stateMachine = new StateMachine(this, states);
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+		Input.discard = true;
+
+	}
+
+	private void Update() {
+		Input = Input.discard ? new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) : Input;
 	}
 
 	/// <summary>
@@ -40,7 +66,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	/// <returns>The projected vector along the player's current ground surface.</returns>
 	public Vector3 GetInput() {
-		Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+		Vector3 movementInput = new Vector3(UnityEngine.Input.GetAxisRaw("Horizontal"), 0, UnityEngine.Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
 		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
 		return planarProjection;

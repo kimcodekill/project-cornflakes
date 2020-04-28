@@ -12,10 +12,10 @@ public abstract class PlayerState : State {
 	protected static int dashCount = 0;
 
 	public override void Run() {
-		if (dashCount < 1 && Input.GetKeyDown(KeyCode.LeftShift)) {
+		if (dashCount < 1 && Player.Input.doDash) {
 			StateMachine.Push<PlayerDashingState>();
 		}
-		else if (Input.GetKeyDown(KeyCode.Space) && jumpCount < 2) {
+		else if (Player.Input.doJump && jumpCount < 2) {
 			StateMachine.Push<PlayerJumpingState>(new object());
 		}
 		

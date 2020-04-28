@@ -29,7 +29,7 @@ public class PlayerDashingState : PlayerAirState {
 			warned = true;
 			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
 		}
-		if (Input.GetKey(KeyCode.LeftShift) && !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1) Dash();
+		if (Player.Input.doDash && !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1) Dash();
 		else StateMachine.Pop(true);
 		
 		base.Enter();
