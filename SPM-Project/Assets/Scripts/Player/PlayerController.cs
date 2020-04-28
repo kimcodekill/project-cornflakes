@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// Returns the player's max health, but can never be set outside of the player script.
 	/// </summary>
-	public float PlayerMaxHealth { get; private set; } = 10000;
+	public float PlayerMaxHealth { get; private set; } = 100;
 
 	/// <summary>
 	/// Returns the PhysicsBody attached to the player, but can never be set outside the player script.
