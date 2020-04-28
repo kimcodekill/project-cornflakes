@@ -10,8 +10,10 @@ public abstract class PlayerGroundedState : PlayerState {
 
 	public override void Enter() {
 		Player.PhysicsBody.SetSlideRate(Drag);
-		jumpCount = 0;
-		dashCount = 0;
+		//Debug.Log("Reset counts");
+		//Debug.Log(this);
+		//jumpCount = 0;
+		//dashCount = 0;
 
 		base.Enter();
 	}
