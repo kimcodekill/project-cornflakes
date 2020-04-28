@@ -16,5 +16,7 @@ MonoBehaviour:
   Acceleration: 40
   TopSpeed: 40
   DashSpeed: 40
-  Cooldown: 0.1
+  Cooldown: 0
   DashDuration: 0.3
+  MaxYGain: 0.5
+  StopDotTreshold: -0.5

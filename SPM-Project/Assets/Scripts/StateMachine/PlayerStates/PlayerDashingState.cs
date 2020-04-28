@@ -5,15 +5,27 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
 public class PlayerDashingState : PlayerAirState {
 
-	public float DashSpeed = 7f;
+	public float DashSpeed;
 
-	public float Cooldown = 3f;
+	public float Cooldown;
 
-	public float DashDuration = 0.5f;
+	public float DashDuration;
+
+	/// <summary>
+	/// The amount of allowable altitude gain from a dash before we stop ascending.
+	/// </summary>
+	public float MaxYGain;
+
+	/// <summary>
+	/// If the dot product of <c>Vector3.down</c> and the current surface normal goes beyond this value, we abort the dash.
+	/// </summary>
+	public float StopDotTreshold;
 
 	private float startTime = -1;
 
 	private float currentDashTime = 0;
+
+	private float initialY;
 
 	private bool dashed = false;
 
@@ -36,9 +48,13 @@ public class PlayerDashingState : PlayerAirState {
 	}
 
 	public override void Run() {
-		if (dashed) currentDashTime += Time.deltaTime;
-		if (dashed && currentDashTime > DashDuration) StateMachine.TransitionTo<PlayerFallingState>();
-		else base.Run();
+		if (dashed) {
+			if (Player.transform.position.y - initialY > MaxYGain) Player.PhysicsBody.SetAxisVelocity('y', 0);
+			currentDashTime += Time.deltaTime;
+			if (currentDashTime > DashDuration || Vector3.Dot(Vector3.down, Player.PhysicsBody.GetCurrentSurfaceNormal()) > StopDotTreshold) StateMachine.TransitionTo<PlayerFallingState>();
+		}
+
+		//base.Run();
 	}
 
 	public override void Exit() {
@@ -54,6 +70,7 @@ public class PlayerDashingState : PlayerAirState {
 	}
 
 	private void Dash() {
+		initialY = Player.transform.position.y;
 		dashCount++;
 		if (afterburner != null) afterburner.Fire();
 		Player.PhysicsBody.ResetVelocity();
@@ -62,7 +79,7 @@ public class PlayerDashingState : PlayerAirState {
 		impulse.y = 0;
 		Player.PhysicsBody.AddForce(impulse, ForceMode.Impulse);
 		Player.PhysicsBody.SetGravityEnabled(false);
-		Player.PhysicsBody.ResetVerticalSpeed();
+		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		dashed = true;
 	}
 

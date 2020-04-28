@@ -1,12 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PhysicsBody : MonoBehaviour {
 
-	private Collider collider;
-
-	private Rigidbody rigidBody;
-	
-	[SerializeField] private LayerMask mask;
+	#region Properties
 
 	/// <summary>
 	/// The position of the left foot of the PhysicsBody relative to the gameObject transform.
@@ -29,19 +26,18 @@ public class PhysicsBody : MonoBehaviour {
 	/// </summary>
 	public float DotProductTreshold { get; set; } = -0.5f;
 
+	#endregion
+
+	[SerializeField] private LayerMask mask;
+
+	private Collider collider;
+
+	private Rigidbody rigidBody;
+
 	private void Awake() {
 		collider = GetComponent<Collider>();
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-	}
-
-	/// <summary>
-	/// Adds a certain amount of force to the PhysicsBody.
-	/// </summary>
-	/// <param name="impulse">The desired impulse.</param>
-	/// <param name="mode">The force mode to use.</param>
-	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
-		rigidBody.AddForce(impulse, mode);
 	}
 
 	/// <summary>
@@ -60,29 +56,23 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.useGravity = enabled;
 	}
 
+	#region Adjust Velocity
+
+	/// <summary>
+	/// Adds a certain amount of force to the PhysicsBody.
+	/// </summary>
+	/// <param name="impulse">The desired impulse.</param>
+	/// <param name="mode">The force mode to use.</param>
+	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
+		rigidBody.AddForce(impulse, mode);
+	}
+
 	/// <summary>
 	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.zero</c>.
 	/// </summary>
 	public void ResetVelocity() {
 		rigidBody.velocity = Vector3.zero;
 		rigidBody.angularVelocity = Vector3.zero;
-	}
-
-	/// <summary>
-	/// Sets the Y component of the PhysicsBody velocity to 0.
-	/// </summary>
-	public void ResetVerticalSpeed() {
-		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, 0f, rigidBody.angularVelocity.z);
-	}
-
-	/// <summary>
-	/// Prevents the PhysicsBody from exceeding the specified velocity.
-	/// </summary>
-	/// <param name="topSpeed">The speed limit.</param>
-	public void CapVelocity(float topSpeed) {
-		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
-		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
 	}
 
 	/// <summary>
@@ -96,6 +86,17 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.angularVelocity = direction.normalized * angularMagnitude;
 	}
 
+	#region Limit Velocity
+
+	/// <summary>
+	/// Prevents the PhysicsBody from exceeding the specified velocity.
+	/// </summary>
+	/// <param name="topSpeed">The speed limit.</param>
+	public void CapVelocity(float topSpeed) {
+		rigidBody.velocity = rigidBody.velocity.magnitude > topSpeed ? rigidBody.velocity.normalized * topSpeed : rigidBody.velocity;
+		rigidBody.angularVelocity = rigidBody.angularVelocity.magnitude > topSpeed ? rigidBody.angularVelocity.normalized * topSpeed : rigidBody.angularVelocity;
+	}
+
 	/// <summary>
 	/// Prevents the PhysicsBody from exceeding the specified horizontal velocity.
 	/// </summary>
@@ -107,6 +108,54 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.velocity = new Vector3(rigidBody.velocity.x, velocityY, rigidBody.velocity.z);
 		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, angularVelocityY, rigidBody.velocity.z);
 	}
+
+	#endregion
+
+	#region Set Axis Velocity
+
+	/// <summary>
+	/// Sets the vertical velocity of the specified axis.
+	/// </summary>
+	/// <param name="axis">The axis to set.</param>
+	/// <param name="velocity">The new velocity of the axis.</param>
+	public void SetAxisVelocity(char axis, float velocity) {
+		switch (axis) {
+			case 'X':
+			case 'x':
+				SetXVelocity(velocity);
+				break;
+			case 'Y':
+			case 'y':
+				SetYVelocity(velocity);
+				break;
+			case 'Z':
+			case 'z':
+				SetZVelocity(velocity);
+				break;
+			default: throw new ArgumentException("Invalid axis");
+		}
+	}
+
+	private void SetXVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(velocity, rigidBody.velocity.y, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(velocity, rigidBody.velocity.y, rigidBody.velocity.z);
+	}
+
+	private void SetYVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, velocity, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, velocity, rigidBody.angularVelocity.z);
+	}
+
+	private void SetZVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, velocity);
+		rigidBody.angularVelocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, velocity);
+	}
+
+	#endregion
+
+	#endregion
+
+	#region Ground Check
 
 	/// <summary>
 	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
@@ -147,5 +196,7 @@ public class PhysicsBody : MonoBehaviour {
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}
+
+	#endregion
 
 }

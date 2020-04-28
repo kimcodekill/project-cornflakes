@@ -4,7 +4,10 @@ using UnityEngine;
 
 public abstract class PlayerGroundedState : PlayerState {
 
-	private const float recheckTimeTreshold = 0.1f;
+	/// <summary>
+	/// The duration of time after becoming ungrounded where jumping is still possible.
+	/// </summary>
+	public float JumpGracePeriod = 0.25f;
 
 	private static float startTime = -1;
 
@@ -16,7 +19,7 @@ public abstract class PlayerGroundedState : PlayerState {
 
 	public override void Run() {
 		if (!Player.PhysicsBody.IsGrounded() && startTime == -1) startTime = Time.time;
-		if (!Player.PhysicsBody.IsGrounded() && Time.time - startTime > recheckTimeTreshold) {
+		if (!Player.PhysicsBody.IsGrounded() && Time.time - startTime > JumpGracePeriod) {
 			startTime = -1;
 			StateMachine.TransitionTo<PlayerFallingState>();
 		}

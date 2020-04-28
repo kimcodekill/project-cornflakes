@@ -30,17 +30,18 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	/// <summary>
 	/// The container class for all the input parameters.
+	/// If <c>discard</c> is <c>true</c>, the input set needs to be refreshed.
 	/// </summary>
 	public class CurrentInput {
 
-		public Vector3 horizontal;
+		public Vector3 directional;
 		public bool doJump;
 		public bool doDash;
 
 		public bool discard;
 		
-		public CurrentInput(Vector3 horizontal, bool doJump, bool doDash) {
-			this.horizontal = horizontal;
+		public CurrentInput(Vector3 directional, bool doJump, bool doDash) {
+			this.directional = directional;
 			this.doJump = doJump;
 			this.doDash = doDash;
 
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void Update() {
 		if (Input.discard) {
 			Input = new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift));
-			DebugManager.UpdateAll("Input", "Horizontal plane movement: " + Input.horizontal.ToString(), "Jump: " + Input.doJump.ToString(), "Dash: " + Input.doDash.ToString());
+			DebugManager.UpdateAll("Input", "Directional: " + Input.directional.ToString(), "Jump: " + Input.doJump.ToString(), "Dash: " + Input.doDash.ToString());
 		}
 		//Input = Input.discard ? new CurrentInput(GetInput(), UnityEngine.Input.GetKeyDown(KeyCode.Space), UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) : Input;
 	}

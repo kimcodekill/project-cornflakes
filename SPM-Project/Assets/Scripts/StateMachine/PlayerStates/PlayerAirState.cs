@@ -21,7 +21,7 @@ public abstract class PlayerAirState : PlayerState {
 			startTime = -1;
 			StateMachine.TransitionTo<PlayerMovingState>();
 		}
-		else Player.PhysicsBody.AddForce(Player.Input.horizontal * Acceleration, ForceMode.Acceleration);
+		else Player.PhysicsBody.AddForce(Player.Input.directional * Acceleration, ForceMode.Acceleration);
 
 		Player.PhysicsBody.CapHorizontalVelocity(TopSpeed);
 
