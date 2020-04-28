@@ -152,4 +152,5 @@ MonoBehaviour:
   spread: 0
   rocketSpeed: 1
   rocketAreaOfEffect: 6
+  rocketLifeTime: 20
   rocket: {fileID: 8592894640773638139, guid: 6c5e67c6eba194941baf5964b95854d0, type: 3}

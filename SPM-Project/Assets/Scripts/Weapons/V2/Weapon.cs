@@ -220,7 +220,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	}
 
 	#endregion
-
+	
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>
