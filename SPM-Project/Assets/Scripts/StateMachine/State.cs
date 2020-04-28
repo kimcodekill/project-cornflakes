@@ -27,6 +27,10 @@ public abstract class State : ScriptableObject {
 	/// </summary>
     public virtual void Exit() { }
 
+	/// <summary>
+	/// Called when some state wishes to know if this state currently permits entry.
+	/// </summary>
+	/// <returns>Whether or not the state permits entry, returns <c>true</c> unless overridden by the state.</returns>
 	public virtual bool CanEnter() { return true; }
 
 	/// <summary>
