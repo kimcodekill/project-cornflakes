@@ -115,7 +115,7 @@ public class PhysicsBody : MonoBehaviour {
 	public bool IsGrounded(bool useNewMethod = true) {
 		if (useNewMethod) {
 			CapsuleCollider c = (CapsuleCollider) collider;
-			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
+			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
 			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
 			Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
 			return hit.collider && Vector3.Dot(Vector3.down, hit.normal) < -0.5f;
