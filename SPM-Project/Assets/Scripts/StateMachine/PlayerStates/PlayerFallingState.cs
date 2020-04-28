@@ -9,6 +9,8 @@ public class PlayerFallingState : PlayerAirState {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 
 		if (jumpCount == 0) jumpCount++;
+
+		base.Enter();
 	}
 
 }

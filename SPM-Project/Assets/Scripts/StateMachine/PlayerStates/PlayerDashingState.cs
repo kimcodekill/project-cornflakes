@@ -38,8 +38,7 @@ public class PlayerDashingState : PlayerAirState {
 	public override void Run() {
 		if (dashed) currentDashTime += Time.deltaTime;
 		if (dashed && currentDashTime > DashDuration) StateMachine.TransitionTo<PlayerFallingState>();
-
-		base.Run();
+		else base.Run();
 	}
 
 	public override void Exit() {

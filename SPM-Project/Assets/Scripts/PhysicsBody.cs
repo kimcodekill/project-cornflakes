@@ -61,7 +61,7 @@ public class PhysicsBody : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.0</c>.
+	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.zero</c>.
 	/// </summary>
 	public void ResetVelocity() {
 		rigidBody.velocity = Vector3.zero;
