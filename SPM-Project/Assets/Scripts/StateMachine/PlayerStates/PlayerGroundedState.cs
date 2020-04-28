@@ -4,28 +4,23 @@ using UnityEngine;
 
 public abstract class PlayerGroundedState : PlayerState {
 
-	public float Drag = 10f;
+	private const float recheckTimeTreshold = 0.1f;
 
-	public float AirDrag = 5f;
+	private static float startTime = -1;
 
 	public override void Enter() {
-		Player.PhysicsBody.SetSlideRate(Drag);
-		//Debug.Log("Reset counts");
-		//Debug.Log(this);
-		//jumpCount = 0;
-		//dashCount = 0;
+		if (startTime == -1) startTime = Time.time;
 
 		base.Enter();
 	}
 
 	public override void Run() {
-		if (!Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerFallingState>();
+		if (!Player.PhysicsBody.IsGrounded() && Time.time - startTime > recheckTimeTreshold) {
+			startTime = -1;
+			StateMachine.TransitionTo<PlayerFallingState>();
+		}
 
 		base.Run();
-	}
-
-	public override void Exit() {
-		Player.PhysicsBody.SetSlideRate(AirDrag);
 	}
 
 }

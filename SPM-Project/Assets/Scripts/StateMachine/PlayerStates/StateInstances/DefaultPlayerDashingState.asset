@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3870b6ff5e577f469871d4ecb12ee4b, type: 3}
   m_Name: DefaultPlayerDashingState
   m_EditorClassIdentifier: 
-  AirAcceleration: 40
-  TopAirSpeed: 40
+  Drag: 0
+  Acceleration: 40
+  TopSpeed: 40
   DashSpeed: 40
   Cooldown: 0.1
   DashDuration: 0.3

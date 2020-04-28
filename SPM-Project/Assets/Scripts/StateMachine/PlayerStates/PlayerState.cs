@@ -4,12 +4,22 @@ using UnityEngine;
 
 public abstract class PlayerState : State {
 	
+	public float Drag;
+
+	public float Acceleration;
+
+	public float TopSpeed;
+
 	private PlayerController player;
 	
 	public PlayerController Player => player = player != null ? player : (PlayerController) Owner;
 
 	protected static int jumpCount = 0;
 	protected static int dashCount = 0;
+
+	public override void Enter() {
+		Player.PhysicsBody.SetSlideRate(Drag);
+	}
 
 	public override void Run() {
 		if (Player.Input.doDash && StateMachine.CanEnterState<PlayerDashingState>()) {

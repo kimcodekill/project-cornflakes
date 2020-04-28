@@ -5,10 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerState/MovingState")]
 public class PlayerMovingState : PlayerGroundedState {
 
-	public float Acceleration = 1f;
-
-	public float TopSpeed = 5f;
-
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 
