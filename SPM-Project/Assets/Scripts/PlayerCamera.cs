@@ -53,7 +53,7 @@ public class PlayerCamera : MonoBehaviour {
 		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
-					playerMesh.GetComponent<PlayerRenderer>().SetTransparency(0f);
+					playerMesh.GetComponent<PlayerRenderer>().SetTransparency(0.0f);
 				}
 				return relationVector.normalized * (hit.distance - camRadius);
 			}
