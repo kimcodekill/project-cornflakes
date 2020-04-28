@@ -26,6 +26,7 @@ public class RocketLauncher : Weapon {
 	[Header("Rocket Launcher Properties")]
 	[SerializeField] private float rocketSpeed;
 	[SerializeField] private float rocketAreaOfEffect;
+	[SerializeField] private float rocketLifeTime;
 	[SerializeField] private GameObject rocket;
 
 	#endregion
@@ -36,7 +37,8 @@ public class RocketLauncher : Weapon {
 		launchedRocket.Damage = Damage;
 		launchedRocket.Speed = rocketSpeed;
 		launchedRocket.AreaOfEffect = rocketAreaOfEffect;
-		launchedRocket.Target = MuzzleCast().point;
+		launchedRocket.TargetDir = (MuzzleCast().point - Muzzle.position).normalized;
+		launchedRocket.LifeTime = rocketLifeTime;
 		AmmoInMagazine--;
 	}
 

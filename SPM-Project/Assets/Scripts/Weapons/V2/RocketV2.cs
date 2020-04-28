@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class RocketV2 : MonoBehaviour, IDamaging {
 
-	#region Properties
-
 	public float Damage { get; set; }
-
 	public float Speed { get; set; }
-
 	public float AreaOfEffect { get; set; }
+	public float LifeTime { get; set; }
+	public Vector3 TargetDir { get; set; }
 
-	public Vector3 Target { get; set; }
+	private float startTime;
 
-	#endregion
-
-	private bool hasExploded = false;
+	private void Start()
+	{
+		startTime = Time.time;
+	}
 
 	private void Update() {
-		if (!hasExploded) transform.position = Vector3.MoveTowards(transform.position, Target, Speed);
+		if (Time.time - startTime < LifeTime){ 
+			transform.position += TargetDir * Speed * Time.deltaTime; 
+		} else { 
+			Explode(); 
+		}
 	}
 
 	public float GetDamage() {
@@ -32,15 +35,17 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 			EventSystem.Current.FireEvent(new HitEvent() {
 				Source = gameObject,
 				Target = hitColliders[i].gameObject,
-				HitPoint = transform.position
+				HitPoint = transform.position,
+
 			});
 		}
-		hasExploded = true;
+
+		gameObject.SetActive(false);
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		Explode();
-		gameObject.SetActive(false);
+		if(!other.Equals(GetComponent<Collider>()))
+			Explode();
 	}
 
 }

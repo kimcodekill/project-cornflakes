@@ -13764,11 +13764,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3478167427223906294, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    - target: {fileID: 224233461678482037, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_Name
+      value: PlayerWeaponMuzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 224233461678482037, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_Icon
       value: 
-      objectReference: {fileID: 2100000, guid: 448496b5a858a1e4eb13c482d567777d, type: 2}
+      objectReference: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000,
+        type: 0}
+    - target: {fileID: 2965801763724568574, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2965801763724568574, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2965801763724568574, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7841059610537404105, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -13843,11 +13864,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: collisionLayer.m_Bits
-      value: 1536
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09c76aa4a4f019c41a45cfc9c75d0027, type: 3}

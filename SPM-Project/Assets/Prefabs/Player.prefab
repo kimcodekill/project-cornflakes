@@ -76,6 +76,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &224233461678482037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2965801763724568574}
+  m_Layer: 11
+  m_Name: PlayerMuzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2965801763724568574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224233461678482037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7841059610958226996}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3208381754192760868
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +449,7 @@ Transform:
   - {fileID: 2852529094400065823}
   - {fileID: 7841059610537404105}
   - {fileID: 7841059611673499745}
+  - {fileID: 2965801763724568574}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -487,6 +518,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d9291ea25c200846a2888e1c988e07a, type: 2}
   - {fileID: 11400000, guid: ba9806ebee8f1af43be4a7d827b2db09, type: 2}
   - {fileID: 11400000, guid: c90e08d5d467f8c4d8697e06bd6d377c, type: 2}
+  muzzleTransform: {fileID: 2965801763724568574}
 --- !u!1 &7841059611166161789
 GameObject:
   m_ObjectHideFlags: 0
