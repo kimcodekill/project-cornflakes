@@ -914,12 +914,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 25cf4ab7b4d31714680675660bfdf1d0, type: 3}
---- !u!4 &792113554 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2852529094400065823, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-    type: 3}
-  m_PrefabInstance: {fileID: 840044201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &840044201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1002,28 +996,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: states.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: states.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: c53acc6cd254e304a8a77ab9988fa508,
-        type: 2}
-    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: states.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 01166ec7491247445b59e4e0d07efd0b,
-        type: 2}
-    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: playerMesh
-      value: 
-      objectReference: {fileID: 792113554}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09c76aa4a4f019c41a45cfc9c75d0027, type: 3}
 --- !u!1001 &942740573
