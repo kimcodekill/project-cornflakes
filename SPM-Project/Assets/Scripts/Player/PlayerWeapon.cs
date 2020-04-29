@@ -57,7 +57,7 @@ public class PlayerWeapon : MonoBehaviour {
 
 		//Doing this here bc there isnt a better way to do it at this time
 		if(CurrentWeapon == null) { WeaponIsActive = false; }
-		else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
+		//else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
 	}
 
 	private void SwitchTo(int index) {
