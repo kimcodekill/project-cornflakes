@@ -84,7 +84,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of variance in the bullet path.
 	/// </summary>
-	public float Spread { get => spread; protected set => spread = value; }
+	public float Spread { get => spread; set => spread = value; }
 
 	/// <summary>
 	/// What the weapon should be able to hit.
