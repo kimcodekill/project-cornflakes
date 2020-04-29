@@ -6,6 +6,7 @@ public abstract class CameraState : State
 {
 	public int CameraFOV;
 	public Vector3 CameraOffset;
+	public float CameraSensitivity;
 
     private PlayerCamera camera;
 
@@ -15,6 +16,7 @@ public abstract class CameraState : State
 	{
 		Camera.SetFOV(CameraFOV);
 		Camera.SetOffset(CameraOffset);
+		Camera.SetSensitivity(CameraSensitivity);
 	}
 
 	public override void Run()

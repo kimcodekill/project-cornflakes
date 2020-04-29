@@ -8,6 +8,9 @@ public class CameraScopedState : CameraState
 	//public int CameraFOV = 30;
 	//public Vector3 CameraOffset = new Vector3(1.75f, 1.5f, -7f);
 
+	public override void Enter() {
+		base.Enter();
+	}
 	public override void Run()
 	{
 		//	If the player unequipped weapon, equipped a different weapon, or pressed mouse1 :

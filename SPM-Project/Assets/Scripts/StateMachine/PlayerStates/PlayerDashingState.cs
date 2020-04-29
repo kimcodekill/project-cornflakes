@@ -3,48 +3,75 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
-public class PlayerDashingState : PlayerAirState {
+public class PlayerDashingState : PlayerState {
 
-	public float DashSpeed = 7f;
+	public float DashSpeed;
 
-	public float Cooldown = 3f;
+	public float Cooldown;
 
-	public float DashDuration = 0.5f;
+	public float DashDuration;
+
+	/// <summary>
+	/// The amount of allowable altitude gain from a dash before we stop ascending.
+	/// </summary>
+	public float MaxYGain;
+
+	/// <summary>
+	/// If the dot product of <c>Vector3.down</c> and the current surface normal goes beyond this value, we abort the dash.
+	/// </summary>
+	public float StopDotTreshold;
 
 	private float startTime = -1;
 
 	private float currentDashTime = 0;
 
+	private float initialY;
+
 	private bool dashed = false;
 
 	private Afterburner afterburner;
 
+	private bool warned;
+
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+		
 		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
-		if (afterburner == null) Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
+		if (afterburner == null && !warned) {
+			warned = true;
+			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
+		}
+		
+		Dash();
 
 		base.Enter();
-
-		if (!dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire())) Dash();
-		else StateMachine.Pop(true);
-		skipEnter = true;
 	}
 
 	public override void Run() {
-		if (dashed) currentDashTime += Time.deltaTime;
-		if (currentDashTime > DashDuration) {
-			Player.PhysicsBody.SetGravityEnabled(true);
-			if (!Player.PhysicsBody.IsGrounded()) base.Run();
-			else {
-				currentDashTime = 0f;
-				dashed = false;
-				StateMachine.Pop(StateMachine.IsPreviousState<PlayerJumpingState>());
-			}
+		if (dashed) {
+			if (Player.transform.position.y - initialY > MaxYGain) Player.PhysicsBody.SetAxisVelocity('y', 0);
+			currentDashTime += Time.deltaTime;
+			if (currentDashTime > DashDuration || Vector3.Dot(Vector3.down, Player.PhysicsBody.GetCurrentSurfaceNormal()) > StopDotTreshold) StateMachine.TransitionTo<PlayerFallingState>();
 		}
+		
+		base.Run();
+	}
+
+	public override void Exit() {
+		Player.PhysicsBody.SetGravityEnabled(true);
+		dashed = false;
+		currentDashTime = 0f;
+
+		base.Exit();
+	}
+
+	public override bool CanEnter() {
+		return !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1;
 	}
 
 	private void Dash() {
+		initialY = Player.transform.position.y;
+		dashCount++;
 		if (afterburner != null) afterburner.Fire();
 		Player.PhysicsBody.ResetVelocity();
 		Vector3 input = Player.GetInput();
@@ -52,7 +79,7 @@ public class PlayerDashingState : PlayerAirState {
 		impulse.y = 0;
 		Player.PhysicsBody.AddForce(impulse, ForceMode.Impulse);
 		Player.PhysicsBody.SetGravityEnabled(false);
-		Player.PhysicsBody.ResetVerticalSpeed();
+		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		dashed = true;
 	}
 
