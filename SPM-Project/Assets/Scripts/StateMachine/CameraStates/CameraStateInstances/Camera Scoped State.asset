@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 674251c9818cafe4d9f5d9c484a6989d, type: 3}
   m_Name: Camera Scoped State
   m_EditorClassIdentifier: 
-  CameraFOV: 30
-  CameraOffset: {x: 1.75, y: 1.5, z: -7}
+  CameraFOV: 10
+  CameraOffset: {x: 0, y: 3, z: -10}
+  CameraSensitivity: 0.5
