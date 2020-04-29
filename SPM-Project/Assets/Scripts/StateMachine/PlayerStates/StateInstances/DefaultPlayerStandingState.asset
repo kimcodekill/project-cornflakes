@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: DefaultPlayerStandingState
   m_EditorClassIdentifier: 
   Drag: 10
-  AirDrag: 0
+  Acceleration: 10
+  TopSpeed: 0
+  JumpGracePeriod: 0.25
