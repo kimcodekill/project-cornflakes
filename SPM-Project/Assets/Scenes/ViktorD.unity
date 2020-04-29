@@ -996,8 +996,19 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09c76aa4a4f019c41a45cfc9c75d0027, type: 3}
+--- !u!23 &897934483 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3478167427223906294, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    type: 3}
+  m_PrefabInstance: {fileID: 840044201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &942740573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1290,7 +1301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d7bb43a697221e248a6d180879973c31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2093,6 +2104,65 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1001 &110724686554387735
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 110724686938391085, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 110724686938391085, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 110724686938391085, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 110724686938391085, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 110724686938391086, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: MeshRenderers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 110724686938391086, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: mrs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1125928482}
+    - target: {fileID: 110724686938391086, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: mrs.Array.data[1]
+      value: 
+      objectReference: {fileID: 897934483}
+    - target: {fileID: 110724686938391086, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: MeshRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1125928482}
+    - target: {fileID: 110724686938391086, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: MeshRenderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 897934483}
+    - target: {fileID: 110724686938391087, guid: 5ee900c22f9010b4ea851394cb99b73b,
+        type: 3}
+      propertyPath: m_Name
+      value: FixZWrite
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5ee900c22f9010b4ea851394cb99b73b, type: 3}
 --- !u!1001 &1870566030044500736
 PrefabInstance:
   m_ObjectHideFlags: 0
