@@ -142,15 +142,11 @@ MonoBehaviour:
   muzzle: {fileID: 0}
   ammoType: 2
   fullAuto: 0
-  damage: 75
+  damage: -1
   fireRate: 50
   magazineSize: 1
-  ammoInMagazine: 1
-  ammoInReserve: 3
+  maxMagazines: 9
   reloadTime: 2
   recoil: 0
   spread: 0
-  rocketSpeed: 1
-  rocketAreaOfEffect: 6
-  rocketLifeTime: 20
   rocket: {fileID: 8592894640773638139, guid: 6c5e67c6eba194941baf5964b95854d0, type: 3}

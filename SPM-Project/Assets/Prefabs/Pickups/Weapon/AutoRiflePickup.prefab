@@ -133,8 +133,7 @@ MonoBehaviour:
   damage: 3
   fireRate: 1000
   magazineSize: 40
-  ammoInMagazine: 40
-  ammoInReserve: 40
+  maxMagazines: 1
   reloadTime: 3
   recoil: 0
   spread: 0.01
