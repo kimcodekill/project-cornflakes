@@ -4,26 +4,26 @@ using UnityEngine;
 
 public abstract class PlayerAirState : PlayerState {
 
-	public float AirAcceleration = 10f;
-
-	public float TopAirSpeed = 5f;
-
 	private const float recheckTimeTreshold = 0.1f;
 
-	private float startAirTime;
-
-	protected bool skipEnter = false;
+	private static float startTime = -1;
 
 	public override void Enter() {
-		skipEnter = false;
-		startAirTime = Time.time;
+		if (startTime == -1 && !Player.PhysicsBody.IsGrounded()) startTime = Time.time;
+
+		base.Enter();
 	}
 
 	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded() && Time.time - startAirTime > recheckTimeTreshold) StateMachine.Pop(skipEnter);
-		else Player.PhysicsBody.AddForce(Player.GetInput() * AirAcceleration, ForceMode.Acceleration);
+		if (Player.PhysicsBody.IsGrounded() && Time.time - startTime > recheckTimeTreshold) {
+			jumpCount = 0;
+			dashCount = 0;
+			startTime = -1;
+			StateMachine.TransitionTo<PlayerMovingState>();
+		}
+		else Player.PhysicsBody.AddForce(Player.GetInput().normalized * Acceleration, ForceMode.Acceleration);
 
-		Player.PhysicsBody.CapHorizontalVelocity(TopAirSpeed);
+		Player.PhysicsBody.CapHorizontalVelocity(TopSpeed);
 
 		base.Run();
 	}
