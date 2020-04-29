@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26cd808b0ef7ea640bb0d25d5c6bb41b, type: 3}
   m_Name: DefaultPlayerJumpingState
   m_EditorClassIdentifier: 
-  AirAcceleration: 10
-  TopAirSpeed: 15
+  Drag: 0
+  Acceleration: 10
+  TopSpeed: 15
   JumpHeight: 11
+  JumpCooldown: 0.05
