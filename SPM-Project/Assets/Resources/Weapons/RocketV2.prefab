@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 100
-  speed: 40
+  speed: 80
   areaOfEffect: 7.5
   lifeTime: 20
   collisionLayers:
