@@ -34,7 +34,18 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 		return damage;
 	}
 
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		float distance = (hitPos - explosionCenter).magnitude;
+
+		float damageScale = (areaOfEffect - distance) / areaOfEffect;
+
+		return Mathf.Round(damage * damageScale);
+	}
+
 	private void Explode() {
+		//Because we're using OverlapSphere we cant get the actual hit point
+		//Could be solved using SphereCast, but I cant get that working.
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
 		for (int i = 0; i < hitColliders.Length; i++) {
 			EventSystem.Current.FireEvent(new HitEvent() {
