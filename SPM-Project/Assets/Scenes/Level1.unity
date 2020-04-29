@@ -13764,11 +13764,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3478167427223906294, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 448496b5a858a1e4eb13c482d567777d, type: 2}
     - target: {fileID: 7841059610537404105, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -13846,8 +13841,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
-      propertyPath: collisionLayer.m_Bits
-      value: 1536
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 718233874}
+    - target: {fileID: 7841059611673499746, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: minCollisionDistance
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09c76aa4a4f019c41a45cfc9c75d0027, type: 3}
@@ -31747,6 +31747,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 715296796}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &718233874 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7841059610958226998, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    type: 3}
+  m_PrefabInstance: {fileID: 287853271}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c6d9966f14e2840957d12a0085c6e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &719006384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4330172714594293750, guid: 20f3f025c992565448ae62dd42bddf90,

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 public class StateMachine {
 
 	private Stack<Type> stateStack = new Stack<Type>();
@@ -35,15 +35,18 @@ public class StateMachine {
 	}
 
 	/// <summary>
-	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process.
+	/// Adds an element to the state stack and enters it, calling <c>Enter()</c> on it in the process,
+	/// and <c>Exit()</c> on the previous state, if exists.
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
-	public void Push<T>() where T : State {
+	/// <param name="param">Used freely to transfer information between states.</param>
+	public void Push<T>(object param = null) where T : State {
 		if (stateStack.Count > 0) {
 			previousState = states[stateStack.Peek()];
 			states[stateStack.Peek()].Exit();
 		}
 		stateStack.Push(typeof(T));
+		states[stateStack.Peek()].param = param;
 		states[stateStack.Peek()].Enter();
 	}
 
@@ -67,6 +70,15 @@ public class StateMachine {
 	}
 
 	/// <summary>
+	/// Evaluates the states CanEnter() function to determine if transitioning is allowed.
+	/// </summary>
+	/// <typeparam name="T">The type of state to check.</typeparam>
+	/// <returns></returns>
+	public bool CanEnterState<T>() where T : State {
+		return states[typeof(T)].CanEnter();
+	}
+
+	/// <summary>
 	/// Returns the type of the current state.
 	/// </summary>
 	/// <returns>The type of the current state.</returns>
@@ -86,9 +98,11 @@ public class StateMachine {
 	/// Enter a new state, calling <c>Exit()</c> on the old state and <c>Enter()</c> on the new state in the process.
 	/// </summary>
 	/// <typeparam name="T">The type of the state to enter.</typeparam>
-	public void TransitionTo<T>() where T : State {
+	/// <param name="param">Used freely to transfer information between states.</param>
+	public void TransitionTo<T>(object param = null) where T : State {
+		previousState = states[stateStack.Peek()];
 		DoPop(true);
-		Push<T>();
+		Push<T>(param);
 	}
 
 }

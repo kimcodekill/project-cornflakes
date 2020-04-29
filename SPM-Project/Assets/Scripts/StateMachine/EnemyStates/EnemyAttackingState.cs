@@ -13,18 +13,18 @@ public class EnemyAttackingState : EnemyBaseState
 	private float internalAttackCD;
 
 	public override void Enter() {
-		//Debug.Log("attacking");
+		Debug.Log("attacking");
 		Enemy.StartAttackBehaviour();
 	}
 
 	public override void Run() {
 		if(!Enemy.TargetIsAttackable()) {
-			StateMachine.Pop();
+			StateMachine.TransitionTo<EnemyAlertedState>();
 		}
 
 		internalAttackCD += Time.deltaTime;
 		if(internalAttackCD > attackCooldown) {
-			AttackTarget(Enemy.VectorToTarget);
+			AttackTarget(Enemy.VectorToTarget + Enemy.AttackSpreadCone(Enemy.weaponSpread));
 			internalAttackCD = 0;
 		}
 
@@ -39,7 +39,6 @@ public class EnemyAttackingState : EnemyBaseState
 	}
 
 	public override void Exit() {
-		//Debug.Log("stop attacking");
 		Enemy.StopAttackBehaviour();
 
 	}

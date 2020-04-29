@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Camera Hipfire State
   m_EditorClassIdentifier: 
   CameraFOV: 60
-  CameraOffset: {x: 1.75, y: 1.5, z: -7}
+  CameraOffset: {x: 0, y: 3, z: -10}
+  CameraSensitivity: 1

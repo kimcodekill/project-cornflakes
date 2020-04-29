@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 
-	private AbilityTrigger weaponArray;
 	private StateMachine stateMachine;
 
 	/// <summary>
@@ -24,15 +23,42 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
+	/// <summary>
+	/// The inputs the player decided on for the current fixed update interval.
+	/// </summary>
+	public CurrentInput Input { get; private set; }
+
+	/// <summary>
+	/// The container class for all the input parameters.
+	/// If <c>discard</c> is <c>true</c>, the input set needs to be refreshed.
+	/// </summary>
+	public class CurrentInput {
+
+		public bool doJump;
+		public bool doDash;
+	
+	}
+
 	private void Start() {
 		PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
+		Input = new CurrentInput();
+		stateMachine = new StateMachine(this, states);
 
-		stateMachine = new StateMachine(this, states); 
+		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+		Input.doJump = false;
+		Input.doDash = false;
+	}
+
+	private void Update() {
+		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
+
+		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
 	}
 
 	/// <summary>
@@ -40,9 +66,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	/// <returns>The projected vector along the player's current ground surface.</returns>
 	public Vector3 GetInput() {
-		Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+		Vector3 movementInput = new Vector3(UnityEngine.Input.GetAxisRaw("Horizontal"), 0, UnityEngine.Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
-		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.GetRotation() * movementInput, PhysicsBody.GetCurrentSurfaceNormal()).normalized;
+		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.transform.rotation * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
 		return planarProjection;
 	}
 

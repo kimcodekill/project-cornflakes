@@ -100,6 +100,7 @@ public class DebugManager : MonoBehaviour {
 	/// <exception cref="System.ArgumentException">Thrown if not enough values have been provided.</exception>
 	public static void UpdateAll(string header, params string[] contents) {
 		if (contents.Length != sectionDictionary[header].Rows.Length) throw new ArgumentException("You need to provide a value for every row, even if some value(s) only contain null for the time being.");
+		for (int i = 0; i < sectionDictionary[header].Rows.Length; i++) UpdateRow(header, i, contents[i]);
 	}
 
 	private void Start() {

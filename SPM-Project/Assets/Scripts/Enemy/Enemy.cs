@@ -16,8 +16,10 @@ public class Enemy : MonoBehaviour, IEntity
 	
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask layerMask;
+	[SerializeField] protected float movementSpeed;
 
 	private StateMachine enemyStateMachine;
+	public float weaponSpread;
 
 	/// <summary>
 	/// Returns this enemy's target.
@@ -25,6 +27,8 @@ public class Enemy : MonoBehaviour, IEntity
 	public PlayerController Target { get; private set; }
 	
 	public Vector3 VectorToTarget { get; private set; }
+	public bool FinishedSearching { get; protected set; }
+	public bool IsPatroller { get; protected set; }
 
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -36,6 +40,7 @@ public class Enemy : MonoBehaviour, IEntity
 		VectorToTarget = GetVectorToTarget();
 		enemyStateMachine.Run();
 		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
+		//Debug.Log(finishedSearching);
 	}
 
 	private Vector3 GetVectorToTarget() {
@@ -119,6 +124,16 @@ public class Enemy : MonoBehaviour, IEntity
 		gameObject.SetActive(false);
 	}
 
+	public Vector3 AttackSpreadCone(float radius) {
+		//(sqrt(1 - z^2) * cosϕ, sqrt(1 - z^2) * sinϕ, z)
+		float radradius = radius * Mathf.PI / 360;
+		float z = Random.Range(Mathf.Cos(radradius), 1);
+		float t = Random.Range(0, Mathf.PI * 2);
+		return new Vector3(Mathf.Sqrt(1 - z * z) * Mathf.Cos(t), Mathf.Sqrt(1 - z * z) * Mathf.Sin(t), z);
+	}
+
+	public void DoAttack(float firingRate, float damage) { }
+
 	public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
@@ -127,6 +142,8 @@ public class Enemy : MonoBehaviour, IEntity
 	public virtual void StopAlertedBehaviour() { }
 	public virtual void StartAttackBehaviour() { }
 	public virtual void StopAttackBehaviour() { }
+	public virtual void StartSearchBehaviour() { }
+	public virtual void StopSearchBehaviour() { }
 
 	
 }

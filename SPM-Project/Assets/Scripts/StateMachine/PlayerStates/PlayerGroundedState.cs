@@ -4,23 +4,27 @@ using UnityEngine;
 
 public abstract class PlayerGroundedState : PlayerState {
 
-	public float Drag = 10f;
+	/// <summary>
+	/// The duration of time after becoming ungrounded where jumping is still possible.
+	/// </summary>
+	public float JumpGracePeriod = 0.25f;
 
-	public float AirDrag = 5f;
+	private static float startTime = -1;
 
 	public override void Enter() {
-		Player.PhysicsBody.SetSlideRate(Drag);
+		startTime = -1;
+
+		base.Enter();
 	}
 
 	public override void Run() {
-		if (Input.GetKeyDown(KeyCode.Space) && Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerJumpingState>();
-		if (!Player.PhysicsBody.IsGrounded()) StateMachine.Push<PlayerFallingState>();
+		if (!Player.PhysicsBody.IsGrounded() && startTime == -1) startTime = Time.time;
+		if (!Player.PhysicsBody.IsGrounded() && Time.time - startTime > JumpGracePeriod) {
+			startTime = -1;
+			StateMachine.TransitionTo<PlayerFallingState>();
+		}
 
 		base.Run();
-	}
-
-	public override void Exit() {
-		Player.PhysicsBody.SetSlideRate(AirDrag);
 	}
 
 }
