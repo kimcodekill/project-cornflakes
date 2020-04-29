@@ -109,13 +109,15 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private float damage;
 	[SerializeField] private float fireRate;
 	[SerializeField] private int magazineSize;
-	[SerializeField] private int ammoInMagazine;
-	[SerializeField] private int ammoInReserve;
+	[SerializeField] private int maxMagazines;
 	[SerializeField] private float reloadTime;
 	[SerializeField] private float recoil;
 	[SerializeField] private float spread;
 
 	#endregion
+
+	private int ammoInMagazine;
+	private int ammoInReserve;
 
 	private PlayerCamera playerCamera;
 
@@ -123,6 +125,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	private void Start() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		ammoInMagazine = magazineSize;
+		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
 
 	#region Attribute Status Functions
@@ -254,4 +258,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		AmmoInMagazine--;
 	}
 
+	public int GetMaxAmmo()	{
+		return maxMagazines * magazineSize;
+	}
 }

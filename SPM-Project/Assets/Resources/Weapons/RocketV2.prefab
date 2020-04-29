@@ -252,6 +252,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766537b24af050e4999253b6b5c3ef0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 100
+  speed: 40
+  areaOfEffect: 7.5
+  lifeTime: 20
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 1792
 --- !u!54 &8592894640773638133
 Rigidbody:
   m_ObjectHideFlags: 0

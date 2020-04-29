@@ -7,39 +7,46 @@ using UnityEngine;
 /// </summary>
 public class RocketLauncher : Weapon {
 
-	#region Properties
+    #region PreWeaponRework
 
-	/// <summary>
-	/// The speed of the launched projectile.
-	/// </summary>
-	public float RocketSpeed { get => rocketSpeed; protected set => rocketSpeed = value; }
+    //#region Properties
 
-	/// <summary>
-	/// The area of effect of the launched projectile, once it hits something.
-	/// </summary>
-	public float RocketAreaOfEffect { get => rocketAreaOfEffect; protected set => rocketAreaOfEffect = value; }
+    ///// <summary>
+    ///// The speed of the launched projectile.
+    ///// </summary>
+    //public float RocketSpeed { get => rocketSpeed; protected set => rocketSpeed = value; }
 
-	#endregion
+    ///// <summary>
+    ///// The area of effect of the launched projectile, once it hits something.
+    ///// </summary>
+    //public float RocketAreaOfEffect { get => rocketAreaOfEffect; protected set => rocketAreaOfEffect = value; }
 
-	#region Serialized
+    //#endregion
 
-	[Header("Rocket Launcher Properties")]
-	[SerializeField] private float rocketSpeed;
-	[SerializeField] private float rocketAreaOfEffect;
-	[SerializeField] private float rocketLifeTime;
-	[SerializeField] private GameObject rocket;
+    //#region Serialized
 
-	#endregion
+    //[Header("Rocket Launcher Properties")]
+    //[SerializeField] private float rocketSpeed;
+    //[SerializeField] private float rocketAreaOfEffect;
+    //[SerializeField] private float rocketLifeTime;
+
+    #endregion
+
+    //This is now the only value that is required.
+    [SerializeField] private GameObject rocket;
 
 	protected override void Fire() {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
 		RocketV2 launchedRocket = Instantiate(rocket, Muzzle.position, Quaternion.LookRotation(direction, Vector3.up)).GetComponent<RocketV2>();
-		launchedRocket.Damage = Damage;
-		launchedRocket.Speed = rocketSpeed;
-		launchedRocket.AreaOfEffect = rocketAreaOfEffect;
+
 		launchedRocket.TargetDir = (MuzzleCast().point - Muzzle.position).normalized;
-		launchedRocket.LifeTime = rocketLifeTime;
+
+		//These are now set in inspector: Resources/RocketV2
+			//launchedRocket.damage = Damage;
+			//launchedRocket.speed = rocketSpeed;
+			//launchedRocket.areaOfEffect = rocketAreaOfEffect;
+			//launchedRocket.lifeTime = rocketLifeTime;
+
 		AmmoInMagazine--;
 	}
-
 }

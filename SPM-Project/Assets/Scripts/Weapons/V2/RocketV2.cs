@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class RocketV2 : MonoBehaviour, IDamaging {
 
-	public float Damage { get; set; }
-	public float Speed { get; set; }
-	public float AreaOfEffect { get; set; }
-	public float LifeTime { get; set; }
+	[SerializeField] private float damage;
+	[SerializeField] private float speed;
+	[SerializeField] private float areaOfEffect;
+	[SerializeField] private float lifeTime;
+	[SerializeField] private LayerMask collisionLayers;
+	
 	public Vector3 TargetDir { get; set; }
 
 	private float startTime;
@@ -18,25 +20,27 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 	}
 
 	private void Update() {
-		if (Time.time - startTime < LifeTime){ 
-			transform.position += TargetDir * Speed * Time.deltaTime; 
+		if (Time.time - startTime < lifeTime){
+			if (TargetDir != Vector3.zero)
+			{
+				transform.position += TargetDir * speed * Time.deltaTime;
+			}
 		} else { 
 			Explode(); 
 		}
 	}
 
 	public float GetDamage() {
-		return Damage;
+		return damage;
 	}
 
 	private void Explode() {
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, AreaOfEffect);
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
 		for (int i = 0; i < hitColliders.Length; i++) {
 			EventSystem.Current.FireEvent(new HitEvent() {
 				Source = gameObject,
 				Target = hitColliders[i].gameObject,
 				HitPoint = transform.position,
-
 			});
 		}
 
@@ -44,8 +48,8 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		if(!other.Equals(GetComponent<Collider>()))
+		//checks if the collided gameobject's layer is in the collisionlayers
+		if(collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
 			Explode();
 	}
-
 }
