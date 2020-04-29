@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "CameraState/ScopedState")]
-public class CameraScopedState : CameraState
-{
-	//public int CameraFOV = 30;
-	//public Vector3 CameraOffset = new Vector3(1.75f, 1.5f, -7f);
+public class CameraScopedState : CameraState {
 
-	public override void Enter() {
-		base.Enter();
-	}
-	public override void Run()
-	{
-		//	If the player unequipped weapon, equipped a different weapon, or pressed mouse1 :
-		//		Go back to Hipfire;
-		//  (if the player unequipped, then HipfireState will also pop)
-		if ((!PlayerWeapon.Instance.WeaponIsActive || PlayerWeapon.Instance.CurrentWeapon.AmmoType != Weapon.EAmmoType.Special) || Input.GetKeyDown(KeyCode.Mouse1)) { StateMachine.Pop(); }
+	/// <summary>
+	/// Whether or not Mouse1 needs to be held down to keep aiming, or if aim is toggled with a click.
+	/// </summary>
+	public bool Toggle;
+	
+	public override void Run() {
+		//In order of appearance: Stop aiming if weapon is no longer active, or the equipped weapon isn't a sniper rifle, or toggle mode is used and the aim key was pressed, or toggle mode isn't used and the aim key simply was released.
+		if (!PlayerWeapon.Instance.WeaponIsActive || !(PlayerWeapon.Instance.CurrentWeapon is SniperRifle) || (Toggle && Input.GetKeyDown(KeyCode.Mouse1)) || (!Toggle && Input.GetKeyUp(KeyCode.Mouse1))) {
+			StateMachine.TransitionTo<CameraHipfireState>();
+		}
 
 		base.Run();
 	}
+
+	public override bool CanEnter() {
+		return PlayerWeapon.Instance.CurrentWeapon != null && PlayerWeapon.Instance.CurrentWeapon is SniperRifle;
+	}
+
 }
