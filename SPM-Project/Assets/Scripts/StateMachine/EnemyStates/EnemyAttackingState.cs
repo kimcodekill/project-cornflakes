@@ -19,12 +19,12 @@ public class EnemyAttackingState : EnemyBaseState
 
 	public override void Run() {
 		if(!Enemy.TargetIsAttackable()) {
-			StateMachine.Pop();
+			StateMachine.TransitionTo<EnemyAlertedState>();
 		}
 
 		internalAttackCD += Time.deltaTime;
 		if(internalAttackCD > attackCooldown) {
-			AttackTarget(Enemy.VectorToTarget);
+			AttackTarget(Enemy.VectorToTarget + Enemy.AttackSpreadCone(Enemy.weaponSpread));
 			internalAttackCD = 0;
 		}
 
@@ -39,7 +39,6 @@ public class EnemyAttackingState : EnemyBaseState
 	}
 
 	public override void Exit() {
-		//Debug.Log("stop attacking");
 		Enemy.StopAttackBehaviour();
 
 	}

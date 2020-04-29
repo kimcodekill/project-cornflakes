@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/KimL.unity
-    guid: 08325cd270c8caf48aca9080af15a31c
+    path: Assets/Scenes/mainMenu.unity
+    guid: edada3120cd277649946d6e6179f3e91
   - enabled: 1
-    path: Assets/Scenes/ERIKS EGNA SCEN.unity
-    guid: f24b477a2b8696f47814932afd383b6e
+    path: Assets/Scenes/Level1.unity
+    guid: c0e98e194e70208409d0217e0d9b2333
+  - enabled: 1
+    path: Assets/Scenes/level2merged.unity
+    guid: d03776e205c4b3e47b86f878bb378e11
   m_configObjects: {}

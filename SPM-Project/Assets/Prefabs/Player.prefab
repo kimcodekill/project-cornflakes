@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 2852529094400065823}
   - component: {fileID: 2134671832060812529}
   - component: {fileID: 3478167427223906294}
+  - component: {fileID: 2214502583052592914}
   m_Layer: 11
   m_Name: PlayerMesh
   m_TagString: Untagged
@@ -211,7 +212,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 69ade0f9a5e4af1489f9fdac867b5831, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -232,6 +233,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &2214502583052592914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4934195158966052853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0d165281873cb4aaddb4e193226645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7841059610537404117
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 1792
 --- !u!114 &2726617569804467269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,7 +900,7 @@ GameObject:
   - component: {fileID: 7841059611673499759}
   - component: {fileID: 7841059611673499746}
   m_Layer: 11
-  m_Name: Main Camera
+  m_Name: PlayerCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -970,14 +983,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5defdd5c8885e47a11a2924e46cac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraOffset: {x: 1.75, y: 1.5, z: -7}
+  states:
+  - {fileID: 11400000, guid: c53acc6cd254e304a8a77ab9988fa508, type: 2}
+  - {fileID: 11400000, guid: 01166ec7491247445b59e4e0d07efd0b, type: 2}
   collisionLayer:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 1536
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
   lookSensitivity: 1
   camRadius: 0.25
-  minCollisionDistance: 2
-  player: {fileID: 7841059610958226996}
+  minCollisionDistance: 2.5
+  playerMesh: {fileID: 2852529094400065823}
 --- !u!1 &7841059611711259448
 GameObject:
   m_ObjectHideFlags: 0

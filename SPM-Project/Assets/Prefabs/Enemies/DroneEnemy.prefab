@@ -365,10 +365,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 20
+  maxHealth: 25
   fieldOfView: -2
   attackRange: 20
-  visionRange: 30
+  visionRange: 20
   gunTransform: {fileID: 39769688967627567}
   eyeTransform: {fileID: 3245006856651615628}
   states:
@@ -378,6 +378,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1536
+  finishedSearching: 0
   patrolBungeeDistance: 5
   movementSpeed: 3
   body: {fileID: 8626059835950779692}
