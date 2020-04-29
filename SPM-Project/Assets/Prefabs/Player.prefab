@@ -899,6 +899,7 @@ GameObject:
   - component: {fileID: 7841059611673499744}
   - component: {fileID: 7841059611673499759}
   - component: {fileID: 7841059611673499746}
+  - component: {fileID: 8955925705087128327}
   m_Layer: 11
   m_Name: PlayerCamera
   m_TagString: MainCamera
@@ -996,6 +997,18 @@ MonoBehaviour:
   camRadius: 0.25
   minCollisionDistance: 2.5
   playerMesh: {fileID: 2852529094400065823}
+--- !u!114 &8955925705087128327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841059611673499758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c98645c72e3711c4f8d1c9220662cb96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7841059611711259448
 GameObject:
   m_ObjectHideFlags: 0

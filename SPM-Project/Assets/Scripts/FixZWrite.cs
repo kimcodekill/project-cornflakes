@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FixZWrite : MonoBehaviour {
-	
-	/// <summary>
-	/// The mesh renderers whose materials to enable Z-writing on.
-	/// </summary>
-	public MeshRenderer[] MeshRenderers;
+
+	private int count;
 	
 	private void Start() {
-		for (int i = 0; i < MeshRenderers.Length; i++) {
-			EnableZWrite(MeshRenderers[i]);	
+		GameObject[] allGameObjects = FindObjectsOfType<GameObject>();
+		for (int i = 0; i < allGameObjects.Length; i++) {
+			if (allGameObjects[i].activeInHierarchy) EnableZWrite(allGameObjects[i].GetComponent<MeshRenderer>());
 		}
+		Debug.LogWarning("Changed _ZWrite for " + count + " objects.");
 	}
 
 	private void EnableZWrite(MeshRenderer mr) {
-		Material m = new Material(mr.material);
-		mr.material = m;
-		m.SetInt("_ZWrite", 1);
+		if (mr == null) return;
+		if (mr.material.GetFloat("_Mode") == 3f) {
+			Material m = new Material(mr.material);
+			mr.material = m;
+			m.SetInt("_ZWrite", 1);
+			count++;
+		}
 	}
 
 }
