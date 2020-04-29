@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoPickup : MonoBehaviour {
 
@@ -32,13 +33,17 @@ public class AmmoPickup : MonoBehaviour {
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
 	}
 
+	private void FixedUpdate() {
+		this.transform.Rotate(0f, 1f, 0f, Space.Self);
+	}
+
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
 			EventSystem.Current.FireEvent(new PickUpEvent() {
 				Description = this + " was picked up by " + other.gameObject,
 				Source = gameObject,
 				Target = other.gameObject,
-			});
+		});
 		}
 	}
 

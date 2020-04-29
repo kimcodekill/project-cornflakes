@@ -132,9 +132,9 @@ MonoBehaviour:
   fullAuto: 0
   damage: 40
   fireRate: 50
-  magazineSize: 9
-  ammoInMagazine: 9
-  ammoInReserve: 72
+  magazineSize: 6
+  ammoInMagazine: 6
+  ammoInReserve: 12
   reloadTime: 3
   recoil: 0
   spread: 0

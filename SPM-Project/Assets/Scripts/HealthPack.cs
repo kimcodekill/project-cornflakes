@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthPack : MonoBehaviour {
 	private BoxCollider bc;
@@ -21,13 +22,17 @@ public class HealthPack : MonoBehaviour {
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
 	}
 
+	private void FixedUpdate() {
+		this.transform.Rotate(0f, 1f, 0f, Space.Self);
+	}
+
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
 			//Debug.Log(other + " picked up healthpack. Healing " + other);
 			other.GetComponent<PlayerController>().Heal(healAmount);
+			other.GetComponentInChildren<PlayerHud>().PickupText("health", healAmount);
 			Destroy(gameObject);
 		}
-
 	}
 
 }
