@@ -1,12 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PhysicsBody : MonoBehaviour {
 
-	private Collider collider;
-
-	private Rigidbody rigidBody;
-	
-	[SerializeField] private LayerMask mask;
+	#region Properties
 
 	/// <summary>
 	/// The position of the left foot of the PhysicsBody relative to the gameObject transform.
@@ -17,34 +14,30 @@ public class PhysicsBody : MonoBehaviour {
 	/// The position of the left foot of the PhysicsBody relative to the gameObject transform.
 	/// </summary>
 	public Vector3 RightFoot { get; set; } = new Vector3(0.5f, 0, 0);
-	
-	/// <summary>
-	/// The distance to which to determine if the PhysicsObject is grounded or not.
-	/// Initialized to the extents of the collider once it has been retrieved.
-	/// </summary>
-	public float GroundedDistance { get => groundedDistance + GroundedDistanceOffset; set => groundedDistance = value; }
-	private float groundedDistance;
 
 	/// <summary>
 	/// The extra margin of collider distance to account for any rigidbody imperfections or inaccuracies.
 	/// </summary>
 	public float GroundedDistanceOffset { get; set; } = 0.1f;
 
+	/// <summary>
+	/// The maximum dot product allowed for <c>Vector3.Dot(Vector3.down, GetCurrentSurfaceNormal())</c>,
+	/// to determine whether or not the player should count as "grounded".
+	/// </summary>
+	public float DotProductTreshold { get; set; } = -0.5f;
+
+	#endregion
+
+	[SerializeField] private LayerMask mask;
+
+	private Collider collider;
+
+	private Rigidbody rigidBody;
+
 	private void Awake() {
 		collider = GetComponent<Collider>();
-		GroundedDistance = collider.bounds.extents.y;
-
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-	}
-
-	/// <summary>
-	/// Adds a certain amount of force to the PhysicsBody.
-	/// </summary>
-	/// <param name="impulse">The desired impulse.</param>
-	/// <param name="mode">The force mode to use.</param>
-	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
-		rigidBody.AddForce(impulse, mode);
 	}
 
 	/// <summary>
@@ -63,8 +56,19 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.useGravity = enabled;
 	}
 
+	#region Adjust Velocity
+
 	/// <summary>
-	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.0</c>.
+	/// Adds a certain amount of force to the PhysicsBody.
+	/// </summary>
+	/// <param name="impulse">The desired impulse.</param>
+	/// <param name="mode">The force mode to use.</param>
+	public void AddForce(Vector3 impulse, ForceMode mode = ForceMode.Impulse) {
+		rigidBody.AddForce(impulse, mode);
+	}
+
+	/// <summary>
+	/// Sets the velocity and angular velocity of the PhysicsBody to <c>Vector3.zero</c>.
 	/// </summary>
 	public void ResetVelocity() {
 		rigidBody.velocity = Vector3.zero;
@@ -72,12 +76,17 @@ public class PhysicsBody : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the Y component of the PhysicsBody velocity to 0.
+	/// Changes the direction of velocity.
 	/// </summary>
-	public void ResetVerticalSpeed() {
-		rigidBody.velocity.Set(rigidBody.velocity.x, -1f, rigidBody.velocity.z);
-		rigidBody.angularVelocity.Set(rigidBody.angularVelocity.x, -1f, rigidBody.angularVelocity.z);
+	/// <param name="direction">The new direction the velocity will be heading.</param>
+	public void ChangeVelocityDirection(Vector3 direction) {
+		float magnitude = rigidBody.velocity.magnitude;
+		float angularMagnitude = rigidBody.angularVelocity.magnitude;
+		rigidBody.velocity = direction.normalized * magnitude;
+		rigidBody.angularVelocity = direction.normalized * angularMagnitude;
 	}
+
+	#region Limit Velocity
 
 	/// <summary>
 	/// Prevents the PhysicsBody from exceeding the specified velocity.
@@ -100,19 +109,67 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, angularVelocityY, rigidBody.velocity.z);
 	}
 
+	#endregion
+
+	#region Set Axis Velocity
+
+	/// <summary>
+	/// Sets the vertical velocity of the specified axis.
+	/// </summary>
+	/// <param name="axis">The axis to set.</param>
+	/// <param name="velocity">The new velocity of the axis.</param>
+	public void SetAxisVelocity(char axis, float velocity) {
+		switch (axis) {
+			case 'X':
+			case 'x':
+				SetXVelocity(velocity);
+				break;
+			case 'Y':
+			case 'y':
+				SetYVelocity(velocity);
+				break;
+			case 'Z':
+			case 'z':
+				SetZVelocity(velocity);
+				break;
+			default: throw new ArgumentException("Invalid axis");
+		}
+	}
+
+	private void SetXVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(velocity, rigidBody.velocity.y, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(velocity, rigidBody.velocity.y, rigidBody.velocity.z);
+	}
+
+	private void SetYVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, velocity, rigidBody.velocity.z);
+		rigidBody.angularVelocity = new Vector3(rigidBody.angularVelocity.x, velocity, rigidBody.angularVelocity.z);
+	}
+
+	private void SetZVelocity(float velocity) {
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, velocity);
+		rigidBody.angularVelocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, velocity);
+	}
+
+	#endregion
+
+	#endregion
+
+	#region Ground Check
+
 	/// <summary>
 	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
 	/// </summary>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded(bool useTempMethod = true) {
-		if (useTempMethod) {
+	public bool IsGrounded(bool useNewMethod = true) {
+		if (useNewMethod) {
 			CapsuleCollider c = (CapsuleCollider) collider;
 			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
-			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius);
-			return Physics.SphereCast(topCircle, c.radius, Vector3.down, out _, (c.height / 2) + GroundedDistanceOffset, mask);
-			//return Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, GroundedDistanceOffset, mask);
+			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
+			Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
+			return hit.collider && Vector3.Dot(Vector3.down, hit.normal) < -0.5f;
 		}
-		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, GroundedDistance, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, GroundedDistance, mask);
+		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, collider.bounds.extents.y + GroundedDistanceOffset, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, collider.bounds.extents.y + GroundedDistanceOffset, mask);
 	}
 
 	/// <summary>
@@ -128,13 +185,18 @@ public class PhysicsBody : MonoBehaviour {
 	/// </summary>
 	/// <returns>The normal of the hit surface.</returns>
 	public Vector3 GetCurrentSurfaceNormal() {
-		Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundedDistance + 2f, mask);
+		CapsuleCollider c = (CapsuleCollider) collider;
+		Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
+		Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
+		Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
 		Debug.DrawRay(hit.point, hit.normal, Color.red);
-		return hit.collider != null ? hit.normal : Vector3.up;
+		return hit.collider ? hit.normal : Vector3.up;
 	}
 
 	private Vector3 GetPositionWithOffset(Vector3 offset) {
 		return transform.position + (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
 	}
+
+	#endregion
 
 }
