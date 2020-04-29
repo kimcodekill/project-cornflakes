@@ -984,6 +984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   states:
+  - {fileID: 11400000, guid: 201c64f19481d8a4e819a170de33f3eb, type: 2}
   - {fileID: 11400000, guid: c53acc6cd254e304a8a77ab9988fa508, type: 2}
   - {fileID: 11400000, guid: 01166ec7491247445b59e4e0d07efd0b, type: 2}
   collisionLayer:
