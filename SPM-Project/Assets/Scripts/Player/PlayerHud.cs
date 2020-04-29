@@ -9,7 +9,7 @@ public class PlayerHud : MonoBehaviour
 	[SerializeField] [Tooltip("The slider field for player healthbar.")] private Slider healthBar;
 	[SerializeField] [Tooltip("Text for bullets left in current magazine.")] private Text bulletsInMag; 
 	[SerializeField] [Tooltip("Text for bullets in reserve, not counting magazine.")] private Text bulletsInReserve;
-	[SerializeField] [Tooltip("Text for pickup information")] private Text pickupText;
+	[SerializeField] [Tooltip("Text for pick-up information")] private Text pickupText;
 
 	[Header("Hud behaviour controls")]
 	[SerializeField] [Tooltip("HUD border image.")] private Image hudBorder;
@@ -54,7 +54,7 @@ public class PlayerHud : MonoBehaviour
 		healthBar.value = player.PlayerCurrentHealth;
 
 	}
-	public void PickupText(string type, float amount)
+	public void ShowPickupText(string type, float amount)
 	{
 		pickupText.text = amount + " " + type + " picked up";
 		//anim.SetBool("Pickedup", true);

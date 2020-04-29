@@ -30,7 +30,7 @@ public class HealthPack : MonoBehaviour {
 		if (other.gameObject.CompareTag("Player")) {
 			//Debug.Log(other + " picked up healthpack. Healing " + other);
 			other.GetComponent<PlayerController>().Heal(healAmount);
-			other.GetComponentInChildren<PlayerHud>().PickupText("health", healAmount);
+			other.GetComponentInChildren<PlayerHud>().ShowPickupText("health", healAmount);
 			Destroy(gameObject);
 		}
 	}
