@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public class CurrentInput {
 
-		public Vector3 directional;
 		public bool doJump;
 		public bool doDash;
 	
@@ -46,12 +45,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
 
-		DebugManager.AddSection("Input", "Directional input: ", "Jump: ", "Dash: ");
+		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
-		Input.directional = Vector3.zero;
 		Input.doJump = false;
 		Input.doDash = false;
 	}
@@ -59,9 +57,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void Update() {
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
-		if (GetInput().magnitude > 0) Input.directional = GetInput();
 
-		DebugManager.UpdateAll("Input", "Directional input: " + Input.directional, "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
 	}
 
 	/// <summary>
