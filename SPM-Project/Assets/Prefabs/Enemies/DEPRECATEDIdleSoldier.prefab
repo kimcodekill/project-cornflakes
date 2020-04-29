@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 7699936361992464768}
   - component: {fileID: 1960858254}
   m_Layer: 8
-  m_Name: PatrollingSoldier
+  m_Name: DEPRECATEDIdleSoldier
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   gunTransform: {fileID: 7699936361195460148}
   eyeTransform: {fileID: 7699936360914412535}
   states:
-  - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
+  - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
   - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
@@ -244,9 +244,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   movementSpeed: 8
-  isPatroller: 1
   weaponSpread: 0
-  points: []
   searchRange: 10
   searchLoops: 10
 --- !u!136 &1960858254

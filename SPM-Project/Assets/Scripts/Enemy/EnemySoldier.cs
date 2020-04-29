@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemySoldier : Enemy {
-	[SerializeField] [Tooltip("The patrol points. NEVER USE ONLY ONE.")] private Transform[] points;
-	//Seriously, never have only one. If you want a non-patrolling soldier, untick the checkbox for Is Patrolling.
 
+	private Transform[] points;
 	private NavMeshAgent agent;
 	private int destPoint = 0;
 	public float searchRange;
@@ -14,15 +13,14 @@ public class EnemySoldier : Enemy {
 	private Vector3 origin;
 	private Vector3 lastKnownPosition;
 
-	private void Awake() {
+	protected void Awake() {
+		if (IsPatroller) points = GetComponent<PatrollingSoldier>().points;
 		origin = transform.position;
 		agent = GetComponent<NavMeshAgent>();
-
 	}
 
 	private void Start() {
 		base.Start();
-
 	}
 
 	private void GoToNextPoint() {

@@ -13,7 +13,7 @@ public class EnemySearchingState : EnemyBaseState
 	public override void Run() {
 		base.Run();
 		if (Enemy.FinishedSearching == true) {
-			if (Enemy.isPatroller) StateMachine.TransitionTo<EnemyPatrollingState>();
+			if (Enemy.IsPatroller) StateMachine.TransitionTo<EnemyPatrollingState>();
 			else StateMachine.TransitionTo<EnemyIdleState>();
 		}
 	}
