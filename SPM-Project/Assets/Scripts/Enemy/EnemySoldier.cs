@@ -14,7 +14,7 @@ public class EnemySoldier : Enemy {
 	private Vector3 lastKnownPosition;
 
 	protected void Awake() {
-		if (IsPatroller) points = GetComponent<PatrollingSoldier>().points;
+		if (IsPatroller) points = GetComponent<PatrollingSoldier>().patrolPoints;
 		origin = transform.position;
 		agent = GetComponent<NavMeshAgent>();
 	}
@@ -63,7 +63,7 @@ public class EnemySoldier : Enemy {
 	private IEnumerator Alerted() {
 		agent.destination = Target.transform.position;
 		while (!agent.pathPending && agent.remainingDistance > attackRange*0.8f) {
-			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(VectorToTarget.x, 0, VectorToTarget.z), Time.deltaTime * 5f, 0f);
+			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
 		yield return null;
@@ -71,22 +71,22 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Attack() {
-		if (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.9f) {
-			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.8f) {
+		if (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.9f) {
+			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.8f) {
 				agent.destination = Target.transform.position;
 				yield return null;
 			}
 		}
 		agent.ResetPath();
 		while (!agent.hasPath) {
-			if (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.9f) {
-				while (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.8f) {
+			if (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.9f) {
+				while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.8f) {
 					agent.destination = Target.transform.position;
 					yield return null;
 				}
 				agent.ResetPath();
 			}
-			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(VectorToTarget.x, 0, VectorToTarget.z), Time.deltaTime * 5f, 0f);
+			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			eyeTransform.LookAt(Target.transform);
 			yield return null;
 		}
@@ -95,23 +95,28 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Search() {
-		Debug.Log("time to search");
 		FinishedSearching = false;
-		float searches = 0;
 		agent.destination = lastKnownPosition;
-		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
+		while (agent.pathPending) {
 			yield return null;
 		}
+		while (agent.remainingDistance > 0.5f) {
+			yield return null;
+		}
+		float searches = 0;
 		while (searches < searchLoops) {
 			agent.destination = FindNewRandomNavMeshPoint(lastKnownPosition, searchRange);
+			while (agent.pathPending) {
+				yield return null;
+			}
 			while (!agent.pathPending && agent.remainingDistance > 0.5f) {
 				yield return null;
 			}
+			yield return new WaitForSeconds(1f);
 			searches++;
 			//Debug.Log(searches);
-			yield return new WaitForSeconds(1f);
 		}
-		yield return null;
+		//Debug.Log("searching complete");
 		FinishedSearching = true;
 	}
 
@@ -126,40 +131,40 @@ public class EnemySoldier : Enemy {
 	}
 
 	public override void StartPatrolBehaviour() {
+		agent.ResetPath();
 		StartCoroutine("Patrol");
 	}
 
 	public override void StopPatrolBehaviour() {
 		StopCoroutine("Patrol");
-		agent.ResetPath();
 	}
 
 	public override void StartAlertedBehaviour() {
+		agent.ResetPath();
 		StartCoroutine("Alerted");
 	}
 
 	public override void StopAlertedBehaviour() {
 		StopCoroutine("Alerted");
-		agent.ResetPath();
 	}
 
 	public override void StartAttackBehaviour() {
+		agent.ResetPath();
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
 		StopCoroutine("Attack");
-		agent.ResetPath();
 	}
 
 	public override void StartSearchBehaviour() {
 		lastKnownPosition = Target.transform.position;
+		agent.ResetPath();
 		StartCoroutine("Search");
 	}
 
 	public override void StopSearchBehaviour() {
 		StopCoroutine("Search");
-		agent.ResetPath();
 	}
 
 	public override void StartIdleBehaviour() {
@@ -169,6 +174,6 @@ public class EnemySoldier : Enemy {
 
 	public override void StopIdleBehaviour() {
 		StopCoroutine("Idle");
-		agent.ResetPath();
+		
 	}
 }
