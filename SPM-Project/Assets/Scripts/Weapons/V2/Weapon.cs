@@ -261,4 +261,9 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public int GetMaxAmmo()	{
 		return maxMagazines * magazineSize;
 	}
+
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		throw new System.NotImplementedException();
+	}
 }

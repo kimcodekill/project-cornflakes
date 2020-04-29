@@ -39,7 +39,7 @@ public class RocketLauncher : Weapon {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
 		RocketV2 launchedRocket = Instantiate(rocket, Muzzle.position, Quaternion.LookRotation(direction, Vector3.up)).GetComponent<RocketV2>();
 
-		launchedRocket.TargetDir = (MuzzleCast().point - Muzzle.position).normalized;
+        launchedRocket.TargetDir = direction;
 
 		//These are now set in inspector: Resources/RocketV2
 			//launchedRocket.damage = Damage;
