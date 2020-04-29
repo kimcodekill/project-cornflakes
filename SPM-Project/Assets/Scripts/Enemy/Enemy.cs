@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] protected float movementSpeed;
 
 	private StateMachine enemyStateMachine;
-	public bool isPatroller;
 	public float weaponSpread;
 
 	/// <summary>
@@ -29,6 +28,7 @@ public class Enemy : MonoBehaviour, IEntity
 	
 	public Vector3 VectorToTarget { get; private set; }
 	public bool FinishedSearching { get; protected set; }
+	public bool IsPatroller { get; protected set; }
 
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
