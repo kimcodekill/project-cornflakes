@@ -8,10 +8,7 @@ public class CheckPoint : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
-			if (!Triggered) {
-				CaptureMoment();
-				CheckPointKeeper.SaveCheckPoints();
-			}
+			if (!Triggered) CaptureMoment();
 			else Debug.Log("This checkpoint has already been triggered");
 		}
 	}
