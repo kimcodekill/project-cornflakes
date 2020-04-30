@@ -122,9 +122,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <returns>A little struct with the ammo values.</returns>
 	/// <exception cref="System.Exception">Thrown if no weapon with the specified ammo type exists.</exception>
 	public AmmoPool GetAmmoPool(Weapon.EAmmoType ammoType) {
-		Debug.LogWarning("AmmoInReserve has its dummy value 1000, change to weapons[i].GetMaxAmmo() in PlayerWeapon.GetAmmoPool()");
 		for (int i = 0; i < weapons.Count; i++) {
-			if (weapons[i].AmmoType == ammoType) return new AmmoPool(weapons[i].AmmoInReserve, 1000);
+			if (weapons[i].AmmoType == ammoType) return new AmmoPool(weapons[i].AmmoInReserve, weapons[i].GetMaxAmmo());
 		}
 		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
