@@ -417,6 +417,7 @@ MonoBehaviour:
     m_Bits: 2048
   bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
     type: 3}
+  useBulletProjectile: 0
 --- !u!120 &4210382078722177768
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -488,7 +489,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.92066044, b: 0.5424528, a: 1}
+      key0: {r: 1, g: 0.92066044, b: 0.5424528, a: 0}
       key1: {r: 1, g: 0.69943273, b: 0, a: 1}
       key2: {r: 1, g: 0.8066038, b: 0.8066038, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -505,7 +506,7 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
+      atime1: 49151
       atime2: 0
       atime3: 0
       atime4: 0

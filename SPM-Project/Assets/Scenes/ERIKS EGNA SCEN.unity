@@ -1025,6 +1025,76 @@ PrefabInstance:
       propertyPath: m_Name
       value: PatrollingSoldierContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.07800293
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].value
+      value: 0.15480205
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inSlope
+      value: 0.028415522
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outSlope
+      value: 0.028415522
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inWeight
+      value: 0.3043478
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].value
+      value: 0.15480205
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].inSlope
+      value: -0.8565456
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].outSlope
+      value: -0.8565456
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068805099154559088, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].inWeight
+      value: 0.3779783
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa871fd53603b5b47ac222001c24efbd, type: 3}
 --- !u!1 &584419738

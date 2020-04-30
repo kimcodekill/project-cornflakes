@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8805001218220254843}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.83, y: 0, z: 4.07}
+  m_LocalPosition: {x: 5.05, y: 0, z: 4.07}
   m_LocalScale: {x: 0.3, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368514970114ff94394678d9ae090b5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 50
+  projectileSpeed: 75
   bulletHitLayer:
     serializedVersion: 2
     m_Bits: 12032
@@ -68,7 +68,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 679b97e1738d14d48bc57091c56a4005, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,7 +89,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.05
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.15
@@ -98,29 +98,29 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.32307178
-        inSlope: 0.7666667
-        outSlope: 0.7666667
+        value: 1
+        inSlope: 0.2509094
+        outSlope: 0.2509094
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.16053511
+        outWeight: 0.18394649
       - serializedVersion: 3
         time: 1
-        value: 0.07692308
-        inSlope: -0.2017544
-        outSlope: -0.2017544
+        value: 0
+        inSlope: -0.9200001
+        outSlope: -0.9200001
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.19063544
+        inWeight: 0.15050167
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 0.4}
+      key0: {r: 1, g: 0, b: 0, a: 1}
+      key1: {r: 1, g: 0, b: 0, a: 0}
       key2: {r: 0.4528302, g: 0.27554289, b: 0.27554289, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -135,8 +135,8 @@ TrailRenderer:
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 46260
-      atime1: 63415
+      atime0: 0
+      atime1: 65535
       atime2: 0
       atime3: 0
       atime4: 0
@@ -152,6 +152,6 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.01
   m_Autodestruct: 1
   m_Emitting: 1
