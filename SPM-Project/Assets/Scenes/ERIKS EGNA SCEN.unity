@@ -859,6 +859,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1327413923285096281, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: attackDamage
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6168304084530303651, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -922,7 +927,7 @@ PrefabInstance:
     - target: {fileID: 6168304084530303652, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa871fd53603b5b47ac222001c24efbd, type: 3}
@@ -2481,7 +2486,7 @@ GameObject:
   - component: {fileID: 1672120590}
   - component: {fileID: 1672120589}
   m_Layer: 0
-  m_Name: SoldierNavMesh
+  m_Name: NavMeshSurfaces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3134,7 +3139,7 @@ PrefabInstance:
     - target: {fileID: 1688106030265225547, guid: 17c0836dc34f2f143b14757cbe988c67,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17c0836dc34f2f143b14757cbe988c67, type: 3}
