@@ -11,7 +11,6 @@ public class EnemySoldier : Enemy {
 	public float searchRange;
 	public int searchLoops;
 	private Vector3 origin;
-	private Vector3 lastKnownPosition;
 
 	protected void Awake() {
 		if (IsPatroller) points = GetComponent<PatrollingSoldier>().patrolPoints;
@@ -96,21 +95,73 @@ public class EnemySoldier : Enemy {
 
 	private IEnumerator Search() {
 		FinishedSearching = false;
-		agent.destination = lastKnownPosition;
+		float searches = 0;
+		bool areaScanned = false;
+		Vector3 lastKnownPosition1, lastKnownPosition2;
+		lastKnownPosition1 = Target.transform.position;
+		yield return null;
+		lastKnownPosition2 = Target.transform.position;
+		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
+		agent.destination = targetLocation;
 		while (agent.pathPending) {
 			yield return null;
 		}
 		while (agent.remainingDistance > 0.5f) {
 			yield return null;
 		}
-		float searches = 0;
+		areaScanned = false;
+		//Debug.Log("set scanned = false");
+		while (!areaScanned) {
+			//Debug.Log("scanning");
+			Vector3 scanLeft = (transform.position + (transform.right*-1)) - transform.position;
+			Vector3 scanRight = (transform.position + transform.right) - transform.position;
+			while (Vector3.Dot(transform.forward, scanLeft) < 0.95) {
+				//Debug.DrawRay(transform.position, scanLeft, Color.blue);
+				transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
+				//Debug.Log("scanning left");
+				yield return null;
+			}
+			while (Vector3.Dot(transform.forward, scanRight) < 0.95) {
+				//Debug.DrawRay(transform.position, scanRight, Color.red);
+				transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
+				//Debug.Log("scanning right");
+				yield return null;
+			}
+			yield return new WaitForSeconds(1f);
+			areaScanned = true;
+			//Debug.Log(areaScanned);
+		}
+
 		while (searches < searchLoops) {
-			agent.destination = FindNewRandomNavMeshPoint(lastKnownPosition, searchRange);
+			agent.destination = FindNewRandomNavMeshPoint(targetLocation + (CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized * searchRange/2), searchRange);
 			while (agent.pathPending) {
 				yield return null;
 			}
-			while (!agent.pathPending && agent.remainingDistance > 0.5f) {
+			while (agent.remainingDistance > 0.5f) {
 				yield return null;
+			}
+			//Debug.Log("set scanned = false");
+			areaScanned = false;
+			while (!areaScanned) {
+				//Debug.Log("scanning");
+				Vector3 scanLeft = (transform.position + (transform.right * -1)) - transform.position;
+				Vector3 scanRight = (transform.position + transform.right) - transform.position;
+				while (Vector3.Dot(transform.forward, scanLeft) < 0.95f) {
+					//Debug.DrawRay(transform.position, scanLeft, Color.blue);
+					transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
+					//Debug.Log("scanning left");
+					yield return null;
+				}
+				while (Vector3.Dot(transform.forward, scanRight) < 0.95f) {
+					//Debug.DrawRay(transform.position, scanRight, Color.red);
+					transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
+					//Debug.Log("scanning right");
+					yield return null;
+				}
+				yield return new WaitForSeconds(1f);
+				areaScanned = true;
+				//Debug.Log(areaScanned);
+
 			}
 			yield return new WaitForSeconds(1f);
 			searches++;
@@ -128,6 +179,11 @@ public class EnemySoldier : Enemy {
 			finalPosition = hit.position;
 		}
 		return finalPosition;
+	}
+
+	private Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
+		Vector3 velo = v2 - v1;
+		return velo;
 	}
 
 	public override void StartPatrolBehaviour() {
@@ -158,7 +214,6 @@ public class EnemySoldier : Enemy {
 	}
 
 	public override void StartSearchBehaviour() {
-		lastKnownPosition = Target.transform.position;
 		agent.ResetPath();
 		StartCoroutine("Search");
 	}
