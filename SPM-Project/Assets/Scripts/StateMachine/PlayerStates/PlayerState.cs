@@ -19,6 +19,7 @@ public abstract class PlayerState : State {
 
 	public override void Enter() {
 		Player.PhysicsBody.SetSlideRate(Drag);
+		if (Player.PhysicsBody.IsGrounded()) dashCount = 0;
 	}
 
 	public override void Run() {
