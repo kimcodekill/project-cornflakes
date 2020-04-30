@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 7699936361992464768}
   - component: {fileID: 1960858254}
   m_Layer: 8
-  m_Name: SoldierEnemy
+  m_Name: DEPRECATEDIdleSoldier
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,7 +204,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 8
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 180
@@ -230,20 +230,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 75
-  fieldOfView: 0.6
-  attackRange: 10
-  visionRange: 30
+  fieldOfView: 0.3
+  attackRange: 20
+  visionRange: 40
   gunTransform: {fileID: 7699936361195460148}
   eyeTransform: {fileID: 7699936360914412535}
   states:
-  - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
+  - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
+  - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
   layerMask:
     serializedVersion: 2
     m_Bits: 1536
-  points: []
-  isPatrolling: 0
+  movementSpeed: 8
+  weaponSpread: 0
+  searchRange: 10
+  searchLoops: 10
 --- !u!136 &1960858254
 CapsuleCollider:
   m_ObjectHideFlags: 0

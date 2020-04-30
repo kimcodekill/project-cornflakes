@@ -20,3 +20,4 @@ MonoBehaviour:
   DashDuration: 0.3
   MaxYGain: 0.5
   StopDotTreshold: -0.5
+  AllowGrounded: 0
