@@ -255,7 +255,7 @@ MonoBehaviour:
   damage: 250
   speed: 80
   areaOfEffect: 10
-  lifeTime: 20
+  lifeTime: 5
   collisionLayers:
     serializedVersion: 2
     m_Bits: 1792
