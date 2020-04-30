@@ -8,6 +8,11 @@ public class DeathZone : MonoBehaviour, IDamaging {
 		return 99999f;		
 	}
 
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		throw new System.NotImplementedException();
+	}
+
 	private void OnTriggerEnter(Collider other) {
 		EventSystem.Current.FireEvent(new HitEvent() {
 			Source = gameObject,
