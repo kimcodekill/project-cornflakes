@@ -124,7 +124,8 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	private void Die() {
-		Destroy(gameObject);
+		StopAllCoroutines();
+		Destroy(gameObject, 0.5f);
 		//gameObject.SetActive(false);
 	}
 
