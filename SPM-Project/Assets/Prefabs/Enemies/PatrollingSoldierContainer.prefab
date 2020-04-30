@@ -79,7 +79,7 @@ MonoBehaviour:
   visionRange: 40
   gunTransform: {fileID: 1327413924585744622}
   eyeTransform: {fileID: 1327413924363410733}
-  attackRange: 20
+  attackRange: 25
   attackDamage: 1
   attackSpreadRadius: 1.75
   attackSpeedRPM: 360
@@ -94,7 +94,9 @@ MonoBehaviour:
   weapon: {fileID: 204679302339680043}
   searchRange: 10
   searchLoops: 10
-  avoidanceRadius: 2.5
+  attackAvoidanceRadius: 2.5
+  defaultAvoidanceRadius: 1.25
+  searchAvoidanceRadius: 1
   patrolPoints:
   - {fileID: 6168304084697789506}
   - {fileID: 6168304083611328923}
@@ -129,6 +131,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
+  bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
+    type: 3}
+  useBulletProjectile: 0
 --- !u!120 &9068805099154559088
 LineRenderer:
   m_ObjectHideFlags: 0

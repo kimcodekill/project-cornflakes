@@ -10,7 +10,10 @@ public class EnemySoldier : Enemy {
 	private int destPoint = 0;
 	[SerializeField] public float searchRange;
 	[SerializeField] private int searchLoops;
-	[SerializeField] private float avoidanceRadius;
+	[SerializeField] private float attackAvoidanceRadius;
+	[SerializeField] private float defaultAvoidanceRadius;
+	[SerializeField] private float searchAvoidanceRadius;
+
 	private Vector3 origin;
 
 	protected void Awake() {
@@ -20,7 +23,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private void Start() {
-		agent.radius = avoidanceRadius;
+		agent.radius = defaultAvoidanceRadius;
 		base.Start();
 	}
 
@@ -151,7 +154,7 @@ public class EnemySoldier : Enemy {
 			yield return new WaitForSeconds(1f);
 			searches++;
 		}
-		agent.radius = avoidanceRadius;
+		agent.radius = attackAvoidanceRadius;
 		FinishedSearching = true;
 	}
 
@@ -190,21 +193,24 @@ public class EnemySoldier : Enemy {
 
 	public override void StartAttackBehaviour() {
 		agent.ResetPath();
+		agent.radius = attackAvoidanceRadius;
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
 		StopCoroutine("Attack");
+		agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartSearchBehaviour() {
 		agent.ResetPath();
+		agent.radius = searchAvoidanceRadius;
 		StartCoroutine("Search");
 	}
 
 	public override void StopSearchBehaviour() {
-		agent.radius = avoidanceRadius;
 		StopCoroutine("Search");
+		agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartIdleBehaviour() {

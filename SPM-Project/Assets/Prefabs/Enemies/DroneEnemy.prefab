@@ -374,7 +374,7 @@ MonoBehaviour:
   gunTransform: {fileID: 39769688967627567}
   eyeTransform: {fileID: 3245006856651615628}
   attackRange: 20
-  attackDamage: 0.3
+  attackDamage: 0.2
   attackSpreadRadius: 1
   attackSpeedRPM: 600
   states:
@@ -415,6 +415,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
+  bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
+    type: 3}
 --- !u!120 &4210382078722177768
 LineRenderer:
   m_ObjectHideFlags: 0

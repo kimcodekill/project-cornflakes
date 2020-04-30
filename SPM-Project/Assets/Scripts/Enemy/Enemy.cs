@@ -82,7 +82,7 @@ public class Enemy : MonoBehaviour, IEntity
 	private bool CanSeeTarget(Vector3 v) {
 		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
-			Debug.DrawRay(eyeTransform.position, v, Color.red);
+			//Debug.DrawRay(eyeTransform.position, v, Color.red);
 			return true;
 		}
 		else { return false; }
