@@ -183,7 +183,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	protected Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit.collider == null ? playerCamera.transform.forward + Vector3.forward : cameraHit.point;
+		return cameraHit.collider == null ? Muzzle.position + playerCamera.transform.forward: cameraHit.point;
 	}
 
 	/// <summary>
@@ -193,8 +193,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="target">The second point.</param>
 	/// <returns>The direction from <c>origin</c> to <c>target</c>.</returns>
 	protected Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
-		Vector3 direction = target - origin;
-		return direction /= direction.magnitude;
+		return (target - origin).normalized;
 	}
 
 	/// <summary>

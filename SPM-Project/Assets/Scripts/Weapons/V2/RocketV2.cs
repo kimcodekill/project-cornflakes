@@ -1,66 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class RocketV2 : MonoBehaviour, IDamaging {
+public class RocketV2 : MonoBehaviour, IDamaging
+{
 
-	[SerializeField] private float damage;
-	[SerializeField] private float speed;
-	[SerializeField] private float areaOfEffect;
-	[SerializeField] private float lifeTime;
-	[SerializeField] private LayerMask collisionLayers;
-	
-	public Vector3 TargetDir { get; set; }
 
-	private float startTime;
+    [SerializeField] private float damage;
+    [SerializeField] private float speed;
+    [SerializeField] private float areaOfEffect;
+    [SerializeField] private float lifeTime;
+    [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private GameObject explosion;
 
-	private void Start()
-	{
-		startTime = Time.time;
-	}
+    public Vector3 TargetDir { get; set; }
 
-	private void Update() {
-		if (Time.time - startTime < lifeTime){
-			if (TargetDir != Vector3.zero)
-			{
-				transform.position += TargetDir * speed * Time.deltaTime;
-			}
-		} else { 
-			Explode(); 
-		}
-	}
+    private float startTime;
 
-	public float GetDamage() {
-		return damage;
-	}
+    private void Start()
+    {
+        startTime = Time.time;
+    }
 
-	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
-	{
-		float distance = (hitPos - explosionCenter).magnitude;
+    private void Update()
+    {
+        if (Time.time - startTime < lifeTime)
+        {
+            if (TargetDir != Vector3.zero)
+            {
+                transform.position += TargetDir * speed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            Explode();
+        }
+    }
 
-		float damageScale = (areaOfEffect - distance) / areaOfEffect;
+    public float GetDamage()
+    {
+        return damage;
+    }
 
-		return Mathf.Round(damage * damageScale);
-	}
+    public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+    {
+        float distance = (hitPos - explosionCenter).magnitude;
 
-	private void Explode() {
-		//Because we're using OverlapSphere we cant get the actual hit point
-		//Could be solved using SphereCast, but I cant get that working.
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
-		for (int i = 0; i < hitColliders.Length; i++) {
-			EventSystem.Current.FireEvent(new HitEvent() {
-				Source = gameObject,
-				Target = hitColliders[i].gameObject,
-				HitPoint = transform.position,
-			});
-		}
+        float damageScale = (areaOfEffect - distance) / areaOfEffect;
 
-		gameObject.SetActive(false);
-	}
+        float actualDamage = Mathf.Round(damage * damageScale);
 
-	private void OnTriggerEnter(Collider other) {
-		//checks if the collided gameobject's layer is in the collisionlayers
-		if(collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
-			Explode();
-	}
+        return actualDamage < 0 ? 0 : actualDamage;
+    }
+
+    private void Explode()
+    {
+        //Because we're using OverlapSphere we cant get the actual hit point
+        //Could be solved using SphereCast, but I cant get that working.
+        Collider[] nearColliders = Physics.OverlapSphere(transform.position, areaOfEffect / areaOfEffect);
+        Collider[] farColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
+
+        //Makes sure the colliders within 1 unit of the explosion get f'd in the b
+        for (int i = 0; i < nearColliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new HitEvent()
+            {
+                Source = gameObject,
+                Target = nearColliders[i].gameObject,
+                HitPoint = nearColliders[i].transform.position,
+            });
+        }
+
+        //Smooches the other ones
+        for (int i = 0; i < farColliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new HitEvent()
+            {
+                Source = gameObject,
+                Target = farColliders[i].gameObject,
+                HitPoint = transform.position,
+            });
+        }
+
+        //This isnt very pretty but it makes it easier to understand what gets hit
+        GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+        boom.transform.localScale *= areaOfEffect;
+
+        gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //checks if the collided gameobject's layer is in the collisionlayers
+        if (collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
+            Explode();
+    }
 }
