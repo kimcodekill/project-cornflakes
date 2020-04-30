@@ -19,7 +19,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the trigger is being pulled.
 	/// </summary>
-	public bool TriggerDown { get { return Input.GetKey(KeyCode.Mouse0) || OverrideTriggerDown; } }
+	public bool TriggerPulled { get { return Input.GetKeyDown(KeyCode.Mouse0); } }
+
+	/// <summary>
+	/// Whether or not the trigger is being held.
+	/// </summary>
+	public bool TriggerHeld { get { return Input.GetKey(KeyCode.Mouse0); } }
 
 	/// <summary>
 	/// Whether or not input is required to fire.
@@ -29,12 +34,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the reload key is being pressed.
 	/// </summary>
-	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R) || OverrideRequestedReload; } }
+	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R); } }
 
-	/// <summary>
-	/// Whether or not input is required to reload.
-	/// </summary>
-	public bool OverrideRequestedReload { get; set; } = false;
+	///// <summary>
+	///// Whether or not input is required to reload.
+	///// </summary>
+	//public bool OverrideRequestedReload { get; set; } = false;
 
 	/// <summary>
 	/// The type of ammunition the weapon uses.
