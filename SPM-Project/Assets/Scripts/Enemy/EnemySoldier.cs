@@ -23,6 +23,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private void Start() {
+		agent.avoidancePriority = Random.Range(0, 99);
 		agent.radius = defaultAvoidanceRadius;
 		base.Start();
 	}
