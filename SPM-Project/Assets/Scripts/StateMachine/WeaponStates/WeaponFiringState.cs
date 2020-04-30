@@ -10,7 +10,7 @@ public class WeaponFiringState : WeaponState {
 	private bool waitForSemi;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
+		//DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 		
 		delay = Weapon.GetTimeBetweenShots();
 		waitForSemi = false;

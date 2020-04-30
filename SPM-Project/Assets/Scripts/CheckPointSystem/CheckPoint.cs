@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour {
 
+	/// <summary>
+	/// If the checkpoint has been triggered.
+	/// </summary>
 	public bool Triggered { get; set; }
 
 	private void OnTriggerEnter(Collider other) {
@@ -14,8 +17,9 @@ public class CheckPoint : MonoBehaviour {
 	}
 
 	private void CaptureMoment() {
-		CaptureKeeper.CreateCapture(transform.position, transform.rotation);
 		Triggered = true;
+		Debug.Log("Triggered checkpoint");
+		CaptureKeeper.CreateCapture(transform.position, transform.rotation);
 	}
 
 }

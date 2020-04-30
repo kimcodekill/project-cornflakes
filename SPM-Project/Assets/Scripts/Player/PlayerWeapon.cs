@@ -37,10 +37,16 @@ public class PlayerWeapon : MonoBehaviour {
 		if (WeaponIsActive) {
 			if (weaponStateMachine != null) {
 				weaponStateMachine.Run();
-				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
+				//DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 			}
 		}
 	}
+
+	/// <summary>
+	/// Returns the list weapons the player is in possession of.
+	/// </summary>
+	/// <returns>The carried weapons.</returns>
+	public List<Weapon> GetWeapons() { return weapons; }
 
 	private void CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)

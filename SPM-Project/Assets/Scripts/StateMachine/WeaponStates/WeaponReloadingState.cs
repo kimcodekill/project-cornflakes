@@ -8,7 +8,7 @@ public class WeaponReloadingState : WeaponState {
 	private float currentTime;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
+		//DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 
 		currentTime = 0f;
 	}

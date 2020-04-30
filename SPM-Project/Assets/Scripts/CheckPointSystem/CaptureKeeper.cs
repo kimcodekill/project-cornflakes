@@ -5,34 +5,44 @@ using UnityEngine;
 
 public static class CaptureKeeper {
 
+	#region Bookkeeping
+
+	/// <summary>
+	/// The container for all captured data.
+	/// </summary>
 	public struct Capture {
 		public struct PlayerStats {
 			public Vector3 position;
 			public Quaternion rotation;
 			public float health;
 		}
+		public struct WeaponStats {
+			public Weapon weapon;
+			public int ammoInMagazine;
+			public int ammoInReserve;
+		}
 		public PlayerStats Player;
+		public List<WeaponStats> Weapons;
 		public List<Vector3> Enemies;
 		public Dictionary<Vector3, bool> CheckPoints;
 	}
 
 	private static List<Capture> captures;
 
+	#endregion
+
 	#region Load Capture
 
+	/// <summary>
+	/// Loads the latest capture.
+	/// </summary>
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
 		Capture latestCapture = captures[captures.Count - 1];
 		LoadPlayerCapture(latestCapture.Player);
+		LoadWeaponCapture(latestCapture.Weapons);
 		LoadEnemyCapture(latestCapture.Enemies);
 		LoadCheckPointCapture(latestCapture.CheckPoints);
-	}
-
-	private static void LoadEnemyCapture(List<Vector3> enemies) {
-		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-		for (int i = 0; i < enemyGameObjects.Length; i++) {
-			if (!enemies.Contains(enemyGameObjects[i].transform.position)) enemyGameObjects[i].SetActive(false);
-		}
 	}
 
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
@@ -40,6 +50,23 @@ public static class CaptureKeeper {
 		playerGameObject.transform.position = player.position;
 		Camera.main.transform.rotation = player.rotation;
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
+	}
+
+	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
+		for (int i = 0; i < weapons.Count; i++) {
+			Weapon weapon = weapons[i].weapon;
+			weapon.enabled = true;
+			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
+			weapon.AmmoInReserve = weapons[i].ammoInReserve;
+			PlayerWeapon.Instance.PickUpWeapon(weapon);
+		}
+	}
+
+	private static void LoadEnemyCapture(List<Vector3> enemies) {
+		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
+		for (int i = 0; i < enemyGameObjects.Length; i++) {
+			if (!enemies.Contains(enemyGameObjects[i].transform.position)) enemyGameObjects[i].SetActive(false);
+		}
 	}
 
 	private static void LoadCheckPointCapture(Dictionary<Vector3, bool> checkPoints) {
@@ -62,6 +89,7 @@ public static class CaptureKeeper {
 		if (captures == null) captures = new List<Capture>();
 		captures.Add(new Capture() {
 			Player = CapturePlayer(checkPointPosition, checkPointRotation),
+			Weapons = CaptureWeapons(),
 			Enemies = CaptureEnemies(),
 			CheckPoints = CaptureCheckPoints()
 		});
@@ -74,6 +102,21 @@ public static class CaptureKeeper {
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
 		}; 
+	}
+
+	private static List<Capture.WeaponStats> CaptureWeapons() {
+		List<Capture.WeaponStats> capturedWeapons = new List<Capture.WeaponStats>();
+		List<Weapon> weapons = new List<Weapon>(PlayerWeapon.Instance.GetWeapons().ToArray());
+		for (int i = 0; i < weapons.Count; i++) {
+			Weapon w = weapons[i];
+			Object.DontDestroyOnLoad(w);
+			capturedWeapons.Add(new Capture.WeaponStats() {
+				weapon = w,
+				ammoInMagazine = weapons[i].AmmoInMagazine,
+				ammoInReserve = weapons[i].AmmoInReserve
+			});
+		}
+		return capturedWeapons;
 	}
 
 	private static List<Vector3> CaptureEnemies() {
@@ -96,9 +139,15 @@ public static class CaptureKeeper {
 
 	#endregion
 
+	#region Clear Captures
+
+	/// <summary>
+	/// Removes all captures.
+	/// </summary>
 	public static void ClearCaptures() {
 		captures = null;
 	}
 
+	#endregion
 
 }
