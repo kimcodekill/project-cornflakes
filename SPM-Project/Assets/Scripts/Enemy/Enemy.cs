@@ -30,6 +30,12 @@ public class Enemy : MonoBehaviour, IEntity
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
+	public Vector3 Origin { get; private set; }
+
+	private void Awake() {
+		Origin = transform.position;
+	}
+
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		enemyStateMachine = new StateMachine(this, states);

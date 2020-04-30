@@ -6,42 +6,52 @@ using UnityEngine;
 public static class CaptureKeeper {
 
 	public struct Capture {
-		public struct Player {
+		public struct PlayerStats {
 			public Vector3 position;
 			public Quaternion rotation;
 			public float health;
 		}
-		public Player PlayerStats { get; private set; }
-		public int[] Enemies { get; private set; }
-		public Capture(int[] enemies, Player player) {
-			Enemies = enemies;
-			PlayerStats = player;
-			Debug.Log("Captured " + enemies.Length + " enemies");
-			Debug.Log("Captured player with " + player.health + " health");
-		} 
+		public PlayerStats Player;
+		public List<Vector3> Enemies;
+		public Dictionary<Vector3, bool> CheckPoints;
 	}
 
 	private static List<Capture> captures;
 
+	#region Load Capture
+
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
-		Debug.Log("Loaded capture");
 		Capture latestCapture = captures[captures.Count - 1];
-		LoadPlayerCapture(latestCapture.PlayerStats);
+		LoadPlayerCapture(latestCapture.Player);
 		LoadEnemyCapture(latestCapture.Enemies);
+		LoadCheckPointCapture(latestCapture.CheckPoints);
 	}
 
-	private static void LoadEnemyCapture(int[] enemies) {
-		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Player");
-
+	private static void LoadEnemyCapture(List<Vector3> enemies) {
+		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
+		for (int i = 0; i < enemyGameObjects.Length; i++) {
+			if (!enemies.Contains(enemyGameObjects[i].transform.position)) enemyGameObjects[i].SetActive(false);
+		}
 	}
 
-	private static void LoadPlayerCapture(Capture.Player player) {
+	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
 		playerGameObject.transform.position = player.position;
 		Camera.main.transform.rotation = player.rotation;
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
 	}
+
+	private static void LoadCheckPointCapture(Dictionary<Vector3, bool> checkPoints) {
+		GameObject[] checkPointGameObjects = GameObject.FindGameObjectsWithTag("CheckPoint");
+		for (int i = 0; i < checkPointGameObjects.Length; i++) {
+			checkPointGameObjects[i].GetComponent<CheckPoint>().Triggered = checkPoints[checkPointGameObjects[i].transform.position];
+		}
+	}
+
+	#endregion
+
+	#region Create Capture
 
 	/// <summary>
 	/// Creates a capture of the game state.
@@ -50,26 +60,41 @@ public static class CaptureKeeper {
 	/// <param name="checkPointRotation">The rotation the player(or camera) should respawn facing.</param>
 	public static void CreateCapture(Vector3 checkPointPosition, Quaternion checkPointRotation) {
 		if (captures == null) captures = new List<Capture>();
-		captures.Add(new Capture(CaptureEnemies(), CapturePlayer(checkPointPosition, checkPointRotation)));
+		captures.Add(new Capture() {
+			Player = CapturePlayer(checkPointPosition, checkPointRotation),
+			Enemies = CaptureEnemies(),
+			CheckPoints = CaptureCheckPoints()
+		});
 	}
 
-	private static Capture.Player CapturePlayer(Vector3 checkPointPosition, Quaternion checkPointRotation) {
+	private static Capture.PlayerStats CapturePlayer(Vector3 checkPointPosition, Quaternion checkPointRotation) {
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
-		return new Capture.Player() {
+		return new Capture.PlayerStats() {
 			position = checkPointPosition,
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
 		}; 
 	}
 
-	private static int[] CaptureEnemies() {
-		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-		int[] hashCodes = new int[enemies.Length];
-		for (int i = 0; i < enemies.Length; i++) {
-			hashCodes[i] = enemies[i].GetHashCode();
+	private static List<Vector3> CaptureEnemies() {
+		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
+		List<Vector3> enemies = new List<Vector3>();
+		for (int i = 0; i < enemyGameObjects.Length; i++) {
+			enemies.Add(enemyGameObjects[i].GetComponent<Enemy>().Origin);
 		}
-		return hashCodes;
+		return enemies;
 	}
+
+	private static Dictionary<Vector3, bool> CaptureCheckPoints() {
+		GameObject[] checkPointGameObjects = GameObject.FindGameObjectsWithTag("CheckPoint");
+		Dictionary<Vector3, bool> checkPoints = new Dictionary<Vector3, bool>();
+		for (int i = 0; i < checkPointGameObjects.Length; i++) {
+			checkPoints.Add(checkPointGameObjects[i].transform.position, checkPointGameObjects[i].GetComponent<CheckPoint>().Triggered);
+		}
+		return checkPoints;
+	}
+
+	#endregion
 
 	public static void ClearCaptures() {
 		captures = null;
