@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class CheckPointSystem : MonoBehaviour {
 
-	public static bool NewLevel { get; set; }
-
 	private static bool registered;
 
 	private void OnEnable() {
