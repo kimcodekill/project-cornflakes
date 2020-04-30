@@ -94,6 +94,7 @@ MonoBehaviour:
   weapon: {fileID: 204679302339680043}
   searchRange: 10
   searchLoops: 10
+  avoidanceRadius: 2.5
   patrolPoints:
   - {fileID: 6168304084697789506}
   - {fileID: 6168304083611328923}

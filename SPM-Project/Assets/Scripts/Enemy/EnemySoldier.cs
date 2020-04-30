@@ -8,8 +8,9 @@ public class EnemySoldier : Enemy {
 	private Transform[] points;
 	private NavMeshAgent agent;
 	private int destPoint = 0;
-	public float searchRange;
-	public int searchLoops;
+	[SerializeField] public float searchRange;
+	[SerializeField] private int searchLoops;
+	[SerializeField] private float avoidanceRadius;
 	private Vector3 origin;
 
 	protected void Awake() {
@@ -19,6 +20,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private void Start() {
+		agent.radius = avoidanceRadius;
 		base.Start();
 	}
 
@@ -40,12 +42,10 @@ public class EnemySoldier : Enemy {
 			yield return null;
 		}
 		Vector3 rnd = transform.position + new Vector3(Random.Range(-100,100), 0, Random.Range(-100, 100));
-		//Debug.Log(rnd);
 		while (Vector3.Dot(transform.forward, rnd.normalized) < 0.9) {
 			transform.forward = Vector3.RotateTowards(transform.forward, rnd, Time.deltaTime, 0f);
 			yield return null;
 		}
-		//Debug.Log("done");
 		yield return new WaitForSeconds(1f);
 		StartCoroutine("Idle");
 	}
@@ -94,6 +94,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Search() {
+		agent.radius = 0.5f;
 		FinishedSearching = false;
 		float searches = 0;
 		bool areaScanned = false;
@@ -106,68 +107,51 @@ public class EnemySoldier : Enemy {
 		while (agent.pathPending) {
 			yield return null;
 		}
-		while (agent.remainingDistance > 0.5f) {
+		while (agent.remainingDistance > 1.5f) {
 			yield return null;
 		}
 		areaScanned = false;
-		//Debug.Log("set scanned = false");
 		while (!areaScanned) {
-			//Debug.Log("scanning");
 			Vector3 scanLeft = (transform.position + (transform.right*-1)) - transform.position;
 			Vector3 scanRight = (transform.position + transform.right) - transform.position;
 			while (Vector3.Dot(transform.forward, scanLeft) < 0.95) {
-				//Debug.DrawRay(transform.position, scanLeft, Color.blue);
 				transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
-				//Debug.Log("scanning left");
 				yield return null;
 			}
 			while (Vector3.Dot(transform.forward, scanRight) < 0.95) {
-				//Debug.DrawRay(transform.position, scanRight, Color.red);
 				transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
-				//Debug.Log("scanning right");
 				yield return null;
 			}
 			yield return new WaitForSeconds(1f);
 			areaScanned = true;
-			//Debug.Log(areaScanned);
 		}
-
 		while (searches < searchLoops) {
 			agent.destination = FindNewRandomNavMeshPoint(targetLocation + (CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized * searchRange/2), searchRange);
 			while (agent.pathPending) {
 				yield return null;
 			}
-			while (agent.remainingDistance > 0.5f) {
+			while (agent.remainingDistance > 1.5f) {
 				yield return null;
 			}
-			//Debug.Log("set scanned = false");
 			areaScanned = false;
 			while (!areaScanned) {
-				//Debug.Log("scanning");
 				Vector3 scanLeft = (transform.position + (transform.right * -1)) - transform.position;
 				Vector3 scanRight = (transform.position + transform.right) - transform.position;
 				while (Vector3.Dot(transform.forward, scanLeft) < 0.95f) {
-					//Debug.DrawRay(transform.position, scanLeft, Color.blue);
 					transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
-					//Debug.Log("scanning left");
 					yield return null;
 				}
 				while (Vector3.Dot(transform.forward, scanRight) < 0.95f) {
-					//Debug.DrawRay(transform.position, scanRight, Color.red);
 					transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
-					//Debug.Log("scanning right");
 					yield return null;
 				}
 				yield return new WaitForSeconds(1f);
 				areaScanned = true;
-				//Debug.Log(areaScanned);
-
 			}
 			yield return new WaitForSeconds(1f);
 			searches++;
-			//Debug.Log(searches);
 		}
-		//Debug.Log("searching complete");
+		agent.radius = avoidanceRadius;
 		FinishedSearching = true;
 	}
 
@@ -219,6 +203,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	public override void StopSearchBehaviour() {
+		agent.radius = avoidanceRadius;
 		StopCoroutine("Search");
 	}
 
