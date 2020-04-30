@@ -21,6 +21,11 @@ public class PlayerDashingState : PlayerState {
 	/// </summary>
 	public float StopDotTreshold;
 
+	/// <summary>
+	/// Toggles whether or not the player should be allowed to dash while grounded.
+	/// </summary>
+	public bool AllowGrounded;
+
 	private float startTime = -1;
 
 	private float currentDashTime = 0;
@@ -66,7 +71,7 @@ public class PlayerDashingState : PlayerState {
 	}
 
 	public override bool CanEnter() {
-		return !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1;
+		return !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1 && ((!AllowGrounded && !Player.PhysicsBody.IsGrounded()) || AllowGrounded);
 	}
 
 	private void Dash() {
