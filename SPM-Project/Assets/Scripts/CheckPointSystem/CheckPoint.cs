@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour {
 
-	private bool triggered;
+	public bool Triggered { get; set; }
 
 	private void OnTriggerEnter(Collider other) {
-		if (!triggered) CaptureMoment();
+		if (other.gameObject.CompareTag("Player")) {
+			if (!Triggered) {
+				CaptureMoment();
+				CheckPointKeeper.SaveCheckPoints();
+			}
+			else Debug.Log("This checkpoint has already been triggered");
+		}
 	}
 
 	private void CaptureMoment() {
-		
+		CaptureKeeper.CreateCapture(transform.position, transform.rotation);
+		Triggered = true;
 	}
 
 }
