@@ -19,6 +19,9 @@ public class PlayerWeapon : MonoBehaviour {
 	public bool WeaponIsActive { get; private set; } = false;
 
 	[SerializeField] private State[] states;
+	
+	//Where the weapons will shoot from;
+	[SerializeField] private Transform muzzleTransform;
 
 	private List<Weapon> weapons = new List<Weapon>();
 
@@ -73,7 +76,7 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 		weapons.Add(weapon);
-		weapon.Muzzle = Camera.main.transform;
+		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}
