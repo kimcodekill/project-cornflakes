@@ -10,8 +10,7 @@ public class WeaponIdleState : WeaponState {
 	private bool ignoredTriggerDown;
 
 	public override void Enter() {
-		//try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
-		//DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
+		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 
 		if (!Weapon.FullAuto && Weapon.TriggerDown) {
 			ignoreTriggerDown = true;

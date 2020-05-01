@@ -33,6 +33,10 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
+	private void Start() {
+		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
+	}
+
 	private void Update() {
 		//Moved CheckInputs here because why wouldn't we do that first
 		CheckInputs();
@@ -40,7 +44,7 @@ public class PlayerWeapon : MonoBehaviour {
 		if (WeaponIsActive) {
 			if (weaponStateMachine != null) {
 				weaponStateMachine.Run();
-				//DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
+				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 			}
 		}
 	}

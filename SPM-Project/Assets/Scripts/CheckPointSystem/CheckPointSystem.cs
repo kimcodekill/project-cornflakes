@@ -25,7 +25,7 @@ public class CheckPointSystem : MonoBehaviour {
 	}
 
 	private void OnSceneChanged(Scene prev, Scene next) {
-		if (prev.name != null || NewGame) {
+		if (NewGame) {
 			NewGame = false;
 			CaptureKeeper.ClearCaptures();
 		}
