@@ -8,8 +8,8 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 	[SerializeField] private float speed;
 	[SerializeField] private float areaOfEffect;
 	[SerializeField] private float lifeTime;
-	[SerializeField] private GameObject explosion;
 	[SerializeField] private LayerMask collisionLayers;
+	[SerializeField] private GameObject explosion;
 	
 	public Vector3 TargetDir { get; set; }
 
@@ -57,8 +57,9 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 			});
 		}
 		//GameObject explosion2 = new GameObject();
-		GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity);
-		expl.gameObject.SetActive(true);
+		GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+		boom.gameObject.SetActive(true);
+		boom.transform.localScale *= areaOfEffect;
 		gameObject.SetActive(false);
 	}
 
