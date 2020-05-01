@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public static class CaptureKeeper {
@@ -24,7 +23,8 @@ public static class CaptureKeeper {
 		public PlayerStats Player;
 		public List<WeaponStats> Weapons;
 		public List<Vector3> Enemies;
-		public Dictionary<Vector3, bool> CheckPoints;
+		public List<Vector3> CheckPoints;
+		public List<Vector3> Pickups;
 	}
 
 	private static List<Capture> captures;
@@ -42,13 +42,14 @@ public static class CaptureKeeper {
 		LoadPlayerCapture(latestCapture.Player);
 		LoadWeaponCapture(latestCapture.Weapons);
 		LoadEnemyCapture(latestCapture.Enemies);
-		LoadCheckPointCapture(latestCapture.CheckPoints);
+		LoadStaticGameObjectCapture(latestCapture.CheckPoints, "CheckPoint");
+		LoadStaticGameObjectCapture(latestCapture.Pickups, "Pickup");
 	}
 
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
 		playerGameObject.transform.position = player.position;
-		Camera.main.transform.rotation = player.rotation;
+		Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
 	}
 
@@ -56,6 +57,7 @@ public static class CaptureKeeper {
 		for (int i = 0; i < weapons.Count; i++) {
 			Weapon weapon = weapons[i].weapon;
 			weapon.enabled = true;
+			weapon.Restart();
 			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
 			weapon.AmmoInReserve = weapons[i].ammoInReserve;
 			PlayerWeapon.Instance.PickUpWeapon(weapon);
@@ -69,10 +71,10 @@ public static class CaptureKeeper {
 		}
 	}
 
-	private static void LoadCheckPointCapture(Dictionary<Vector3, bool> checkPoints) {
-		GameObject[] checkPointGameObjects = GameObject.FindGameObjectsWithTag("CheckPoint");
-		for (int i = 0; i < checkPointGameObjects.Length; i++) {
-			checkPointGameObjects[i].GetComponent<CheckPoint>().Triggered = checkPoints[checkPointGameObjects[i].transform.position];
+	private static void LoadStaticGameObjectCapture(List<Vector3> capturedGameObjects, string tag) {
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
+		for (int i = 0; i < gameObjects.Length; i++) {
+			if (!capturedGameObjects.Contains(gameObjects[i].transform.position)) gameObjects[i].SetActive(false);
 		}
 	}
 
@@ -91,7 +93,8 @@ public static class CaptureKeeper {
 			Player = CapturePlayer(checkPointPosition, checkPointRotation),
 			Weapons = CaptureWeapons(),
 			Enemies = CaptureEnemies(),
-			CheckPoints = CaptureCheckPoints()
+			CheckPoints = CaptureStaticGameObjects("CheckPoint"),
+			Pickups = CaptureStaticGameObjects("Pickup")
 		});
 	}
 
@@ -128,13 +131,13 @@ public static class CaptureKeeper {
 		return enemies;
 	}
 
-	private static Dictionary<Vector3, bool> CaptureCheckPoints() {
-		GameObject[] checkPointGameObjects = GameObject.FindGameObjectsWithTag("CheckPoint");
-		Dictionary<Vector3, bool> checkPoints = new Dictionary<Vector3, bool>();
-		for (int i = 0; i < checkPointGameObjects.Length; i++) {
-			checkPoints.Add(checkPointGameObjects[i].transform.position, checkPointGameObjects[i].GetComponent<CheckPoint>().Triggered);
+	private static List<Vector3> CaptureStaticGameObjects(string tag) {
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
+		List<Vector3> capturedGameObjects = new List<Vector3>();
+		for (int i = 0; i < gameObjects.Length; i++) {
+			capturedGameObjects.Add(gameObjects[i].transform.position);
 		}
-		return checkPoints;
+		return capturedGameObjects;
 	}
 
 	#endregion
@@ -145,7 +148,20 @@ public static class CaptureKeeper {
 	/// Removes all captures.
 	/// </summary>
 	public static void ClearCaptures() {
+		DestroyDontDestroyOnLoad();
 		captures = null;
+	}
+
+	#endregion
+
+	#region Helper Functions
+
+	private static void DestroyDontDestroyOnLoad() {
+		for (int i = 0; i < captures.Count; i++) {
+			for (int j = 0; j < captures.Count; j++) {
+				Object.Destroy(captures[i].Weapons[j].weapon.gameObject);
+			}
+		}
 	}
 
 	#endregion
