@@ -64,7 +64,11 @@ public class PlayerWeapon : MonoBehaviour {
 		return false;
 	}
 
-	private void SwitchTo(int index) {
+	/// <summary>
+	/// Switches to the weapon at the specified index.
+	/// </summary>
+	/// <param name="index">The specified index.</param>
+	public void SwitchTo(int index) {
 		CurrentWeapon = weapons[index];
 	}
 
