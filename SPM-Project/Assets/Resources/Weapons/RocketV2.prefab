@@ -34,6 +34,18 @@ Transform:
   m_Father: {fileID: 8592894640773638140}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3408997481356862120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454562227305200281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9a09e5693a3504e9b3e540887eaf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8592894640553087791
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,10 +269,10 @@ MonoBehaviour:
   speed: 80
   areaOfEffect: 7.5
   lifeTime: 20
-  explosion: {fileID: 8454562227305200281}
   collisionLayers:
     serializedVersion: 2
     m_Bits: 1792
+  explosion: {fileID: 8454562227305200281}
 --- !u!54 &8592894640773638133
 Rigidbody:
   m_ObjectHideFlags: 0

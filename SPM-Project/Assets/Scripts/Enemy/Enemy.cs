@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
 	
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
+	[SerializeField] private GameObject deathExplosion;
 	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask layerMask;
 	[SerializeField] protected float movementSpeed;
 
@@ -121,6 +122,8 @@ public class Enemy : MonoBehaviour, IEntity
 
 	private void KillEnemy() {
 		//Destroy(gameObject);
+		GameObject expl = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
+		expl.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 	}
 

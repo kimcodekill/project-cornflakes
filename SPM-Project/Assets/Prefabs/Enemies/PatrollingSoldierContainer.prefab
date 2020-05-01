@@ -86,14 +86,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   movementSpeed: 8
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
   weaponSpread: 0
+  searchRange: 10
+  searchLoops: 10
   points:
   - {fileID: 6168304084697789506}
   - {fileID: 6168304083611328923}
   - {fileID: 6168304085334955042}
   - {fileID: 6168304084260173964}
-  searchRange: 10
-  searchLoops: 10
 --- !u!136 &8696522061249260628
 CapsuleCollider:
   m_ObjectHideFlags: 0

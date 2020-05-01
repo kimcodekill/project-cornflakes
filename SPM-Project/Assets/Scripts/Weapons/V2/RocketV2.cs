@@ -56,10 +56,9 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 				HitPoint = transform.position,
 			});
 		}
-		//GameObject explosion2 = new GameObject();
-		GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-		boom.gameObject.SetActive(true);
-		boom.transform.localScale *= areaOfEffect;
+		GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+		expl.gameObject.SetActive(true);
+		expl.transform.localScale *= areaOfEffect;
 		gameObject.SetActive(false);
 	}
 

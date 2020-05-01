@@ -240,12 +240,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
   - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
   layerMask:
     serializedVersion: 2
     m_Bits: 1536
   movementSpeed: 8
   weaponSpread: 0
-  points: []
   searchRange: 10
   searchLoops: 10
 --- !u!136 &1960858254
