@@ -20,10 +20,6 @@ public class CheckPointSystem : MonoBehaviour {
 		}
 	}
 
-	private void Update() {
-		if (Input.GetKeyDown(KeyCode.X)) CaptureKeeper.ClearCaptures();
-	}
-
 	private void OnSceneChanged(Scene prev, Scene next) {
 		if (NewGame) {
 			NewGame = false;
