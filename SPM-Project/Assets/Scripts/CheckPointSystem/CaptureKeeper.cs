@@ -14,6 +14,7 @@ public static class CaptureKeeper {
 			public Vector3 position;
 			public Quaternion rotation;
 			public float health;
+			public int currentWeapon;
 		}
 		public struct WeaponStats {
 			public Weapon weapon;
@@ -37,8 +38,8 @@ public static class CaptureKeeper {
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
 		Capture latestCapture = captures[captures.Count - 1];
-		LoadPlayerCapture(latestCapture.Player);
 		LoadWeaponCapture(latestCapture.Weapons);
+		LoadPlayerCapture(latestCapture.Player);
 		LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
 	}
 
@@ -47,6 +48,7 @@ public static class CaptureKeeper {
 		playerGameObject.transform.position = player.position;
 		Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
+		PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
 
 	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
@@ -79,8 +81,8 @@ public static class CaptureKeeper {
 	public static void CreateCapture(CheckPoint checkPoint = null) {
 		if (captures == null) captures = new List<Capture>();
 		captures.Add(new Capture() {
-			Player = CapturePlayer(checkPoint == null ? PlayerController.Instance.transform.position : checkPoint.transform.position, Quaternion.identity),
 			Weapons = CaptureWeapons(),
+			Player = CapturePlayer(checkPoint == null ? PlayerController.Instance.transform.position : checkPoint.transform.position, Quaternion.identity),
 			DichotomousGameObjects = CaptureDichotomousGameObjects()
 		});
 	}
@@ -91,6 +93,7 @@ public static class CaptureKeeper {
 			position = checkPointPosition,
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
+			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon)
 		}; 
 	}
 
