@@ -22,9 +22,7 @@ public static class CaptureKeeper {
 		}
 		public PlayerStats Player;
 		public List<WeaponStats> Weapons;
-		public List<object> Enemies;
-		public List<object> CheckPoints;
-		public List<object> Pickups;
+		public List<object> DichotomousGameObjects;
 	}
 
 	private static List<Capture> captures;
@@ -41,9 +39,7 @@ public static class CaptureKeeper {
 		Capture latestCapture = captures[captures.Count - 1];
 		LoadPlayerCapture(latestCapture.Player);
 		LoadWeaponCapture(latestCapture.Weapons);
-		LoadEnemyCapture(latestCapture.Enemies);
-		LoadGameObjectCapture(latestCapture.CheckPoints, "CheckPoint");
-		LoadGameObjectCapture(latestCapture.Pickups, "Pickup");
+		LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
 	}
 
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
@@ -64,17 +60,11 @@ public static class CaptureKeeper {
 		}
 	}
 
-	private static void LoadEnemyCapture(List<object> enemies) {
-		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-		for (int i = 0; i < enemyGameObjects.Length; i++) {
-			if (!enemies.Contains(enemyGameObjects[i].transform.position)) enemyGameObjects[i].SetActive(false);
-		}
-	}
-
-	private static void LoadGameObjectCapture(List<object> capturedGameObjects, string tag) {
-		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
+	private static void LoadDichotomousGameObjectCapture(List<object> capturedGameObjects) {
+		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
 		for (int i = 0; i < gameObjects.Length; i++) {
-			if (!capturedGameObjects.Contains(gameObjects[i].transform.position)) gameObjects[i].SetActive(false);
+			ICapturable ic = gameObjects[i].GetComponent<ICapturable>();
+			if (ic != null && ic.InstanceIsCapturable() && !capturedGameObjects.Contains(ic.GetPersistentCaptureID())) gameObjects[i].SetActive(false);
 		}
 	}
 
@@ -85,16 +75,13 @@ public static class CaptureKeeper {
 	/// <summary>
 	/// Creates a capture of the game state.
 	/// </summary>
-	/// <param name="checkPointPosition">The position the player should respawn at.</param>
-	/// <param name="checkPointRotation">The rotation the player(or camera) should respawn facing.</param>
-	public static void CreateCapture(Vector3 checkPointPosition, Quaternion checkPointRotation) {
+	/// <param name="checkPoint">The CheckPoint that triggered the capture.</param>
+	public static void CreateCapture(CheckPoint checkPoint = null) {
 		if (captures == null) captures = new List<Capture>();
 		captures.Add(new Capture() {
-			Player = CapturePlayer(checkPointPosition, checkPointRotation),
+			Player = CapturePlayer(checkPoint == null ? PlayerController.Instance.transform.position : checkPoint.transform.position, Quaternion.identity),
 			Weapons = CaptureWeapons(),
-			Enemies = CaptureGameObjects("Enemy"),
-			CheckPoints = CaptureGameObjects("CheckPoint"),
-			Pickups = CaptureGameObjects("Pickup")
+			DichotomousGameObjects = CaptureDichotomousGameObjects()
 		});
 	}
 
@@ -122,23 +109,13 @@ public static class CaptureKeeper {
 		return capturedWeapons;
 	}
 
-	private static List<Vector3> CaptureEnemies() {
-		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-		List<Vector3> enemies = new List<Vector3>();
-		for (int i = 0; i < enemyGameObjects.Length; i++) {
-			enemies.Add(enemyGameObjects[i].GetComponent<Enemy>().Origin);
-		}
-		return enemies;
-	}
-
-	private static List<object> CaptureGameObjects(string tag) {
-		//GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
+	private static List<object> CaptureDichotomousGameObjects() {
 		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
 		List<object> capturedGameObjects = new List<object>();
 		for (int i = 0; i < gameObjects.Length; i++) {
 			ICapturable ic = gameObjects[i].GetComponent<ICapturable>();
 			if (ic != null && ic.InstanceIsCapturable()) {
-				capturedGameObjects.Add(gameObjects[i].GetComponent<ICapturable>().GetPersistentCaptureID());
+				capturedGameObjects.Add(ic.GetPersistentCaptureID());
 			}
 		}
 		return capturedGameObjects;
@@ -146,7 +123,15 @@ public static class CaptureKeeper {
 
 	#endregion
 
-	#region Clear Captures
+	#region Manage Captures
+
+	/// <summary>
+	/// Removes the latest capture, causing the next scene load to start from the previous checkpoint.
+	/// </summary>
+	public static void RollBackCapture() {
+		if (captures.Count == 1) captures = null;
+		else captures.RemoveAt(captures.Count - 1);
+	}
 
 	/// <summary>
 	/// Removes all captures.
