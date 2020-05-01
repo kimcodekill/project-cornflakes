@@ -84,7 +84,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of variance in the bullet path.
 	/// </summary>
-	public float Spread { get => spread; protected set => spread = value; }
+	public float Spread { get => spread; set => spread = value; }
 
 	/// <summary>
 	/// What the weapon should be able to hit.
@@ -109,13 +109,15 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private float damage;
 	[SerializeField] private float fireRate;
 	[SerializeField] private int magazineSize;
-	[SerializeField] private int ammoInMagazine;
-	[SerializeField] private int ammoInReserve;
+	[SerializeField] private int maxMagazines;
 	[SerializeField] private float reloadTime;
 	[SerializeField] private float recoil;
 	[SerializeField] private float spread;
 
 	#endregion
+
+	private int ammoInMagazine;
+	private int ammoInReserve;
 
 	private PlayerCamera playerCamera;
 
@@ -123,6 +125,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	private void Start() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		ammoInMagazine = magazineSize;
+		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
 
 	#region Attribute Status Functions
@@ -220,7 +224,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	}
 
 	#endregion
-
+	
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>
@@ -254,4 +258,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		AmmoInMagazine--;
 	}
 
+	public int GetMaxAmmo()	{
+		return maxMagazines * magazineSize;
+	}
+
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		throw new System.NotImplementedException();
+	}
 }

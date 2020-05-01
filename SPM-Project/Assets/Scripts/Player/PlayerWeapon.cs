@@ -19,6 +19,9 @@ public class PlayerWeapon : MonoBehaviour {
 	public bool WeaponIsActive { get; private set; } = false;
 
 	[SerializeField] private State[] states;
+	
+	//Where the weapons will shoot from;
+	[SerializeField] private Transform muzzleTransform;
 
 	private List<Weapon> weapons = new List<Weapon>();
 
@@ -79,7 +82,7 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 		weapons.Add(weapon);
-		weapon.Muzzle = Camera.main.transform;
+		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}
@@ -104,6 +107,31 @@ public class PlayerWeapon : MonoBehaviour {
 		for (int i = 0; i < weapons.Count; i++) {
 			if (weapons[i].AmmoType == ammoType) weapons[i].AmmoInReserve += amount;
 		}
+	}
+
+	/// <summary>
+	/// Struct used to pass the reserveAmmo and maxAmmo values of a weapon.
+	/// </summary>
+	public struct AmmoPool {
+		public int reserveAmmo;
+		public int maxAmmo;
+		public AmmoPool(int reserveAmmo, int maxAmmo) {
+			this.reserveAmmo = reserveAmmo;
+			this.maxAmmo = maxAmmo;
+		}
+	}
+
+	/// <summary>
+	/// Gets the current reserve ammo and max ammo of the weapon of some type.
+	/// </summary>
+	/// <param name="ammoType">The ammo type to look for.</param>
+	/// <returns>A little struct with the ammo values.</returns>
+	/// <exception cref="System.Exception">Thrown if no weapon with the specified ammo type exists.</exception>
+	public AmmoPool GetAmmoPool(Weapon.EAmmoType ammoType) {
+		for (int i = 0; i < weapons.Count; i++) {
+			if (weapons[i].AmmoType == ammoType) return new AmmoPool(weapons[i].AmmoInReserve, weapons[i].GetMaxAmmo());
+		}
+		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
 
 }
