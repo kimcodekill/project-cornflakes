@@ -2,23 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AmmoPickup : MonoBehaviour {
-
-	#region Properties
-
-	public Weapon.EAmmoType AmmoType { get => ammoType; }
-
-	public int AmmoAmount { get => ammoAmount; }
-
-	#endregion
-
-	#region Serialized
-
-	[SerializeField] private Weapon.EAmmoType ammoType;
-	[SerializeField] private int ammoAmount;
-
-	#endregion
-
+public abstract class Pickup : MonoBehaviour {
+	
 	private void Start() {
 		ParticleSystemRenderer psr = gameObject.AddComponent<ParticleSystemRenderer>();
 		ParticleSystem ps = gameObject.AddComponent<ParticleSystem>();
@@ -33,13 +18,20 @@ public class AmmoPickup : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		if (other.gameObject.CompareTag("Player")) {
-			EventSystem.Current.FireEvent(new PickUpEvent() {
-				Description = this + " was picked up by " + other.gameObject,
-				Source = gameObject,
-				Target = other.gameObject,
-			});
-		}
+		if (IsValid(other)) OnPickup(other);
 	}
+
+	/// <summary>
+	/// Dictates what should happen when the pickup passes the valid check.
+	/// </summary>
+	/// <param name="other">The collider interacting with the pickup.</param>
+	protected virtual void OnPickup(Collider other) { }
+
+	/// <summary>
+	/// Dictates whether or not the pickup should run its pickup logic.
+	/// </summary>
+	/// <param name="other">The collider interacting with the pickup.</param>
+	/// <returns>Whether or not the pickup is valid.</returns>
+	protected virtual bool IsValid(Collider other) { return true; }
 
 }
