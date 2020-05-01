@@ -22,9 +22,9 @@ public static class CaptureKeeper {
 		}
 		public PlayerStats Player;
 		public List<WeaponStats> Weapons;
-		public List<Vector3> Enemies;
-		public List<Vector3> CheckPoints;
-		public List<Vector3> Pickups;
+		public List<object> Enemies;
+		public List<object> CheckPoints;
+		public List<object> Pickups;
 	}
 
 	private static List<Capture> captures;
@@ -42,8 +42,8 @@ public static class CaptureKeeper {
 		LoadPlayerCapture(latestCapture.Player);
 		LoadWeaponCapture(latestCapture.Weapons);
 		LoadEnemyCapture(latestCapture.Enemies);
-		LoadStaticGameObjectCapture(latestCapture.CheckPoints, "CheckPoint");
-		LoadStaticGameObjectCapture(latestCapture.Pickups, "Pickup");
+		LoadGameObjectCapture(latestCapture.CheckPoints, "CheckPoint");
+		LoadGameObjectCapture(latestCapture.Pickups, "Pickup");
 	}
 
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
@@ -64,14 +64,14 @@ public static class CaptureKeeper {
 		}
 	}
 
-	private static void LoadEnemyCapture(List<Vector3> enemies) {
+	private static void LoadEnemyCapture(List<object> enemies) {
 		GameObject[] enemyGameObjects = GameObject.FindGameObjectsWithTag("Enemy");
 		for (int i = 0; i < enemyGameObjects.Length; i++) {
 			if (!enemies.Contains(enemyGameObjects[i].transform.position)) enemyGameObjects[i].SetActive(false);
 		}
 	}
 
-	private static void LoadStaticGameObjectCapture(List<Vector3> capturedGameObjects, string tag) {
+	private static void LoadGameObjectCapture(List<object> capturedGameObjects, string tag) {
 		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
 		for (int i = 0; i < gameObjects.Length; i++) {
 			if (!capturedGameObjects.Contains(gameObjects[i].transform.position)) gameObjects[i].SetActive(false);
@@ -92,9 +92,9 @@ public static class CaptureKeeper {
 		captures.Add(new Capture() {
 			Player = CapturePlayer(checkPointPosition, checkPointRotation),
 			Weapons = CaptureWeapons(),
-			Enemies = CaptureEnemies(),
-			CheckPoints = CaptureStaticGameObjects("CheckPoint"),
-			Pickups = CaptureStaticGameObjects("Pickup")
+			Enemies = CaptureGameObjects("Enemy"),
+			CheckPoints = CaptureGameObjects("CheckPoint"),
+			Pickups = CaptureGameObjects("Pickup")
 		});
 	}
 
@@ -131,11 +131,15 @@ public static class CaptureKeeper {
 		return enemies;
 	}
 
-	private static List<Vector3> CaptureStaticGameObjects(string tag) {
-		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
-		List<Vector3> capturedGameObjects = new List<Vector3>();
+	private static List<object> CaptureGameObjects(string tag) {
+		//GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(tag);
+		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
+		List<object> capturedGameObjects = new List<object>();
 		for (int i = 0; i < gameObjects.Length; i++) {
-			capturedGameObjects.Add(gameObjects[i].transform.position);
+			ICapturable ic = gameObjects[i].GetComponent<ICapturable>();
+			if (ic != null && ic.InstanceIsCapturable()) {
+				capturedGameObjects.Add(gameObjects[i].GetComponent<ICapturable>().GetPersistentCaptureID());
+			}
 		}
 		return capturedGameObjects;
 	}

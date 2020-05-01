@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IEntity 
+public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
 	
 	[Header("Enemy attributes")]
@@ -151,5 +151,11 @@ public class Enemy : MonoBehaviour, IEntity
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
-	
+	public bool InstanceIsCapturable() {
+		return true;
+	}
+
+	public object GetPersistentCaptureID() {
+		return Origin;
+	}
 }
