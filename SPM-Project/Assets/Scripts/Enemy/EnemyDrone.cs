@@ -34,6 +34,7 @@ public class EnemyDrone : Enemy {
 	}
 
 	private IEnumerator Patrol() {
+		ResetWeapon();
 		Vector3 newPos = FindRandomPosition(origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
 			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));

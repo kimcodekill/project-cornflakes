@@ -38,7 +38,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 
 	public void DoAttack() {
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
-		Vector3 spreadedAttack = AddSpread(attackVector).normalized * attackRange;
+		Vector3 spreadedAttack = AddSpread(attackVector.normalized)* attackRange;
 		if (useBulletProjectile) {
 			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.LookRotation(owner.gunTransform.right));
 			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
@@ -61,7 +61,11 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	private Vector3 AddSpread(Vector3 direction) {
-		return new Vector3(Random.Range(-weaponSpread, weaponSpread) + direction.x, Random.Range(-weaponSpread, weaponSpread) + direction.y, direction.z).normalized;
+		return new Vector3(
+			Random.Range(-weaponSpread, weaponSpread) + direction.x,
+			Random.Range(-weaponSpread, weaponSpread) + direction.y,
+			direction.z
+			).normalized;
 	}
 
 	private IEnumerator ShotEffect() {

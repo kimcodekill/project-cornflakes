@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &791663855728672146
+--- !u!1 &2082725126308262436
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 39769688967627567}
-  - component: {fileID: 2980505456978861311}
-  - component: {fileID: 2081656699297531957}
-  m_Layer: 8
+  - component: {fileID: 6709981589234275083}
+  - component: {fileID: 8494579312143655210}
+  - component: {fileID: 8693992975511220376}
+  - component: {fileID: 783668754292583379}
+  m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &39769688967627567
+--- !u!4 &6709981589234275083
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791663855728672146}
-  m_LocalRotation: {x: -0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: -0.385, z: 0.421}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_GameObject: {fileID: 2082725126308262436}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.564}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.2}
   m_Children: []
   m_Father: {fileID: 3245006857513409221}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -60, y: 0, z: 0}
---- !u!33 &2980505456978861311
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8494579312143655210
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791663855728672146}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2081656699297531957
+  m_GameObject: {fileID: 2082725126308262436}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8693992975511220376
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791663855728672146}
+  m_GameObject: {fileID: 2082725126308262436}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -79,6 +80,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &783668754292583379
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082725126308262436}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3245006856273335012
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3245006856651615629}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.489, z: 0}
+  m_LocalPosition: {x: 0, y: 0.466, z: 0.151}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 3245006857513409221}
@@ -350,7 +364,7 @@ Transform:
   - {fileID: 3245006856273335019}
   - {fileID: 3245006856896256755}
   - {fileID: 3245006856651615628}
-  - {fileID: 39769688967627567}
+  - {fileID: 6709981589234275083}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -371,11 +385,11 @@ MonoBehaviour:
   maxHealth: 25
   fieldOfView: -2
   visionRange: 20
-  gunTransform: {fileID: 39769688967627567}
+  gunTransform: {fileID: 6709981589234275083}
   eyeTransform: {fileID: 3245006856651615628}
   attackRange: 20
   attackDamage: 0.2
-  attackSpreadRadius: 1
+  attackSpreadRadius: 0.25
   attackSpeedRPM: 600
   states:
   - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
@@ -412,10 +426,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3f7bf91ba3b8847ab9444dce8d6a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
-  bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
+  bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
     type: 3}
   useBulletProjectile: 0
 --- !u!120 &4210382078722177768

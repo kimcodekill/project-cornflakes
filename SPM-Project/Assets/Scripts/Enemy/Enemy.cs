@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
 	[SerializeField] protected EnemyWeaponBase weapon;
+	[SerializeField] private float attackLimitDegrees;
 	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
 	private StateMachine enemyStateMachine;
@@ -99,6 +100,21 @@ public class Enemy : MonoBehaviour, IEntity
 		}
 		else return false;
 		
+	}
+
+	public bool WeaponIsAimed() {
+		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
+		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
+		float radAngle = Mathf.Acos((Vector3.Dot(sightToPlayer, gunAim)) / (sightToPlayer.magnitude * gunAim.magnitude));
+		float degrees = radAngle * (180 / Mathf.PI);		
+		if (degrees < attackLimitDegrees) {
+			return true;
+		}
+		else return false;
+	}
+
+	protected void ResetWeapon() {
+		gunTransform.forward = Vector3.RotateTowards(gunTransform.forward, transform.forward, Time.deltaTime, 0);
 	}
 
 	/// <summary>

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368514970114ff94394678d9ae090b5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 75
+  projectileSpeed: 100
   bulletHitLayer:
     serializedVersion: 2
     m_Bits: 12032
@@ -89,7 +89,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.05
+  m_Time: 0.125
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.15
@@ -119,8 +119,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 1}
-      key1: {r: 1, g: 0, b: 0, a: 0}
+      key0: {r: 1, g: 0.2688679, b: 0.2688679, a: 1}
+      key1: {r: 1, g: 0.9198113, b: 0.9198113, a: 1}
       key2: {r: 0.4528302, g: 0.27554289, b: 0.27554289, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
