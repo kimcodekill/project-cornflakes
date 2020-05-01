@@ -4,43 +4,63 @@ using UnityEngine;
 
 public class RocketV2 : MonoBehaviour, IDamaging {
 
-	#region Properties
+	[SerializeField] private float damage;
+	[SerializeField] private float speed;
+	[SerializeField] private float areaOfEffect;
+	[SerializeField] private float lifeTime;
+	[SerializeField] private LayerMask collisionLayers;
+	
+	public Vector3 TargetDir { get; set; }
 
-	public float Damage { get; set; }
+	private float startTime;
 
-	public float Speed { get; set; }
-
-	public float AreaOfEffect { get; set; }
-
-	public Vector3 Target { get; set; }
-
-	#endregion
-
-	private bool hasExploded = false;
+	private void Start()
+	{
+		startTime = Time.time;
+	}
 
 	private void Update() {
-		if (!hasExploded) transform.position = Vector3.MoveTowards(transform.position, Target, Speed);
+		if (Time.time - startTime < lifeTime){
+			if (TargetDir != Vector3.zero)
+			{
+				transform.position += TargetDir * speed * Time.deltaTime;
+			}
+		} else { 
+			Explode(); 
+		}
 	}
 
 	public float GetDamage() {
-		return Damage;
+		return damage;
+	}
+
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		float distance = (hitPos - explosionCenter).magnitude;
+
+		float damageScale = (areaOfEffect - distance) / areaOfEffect;
+
+		return Mathf.Round(damage * damageScale);
 	}
 
 	private void Explode() {
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, AreaOfEffect);
+		//Because we're using OverlapSphere we cant get the actual hit point
+		//Could be solved using SphereCast, but I cant get that working.
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
 		for (int i = 0; i < hitColliders.Length; i++) {
 			EventSystem.Current.FireEvent(new HitEvent() {
 				Source = gameObject,
 				Target = hitColliders[i].gameObject,
-				HitPoint = transform.position
+				HitPoint = transform.position,
 			});
 		}
-		hasExploded = true;
-	}
 
-	private void OnTriggerEnter(Collider other) {
-		Explode();
 		gameObject.SetActive(false);
 	}
 
+	private void OnTriggerEnter(Collider other) {
+		//checks if the collided gameobject's layer is in the collisionlayers
+		if(collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
+			Explode();
+	}
 }

@@ -6,6 +6,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 
+	/// <summary>
+	/// Singleton
+	/// </summary>
+	public static PlayerController Instance;
+
 	private StateMachine stateMachine;
 
 	/// <summary>
@@ -33,10 +38,12 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// If <c>discard</c> is <c>true</c>, the input set needs to be refreshed.
 	/// </summary>
 	public class CurrentInput {
-
 		public bool doJump;
 		public bool doDash;
-	
+	}
+
+	private void OnEnable() {
+		if (Instance == null) Instance = this;
 	}
 
 	private void Start() {
