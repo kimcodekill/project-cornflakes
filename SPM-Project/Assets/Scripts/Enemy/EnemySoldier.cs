@@ -98,7 +98,6 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Search() {
-		agent.radius = 0.5f;
 		FinishedSearching = false;
 		float searches = 0;
 		bool areaScanned = false;
@@ -155,7 +154,8 @@ public class EnemySoldier : Enemy {
 			yield return new WaitForSeconds(1f);
 			searches++;
 		}
-		agent.radius = attackAvoidanceRadius;
+		//agent.radius = defaultAvoidanceRadius;
+		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
 		FinishedSearching = true;
 	}
 
@@ -172,6 +172,16 @@ public class EnemySoldier : Enemy {
 	private Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
 		Vector3 velo = v2 - v1;
 		return velo;
+	}
+
+	private IEnumerator AvoidanceLerp(float avoidance) {
+		//Debug.Log("radius" + avoidance);
+		//Debug.Log(agent.radius);
+		while(agent.radius != avoidance) {
+			//Debug.Log("true");
+			agent.radius = Mathf.MoveTowards(agent.radius, avoidance, 0.01f);
+			yield return null;
+		}
 	}
 
 	public override void StartPatrolBehaviour() {
@@ -194,24 +204,29 @@ public class EnemySoldier : Enemy {
 
 	public override void StartAttackBehaviour() {
 		agent.ResetPath();
-		agent.radius = attackAvoidanceRadius;
+		StartCoroutine(AvoidanceLerp(attackAvoidanceRadius));
+		//agent.radius = attackAvoidanceRadius;
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
 		StopCoroutine("Attack");
-		agent.radius = defaultAvoidanceRadius;
+		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
+
+		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartSearchBehaviour() {
 		agent.ResetPath();
-		agent.radius = searchAvoidanceRadius;
+		StartCoroutine(AvoidanceLerp(searchAvoidanceRadius));
+
+		//agent.radius = searchAvoidanceRadius;
 		StartCoroutine("Search");
 	}
 
 	public override void StopSearchBehaviour() {
 		StopCoroutine("Search");
-		agent.radius = defaultAvoidanceRadius;
+		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartIdleBehaviour() {
