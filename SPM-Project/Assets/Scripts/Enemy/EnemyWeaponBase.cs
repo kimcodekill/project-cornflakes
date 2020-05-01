@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 
-	private Enemy owner;
+	public Enemy owner;
 	private float fireRate;
 	private float damagePerShot;
 	private float weaponSpread;
@@ -37,25 +37,27 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	public void DoAttack() {
-		shotLine.SetPosition(0, owner.gunTransform.position);
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
 		Vector3 spreadedAttack = AddSpread(attackVector).normalized * attackRange;
-		shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
 		if (useBulletProjectile) {
 			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.LookRotation(owner.gunTransform.right));
-			bullet.Initialize(owner.gunTransform.position + spreadedAttack);
+			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
 		}
-		if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
-			if (hit.collider.GetComponent<PlayerController>()) {
-				shotLine.SetPosition(1, hit.point);
-				EventSystem.Current.FireEvent(new HitEvent {
-					Description = " " + owner.gameObject.name + " hit " + owner.Target.name,
-					Source = gameObject,
-					Target = owner.Target.gameObject
-				});
+		if (!useBulletProjectile) {
+			shotLine.SetPosition(0, owner.gunTransform.position);
+			shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
+			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
+				if (hit.collider.gameObject.GetComponent<PlayerController>()) {
+					shotLine.SetPosition(1, hit.point);
+					EventSystem.Current.FireEvent(new HitEvent {
+						Description = " " + owner.gameObject.name + " hit " + owner.Target.name,
+						Source = gameObject,
+						Target = owner.Target.gameObject
+					});
+				}
 			}
+		StartCoroutine(ShotEffect());
 		}
-		if(!useBulletProjectile) StartCoroutine(ShotEffect());
 	}
 
 	private Vector3 AddSpread(Vector3 direction) {

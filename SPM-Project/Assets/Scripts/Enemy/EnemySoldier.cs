@@ -179,7 +179,7 @@ public class EnemySoldier : Enemy {
 		//Debug.Log(agent.radius);
 		while(agent.radius != avoidance) {
 			//Debug.Log("true");
-			agent.radius = Mathf.MoveTowards(agent.radius, avoidance, 0.01f);
+			agent.radius = Mathf.MoveTowards(agent.radius, avoidance, Time.deltaTime);
 			yield return null;
 		}
 	}
