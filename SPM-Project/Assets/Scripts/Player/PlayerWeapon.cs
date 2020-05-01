@@ -17,6 +17,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// Whether or not the weapon is active.
 	/// </summary>
 	public bool WeaponIsActive { get; private set; } = false;
+	
+	public bool SwitchWeapon { get { return CheckInputs(); } }
 
 	[SerializeField] private State[] states;
 	
@@ -38,14 +40,9 @@ public class PlayerWeapon : MonoBehaviour {
 	}
 
 	private void Update() {
-		//Moved CheckInputs here because why wouldn't we do that first
-		CheckInputs();
-
-		if (WeaponIsActive) {
-			if (weaponStateMachine != null) {
-				weaponStateMachine.Run();
-				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
-			}
+		if (weaponStateMachine != null) {
+			weaponStateMachine.Run();
+			DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 		}
 	}
 
@@ -55,19 +52,16 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <returns>The carried weapons.</returns>
 	public List<Weapon> GetWeapons() { return weapons; }
 
-	private void CheckInputs() {
+	private bool CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
 			if (Input.GetKeyDown((i + 1).ToString()))
 			{
 				SwitchTo(i);
-				//Let player equip weapon by clicking the corresponding button
-				WeaponIsActive = true;
-				return;
+
+				return true;
 			}
 
-		//Doing this here bc there isnt a better way to do it at this time
-		if(CurrentWeapon == null) { WeaponIsActive = false; }
-		//else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
+		return false;
 	}
 
 	private void SwitchTo(int index) {
