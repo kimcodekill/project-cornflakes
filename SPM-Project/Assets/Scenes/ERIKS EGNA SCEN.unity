@@ -1057,7 +1057,7 @@ PrefabInstance:
     - target: {fileID: 1327413923285096281, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
       propertyPath: attackLimitDegrees
-      value: 180
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6168304084530303651, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
