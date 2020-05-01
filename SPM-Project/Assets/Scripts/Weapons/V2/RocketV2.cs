@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using UnityEngine;
 
 public class RocketV2 : MonoBehaviour, IDamaging
@@ -83,9 +84,13 @@ public class RocketV2 : MonoBehaviour, IDamaging
             });
         }
 
-        //This isnt very pretty but it makes it easier to understand what gets hit
-        GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-        boom.transform.localScale *= areaOfEffect;
+        EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+        {
+            ExplosionEffect = explosion,
+            WorldPosition = transform.position,
+            Rotation = Quaternion.identity,
+            Scale = areaOfEffect
+        }) ;
 
         gameObject.SetActive(false);
     }
