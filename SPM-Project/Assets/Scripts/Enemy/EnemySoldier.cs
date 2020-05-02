@@ -14,7 +14,6 @@ public class EnemySoldier : Enemy {
 	[SerializeField] private float defaultAvoidanceRadius;
 	[SerializeField] private float searchAvoidanceRadius;
 
-	private Vector3 origin;
 
 	public void AgentReposition() {
 		agent.destination = FindNewRandomNavMeshPoint(transform.position, 1f);
@@ -22,7 +21,6 @@ public class EnemySoldier : Enemy {
 
 	protected void Awake() {
 		if (IsPatroller) points = GetComponent<PatrollingSoldier>().patrolPoints;
-		origin = transform.position;
 		agent = GetComponent<NavMeshAgent>();
 	}
 
@@ -40,7 +38,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private void GoToGuardPoint() {
-		agent.destination = origin;
+		agent.destination = Origin;
 	}
 
 	private IEnumerator Idle() {
