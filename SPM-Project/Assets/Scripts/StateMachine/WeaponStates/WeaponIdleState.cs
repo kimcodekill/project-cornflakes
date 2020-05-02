@@ -6,7 +6,6 @@ using UnityEngine;
 public class WeaponIdleState : WeaponState {
 
 	public override void Enter() {
-		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
 		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 	}
 

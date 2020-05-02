@@ -134,6 +134,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
 
+	public void Restart() {
+		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+	}
+
 	#region Attribute Status Functions
 
 	/// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IEntity 
+public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
 	
 	[Header("Enemy attributes")]
@@ -29,6 +29,12 @@ public class Enemy : MonoBehaviour, IEntity
 	public Vector3 VectorToTarget { get; private set; }
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
+
+	public Vector3 Origin { get; private set; }
+
+	private void Awake() {
+		Origin = transform.position;
+	}
 
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -145,5 +151,11 @@ public class Enemy : MonoBehaviour, IEntity
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
-	
+	public bool InstanceIsCapturable() {
+		return true;
+	}
+
+	public object GetPersistentCaptureID() {
+		return Origin;
+	}
 }
