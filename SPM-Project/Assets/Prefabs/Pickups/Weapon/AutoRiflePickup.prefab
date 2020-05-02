@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7626634061086666947}
   m_Layer: 0
   m_Name: AutoRiflePickup
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,14 +130,13 @@ MonoBehaviour:
   muzzle: {fileID: 0}
   ammoType: 0
   fullAuto: 1
-  damage: 2
-  fireRate: 2000
+  damage: 3
+  fireRate: 1000
   magazineSize: 40
-  ammoInMagazine: 40
-  ammoInReserve: 40
-  reloadTime: 2
+  maxMagazines: 1
+  reloadTime: 3
   recoil: 0
-  spread: 0.025
+  spread: 0.01
   cooldownWait: 0.75
 --- !u!114 &7626634061086666947
 MonoBehaviour:
