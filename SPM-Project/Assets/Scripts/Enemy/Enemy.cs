@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour, IEntity
 		aSource.spatialBlend = 1;
 		aSource.rolloffMode = AudioRolloffMode.Linear;
 		aSource.minDistance = 1;
-		aSource.maxDistance = 50;
+		aSource.maxDistance = 40;
 		return aSource;
 	}
 
