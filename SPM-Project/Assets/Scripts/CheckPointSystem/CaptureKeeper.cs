@@ -48,7 +48,7 @@ public static class CaptureKeeper {
 		playerGameObject.transform.position = player.position;
 		Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
-		PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
+		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
 
 	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
