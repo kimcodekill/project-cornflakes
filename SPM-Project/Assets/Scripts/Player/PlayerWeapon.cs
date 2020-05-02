@@ -35,12 +35,22 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
+	private void Start() {
+		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
+	}
+
 	private void Update() {
 		if (weaponStateMachine != null) {
 			weaponStateMachine.Run();
 			DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 		}
 	}
+
+	/// <summary>
+	/// Returns the list weapons the player is in possession of.
+	/// </summary>
+	/// <returns>The carried weapons.</returns>
+	public List<Weapon> GetWeapons() { return weapons; }
 
 	private bool CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
@@ -54,7 +64,11 @@ public class PlayerWeapon : MonoBehaviour {
 		return false;
 	}
 
-	private void SwitchTo(int index) {
+	/// <summary>
+	/// Switches to the weapon at the specified index.
+	/// </summary>
+	/// <param name="index">The specified index.</param>
+	public void SwitchTo(int index) {
 		CurrentWeapon = weapons[index];
 	}
 

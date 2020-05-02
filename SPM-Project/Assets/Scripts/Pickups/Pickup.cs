@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Pickup : MonoBehaviour {
-	
+public abstract class Pickup : MonoBehaviour, ICapturable {
+
 	private void Start() {
 		ParticleSystemRenderer psr = gameObject.AddComponent<ParticleSystemRenderer>();
 		ParticleSystem ps = gameObject.AddComponent<ParticleSystem>();
@@ -34,4 +34,11 @@ public abstract class Pickup : MonoBehaviour {
 	/// <returns>Whether or not the pickup is valid.</returns>
 	protected virtual bool IsValid(Collider other) { return true; }
 
+	public bool InstanceIsCapturable() {
+		return true;
+	}
+
+	public object GetPersistentCaptureID() {
+		return transform.position;
+	}
 }
