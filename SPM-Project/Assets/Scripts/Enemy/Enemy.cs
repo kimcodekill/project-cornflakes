@@ -33,6 +33,9 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
+  /// <summary>
+  /// Returns the origin of this enemy.
+  /// </summary>
 	public Vector3 Origin { get; private set; }
 
 	private void Awake() {
