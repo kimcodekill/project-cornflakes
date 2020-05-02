@@ -4,31 +4,40 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-	[Header("Bullet attributes")]
-	[SerializeField] [Tooltip("How fast the bullet travels.")] private float projectileSpeed;
-	private float distanceToTravel;
-	private float totalDistanceTravelled;
-	private Vector3 movementDirection;
+	[SerializeField] private float projectileSpeed;
+	private Vector3 travelVector;
+	private TrailRenderer trail;
+	[SerializeField] private LayerMask bulletHitLayer;
+	[SerializeField] private GameObject hitEffect;
+	private EnemyWeaponBase owner;
 
 	/// <summary>
 	/// Gives the Bullet some number of starting values through parameters.
 	/// </summary>
 	/// <param name="shootDir"> The vector the bullet should travel along.</param>
-	/// <param name="distanceToTarget">How far the bullet should travel before destroying.</param>
-	public void Initialize(Vector3 shootDir, float distanceToTarget) {
-		movementDirection = shootDir;
-		distanceToTravel = distanceToTarget;
+	public void Initialize(Vector3 shootDir, EnemyWeaponBase owner) {
+		travelVector = shootDir - transform.position;
+		this.owner = owner;
 	}
 
-	void Update() {
-		CheckDistance(totalDistanceTravelled, distanceToTravel);
-		totalDistanceTravelled += projectileSpeed * Time.deltaTime;
-		transform.position += movementDirection.normalized * projectileSpeed * Time.deltaTime;
+	private void Start() {
+		trail = GetComponent<TrailRenderer>();
+		trail.enabled = true;
 	}
 
-	private void CheckDistance(float distance, float maxDistance) {
-		if (distance >= maxDistance)
+	private void FixedUpdate() {
+		RaycastHit hit;
+		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * projectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			Destroy(gameObject);
-			//gameObject.SetActive(false);
+			if (hit.collider.gameObject.GetComponent<PlayerController>()){
+				EventSystem.Current.FireEvent(new HitEvent {
+					Description = " " + owner.owner.gameObject.name + " hit " + owner.owner.Target.name,
+					Source = owner.gameObject,
+					Target = owner.owner.Target.gameObject
+				});
+			}
+			
+		}
+		transform.position += travelVector.normalized * projectileSpeed * Time.fixedDeltaTime;
 	}
 }
