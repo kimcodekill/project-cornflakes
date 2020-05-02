@@ -35,6 +35,10 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		return damagePerShot;
 	}
 
+	public float GetExplosionDamage(Vector3 pos, Vector3 pos2) {
+		return 0;
+	}
+	
 	public float GetFireRate() {
 		return 60.0f / fireRate;
 	}
