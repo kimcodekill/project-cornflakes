@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+﻿using UnityEditor.SceneManagement;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+	[SerializeField] private AudioClip[] audioClips;
+	[SerializeField] private AudioSource audioSource;
+	[SerializeField] public AudioSource audioPlayerSteps;
+	[SerializeField] private AudioSource audioPlayerIdle;
+
+	//private AudioSource[] audioSources;
 
 	/// <summary>
 	/// Singleton
@@ -51,6 +58,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+		audioPlayerIdle = gameObject.AddComponent<AudioSource>();
+		audioPlayerIdle.loop = true;
+		audioPlayerIdle.clip = audioClips[0];
+		audioPlayerIdle.Play();
 
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
@@ -80,7 +91,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	/// <summary>
-	/// Regenerats the player's health. Implements <c>IEntity.TakeDamage()</c>
+	/// Regenerates the player's health. Implements <c>IEntity.TakeDamage()</c>
 	/// </summary>
 	/// <param name="amount"> The amount the player should heal.</param>
 	public float Heal(float amount) {
@@ -94,6 +105,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <param name="amount">The amount of damage the player will take.</param>
 	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
+		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
@@ -107,5 +119,15 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{
 			Description = "Player fricking died, yo."
 		});
+	}
+
+	public void PlayAudioMain(int clipIndex, float volume) {
+		audioSource.pitch = 1;
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
+		audioSource.pitch = Random.Range(minPitch, maxPitch);
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
 }

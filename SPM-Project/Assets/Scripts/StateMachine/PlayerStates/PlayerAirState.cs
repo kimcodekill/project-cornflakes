@@ -19,7 +19,8 @@ public abstract class PlayerAirState : PlayerState {
 			jumpCount = 0;
 			dashCount = 0;
 			startTime = -1;
-			StateMachine.TransitionTo<PlayerMovingState>();
+			Player.PlayAudioMain(4, 1);
+			StateMachine.TransitionTo<PlayerStandingState>();
 		}
 		else Player.PhysicsBody.AddForce(Player.GetInput().normalized * Acceleration, ForceMode.Acceleration);
 

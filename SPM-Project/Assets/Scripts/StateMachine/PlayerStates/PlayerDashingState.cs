@@ -86,6 +86,7 @@ public class PlayerDashingState : PlayerState {
 		Player.PhysicsBody.SetGravityEnabled(false);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		dashed = true;
+		Player.PlayAudioMain(2, 1);
 	}
 
 	private bool OffCooldown(float currentTime) {

@@ -13,7 +13,6 @@ public abstract class PlayerGroundedState : PlayerState {
 
 	public override void Enter() {
 		startTime = -1;
-
 		base.Enter();
 	}
 

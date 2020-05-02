@@ -19,7 +19,9 @@ public class PlayerWeapon : MonoBehaviour {
 	public bool WeaponIsActive { get; private set; } = false;
 
 	[SerializeField] private State[] states;
-	
+	[SerializeField] private AudioClip[] audioClips;
+	[SerializeField] private AudioSource audioSource;
+
 	//Where the weapons will shoot from;
 	[SerializeField] private Transform muzzleTransform;
 
@@ -56,11 +58,12 @@ public class PlayerWeapon : MonoBehaviour {
 			}
 
 		//Doing this here bc there isnt a better way to do it at this time
-		if(CurrentWeapon == null) { WeaponIsActive = false; }
+		if (CurrentWeapon == null) { WeaponIsActive = false; }
 		//else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
 	}
 
 	private void SwitchTo(int index) {
+		if (CurrentWeapon != weapons[index]) PlayAudio((index * 3) + 2);
 		CurrentWeapon = weapons[index];
 	}
 
@@ -76,6 +79,8 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 		weapons.Add(weapon);
+		weapon.playerWeapon = this;
+		PlayAudio((weapons.Count - 1) * 3);
 		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
@@ -128,4 +133,7 @@ public class PlayerWeapon : MonoBehaviour {
 		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
 
+	public void PlayAudio(int clipIndex) {
+		audioSource.PlayOneShot(audioClips[clipIndex], 1);
+	}
 }

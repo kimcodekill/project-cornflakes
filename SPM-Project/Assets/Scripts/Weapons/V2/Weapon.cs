@@ -123,8 +123,11 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
+	public PlayerWeapon playerWeapon;
+
 	private void Start() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
@@ -237,6 +240,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
 		ammoInReserve -= canTakeAmount;
 		ammoInMagazine += canTakeAmount;
+		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(0);
+		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(3);
+		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(6);
+		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(9);
 	}
 
 	/// <summary>
@@ -248,6 +255,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 			Description = this + " fired a shot",
 			GameObject = gameObject
 		});
+		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(1);
+		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(4);
+		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(7);
+		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(10);
 		Fire();
 	}
 

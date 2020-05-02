@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Enemy : MonoBehaviour, IEntity 
 {
@@ -19,7 +20,14 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] protected float movementSpeed;
 
 	private StateMachine enemyStateMachine;
+
 	public float weaponSpread;
+
+	[HideInInspector] public AudioSource audioSource;
+	[HideInInspector] public AudioSource audioSourceIdle;
+	public AudioClip[] audioClips;
+	private int minSoundDelay = 5;
+	private int maxSoundDelay = 10;
 
 	/// <summary>
 	/// Returns this enemy's target.
@@ -32,13 +40,30 @@ public class Enemy : MonoBehaviour, IEntity
 
 	protected void Start() {
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+		audioSource = CreateAudioSource();
+		audioSourceIdle = CreateAudioSource();
+
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
+	}
+
+	protected AudioSource CreateAudioSource() {
+		AudioSource aSource = gameObject.AddComponent<AudioSource>();
+		aSource.spatialBlend = 1;
+		aSource.rolloffMode = AudioRolloffMode.Linear;
+		aSource.minDistance = 1;
+		aSource.maxDistance = 50;
+		return aSource;
 	}
 
 	protected void Update() {
 		VectorToTarget = GetVectorToTarget();
 		enemyStateMachine.Run();
+		if (audioSourceIdle.isPlaying == false) {
+			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
+			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
+		}
 		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
 		//Debug.Log(finishedSearching);
 	}
@@ -133,8 +158,12 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	public void DoAttack(float firingRate, float damage) { }
+	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
+		audioSource.pitch = Random.Range(minPitch, maxPitch);
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+	}
 
-	public virtual void StartIdleBehaviour() { }
+public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
 	public virtual void StopPatrolBehaviour() { }

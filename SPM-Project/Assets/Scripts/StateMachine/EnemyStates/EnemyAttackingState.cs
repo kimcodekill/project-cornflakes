@@ -35,7 +35,7 @@ public class EnemyAttackingState : EnemyBaseState
 		instance = Instantiate(bulletPrefab, Enemy.gunTransform.position, Enemy.transform.rotation);
 		instance.Initialize(v, v.magnitude);
 		Enemy.Target.TakeDamage(attackDamage);
-
+		Enemy.PlayAudio(4, 1, 0.8f, 1.3f);
 	}
 
 	public override void Exit() {

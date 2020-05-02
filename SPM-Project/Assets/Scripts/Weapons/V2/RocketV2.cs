@@ -13,10 +13,13 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 	public Vector3 TargetDir { get; set; }
 
 	private float startTime;
+	private AudioSource audioSource;
 
 	private void Start()
 	{
 		startTime = Time.time;
+		audioSource = GetComponent<AudioSource>();
+		audioSource.Play();
 	}
 
 	private void Update() {
