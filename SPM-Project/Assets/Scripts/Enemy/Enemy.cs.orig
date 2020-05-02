@@ -35,12 +35,15 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 <<<<<<< HEAD
 =======
+  /// <summary>
+  /// Returns the origin of this enemy.
+  /// </summary>
+>>>>>>> 025ce7f6669d0996a24d4388b42cfef52a625c67
 	public Vector3 Origin { get; private set; }
 
 	private void Awake() {
 		Origin = transform.position;
 	}
->>>>>>> checkpoint
 
 	protected void Start() {
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
