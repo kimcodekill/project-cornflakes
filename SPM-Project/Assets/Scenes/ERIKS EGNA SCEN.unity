@@ -1044,6 +1044,11 @@ PrefabInstance:
       propertyPath: useBulletProjectile
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 204679302339680043, guid: fa871fd53603b5b47ac222001c24efbd,
+        type: 3}
+      propertyPath: targetLeadFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1327413923285096281, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
       propertyPath: attackDamage
