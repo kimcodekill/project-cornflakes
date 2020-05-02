@@ -68,7 +68,9 @@ public class DebugManager : MonoBehaviour {
 	/// <param name="row">The index of the row to update.</param>
 	/// <param name="content">The content to be placed on the specified row.</param>
 	public static void UpdateRow(string header, int row, string content) {
-		sectionDictionary[header].Rows[row] = content;
+		try {
+			sectionDictionary[header].Rows[row] = content;
+		} catch (KeyNotFoundException) { }
 	}
 
 	/// <summary>

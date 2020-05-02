@@ -76,6 +76,54 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &224233461678482037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2965801763724568574}
+  - component: {fileID: 4584773652630041271}
+  m_Layer: 11
+  m_Name: PlayerWeaponMuzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2965801763724568574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224233461678482037}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7841059610958226996}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4584773652630041271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224233461678482037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b499c99b237a02c46bcea2d5b64f8ad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logThis: 0
+  message: 'Move this to where the bullets should come from.
+
+    I.E: not (0, 1,
+    0).'
 --- !u!1 &3208381754192760868
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +480,7 @@ Transform:
   - {fileID: 2852529094400065823}
   - {fileID: 7841059610537404105}
   - {fileID: 7841059611673499745}
+  - {fileID: 2965801763724568574}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -500,6 +549,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d9291ea25c200846a2888e1c988e07a, type: 2}
   - {fileID: 11400000, guid: ba9806ebee8f1af43be4a7d827b2db09, type: 2}
   - {fileID: 11400000, guid: c90e08d5d467f8c4d8697e06bd6d377c, type: 2}
+  muzzleTransform: {fileID: 2965801763724568574}
 --- !u!1 &7841059611166161789
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +949,8 @@ GameObject:
   - component: {fileID: 7841059611673499744}
   - component: {fileID: 7841059611673499759}
   - component: {fileID: 7841059611673499746}
+  - component: {fileID: 8955925705087128327}
+  - component: {fileID: 5227034916481503275}
   m_Layer: 11
   m_Name: PlayerCamera
   m_TagString: MainCamera
@@ -914,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7841059611673499758}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.75, y: 1.5, z: -7}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7841059610958226996}
@@ -984,7 +1036,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   states:
-  - {fileID: 11400000, guid: 201c64f19481d8a4e819a170de33f3eb, type: 2}
   - {fileID: 11400000, guid: c53acc6cd254e304a8a77ab9988fa508, type: 2}
   - {fileID: 11400000, guid: 01166ec7491247445b59e4e0d07efd0b, type: 2}
   collisionLayer:
@@ -997,6 +1048,31 @@ MonoBehaviour:
   camRadius: 0.25
   minCollisionDistance: 2.5
   playerMesh: {fileID: 2852529094400065823}
+--- !u!114 &8955925705087128327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841059611673499758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c98645c72e3711c4f8d1c9220662cb96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5227034916481503275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841059611673499758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91fa3c146192b14685d483fe4cb7c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnabled: 0
 --- !u!1 &7841059611711259448
 GameObject:
   m_ObjectHideFlags: 0
