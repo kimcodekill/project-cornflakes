@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour, IEntity
 	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
 	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
 	[SerializeField] protected float attackDamage;
-	[SerializeField] protected float attackSpreadRadius;
+	[SerializeField] protected float attackSpread;
 	[SerializeField] protected float attackSpeedRPM;
 
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour, IEntity
 
 
 	protected void Start() {
-		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpreadRadius, attackRange);
+		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;

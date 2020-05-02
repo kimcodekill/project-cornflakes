@@ -1052,7 +1052,7 @@ PrefabInstance:
     - target: {fileID: 1327413923285096281, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}
       propertyPath: attackSpreadRadius
-      value: 0.25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1327413923285096281, guid: fa871fd53603b5b47ac222001c24efbd,
         type: 3}

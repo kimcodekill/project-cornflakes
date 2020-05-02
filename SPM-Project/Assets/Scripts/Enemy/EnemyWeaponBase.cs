@@ -14,6 +14,8 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private WaitForSeconds lineDuration = new WaitForSeconds(0.25f);
 	[SerializeField] private Bullet bulletPrefab;
 	[SerializeField] private bool useBulletProjectile;
+	[SerializeField] private float targetLeadFactor;
+	private Vector3 oldTargetPos;
 
 	public void SetParams(Enemy owner, float rof, float damage, float radius, float range) {
 		this.owner = owner;
@@ -26,6 +28,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private void Start() {
 		shotLine = GetComponent<LineRenderer>();
 		shotLine.enabled = false;
+		targetLeadFactor = Mathf.Clamp(targetLeadFactor, 0f, 1f);
 	}
 
 	public float GetDamage() {
@@ -38,12 +41,14 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 
 	public void DoAttack() {
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
-		Vector3 spreadedAttack = AddSpread(attackVector.normalized)* attackRange;
 		if (useBulletProjectile) {
+			Vector3 collatedAttackVector = attackVector + LeadTarget();
+			Vector3 spreadedAttack = AddSpread(collatedAttackVector.normalized) * attackRange;
 			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.LookRotation(owner.gunTransform.right));
 			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
 		}
 		if (!useBulletProjectile) {
+			Vector3 spreadedAttack = AddSpread(attackVector.normalized)* attackRange;
 			shotLine.SetPosition(0, owner.gunTransform.position);
 			shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
 			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
@@ -66,6 +71,13 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 			Random.Range(-weaponSpread, weaponSpread) + direction.y,
 			direction.z
 			).normalized;
+	}
+
+	private Vector3 LeadTarget() {
+		Vector3 currentPos = owner.Target.transform.position;
+		Vector3 leadingVector = currentPos - oldTargetPos;
+		oldTargetPos = currentPos;
+		return leadingVector * targetLeadFactor;
 	}
 
 	private IEnumerator ShotEffect() {
