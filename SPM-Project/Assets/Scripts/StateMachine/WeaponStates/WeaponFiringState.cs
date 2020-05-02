@@ -5,34 +5,55 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "WeaponState/FiringState")]
 public class WeaponFiringState : WeaponState {
 
-	private float delay;
+	private float startTime;
 
-	private bool waitForSemi;
+	private bool semiShot;
 
 	public override void Enter() {
 		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
-		
-		delay = Weapon.GetTimeBetweenShots();
-		waitForSemi = false;
+
+		if (Weapon is AutoRifle) (Weapon as AutoRifle).CurrentCooldownTime = 0f;
+
+		startTime = Time.time;
+		semiShot = false;
 	}
 
 	public override void Run() {
-		delay += Time.deltaTime;
-		if (!waitForSemi && ((Weapon.FullAuto && delay > Weapon.GetTimeBetweenShots()) || !Weapon.FullAuto)) {
-			Weapon.DoFire();
-			delay = 0f;
-			if (!Weapon.FullAuto) waitForSemi = true;
+		if (!Weapon.HasAmmoInMagazine())
+		{
+			StateMachine.TransitionTo<WeaponIdleState>();
 		}
-		if (delay > Weapon.GetTimeBetweenShots()) waitForSemi = false;
-		if (!Weapon.HasAmmoInMagazine()) {
-			if (Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
-			else StateMachine.TransitionTo<WeaponIdleState>();
-		}
-		else if (!Weapon.FullAuto || !Weapon.TriggerDown) {
-			if (!waitForSemi) StateMachine.TransitionTo<WeaponIdleState>();
+		else
+		{
+			if (!Weapon.FullAuto)
+			{
+				if (!semiShot)
+				{
+					Weapon.DoFire();
+					semiShot = true;
+				}
+				if ((Time.time - startTime) > Weapon.GetTimeBetweenShots())
+				{
+					StateMachine.TransitionTo<WeaponIdleState>();
+				}
+			}
+			else
+			{
+				if(Weapon.TriggerHeld)
+				{
+					if ((Time.time - startTime) > Weapon.GetTimeBetweenShots())
+					{
+						Weapon.DoFire();
+						startTime = Time.time;
+					}
+				}
+				else
+				{
+					StateMachine.TransitionTo<WeaponIdleState>();
+				}
+			}
 		}
 
 		base.Run();
 	}
-
 }

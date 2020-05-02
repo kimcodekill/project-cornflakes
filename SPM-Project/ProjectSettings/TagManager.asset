@@ -6,7 +6,8 @@ TagManager:
   tags:
   - Target
   - Enemy
-  - EnemyOrigin
+  - CheckPoint
+  - Pickup
   layers:
   - Default
   - TransparentFX

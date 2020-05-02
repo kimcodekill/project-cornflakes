@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IEntity 
+public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
 	[Header("Enemy attributes")]
 	[SerializeField] protected float movementSpeed;
@@ -33,6 +33,14 @@ public class Enemy : MonoBehaviour, IEntity
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
+  /// <summary>
+  /// Returns the origin of this enemy.
+  /// </summary>
+	public Vector3 Origin { get; private set; }
+
+	private void Awake() {
+		Origin = transform.position;
+	}
 
 	protected void Start() {
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
@@ -156,5 +164,11 @@ public class Enemy : MonoBehaviour, IEntity
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
-	
+	public bool InstanceIsCapturable() {
+		return true;
+	}
+
+	public object GetPersistentCaptureID() {
+		return Origin;
+	}
 }

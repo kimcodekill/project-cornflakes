@@ -5,6 +5,8 @@ using UnityEngine;
 public class DebugTrigger : DebugTool
 {
     [SerializeField] GameObject player;
+    [SerializeField] GameObject[] pickups;
+    [SerializeField] Target target;
 
     protected override void OnUpdate()
     {
@@ -13,9 +15,9 @@ public class DebugTrigger : DebugTool
             player.GetComponent<PlayerController>().TakeDamage(float.PositiveInfinity);
         }
         
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            //Camera.main.GetComponent<PlayerCamera>().
+            target.Heal(-1);
         }
     }
 }

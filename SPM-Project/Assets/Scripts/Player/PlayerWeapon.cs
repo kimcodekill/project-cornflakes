@@ -17,8 +17,13 @@ public class PlayerWeapon : MonoBehaviour {
 	/// Whether or not the weapon is active.
 	/// </summary>
 	public bool WeaponIsActive { get; private set; } = false;
+	
+	public bool SwitchWeapon { get { return CheckInputs(); } }
 
 	[SerializeField] private State[] states;
+	
+	//Where the weapons will shoot from;
+	[SerializeField] private Transform muzzleTransform;
 
 	private List<Weapon> weapons = new List<Weapon>();
 
@@ -30,34 +35,40 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
-	private void Update() {
-		//Moved CheckInputs here because why wouldn't we do that first
-		CheckInputs();
+	private void Start() {
+		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
+	}
 
-		if (WeaponIsActive) {
-			if (weaponStateMachine != null) {
-				weaponStateMachine.Run();
-				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
-			}
+	private void Update() {
+		if (weaponStateMachine != null) {
+			weaponStateMachine.Run();
+			DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 		}
 	}
 
-	private void CheckInputs() {
+	/// <summary>
+	/// Returns the list weapons the player is in possession of.
+	/// </summary>
+	/// <returns>The carried weapons.</returns>
+	public List<Weapon> GetWeapons() { return weapons; }
+
+	private bool CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
 			if (Input.GetKeyDown((i + 1).ToString()))
 			{
 				SwitchTo(i);
-				//Let player equip weapon by clicking the corresponding button
-				WeaponIsActive = true;
-				return;
+
+				return true;
 			}
 
-		//Doing this here bc there isnt a better way to do it at this time
-		if(CurrentWeapon == null) { WeaponIsActive = false; }
-		//else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
+		return false;
 	}
 
-	private void SwitchTo(int index) {
+	/// <summary>
+	/// Switches to the weapon at the specified index.
+	/// </summary>
+	/// <param name="index">The specified index.</param>
+	public void SwitchTo(int index) {
 		CurrentWeapon = weapons[index];
 	}
 
@@ -73,7 +84,7 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 		weapons.Add(weapon);
-		weapon.Muzzle = Camera.main.transform;
+		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}
@@ -98,6 +109,31 @@ public class PlayerWeapon : MonoBehaviour {
 		for (int i = 0; i < weapons.Count; i++) {
 			if (weapons[i].AmmoType == ammoType) weapons[i].AmmoInReserve += amount;
 		}
+	}
+
+	/// <summary>
+	/// Struct used to pass the reserveAmmo and maxAmmo values of a weapon.
+	/// </summary>
+	public struct AmmoPool {
+		public int reserveAmmo;
+		public int maxAmmo;
+		public AmmoPool(int reserveAmmo, int maxAmmo) {
+			this.reserveAmmo = reserveAmmo;
+			this.maxAmmo = maxAmmo;
+		}
+	}
+
+	/// <summary>
+	/// Gets the current reserve ammo and max ammo of the weapon of some type.
+	/// </summary>
+	/// <param name="ammoType">The ammo type to look for.</param>
+	/// <returns>A little struct with the ammo values.</returns>
+	/// <exception cref="System.Exception">Thrown if no weapon with the specified ammo type exists.</exception>
+	public AmmoPool GetAmmoPool(Weapon.EAmmoType ammoType) {
+		for (int i = 0; i < weapons.Count; i++) {
+			if (weapons[i].AmmoType == ammoType) return new AmmoPool(weapons[i].AmmoInReserve, weapons[i].GetMaxAmmo());
+		}
+		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
 
 }
