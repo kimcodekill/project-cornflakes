@@ -52,8 +52,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	protected void Update() {
 		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
 		enemyStateMachine.Run();
-		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
-		//Debug.Log(finishedSearching);
+		
 	}
 
 	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
@@ -74,7 +73,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	private bool TargetIsInFOV(Vector3 v) {
 		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
 		if (angleToTarget >= fieldOfView) {
-			//Debug.Log(Target.gameObject.name + " is in FOV of " + gameObject.name);
 			return true; 
 		}
 		else { return false; }
@@ -82,7 +80,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private bool TargetIsInRange() {
 		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
-			//Debug.Log(Target.gameObject.name + " in range of " + gameObject.name);
 			return true;
 		}
 		else { return false; }
@@ -121,9 +118,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		else return false;
 	}
 
-	protected void ResetWeapon() {
-		gunTransform.forward = Vector3.RotateTowards(gunTransform.forward, transform.forward, Time.deltaTime, 0);
-	}
 
 	/// <summary>
 	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the enemy.
