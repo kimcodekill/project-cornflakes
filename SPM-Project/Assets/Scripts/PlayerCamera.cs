@@ -29,7 +29,6 @@ public class PlayerCamera : MonoBehaviour {
 	public Camera Camera { get; private set; }
 
 	private void Start() {
-		Cursor.lockState = CursorLockMode.Locked;
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
 		stateMachine = new StateMachine(this, states);
