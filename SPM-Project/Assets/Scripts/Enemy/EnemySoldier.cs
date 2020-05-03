@@ -57,7 +57,6 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Patrol() {
-		ResetWeapon();
 		eyeTransform.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
 			GoToNextPoint();
@@ -77,24 +76,19 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Attack() {
-		if (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.8f) {
+
+		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange) {
+			agent.destination = Target.transform.position;
+			yield return null;
+		}
+		agent.ResetPath();
+		while (!agent.hasPath) {
 			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange) {
 				agent.destination = Target.transform.position;
 				yield return null;
 			}
-		}
-		agent.ResetPath();
-		while (!agent.hasPath) {
-			if (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.8f) {
-				while (Vector3.Distance(transform.position, Target.transform.position) > attackRange) {
-					agent.destination = Target.transform.position;
-					yield return null;
-				}
-				agent.ResetPath();
-			}
+			agent.ResetPath();
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
-			float gunX = gunTransform.rotation.x;
-
 			eyeTransform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransform.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
 			yield return null;
 		}

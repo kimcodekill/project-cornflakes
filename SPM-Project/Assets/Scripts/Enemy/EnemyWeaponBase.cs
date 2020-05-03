@@ -52,7 +52,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
 		}
 		if (!useBulletProjectile) {
-			Vector3 spreadedAttack = AddSpread(attackVector.normalized)* attackRange;
+			Vector3 spreadedAttack = RandomInCone(weaponSpread, attackVector.normalized) * attackRange;
 			shotLine.SetPosition(0, owner.gunTransform.position);
 			shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
 			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
@@ -69,13 +69,13 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		}
 	}
 
-	private Vector3 AddSpread(Vector3 direction) {
-		return new Vector3(
-			Random.Range(-weaponSpread, weaponSpread) + direction.x,
-			Random.Range(-weaponSpread, weaponSpread) + direction.y,
-			direction.z
-			).normalized;
-	}
+	//private Vector3 AddSpread(Vector3 direction) {
+	//	return new Vector3(
+	//		Random.Range(-weaponSpread, weaponSpread) + direction.x,
+	//		Random.Range(-weaponSpread, weaponSpread) + direction.y,
+	//		direction.z
+	//		).normalized;
+	//}
 
 	private Vector3 LeadTarget() {
 		Vector3 currentPos = owner.Target.transform.position;
@@ -85,17 +85,18 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	public Vector3 RandomInCone(float spreadAngle, Vector3 axis) {
-		float radAngle = Mathf.PI / 180 * spreadAngle/2;
-		float z = Random.Range(Mathf.Cos(radAngle), 1);
-		float theta = Mathf.Acos(z);
+		float radians = Mathf.PI / 180 * spreadAngle/2;
+		float dotProduct = Random.Range(Mathf.Cos(radians), 1);
+		float polarAngle = Mathf.Acos(dotProduct);
 		float azimuth = Random.Range(-Mathf.PI, Mathf.PI);
-		Vector3 normalDir = Vector3.ProjectOnPlane(Vector3.up, axis);
-		Vector3 firstCross = normalDir.normalized;
-		Vector3 secondCross = Vector3.Cross(firstCross, axis);
-		Vector3 pointOnSphericalCap = Mathf.Sin(theta) * (Mathf.Cos(azimuth) * firstCross + Mathf.Sin(azimuth) * secondCross) + Mathf.Cos(theta) * axis;
-		Vector3 rnd = pointOnSphericalCap;
-		return rnd;
-
+		Vector3 yProjection = Vector3.ProjectOnPlane(Vector3.up, axis);
+		if(Vector3.Dot(axis, Vector3.up) > 0.9f) {
+			yProjection = Vector3.ProjectOnPlane(Vector3.forward, axis);
+		}
+		Vector3 y = yProjection.normalized;
+		Vector3 x = Vector3.Cross(y, axis);
+		Vector3 pointOnSphericalCap = Mathf.Sin(polarAngle) * (Mathf.Cos(azimuth) * x + Mathf.Sin(azimuth) * y) + Mathf.Cos(polarAngle) * axis;
+		return pointOnSphericalCap;
 	}
 
 	private IEnumerator RaycastShotEffect() {
