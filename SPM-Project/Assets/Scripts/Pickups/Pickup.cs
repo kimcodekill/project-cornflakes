@@ -21,6 +21,8 @@ public abstract class Pickup : MonoBehaviour, ICapturable {
 		if (IsValid(other)) OnPickup(other);
 	}
 
+	protected virtual void CheckCompatibility() { }
+
 	/// <summary>
 	/// Dictates what should happen when the pickup passes the valid check.
 	/// </summary>
@@ -41,4 +43,5 @@ public abstract class Pickup : MonoBehaviour, ICapturable {
 	public object GetPersistentCaptureID() {
 		return transform.position;
 	}
+
 }

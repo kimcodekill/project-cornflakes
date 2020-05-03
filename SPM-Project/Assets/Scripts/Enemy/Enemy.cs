@@ -33,10 +33,12 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
-  /// <summary>
-  /// Returns the origin of this enemy.
-  /// </summary>
+	/// <summary>
+	/// Returns the origin of this enemy.
+	/// </summary>
 	public Vector3 Origin { get; private set; }
+
+	private bool alreadyDead = false;
 
 	private void Awake() {
 		Origin = transform.position;
@@ -148,7 +150,13 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	}
 
 	private void Die() {
+		if (alreadyDead) return;
+		alreadyDead = true;
 		StopAllCoroutines();
+		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+			Source = gameObject,
+			DropAnythingAtAllChance = 1f,
+		});
 		Destroy(gameObject, 0.5f);
 		//gameObject.SetActive(false);
 	}

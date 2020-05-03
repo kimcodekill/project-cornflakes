@@ -136,4 +136,17 @@ public class PlayerWeapon : MonoBehaviour {
 		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
 
+	/// <summary>
+	/// Checks if the player has a weapon using the specified ammo type.
+	/// </summary>
+	/// <param name="ammoType">The ammo type to check for.</param>
+	/// <returns></returns>
+	public bool HasWeaponOfAmmoType(Weapon.EAmmoType ammoType) {
+		bool valid = false;
+		for (int i = 0; i < weapons.Count; i++) {
+			if (weapons[i].AmmoType == ammoType) valid = true;
+		}
+		return valid;
+	}
+
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPack : Pickup {
+public class HealthPickup : Pickup {
 
 	#region Properties
 
