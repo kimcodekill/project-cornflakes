@@ -55,4 +55,8 @@ public class SniperRifle : Weapon {
 		}
 	}
 
+	public override string ToString() {
+		return "Sniper Rifle";
+	}
+
 }

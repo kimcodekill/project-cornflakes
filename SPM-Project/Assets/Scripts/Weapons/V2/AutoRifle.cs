@@ -38,4 +38,7 @@ public class AutoRifle : Weapon {
 		if (AmmoInReserve < MagazineSize) AmmoInReserve = MagazineSize;
 	}
 
+	public override string ToString() {
+		return "Auto Rifle";
+	}
 }

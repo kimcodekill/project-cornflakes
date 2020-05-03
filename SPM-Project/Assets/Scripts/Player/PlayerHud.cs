@@ -54,9 +54,10 @@ public class PlayerHud : MonoBehaviour
 		healthBar.value = player.PlayerCurrentHealth;
 
 	}
-	public void ShowPickupText(string type, float amount)
-	{
-		pickupText.text = amount + " " + type + " picked up";
+
+	public void ShowPickupText(string type, float amount) {
+		if (amount != 0) pickupText.text = amount + " " + type + " picked up";
+		else pickupText.text = type + " picked up";
 		//anim.SetBool("Pickedup", true);
 		anim.ResetTrigger("PickedUp");
 		anim.SetTrigger("PickedUp");

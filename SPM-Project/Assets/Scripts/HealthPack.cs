@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthPack : MonoBehaviour {
+	
 	private BoxCollider bc;
 	[SerializeField] float healAmount;
 

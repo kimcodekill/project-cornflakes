@@ -11,7 +11,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		Infinite,
 		Shells,
 		Rockets,
-		Special
+		Cartridges
 	}
 
 	#region Properties

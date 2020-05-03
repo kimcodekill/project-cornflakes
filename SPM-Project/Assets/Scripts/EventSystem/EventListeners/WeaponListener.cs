@@ -16,6 +16,7 @@ public class WeaponListener : MonoBehaviour {
 			if ((w = pue.Source.GetComponent<Weapon>()) != null) {
 				pw.PickUpWeapon(w);
 				pue.Source.SetActive(false);
+				pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(w.ToString(), 0);
 			}
 			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
 				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
