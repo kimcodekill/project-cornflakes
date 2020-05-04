@@ -44,7 +44,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	public void DoAttack() {
-		Debug.Log(owner.gameObject + " attacked");
+		//Debug.Log(owner.gameObject + " attacked");
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
 		if (useBulletProjectile) {
 			Vector3 collatedAttackVector = LeadTarget(attackVector);
