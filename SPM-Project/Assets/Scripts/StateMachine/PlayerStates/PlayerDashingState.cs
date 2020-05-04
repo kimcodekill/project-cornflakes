@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Co-Author Joakim Linna
+
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
 public class PlayerDashingState : PlayerState {
 
@@ -46,6 +48,9 @@ public class PlayerDashingState : PlayerState {
 			warned = true;
 			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
 		}
+
+		//I mean we could probably just tell the playeranim to do stuff from here but idk
+		EventSystem.Current.FireEvent(new PlayerDashEvent() { Description = "Player Dashed" });
 		
 		Dash();
 

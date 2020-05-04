@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Co-Author Joakim Linna
+
 [CreateAssetMenu(menuName = "PlayerState/JumpingState")]
 public class PlayerJumpingState : PlayerAirState {
 
@@ -19,6 +21,9 @@ public class PlayerJumpingState : PlayerAirState {
 		if (Player.GetInput().magnitude > 0f) Player.PhysicsBody.ChangeVelocityDirection(Player.GetInput().normalized);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+
+		//I mean we could probably just tell the playeranim to do stuff from here but idk
+		EventSystem.Current.FireEvent(new PlayerJumpEvent() { Description = "Player Jumped" });
 
 		StateMachine.TransitionTo<PlayerFallingState>();
 	}
