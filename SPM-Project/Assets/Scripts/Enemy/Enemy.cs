@@ -118,6 +118,10 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		else return false;
 	}
 
+	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
+		Vector3 v = v2 - v1;
+		return v;
+	}
 
 	/// <summary>
 	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the enemy.
@@ -143,8 +147,8 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
-		Destroy(gameObject, 0.5f);
-		//gameObject.SetActive(false);
+		gameObject.SetActive(false);
+		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
 	public virtual void StartIdleBehaviour() { }

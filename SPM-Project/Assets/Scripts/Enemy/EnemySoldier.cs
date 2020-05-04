@@ -77,13 +77,13 @@ public class EnemySoldier : Enemy {
 
 	private IEnumerator Attack() {
 
-		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange) {
+		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
 			agent.destination = Target.transform.position;
 			yield return null;
 		}
 		agent.ResetPath();
 		while (!agent.hasPath) {
-			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange) {
+			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
 				agent.destination = Target.transform.position;
 				yield return null;
 			}
@@ -166,11 +166,6 @@ public class EnemySoldier : Enemy {
 			finalPosition = hit.position;
 		}
 		return finalPosition;
-	}
-
-	private Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
-		Vector3 velo = v2 - v1;
-		return velo;
 	}
 
 	private IEnumerator AvoidanceLerp(float avoidance) {
