@@ -5,6 +5,7 @@ using UnityEngine;
 public class DebugTrigger : DebugTool
 {
     [SerializeField] GameObject player;
+    [SerializeField] GameObject[] pickups;
     [SerializeField] Target target;
 
     protected override void OnUpdate()
