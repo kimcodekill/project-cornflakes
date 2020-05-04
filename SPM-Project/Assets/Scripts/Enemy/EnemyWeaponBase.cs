@@ -11,11 +11,11 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private float attackRange;
 	[SerializeField] private LayerMask playerLayer;
 	private LineRenderer shotLine;
-	private WaitForSeconds lineDuration = new WaitForSeconds(0.25f);
+	[SerializeField] [Tooltip ("For how long should the LineRenderer be drawn? Only applies to Raycast attacks.")] private float lineDuration;
 	[SerializeField] private Bullet bulletPrefab;
 	[SerializeField] private bool useBulletProjectile;
 	[SerializeField] private float targetLeadFactor;
-	private Vector3 oldTargetPos;
+	private Vector3 previousTargetDir;
 
 	public void SetParams(Enemy owner, float rof, float damage, float spread, float range) {
 		this.owner = owner;
@@ -44,9 +44,10 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	public void DoAttack() {
+		Debug.Log(owner.gameObject + " attacked");
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
 		if (useBulletProjectile) {
-			Vector3 collatedAttackVector = attackVector + LeadTarget();
+			Vector3 collatedAttackVector = LeadTarget(attackVector);
 			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
 			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.identity);
 			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
@@ -69,19 +70,13 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		}
 	}
 
-	//private Vector3 AddSpread(Vector3 direction) {
-	//	return new Vector3(
-	//		Random.Range(-weaponSpread, weaponSpread) + direction.x,
-	//		Random.Range(-weaponSpread, weaponSpread) + direction.y,
-	//		direction.z
-	//		).normalized;
-	//}
-
-	private Vector3 LeadTarget() {
-		Vector3 currentPos = owner.Target.transform.position;
-		Vector3 leadingVector = currentPos - oldTargetPos;
-		oldTargetPos = currentPos;
-		return leadingVector * targetLeadFactor;
+	private Vector3 LeadTarget(Vector3 attackVector) {
+		Vector3 targetVelocity = owner.CalculateTargetVelocity(previousTargetDir, attackVector);
+		Vector3 leadVelocity = targetVelocity * targetLeadFactor;
+		previousTargetDir = attackVector;
+		if (attackVector.sqrMagnitude < 100)
+			return attackVector;
+		else return attackVector + leadVelocity;
 	}
 
 	public Vector3 RandomInCone(float spreadAngle, Vector3 axis) {
@@ -101,7 +96,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 
 	private IEnumerator RaycastShotEffect() {
 		shotLine.enabled = true;
-		yield return lineDuration;
+		yield return new WaitForSeconds(lineDuration);
 		shotLine.enabled = false;
 	}
 
