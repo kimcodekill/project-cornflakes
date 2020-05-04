@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Pickup : MonoBehaviour, ICapturable {
+public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
+
+	private bool fromSpawner;
+
+	private ParticleSystem ps;
 
 	private void Start() {
 		ParticleSystemRenderer psr = gameObject.AddComponent<ParticleSystemRenderer>();
-		ParticleSystem ps = gameObject.AddComponent<ParticleSystem>();
-		ps.startLifetime = 1f;
+		ps = gameObject.AddComponent<ParticleSystem>();
+		ps.startLifetime = 0.25f;
 		ps.startSize = 0.25f;
+		ps.gravityModifier = -3f;
+		ps.emissionRate = 20f;
 		var ns = ps.shape;
-		ns.shapeType = ParticleSystemShapeType.Cone;
-		ns.rotation = new Vector3(-90f, 0f, 0f);
+		ns.shapeType = ParticleSystemShapeType.Sphere;
 		psr.material = new Material(gameObject.GetComponent<MeshRenderer>().material);
 		psr.material.shader = Shader.Find("Unlit/Color");
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
@@ -19,6 +24,7 @@ public abstract class Pickup : MonoBehaviour, ICapturable {
 
 	private void OnTriggerEnter(Collider other) {
 		if (IsValid(other)) OnPickup(other);
+		else if (other.gameObject.CompareTag("Player") && fromSpawner) Destroy(gameObject);
 	}
 
 	protected virtual void CheckCompatibility() { }
@@ -44,4 +50,7 @@ public abstract class Pickup : MonoBehaviour, ICapturable {
 		return transform.position;
 	}
 
+	public void Spawned() {
+		fromSpawner = true;
+	}
 }

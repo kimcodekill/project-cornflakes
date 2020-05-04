@@ -29,7 +29,6 @@ public struct LootTable {
 	/// The indexer used to add loot table items to the loot table.
 	/// </summary>
 	/// <param name="lootObjectPath">What exactly should be dropped.</param>
-	/// <param name="subType">The desired subtype, if one exists.</param>
 	/// <returns>Nothing, actually.</returns>
 	public float this[string lootObjectPath] {
 		set {

@@ -38,8 +38,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	public Vector3 Origin { get; private set; }
 
-	private bool alreadyDead = false;
-
 	private void Awake() {
 		Origin = transform.position;
 	}
@@ -150,15 +148,13 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	}
 
 	private void Die() {
-		if (alreadyDead) return;
-		alreadyDead = true;
 		StopAllCoroutines();
 		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
 			Source = gameObject,
 			DropAnythingAtAllChance = 1f,
 		});
-		Destroy(gameObject, 0.5f);
-		//gameObject.SetActive(false);
+		gameObject.SetActive(false);
+		Destroy(gameObject, 2f);
 	}
 
 	public virtual void StartIdleBehaviour() { }
