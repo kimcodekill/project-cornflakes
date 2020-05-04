@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDrone : Enemy {
+public class EnemyDrone : Enemy, ILootable {
 
 	[SerializeField] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
@@ -85,5 +85,14 @@ public class EnemyDrone : Enemy {
 
 	public override void StopAlertedBehaviour() {
 		StopCoroutine("Alerted");
+	}
+
+	public LootTable GetLootTable() {
+		return new LootTable {
+			["Pickups/HealthPickup"] = 0.2f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.4f : 0f,
+			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.4f : 0f,
+		};
 	}
 }

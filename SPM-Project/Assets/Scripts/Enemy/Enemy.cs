@@ -147,12 +147,12 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
-		gameObject.SetActive(false);
-		Destroy(gameObject.transform.parent.gameObject, 2f);
+		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+			Source = gameObject,
 			DropAnythingAtAllChance = 0.5f,
 		});
 		gameObject.SetActive(false);
-		Destroy(gameObject, 2f);
+		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
 	public virtual void StartIdleBehaviour() { }
