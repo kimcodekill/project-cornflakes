@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
 	[SerializeField] protected EnemyWeaponBase weapon;
 	[SerializeField] private float attackLimitDegrees;
+	[SerializeField] private GameObject deathExplosion;
+
 	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
 	private StateMachine enemyStateMachine;
@@ -47,7 +49,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
-		//deathExplosion.transform.localScale = new Vector3(1, 1, 1);
 	}
 
 	protected void Update() {
@@ -148,8 +149,15 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
-		GameObject expl = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
-		expl.gameObject.SetActive(true);
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+		{
+			ExplosionEffect = deathExplosion,
+			WorldPosition = transform.position,
+			Rotation = Quaternion.identity,
+			Scale = 1
+		});
+		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
+		//explosion.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}

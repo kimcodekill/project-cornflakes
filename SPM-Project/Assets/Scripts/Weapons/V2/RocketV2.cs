@@ -7,26 +7,23 @@ using UnityEngine;
 public class RocketV2 : MonoBehaviour, IDamaging
 {
 
-
     [SerializeField] private float damage;
     [SerializeField] private float speed;
     [SerializeField] private float areaOfEffect;
     [SerializeField] private float lifeTime;
     [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private GameObject trail;
     [SerializeField] private GameObject explosion;
 
     public Vector3 TargetDir { get; set; }
 
     private float startTime;
-	private GameObject actualTrail;
 
     private void Start()
     {
         startTime = Time.time;
-		actualTrail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
-		actualTrail.transform.rotation = transform.rotation;
-		trail.SetActive(false);
-		explosion.SetActive(false);
+		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
+		trail.transform.rotation = transform.rotation;
     }
 
     private void Update()
@@ -88,12 +85,11 @@ public class RocketV2 : MonoBehaviour, IDamaging
                 HitPoint = transform.position,
             });
         }
-		GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-		expl.gameObject.SetActive(true);
-		expl.transform.localScale *= areaOfEffect;
 
-		ParticleSystem[] actualTrailParticleSystems = actualTrail.gameObject.GetComponentsInChildren<ParticleSystem>();
-		foreach (ParticleSystem childPS in actualTrailParticleSystems) {
+        //Makes the trail stop emitting particles
+		ParticleSystem[] trailParticleSystems = trail.gameObject.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem childPS in trailParticleSystems)
+        {
 			ParticleSystem.EmissionModule childPSEmissionModule = childPS.emission;
 			childPSEmissionModule.rateOverDistance = 0;
 		}
@@ -104,7 +100,7 @@ public class RocketV2 : MonoBehaviour, IDamaging
             WorldPosition = transform.position,
             Rotation = Quaternion.identity,
             Scale = areaOfEffect
-        }) ;
+        });
 
         gameObject.SetActive(false);
     }

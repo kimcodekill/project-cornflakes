@@ -396,12 +396,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: fc19eadcf4b02c64298f995eb9dfc7af, type: 2}
   ObscuringLayers:
-    type: 3}
     serializedVersion: 2
     m_Bits: 1536
   weapon: {fileID: 6703462120666448564}
   attackLimitDegrees: 0
-  weaponSpread: 0
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
   patrolBungeeDistance: 5
   body: {fileID: 8626059835950779692}
 --- !u!135 &8626059835950779692
