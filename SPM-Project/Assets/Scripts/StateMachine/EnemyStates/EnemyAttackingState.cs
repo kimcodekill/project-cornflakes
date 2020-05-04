@@ -18,7 +18,6 @@ public class EnemyAttackingState : EnemyBaseState
 		if(!Enemy.TargetIsAttackable()) {
 			StateMachine.TransitionTo<EnemyAlertedState>();
 		}
-		//Debug.Log(Enemy.WeaponIsAimed());
 
 		if(Time.time > internalAttackCD && Enemy.WeaponIsAimed()) {
 			internalAttackCD = Time.time + Enemy.EnemyEquippedWeapon.GetFireRate();

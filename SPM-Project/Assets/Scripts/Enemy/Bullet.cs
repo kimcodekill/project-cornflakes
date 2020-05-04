@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-	[SerializeField] private float projectileSpeed;
+	[SerializeField] float projectileSpeed;
 	private Vector3 travelVector;
 	private TrailRenderer trail;
 	[SerializeField] private LayerMask bulletHitLayer;
 	[SerializeField] private GameObject hitEffect;
 	private EnemyWeaponBase owner;
+
+	public float ProjectileSpeed { get => projectileSpeed; }
 
 	/// <summary>
 	/// Gives the Bullet some number of starting values through parameters.
@@ -27,7 +29,7 @@ public class Bullet : MonoBehaviour {
 
 	private void FixedUpdate() {
 		RaycastHit hit;
-		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * projectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
+		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			Destroy(gameObject);
 			if (hit.collider.gameObject.GetComponent<PlayerController>()){
 				EventSystem.Current.FireEvent(new HitEvent {
@@ -38,6 +40,6 @@ public class Bullet : MonoBehaviour {
 			}
 			
 		}
-		transform.position += travelVector.normalized * projectileSpeed * Time.fixedDeltaTime;
+		transform.position += travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime;
 	}
 }
