@@ -9,15 +9,20 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 	[SerializeField] private float areaOfEffect;
 	[SerializeField] private float lifeTime;
 	[SerializeField] private LayerMask collisionLayers;
+	[SerializeField] private GameObject trail;
 	[SerializeField] private GameObject explosion;
 	
 	public Vector3 TargetDir { get; set; }
 
 	private float startTime;
+	private GameObject actualTrail;
 
 	private void Start()
 	{
 		startTime = Time.time;
+		actualTrail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
+		actualTrail.transform.rotation = transform.rotation;
+		trail.SetActive(false);
 		explosion.SetActive(false);
 	}
 
@@ -59,12 +64,19 @@ public class RocketV2 : MonoBehaviour, IDamaging {
 		GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
 		expl.gameObject.SetActive(true);
 		expl.transform.localScale *= areaOfEffect;
+
+		ParticleSystem[] actualTrailParticleSystems = actualTrail.gameObject.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem childPS in actualTrailParticleSystems) {
+			ParticleSystem.EmissionModule childPSEmissionModule = childPS.emission;
+			childPSEmissionModule.rateOverDistance = 0;
+		}
+
 		gameObject.SetActive(false);
 	}
 
 	private void OnTriggerEnter(Collider other) {
 		//checks if the collided gameobject's layer is in the collisionlayers
-		if(collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
+		if (collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
 			Explode();
 	}
 }

@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour, IEntity
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
+		//deathExplosion.transform.localScale = new Vector3(1, 1, 1);
 	}
 
 	protected void Update() {
