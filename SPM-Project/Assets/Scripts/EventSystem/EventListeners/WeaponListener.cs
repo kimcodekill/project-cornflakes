@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class WeaponListener : MonoBehaviour {
 
-	private void Start() => EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
+	private void Start()
+	{
+		EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
+		EventSystem.Current.RegisterListener<WeaponFiredEvent>(OnWeaponFired);
+	}
 
 	private void OnPickUp(Event e) {
 		PickUpEvent pue = (PickUpEvent) e;
@@ -24,4 +28,12 @@ public class WeaponListener : MonoBehaviour {
 		}
 	}
 
+	private void OnWeaponFired(Event e)
+	{
+		WeaponFiredEvent wfe = e as WeaponFiredEvent;
+
+		//Trigger the weapon recoil animation here
+		//If you need something special about the event, wfe contains some stuff
+
+	}
 }

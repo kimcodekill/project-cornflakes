@@ -7,5 +7,4 @@ public abstract class Event {
 	public object Description { get => description; set => description = value.ToString(); }
 
 	private string description;
-
 }
