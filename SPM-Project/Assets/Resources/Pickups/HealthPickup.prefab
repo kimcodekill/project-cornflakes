@@ -106,4 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e189034fbb3cf47b466e326604dad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runTimeSpawnedPickupLifeTime: 10
   healAmount: 25
