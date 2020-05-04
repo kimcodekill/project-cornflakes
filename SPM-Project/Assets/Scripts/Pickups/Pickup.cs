@@ -4,7 +4,11 @@ using UnityEngine;
 
 public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 
+	[SerializeField] [Tooltip("How long the pickup should exist if it was spawned in runtime")] private float runTimeSpawnedPickupLifeTime = 6f;
+
 	private bool fromSpawner;
+
+	private Despawner despawner;
 
 	private ParticleSystem ps;
 
@@ -20,11 +24,16 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 		psr.material = new Material(gameObject.GetComponent<MeshRenderer>().material);
 		psr.material.shader = Shader.Find("Unlit/Color");
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
+
+		if (fromSpawner) despawner = new Despawner(gameObject, runTimeSpawnedPickupLifeTime);
 	}
 
 	private void OnTriggerEnter(Collider other) {
 		if (IsValid(other)) OnPickup(other);
-		else if (other.gameObject.CompareTag("Player") && fromSpawner) Destroy(gameObject);
+	}
+
+	private void Update() {
+		if (fromSpawner) despawner.Run();
 	}
 
 	protected virtual void CheckCompatibility() { }
