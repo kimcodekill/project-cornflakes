@@ -9,7 +9,11 @@ public abstract class WeaponState : State {
 	public Weapon Weapon => weaponOwner == null ? (weaponOwner = (PlayerWeapon)Owner).CurrentWeapon : weaponOwner.CurrentWeapon;
 
 	public override void Run() {
-		if (Weapon.RequestedReload && Weapon.AmmoInMagazine < Weapon.MagazineSize && Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
+		//if (Weapon.RequestedReload && Weapon.AmmoInMagazine < Weapon.MagazineSize && Weapon.HasAmmoInReserve()) StateMachine.TransitionTo<WeaponReloadingState>();
+
+		if(weaponOwner.SwitchWeapon) {
+			StateMachine.TransitionTo<WeaponIdleState>(); 
+		}
 	}
 
 }

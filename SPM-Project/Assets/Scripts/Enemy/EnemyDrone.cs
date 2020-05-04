@@ -12,6 +12,7 @@ public class EnemyDrone : Enemy {
 	private void Awake() {
 		origin = transform.position;
 	}
+
 	private void Start() {
 		base.Start();
 	}
@@ -22,7 +23,7 @@ public class EnemyDrone : Enemy {
 
 	private Vector3 FindRandomPosition(Vector3 startingPos, float moveRange) {
 		Vector3 randomPos = startingPos + new Vector3(Random.Range(-moveRange, moveRange), Random.Range(-moveRange/3, moveRange/3), Random.Range(-moveRange, moveRange));
-		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (randomPos - transform.position).normalized, (randomPos - transform.position).magnitude + 1f, layerMask);
+		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (randomPos - transform.position).normalized, (randomPos - transform.position).magnitude + 1f, ObscuringLayers);
 		for (int i = 0; i < hits.Length; i++) {
 			if (hits[i].collider != null) {
 				//Debug.Log("Hit " + hits[i].collider.gameObject.name);
@@ -48,13 +49,13 @@ public class EnemyDrone : Enemy {
 		/*if ((Vector3.Distance(transform.position, Target.transform.position) > 2.0f)) {
 			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
 		}*/
-		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
+		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
 		yield return null;
 		StartCoroutine("Attack");
 	}
 
 	private IEnumerator Alerted() {
-		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, VectorToTarget, Time.deltaTime * 5f, 0f));
+		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
 		if ((Vector3.Distance(transform.position, Target.transform.position) > attackRange)) {
 			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
 		}
@@ -63,22 +64,18 @@ public class EnemyDrone : Enemy {
 	}
 
 	public override void StartPatrolBehaviour() {
-		//Debug.Log("Drone idling");
 		StartCoroutine("Patrol");
 	}
 
 	public override void StopPatrolBehaviour() {
-		//Debug.Log("Drone stopping idling");
 		StopCoroutine("Patrol");
 	}
 
 	public override void StartAttackBehaviour() {
-		//Debug.Log("Drone attacking");
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
-		//Debug.Log("Drone stopping attacking");
 		StopCoroutine("Attack");
 	}
 

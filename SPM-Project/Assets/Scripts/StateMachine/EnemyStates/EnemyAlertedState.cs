@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyAlertedState : EnemyBaseState
 {
 	public override void Enter() {
-		Debug.Log("alerted");
+		//Debug.Log("alerted");
 		Enemy.StartAlertedBehaviour();
 		///alert other nearby enemies???
 
@@ -14,7 +14,11 @@ public class EnemyAlertedState : EnemyBaseState
 
 	public override void Run() {
 		if (Enemy.TargetIsAttackable()) { StateMachine.TransitionTo<EnemyAttackingState>(); }
-		if(!Enemy.PlayerIsInSight()) { StateMachine.TransitionTo<EnemySearchingState>(); }
+		if (!Enemy.PlayerIsInSight()) {
+			if (Enemy is EnemySoldier) StateMachine.TransitionTo<EnemySearchingState>();
+			else if (Enemy is EnemyTurret) StateMachine.TransitionTo<EnemyIdleState>();
+			else StateMachine.TransitionTo<EnemyPatrollingState>();
+		}
 	}
 
 	public override void Exit() {

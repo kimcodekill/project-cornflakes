@@ -2391,6 +2391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabled: 1
   player: {fileID: 1143736858}
+  pickups: []
   target: {fileID: 2094752166}
 --- !u!4 &1444419386
 Transform:
