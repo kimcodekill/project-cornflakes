@@ -15,7 +15,7 @@ public class FixZWrite : MonoBehaviour {
 	}
 
 	private void EnableZWrite(MeshRenderer mr) {
-		if (mr == null) return;
+		if (mr == null || mr.material.shader.name != "Standard") return;
 		if (mr.material.GetFloat("_Mode") == 3f) {
 			Material m = new Material(mr.material);
 			mr.material = m;
