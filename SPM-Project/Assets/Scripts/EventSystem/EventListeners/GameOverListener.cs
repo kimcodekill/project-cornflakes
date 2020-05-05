@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Author: Joakim Linna
+
 public class GameOverListener : MonoBehaviour
 {
     public static string RootSceneName;

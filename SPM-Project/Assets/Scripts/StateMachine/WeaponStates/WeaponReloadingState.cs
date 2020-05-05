@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Viktor Dahlberg
+//Co Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "WeaponState/ReloadingState")]
 public class WeaponReloadingState : WeaponState {
 
