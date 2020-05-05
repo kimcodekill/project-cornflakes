@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Erik Pilström
-
 public class PlayerCamera : MonoBehaviour {
 
 	[SerializeField] [Tooltip("The camera's possible states")] private State[] states;

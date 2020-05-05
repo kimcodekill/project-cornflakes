@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//Author: Erik Pilström
+//This script is no longer relevant for the project and can be deleted.
 public class NavMeshTest : MonoBehaviour
 {
 	public Camera cam;
@@ -14,7 +16,7 @@ public class NavMeshTest : MonoBehaviour
 		//surface.BuildNavMesh();
 		agent = gameObject.GetComponent<NavMeshAgent>();
 	}
-	// Update is called once per frame
+
 	void Update()
     {
 		

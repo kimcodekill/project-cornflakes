@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 public class EnemyDeathEvent : Event
 {
 	public float ammoDropChance;
