@@ -156,8 +156,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 			Rotation = Quaternion.identity,
 			Scale = 1
 		});
-		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
-		//explosion.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}

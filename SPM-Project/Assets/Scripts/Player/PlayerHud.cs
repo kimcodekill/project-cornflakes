@@ -66,9 +66,8 @@ public class PlayerHud : MonoBehaviour
 			}
 		Text newText = Instantiate(pickupText, this.gameObject.transform.GetChild(0));
 		activepickupTexts.Add(newText);
-		Debug.Log(newText);
 
-		if (amount != 0) pickupText.text = amount + " " + type + " picked up";
-		else pickupText.text = type + " picked up";
+		if (amount != 0) newText.text = amount + " " + type + " picked up";
+		else newText.text = type + " picked up";
 	}
 }
