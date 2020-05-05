@@ -18,12 +18,13 @@ public class PlayerHud : MonoBehaviour
 	private float flashDuration = 0.1f;
 	private PlayerWeapon playerWeapon;
 	private Animator anim;
+	private List<Text> activepickupTexts = new List<Text>();
 
 	private void Start()
     {
 		hudBorder.color = defaultPanelColour;
 		playerWeapon = player.gameObject.GetComponent<PlayerWeapon>();
-		anim = GetComponentInChildren<Animator>();
+		//anim = GetComponentInChildren<Animator>();
 	}
 
     private void Update()
@@ -56,10 +57,18 @@ public class PlayerHud : MonoBehaviour
 	}
 
 	public void ShowPickupText(string type, float amount) {
+		if (activepickupTexts.Count > 0) foreach (Text text in activepickupTexts) {
+				text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, text.rectTransform.anchoredPosition.y + 30);
+			}
+		else foreach (Text text in activepickupTexts) {
+				activepickupTexts.Remove(text);
+				Destroy(text.gameObject);
+			}
+		Text newText = Instantiate(pickupText, this.gameObject.transform.GetChild(0));
+		activepickupTexts.Add(newText);
+		Debug.Log(newText);
+
 		if (amount != 0) pickupText.text = amount + " " + type + " picked up";
 		else pickupText.text = type + " picked up";
-		//anim.SetBool("Pickedup", true);
-		anim.ResetTrigger("PickedUp");
-		anim.SetTrigger("PickedUp");
 	}
 }
