@@ -10,6 +10,10 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 
 	private Despawner despawner;
 
+	private Rigidbody rigidBody;
+
+	private Collider collider;
+
 	private ParticleSystem ps;
 
 	private void Start() {
@@ -24,7 +28,15 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 		psr.material = new Material(gameObject.GetComponent<MeshRenderer>().material);
 		psr.material.shader = Shader.Find("Unlit/Color");
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
-		if (fromSpawner) despawner = new Despawner(gameObject, runTimeSpawnedPickupLifeTime);
+		
+		if (fromSpawner) {
+			rigidBody = GetComponent<Rigidbody>();
+			Collider[] colliders = GetComponents<Collider>();
+			for (int i = 0; i < colliders.Length; i++) {
+				if (!colliders[i].isTrigger) collider = colliders[i];
+			}
+			despawner = new Despawner(gameObject, runTimeSpawnedPickupLifeTime);
+		}
 	}
 
 	private void OnTriggerEnter(Collider other) {
@@ -32,7 +44,13 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 	}
 
 	private void Update() {
-		if (fromSpawner) despawner.Run();
+		if (fromSpawner) {
+			if (rigidBody != null && rigidBody.IsSleeping()) {
+				Destroy(collider);
+				Destroy(rigidBody);
+			}
+			despawner.Run();
+		}
 	}
 
 	protected virtual void CheckCompatibility() { }
