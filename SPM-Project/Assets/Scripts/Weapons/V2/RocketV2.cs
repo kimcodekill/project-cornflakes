@@ -1,46 +1,114 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 using UnityEngine;
 
-public class RocketV2 : MonoBehaviour, IDamaging {
+public class RocketV2 : MonoBehaviour, IDamaging
+{
 
-	#region Properties
+    [SerializeField] private float damage;
+    [SerializeField] private float speed;
+    [SerializeField] private float areaOfEffect;
+    [SerializeField] private float lifeTime;
+    [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private GameObject trail;
+    [SerializeField] private GameObject explosion;
 
-	public float Damage { get; set; }
+    public Vector3 TargetDir { get; set; }
 
-	public float Speed { get; set; }
+    private float startTime;
 
-	public float AreaOfEffect { get; set; }
+    private void Start()
+    {
+        startTime = Time.time;
+		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
+		trail.transform.rotation = transform.rotation;
+    }
 
-	public Vector3 Target { get; set; }
+    private void Update()
+    {
+        if (Time.time - startTime < lifeTime)
+        {
+            if (TargetDir != Vector3.zero)
+            {
+                transform.position += TargetDir * speed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            Explode();
+        }
+    }
 
-	#endregion
+    public float GetDamage()
+    {
+        return damage;
+    }
 
-	private bool hasExploded = false;
+    public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+    {
+        float distance = (hitPos - explosionCenter).magnitude;
 
-	private void Update() {
-		if (!hasExploded) transform.position = Vector3.MoveTowards(transform.position, Target, Speed);
-	}
+        float damageScale = (areaOfEffect - distance) / areaOfEffect;
 
-	public float GetDamage() {
-		return Damage;
-	}
+        float actualDamage = Mathf.Round(damage * damageScale);
 
-	private void Explode() {
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, AreaOfEffect);
-		for (int i = 0; i < hitColliders.Length; i++) {
-			EventSystem.Current.FireEvent(new HitEvent() {
-				Source = gameObject,
-				Target = hitColliders[i].gameObject,
-				HitPoint = transform.position
-			});
+        return actualDamage < 0 ? 0 : actualDamage;
+    }
+
+    private void Explode()
+    {
+        //Because we're using OverlapSphere we cant get the actual hit point
+        //Could be solved using SphereCast, but I cant get that working.
+        Collider[] nearColliders = Physics.OverlapSphere(transform.position, areaOfEffect / areaOfEffect);
+        Collider[] farColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
+
+        //Makes sure the colliders within 1 unit of the explosion get f'd in the b
+        for (int i = 0; i < nearColliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new HitEvent()
+            {
+                Source = gameObject,
+                Target = nearColliders[i].gameObject,
+                HitPoint = nearColliders[i].transform.position,
+            });
+        }
+
+        //Smooches the other ones
+        for (int i = 0; i < farColliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new HitEvent()
+            {
+                Source = gameObject,
+                Target = farColliders[i].gameObject,
+                HitPoint = transform.position,
+            });
+        }
+
+        //Makes the trail stop emitting particles
+		ParticleSystem[] trailParticleSystems = trail.gameObject.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem childPS in trailParticleSystems)
+        {
+			ParticleSystem.EmissionModule childPSEmissionModule = childPS.emission;
+			childPSEmissionModule.rateOverDistance = 0;
 		}
-		hasExploded = true;
-	}
 
-	private void OnTriggerEnter(Collider other) {
-		Explode();
-		gameObject.SetActive(false);
-	}
+        EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+        {
+            ExplosionEffect = explosion,
+            WorldPosition = transform.position,
+            Rotation = Quaternion.identity,
+            Scale = areaOfEffect
+        });
 
+        gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //checks if the collided gameobject's layer is in the collisionlayers
+        if (collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
+            Explode();
+    }
 }

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5878737985512538768}
   m_Layer: 0
   m_Name: RocketLauncherPickup
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,14 +142,11 @@ MonoBehaviour:
   muzzle: {fileID: 0}
   ammoType: 2
   fullAuto: 0
-  damage: 75
+  damage: -1
   fireRate: 50
   magazineSize: 1
-  ammoInMagazine: 1
-  ammoInReserve: 3
+  maxMagazines: 9
   reloadTime: 2
   recoil: 0
   spread: 0
-  rocketSpeed: 1
-  rocketAreaOfEffect: 6
   rocket: {fileID: 8592894640773638139, guid: 6c5e67c6eba194941baf5964b95854d0, type: 3}

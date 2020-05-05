@@ -8,18 +8,25 @@ public class EnemySoldier : Enemy {
 	private Transform[] points;
 	private NavMeshAgent agent;
 	private int destPoint = 0;
-	public float searchRange;
-	public int searchLoops;
-	private Vector3 origin;
-	private Vector3 lastKnownPosition;
+	[SerializeField] public float searchRange;
+	[SerializeField] private int searchLoops;
+	[SerializeField] private float attackAvoidanceRadius;
+	[SerializeField] private float defaultAvoidanceRadius;
+	[SerializeField] private float searchAvoidanceRadius;
+
+
+	public void AgentReposition() {
+		agent.destination = FindNewRandomNavMeshPoint(transform.position, 1f);
+	}
 
 	protected void Awake() {
-		if (IsPatroller) points = GetComponent<PatrollingSoldier>().points;
-		origin = transform.position;
+		if (IsPatroller) points = GetComponent<PatrollingSoldier>().patrolPoints;
 		agent = GetComponent<NavMeshAgent>();
 	}
 
 	private void Start() {
+		agent.avoidancePriority = Random.Range(0, 99);
+		agent.radius = defaultAvoidanceRadius;
 		base.Start();
 	}
 
@@ -31,7 +38,7 @@ public class EnemySoldier : Enemy {
 	}
 
 	private void GoToGuardPoint() {
-		agent.destination = origin;
+		agent.destination = Origin;
 	}
 
 	private IEnumerator Idle() {
@@ -41,12 +48,10 @@ public class EnemySoldier : Enemy {
 			yield return null;
 		}
 		Vector3 rnd = transform.position + new Vector3(Random.Range(-100,100), 0, Random.Range(-100, 100));
-		//Debug.Log(rnd);
 		while (Vector3.Dot(transform.forward, rnd.normalized) < 0.9) {
 			transform.forward = Vector3.RotateTowards(transform.forward, rnd, Time.deltaTime, 0f);
 			yield return null;
 		}
-		//Debug.Log("done");
 		yield return new WaitForSeconds(1f);
 		StartCoroutine("Idle");
 	}
@@ -63,7 +68,7 @@ public class EnemySoldier : Enemy {
 	private IEnumerator Alerted() {
 		agent.destination = Target.transform.position;
 		while (!agent.pathPending && agent.remainingDistance > attackRange*0.8f) {
-			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(VectorToTarget.x, 0, VectorToTarget.z), Time.deltaTime * 5f, 0f);
+			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
 		yield return null;
@@ -71,23 +76,20 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Attack() {
-		if (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.9f) {
-			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.8f) {
-				agent.destination = Target.transform.position;
-				yield return null;
-			}
+
+		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
+			agent.destination = Target.transform.position;
+			yield return null;
 		}
 		agent.ResetPath();
 		while (!agent.hasPath) {
-			if (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.9f) {
-				while (Vector3.Distance(transform.position, Target.transform.position) > attackRange*0.8f) {
-					agent.destination = Target.transform.position;
-					yield return null;
-				}
-				agent.ResetPath();
+			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
+				agent.destination = Target.transform.position;
+				yield return null;
 			}
-			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(VectorToTarget.x, 0, VectorToTarget.z), Time.deltaTime * 5f, 0f);
-			eyeTransform.LookAt(Target.transform);
+			agent.ResetPath();
+			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
+			eyeTransform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransform.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
 			yield return null;
 		}
 		yield return null;
@@ -95,23 +97,64 @@ public class EnemySoldier : Enemy {
 	}
 
 	private IEnumerator Search() {
-		Debug.Log("time to search");
 		FinishedSearching = false;
 		float searches = 0;
-		agent.destination = lastKnownPosition;
-		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
+		bool areaScanned = false;
+		Vector3 lastKnownPosition1, lastKnownPosition2;
+		lastKnownPosition1 = Target.transform.position;
+		yield return null;
+		lastKnownPosition2 = Target.transform.position;
+		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
+		agent.destination = targetLocation;
+		while (agent.pathPending) {
 			yield return null;
 		}
-		while (searches < searchLoops) {
-			agent.destination = FindNewRandomNavMeshPoint(lastKnownPosition, searchRange);
-			while (!agent.pathPending && agent.remainingDistance > 0.5f) {
+		while (agent.remainingDistance > 1.5f) {
+			yield return null;
+		}
+		areaScanned = false;
+		while (!areaScanned) {
+			Vector3 scanLeft = (transform.position + (transform.right*-1)) - transform.position;
+			Vector3 scanRight = (transform.position + transform.right) - transform.position;
+			while (Vector3.Dot(transform.forward, scanLeft) < 0.95) {
+				transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
 				yield return null;
 			}
-			searches++;
-			//Debug.Log(searches);
+			while (Vector3.Dot(transform.forward, scanRight) < 0.95) {
+				transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
+				yield return null;
+			}
 			yield return new WaitForSeconds(1f);
+			areaScanned = true;
 		}
-		yield return null;
+		while (searches < searchLoops) {
+			agent.destination = FindNewRandomNavMeshPoint(targetLocation + (CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized * searchRange/2), searchRange);
+			while (agent.pathPending) {
+				yield return null;
+			}
+			while (agent.remainingDistance > 1.5f) {
+				yield return null;
+			}
+			areaScanned = false;
+			while (!areaScanned) {
+				Vector3 scanLeft = (transform.position + (transform.right * -1)) - transform.position;
+				Vector3 scanRight = (transform.position + transform.right) - transform.position;
+				while (Vector3.Dot(transform.forward, scanLeft) < 0.95f) {
+					transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime*3, 0f);
+					yield return null;
+				}
+				while (Vector3.Dot(transform.forward, scanRight) < 0.95f) {
+					transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime*3, 0f);
+					yield return null;
+				}
+				yield return new WaitForSeconds(1f);
+				areaScanned = true;
+			}
+			yield return new WaitForSeconds(1f);
+			searches++;
+		}
+		//agent.radius = defaultAvoidanceRadius;
+		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
 		FinishedSearching = true;
 	}
 
@@ -125,41 +168,59 @@ public class EnemySoldier : Enemy {
 		return finalPosition;
 	}
 
+	private IEnumerator AvoidanceLerp(float avoidance) {
+		//Debug.Log("radius" + avoidance);
+		//Debug.Log(agent.radius);
+		while(agent.radius != avoidance) {
+			//Debug.Log("true");
+			agent.radius = Mathf.MoveTowards(agent.radius, avoidance, Time.deltaTime);
+			yield return null;
+		}
+	}
+
 	public override void StartPatrolBehaviour() {
+		agent.ResetPath();
 		StartCoroutine("Patrol");
 	}
 
 	public override void StopPatrolBehaviour() {
 		StopCoroutine("Patrol");
-		agent.ResetPath();
 	}
 
 	public override void StartAlertedBehaviour() {
+		agent.ResetPath();
 		StartCoroutine("Alerted");
 	}
 
 	public override void StopAlertedBehaviour() {
 		StopCoroutine("Alerted");
-		agent.ResetPath();
 	}
 
 	public override void StartAttackBehaviour() {
+		agent.ResetPath();
+		StartCoroutine(AvoidanceLerp(attackAvoidanceRadius));
+		//agent.radius = attackAvoidanceRadius;
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
 		StopCoroutine("Attack");
-		agent.ResetPath();
+		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
+
+		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartSearchBehaviour() {
-		lastKnownPosition = Target.transform.position;
+		agent.ResetPath();
+		StartCoroutine(AvoidanceLerp(searchAvoidanceRadius));
+
+		//agent.radius = searchAvoidanceRadius;
 		StartCoroutine("Search");
 	}
 
 	public override void StopSearchBehaviour() {
 		StopCoroutine("Search");
-		agent.ResetPath();
+		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartIdleBehaviour() {
@@ -169,6 +230,6 @@ public class EnemySoldier : Enemy {
 
 	public override void StopIdleBehaviour() {
 		StopCoroutine("Idle");
-		agent.ResetPath();
+		
 	}
 }

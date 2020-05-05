@@ -6,12 +6,17 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 
+	/// <summary>
+	/// Singleton
+	/// </summary>
+	public static PlayerController Instance;
+
 	private StateMachine stateMachine;
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
 	/// </summary>
-	public float PlayerCurrentHealth { get; private set; }
+	public float PlayerCurrentHealth { get; set; } = -1;
 
 	/// <summary>
 	/// Returns the player's max health, but can never be set outside of the player script.
@@ -33,14 +38,16 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// If <c>discard</c> is <c>true</c>, the input set needs to be refreshed.
 	/// </summary>
 	public class CurrentInput {
-
 		public bool doJump;
 		public bool doDash;
-	
+	}
+
+	private void OnEnable() {
+		if (Instance == null) Instance = this;
 	}
 
 	private void Start() {
-		PlayerCurrentHealth = PlayerMaxHealth;
+		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
