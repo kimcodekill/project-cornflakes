@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
 	[SerializeField] protected EnemyWeaponBase weapon;
+	[SerializeField] private GameObject deathExplosion;
+
 	
 	protected Vector3 vectorToPlayer; //Vector to the player from the enemy's eyes. Used by Enemy-children.
 	private StateMachine enemyStateMachine; //Enemy's STM instance.
@@ -170,6 +172,15 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+		{
+			ExplosionEffect = deathExplosion,
+			WorldPosition = transform.position,
+			Rotation = Quaternion.identity,
+			Scale = 1
+		});
+		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
+		//explosion.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}

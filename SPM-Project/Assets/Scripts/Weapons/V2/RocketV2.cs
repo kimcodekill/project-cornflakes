@@ -7,12 +7,12 @@ using UnityEngine;
 public class RocketV2 : MonoBehaviour, IDamaging
 {
 
-
     [SerializeField] private float damage;
     [SerializeField] private float speed;
     [SerializeField] private float areaOfEffect;
     [SerializeField] private float lifeTime;
     [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private GameObject trail;
     [SerializeField] private GameObject explosion;
 
     public Vector3 TargetDir { get; set; }
@@ -22,6 +22,8 @@ public class RocketV2 : MonoBehaviour, IDamaging
     private void Start()
     {
         startTime = Time.time;
+		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
+		trail.transform.rotation = transform.rotation;
     }
 
     private void Update()
@@ -84,13 +86,21 @@ public class RocketV2 : MonoBehaviour, IDamaging
             });
         }
 
+        //Makes the trail stop emitting particles
+		ParticleSystem[] trailParticleSystems = trail.gameObject.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem childPS in trailParticleSystems)
+        {
+			ParticleSystem.EmissionModule childPSEmissionModule = childPS.emission;
+			childPSEmissionModule.rateOverDistance = 0;
+		}
+
         EventSystem.Current.FireEvent(new ExplosionEffectEvent()
         {
             ExplosionEffect = explosion,
             WorldPosition = transform.position,
             Rotation = Quaternion.identity,
             Scale = areaOfEffect
-        }) ;
+        });
 
         gameObject.SetActive(false);
     }
