@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDrone : Enemy, ILootable {
+//Author: Erik Pilström
 
-	[SerializeField] private float patrolBungeeDistance;
-	[SerializeField] private SphereCollider body;
+	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	
+	private SphereCollider body;
 	private Vector3 origin;
 
 	private void Awake() {
@@ -21,18 +21,25 @@ public class EnemyDrone : Enemy, ILootable {
 		base.Update();
 	}
 
+	/// <summary>
+	/// Finds a new position for patrolling.
+	/// </summary>
+	/// <returns></returns>
 	private Vector3 FindRandomPosition(Vector3 startingPos, float moveRange) {
 		Vector3 randomPos = startingPos + new Vector3(Random.Range(-moveRange, moveRange), Random.Range(-moveRange/3, moveRange/3), Random.Range(-moveRange, moveRange));
 		RaycastHit[] hits = Physics.SphereCastAll(transform.position, body.radius, (randomPos - transform.position).normalized, (randomPos - transform.position).magnitude + 1f, ObscuringLayers);
 		for (int i = 0; i < hits.Length; i++) {
 			if (hits[i].collider != null) {
-				//Debug.Log("Hit " + hits[i].collider.gameObject.name);
 				return FindRandomPosition(startingPos + hits[i].normal, moveRange);
 			}
 		}
 		return randomPos;
 	}
 
+	/// <summary>
+	/// Drone's Patrol-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Patrol() {
 		Vector3 newPos = FindRandomPosition(origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
@@ -45,15 +52,20 @@ public class EnemyDrone : Enemy, ILootable {
 		StartCoroutine("Patrol");
 	}
 
+	/// <summary>
+	/// Drone's Attack-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Attack() {
-		/*if ((Vector3.Distance(transform.position, Target.transform.position) > 2.0f)) {
-			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
-		}*/
 		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
 		yield return null;
 		StartCoroutine("Attack");
 	}
 
+	/// <summary>
+	/// Drone's Alerted-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Alerted() {
 		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
 		if ((Vector3.Distance(transform.position, Target.transform.position) > attackRange)) {
@@ -63,6 +75,7 @@ public class EnemyDrone : Enemy, ILootable {
 		StartCoroutine("Alerted");
 	}
 
+	//Behaviour transitions.
 	public override void StartPatrolBehaviour() {
 		StartCoroutine("Patrol");
 	}

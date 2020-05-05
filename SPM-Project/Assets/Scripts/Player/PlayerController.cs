@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
@@ -102,7 +103,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void Die() {
 
-		//Changed so player death now fires deathevent which (currently) reloads the scene instantly
+		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
 		EventSystem.Current.FireEvent(new PlayerDeadEvent()
 		{
 			Description = "Player fricking died, yo."

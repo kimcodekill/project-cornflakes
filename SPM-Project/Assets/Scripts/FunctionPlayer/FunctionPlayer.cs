@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class FunctionPlayer : MonoBehaviour {
 
 	public delegate void FunctionToPlay();

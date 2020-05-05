@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "CameraState/DefaultState")]
 public class CameraDefaultState : CameraState
 {

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
+//Co Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "WeaponState/IdleState")]
 public class WeaponIdleState : WeaponState {
 

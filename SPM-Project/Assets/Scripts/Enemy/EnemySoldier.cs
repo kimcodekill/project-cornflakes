@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemySoldier : Enemy, ILootable {
+//Author: Erik Pilström
+
+	[SerializeField] [Tooltip("How far the Soldier should look while searching.")]public float searchRange;
+	[SerializeField] [Tooltip("How many search loops the Soldier should go through.")] private int searchLoops;
+	[SerializeField] [Tooltip("What radius the Soldier should use for avoidance while attacking.")] private float attackAvoidanceRadius;
+	[SerializeField] [Tooltip("What radius the Soldier should use for avoidance while patrolling/idling.")] private float defaultAvoidanceRadius;
+	[SerializeField] [Tooltip("What radius the Soldier should use for avoidance while searching.")] private float searchAvoidanceRadius;
 
 	private Transform[] points;
 	private NavMeshAgent agent;
 	private int destPoint = 0;
-	[SerializeField] public float searchRange;
-	[SerializeField] private int searchLoops;
-	[SerializeField] private float attackAvoidanceRadius;
-	[SerializeField] private float defaultAvoidanceRadius;
-	[SerializeField] private float searchAvoidanceRadius;
 
-
+	/// <summary>
+	/// Doesn't do anything yet.
+	/// Was thinking that this may be useful if we need the Soldier to find a new position nearby because of some blockage or other reason.
+	/// </summary>
 	public void AgentReposition() {
 		agent.destination = FindNewRandomNavMeshPoint(transform.position, 1f);
 	}
@@ -30,6 +34,9 @@ public class EnemySoldier : Enemy, ILootable {
 		base.Start();
 	}
 
+	/// <summary>
+	/// Simple patrol from point to point.
+	/// </summary>
 	private void GoToNextPoint() {
 		if (points.Length == 0)
 			return;
@@ -41,6 +48,10 @@ public class EnemySoldier : Enemy, ILootable {
 		agent.destination = Origin;
 	}
 
+	/// <summary>
+	/// Soldier Idle-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Idle() {
 		eyeTransform.forward = transform.forward;
 		GoToGuardPoint();
@@ -56,6 +67,10 @@ public class EnemySoldier : Enemy, ILootable {
 		StartCoroutine("Idle");
 	}
 
+	/// <summary>
+	/// Soldier Patrol-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Patrol() {
 		eyeTransform.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
@@ -65,6 +80,10 @@ public class EnemySoldier : Enemy, ILootable {
 		StartCoroutine("Patrol");
 	}
 
+	/// <summary>
+	/// Soldier Alerted-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Alerted() {
 		agent.destination = Target.transform.position;
 		while (!agent.pathPending && agent.remainingDistance > attackRange*0.8f) {
@@ -75,6 +94,10 @@ public class EnemySoldier : Enemy, ILootable {
 		StartCoroutine("Alerted");
 	}
 
+	/// <summary>
+	/// Soldier Attack-behaviour.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Attack() {
 
 		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
@@ -96,6 +119,13 @@ public class EnemySoldier : Enemy, ILootable {
 		StartCoroutine("Attack");
 	}
 
+	/// <summary>
+	/// Soldier Search-behaviour.
+	/// 
+	/// This whole function is a steaming pile of garbage. It works, but man is it bad. Needs major overhaul.
+	/// A lot of code repetition that I tried to get rid of, but couldn't really find a way to make it work within the coroutine, so it will stay for now.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator Search() {
 		FinishedSearching = false;
 		float searches = 0;
@@ -153,11 +183,16 @@ public class EnemySoldier : Enemy, ILootable {
 			yield return new WaitForSeconds(1f);
 			searches++;
 		}
-		//agent.radius = defaultAvoidanceRadius;
 		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
 		FinishedSearching = true;
 	}
 
+	/// <summary>
+	/// Finds a new random point on the NavMesh within range, used for the Soldier's search behaviour.
+	/// </summary>
+	/// <param name="startPos">The origin point for the area.</param>
+	/// <param name="range">How large of a sphere should be used to find the random point.</param>
+	/// <returns></returns>
 	private Vector3 FindNewRandomNavMeshPoint(Vector3 startPos, float range) {
 		Vector3 newPoint = Random.insideUnitSphere * range;
 		newPoint = startPos + newPoint;
@@ -168,16 +203,18 @@ public class EnemySoldier : Enemy, ILootable {
 		return finalPosition;
 	}
 
+	/// <summary>
+	/// Smoothing for the change in avoidance radius between the different states to avoid snapping.
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator AvoidanceLerp(float avoidance) {
-		//Debug.Log("radius" + avoidance);
-		//Debug.Log(agent.radius);
 		while(agent.radius != avoidance) {
-			//Debug.Log("true");
 			agent.radius = Mathf.MoveTowards(agent.radius, avoidance, Time.deltaTime);
 			yield return null;
 		}
 	}
 
+	//All of the below handle transitions between the different behaviours.
 	public override void StartPatrolBehaviour() {
 		agent.ResetPath();
 		StartCoroutine("Patrol");
@@ -199,28 +236,22 @@ public class EnemySoldier : Enemy, ILootable {
 	public override void StartAttackBehaviour() {
 		agent.ResetPath();
 		StartCoroutine(AvoidanceLerp(attackAvoidanceRadius));
-		//agent.radius = attackAvoidanceRadius;
 		StartCoroutine("Attack");
 	}
 
 	public override void StopAttackBehaviour() {
 		StopCoroutine("Attack");
 		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
-
-		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartSearchBehaviour() {
 		agent.ResetPath();
 		StartCoroutine(AvoidanceLerp(searchAvoidanceRadius));
-
-		//agent.radius = searchAvoidanceRadius;
 		StartCoroutine("Search");
 	}
 
 	public override void StopSearchBehaviour() {
 		StopCoroutine("Search");
-		//agent.radius = defaultAvoidanceRadius;
 	}
 
 	public override void StartIdleBehaviour() {
@@ -230,7 +261,6 @@ public class EnemySoldier : Enemy, ILootable {
 
 	public override void StopIdleBehaviour() {
 		StopCoroutine("Idle");
-		
 	}
 
 	public LootTable GetLootTable() {

@@ -11,7 +11,6 @@ public class EnemyTurret : Enemy, ILootable {
 			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.25f : 0f,
 			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.25f : 0f,
 		};
-
 	}
 
 }
