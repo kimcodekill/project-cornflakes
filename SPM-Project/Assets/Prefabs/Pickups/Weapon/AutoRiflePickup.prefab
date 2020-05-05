@@ -136,7 +136,7 @@ MonoBehaviour:
   maxMagazines: 1
   reloadTime: 3
   recoil: 0
-  spread: 0.01
+  spreadAngle: 1.8
   cooldownWait: 0.75
 --- !u!114 &7626634061086666947
 MonoBehaviour:

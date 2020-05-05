@@ -89,7 +89,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of variance in the bullet path.
 	/// </summary>
-	public float Spread { get => spread; set => spread = value; }
+	public float SpreadAngle { get => spreadAngle; set => spreadAngle = value; }
 
 	/// <summary>
 	/// What the weapon should be able to hit.
@@ -117,7 +117,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private int maxMagazines;
 	[SerializeField] private float reloadTime;
 	[SerializeField] private float recoil;
-	[SerializeField] private float spread;
+	[SerializeField] private float spreadAngle;
 
 	#endregion
 
@@ -228,11 +228,29 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="direction">The direction to adjust.</param>
 	/// <returns>The input vector with added variance.</returns>
 	protected virtual Vector3 AddSpread(Vector3 direction) {
-		return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
+		return RandomInCone(spreadAngle, direction);
+		//return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
+	}
+
+	public Vector3 RandomInCone(float spreadAngle, Vector3 axis)
+	{
+		float radians = Mathf.PI / 180 * spreadAngle / 2;
+		float dotProduct = Random.Range(Mathf.Cos(radians), 1);
+		float polarAngle = Mathf.Acos(dotProduct);
+		float azimuth = Random.Range(-Mathf.PI, Mathf.PI);
+		Vector3 yProjection = Vector3.ProjectOnPlane(Vector3.up, axis);
+		if (Vector3.Dot(axis, Vector3.up) > 0.9f)
+		{
+			yProjection = Vector3.ProjectOnPlane(Vector3.forward, axis);
+		}
+		Vector3 y = yProjection.normalized;
+		Vector3 x = Vector3.Cross(y, axis);
+		Vector3 pointOnSphericalCap = Mathf.Sin(polarAngle) * (Mathf.Cos(azimuth) * x + Mathf.Sin(azimuth) * y) + Mathf.Cos(polarAngle) * axis;
+		return pointOnSphericalCap;
 	}
 
 	#endregion
-	
+
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>
