@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
 public class EnemyDeathEvent : Event {
+=======
+//Author: Erik Pilström
+public class EnemyDeathEvent : Event
+{
+	public float ammoDropChance;
+>>>>>>> master
 
 	public GameObject Source;
 

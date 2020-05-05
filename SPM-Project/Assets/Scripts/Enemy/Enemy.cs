@@ -172,6 +172,10 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
+		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+			Source = gameObject,
+			DropAnythingAtAllChance = 0.5f,
+		});
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
 		{
 			ExplosionEffect = deathExplosion,

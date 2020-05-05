@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Author: Erik Pilström
-public class EnemyTurret : Enemy
-{
-	//Nothing to see here, just implements the Enemy class, doesn't need any other functionality outside of the Soldier base class.
-	//Since this is our most basic and simple enemy, just a box that shoots basically.
+public class EnemyTurret : Enemy, ILootable {
+
+	public LootTable GetLootTable() {
+		return new LootTable {
+			["Pickups/HealthPickup"] = 0.25f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.25f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.25f : 0f,
+			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.25f : 0f,
+		};
+	}
 
 }

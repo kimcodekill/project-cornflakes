@@ -2,24 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Author: Viktor Dahlberg
-public abstract class Pickup : MonoBehaviour, ICapturable {
+public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
+
+	[SerializeField] [Tooltip("How long the pickup should exist if it was spawned in runtime")] private float runTimeSpawnedPickupLifeTime = 10f;
+
+	private bool fromSpawner;
+
+	private Despawner despawner;
+
+	private Rigidbody rigidBody;
+
+	private Collider collider;
+
+	private ParticleSystem ps;
 
 	private void Start() {
 		ParticleSystemRenderer psr = gameObject.AddComponent<ParticleSystemRenderer>();
-		ParticleSystem ps = gameObject.AddComponent<ParticleSystem>();
-		ps.startLifetime = 1f;
+		ps = gameObject.AddComponent<ParticleSystem>();
+		ps.startLifetime = 0.25f;
 		ps.startSize = 0.25f;
+		ps.gravityModifier = -3f;
+		ps.emissionRate = 20f;
 		var ns = ps.shape;
-		ns.shapeType = ParticleSystemShapeType.Cone;
-		ns.rotation = new Vector3(-90f, 0f, 0f);
+		ns.shapeType = ParticleSystemShapeType.Sphere;
 		psr.material = new Material(gameObject.GetComponent<MeshRenderer>().material);
 		psr.material.shader = Shader.Find("Unlit/Color");
 		psr.material.SetColor("_Color", psr.material.GetColor("_Color") / 2f);
+		
+		if (fromSpawner) {
+			rigidBody = GetComponent<Rigidbody>();
+			Collider[] colliders = GetComponents<Collider>();
+			for (int i = 0; i < colliders.Length; i++) {
+				if (!colliders[i].isTrigger) collider = colliders[i];
+			}
+			despawner = new Despawner(gameObject, runTimeSpawnedPickupLifeTime);
+		}
 	}
 
 	private void OnTriggerEnter(Collider other) {
 		if (IsValid(other)) OnPickup(other);
+	}
+
+	private void Update() {
+		if (fromSpawner) {
+			if (rigidBody != null && rigidBody.IsSleeping()) {
+				Destroy(collider);
+				Destroy(rigidBody);
+			}
+			despawner.Run();
+		}
 	}
 
 	/// <summary>
@@ -41,5 +72,9 @@ public abstract class Pickup : MonoBehaviour, ICapturable {
 
 	public object GetPersistentCaptureID() {
 		return transform.position;
+	}
+
+	public void Spawned() {
+		fromSpawner = true;
 	}
 }
