@@ -53,8 +53,6 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 		}
 	}
 
-	protected virtual void CheckCompatibility() { }
-
 	/// <summary>
 	/// Dictates what should happen when the pickup passes the valid check.
 	/// </summary>
