@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Erik Pilström
+public class EnemyDrone : Enemy, ILootable {
 
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	
