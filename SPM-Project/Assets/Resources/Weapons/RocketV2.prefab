@@ -259,7 +259,9 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 1792
-  explosion: {fileID: 481917732881179713, guid: 7f2791d81aec16b4fad93e956b7d8ac5,
+  trail: {fileID: 5219472522693736386, guid: cea31cf8032113845817ea59016b9351, type: 3}
+  explosion: {fileID: 1828176872806910, guid: 099d478b979a93e489806f5ca53b12ea, type: 3}
+  explosion2: {fileID: 481917732881179713, guid: 7f2791d81aec16b4fad93e956b7d8ac5,
     type: 3}
 --- !u!54 &8592894640773638133
 Rigidbody:
