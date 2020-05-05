@@ -81,7 +81,7 @@ MonoBehaviour:
   eyeTransform: {fileID: 1327413924363410733}
   attackRange: 30
   attackDamage: 1
-  attackSpread: 0.15
+  attackSpread: 10
   attackSpeedRPM: 360
   states:
   - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
@@ -133,10 +133,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
+  lineDuration: 0.25
   bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
     type: 3}
   useBulletProjectile: 1
-  targetLeadFactor: 0.8
+  targetLeadFactor: 1
 --- !u!120 &9068805099154559088
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -144,7 +145,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327413923285096283}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 0

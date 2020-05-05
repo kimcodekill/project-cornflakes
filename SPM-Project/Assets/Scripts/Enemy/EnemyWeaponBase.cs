@@ -14,12 +14,12 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private float attackRange;
 	[SerializeField] [Tooltip("Needs to check for collision with the player, thus needs the layer for the player.")] private LayerMask playerLayer;
 	private LineRenderer shotLine;
-	private WaitForSeconds lineDuration = new WaitForSeconds(0.25f);
+	[SerializeField] [Tooltip ("For how long should the LineRenderer be drawn? Only applies to Raycast attacks.")] private float lineDuration;
 	[SerializeField] [Tooltip("Which Bullet gameobject to instantiate.")] private Bullet bulletPrefab;
 	[SerializeField] [Tooltip ("Determines whether or not this weapon shot fire bullet projectiles or raycasts.")] private bool useBulletProjectile;
 	[SerializeField] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
 	//^ Needs to be moved from this class to the Enemy to keep things centralised. Pass through SetParams() instead.
-	private Vector3 oldTargetPos;
+	private Vector3 previousTargetDir;
 
 	/// <summary>
 	/// Accessed from the enemy that the weapon is equipped on, to set values for the weapon based on the enemy's stats.
@@ -75,16 +75,17 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// Can be done with either bullet projectile or raycast attack, as determined by the bool.
 	/// </summary>
 	public void DoAttack() {
+		//Debug.Log(owner.gameObject + " attacked");
 		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
 		if (useBulletProjectile) {
-			Vector3 collatedAttackVector = attackVector + LeadTarget();
-			Vector3 spreadedAttack = AddSpread(collatedAttackVector.normalized) * attackRange;
-			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.LookRotation(owner.gunTransform.right));
+			Vector3 collatedAttackVector = LeadTarget(attackVector);
+			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
+			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.identity);
 			//^ Going to change this to pull the bullets from our objectpooler instead, far more performant, but will leave for the time being. 
 			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
 		}
 		if (!useBulletProjectile) {
-			Vector3 spreadedAttack = AddSpread(attackVector.normalized)* attackRange;
+			Vector3 spreadedAttack = RandomInCone(weaponSpread, attackVector.normalized) * attackRange;
 			shotLine.SetPosition(0, owner.gunTransform.position);
 			shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
 			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
@@ -97,28 +98,37 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 					});
 				}
 			}
-		StartCoroutine(ShotEffect());
+		StartCoroutine(RaycastShotEffect());
 		}
 	}
 
-	private Vector3 AddSpread(Vector3 direction) {
-		return new Vector3(
-			Random.Range(-weaponSpread, weaponSpread) + direction.x,
-			Random.Range(-weaponSpread, weaponSpread) + direction.y,
-			direction.z
-			).normalized;
+	private Vector3 LeadTarget(Vector3 attackVector) {
+		Vector3 targetVelocity = owner.CalculateTargetVelocity(previousTargetDir, attackVector);
+		Vector3 leadVelocity = targetVelocity * targetLeadFactor;
+		previousTargetDir = attackVector;
+		if (attackVector.sqrMagnitude < 100)
+			return attackVector;
+		else return attackVector + leadVelocity;
 	}
 
-	private Vector3 LeadTarget() {
-		Vector3 currentPos = owner.Target.transform.position;
-		Vector3 leadingVector = currentPos - oldTargetPos;
-		oldTargetPos = currentPos;
-		return leadingVector * targetLeadFactor;
+	public Vector3 RandomInCone(float spreadAngle, Vector3 axis) {
+		float radians = Mathf.PI / 180 * spreadAngle/2;
+		float dotProduct = Random.Range(Mathf.Cos(radians), 1);
+		float polarAngle = Mathf.Acos(dotProduct);
+		float azimuth = Random.Range(-Mathf.PI, Mathf.PI);
+		Vector3 yProjection = Vector3.ProjectOnPlane(Vector3.up, axis);
+		if(Vector3.Dot(axis, Vector3.up) > 0.9f) {
+			yProjection = Vector3.ProjectOnPlane(Vector3.forward, axis);
+		}
+		Vector3 y = yProjection.normalized;
+		Vector3 x = Vector3.Cross(y, axis);
+		Vector3 pointOnSphericalCap = Mathf.Sin(polarAngle) * (Mathf.Cos(azimuth) * x + Mathf.Sin(azimuth) * y) + Mathf.Cos(polarAngle) * axis;
+		return pointOnSphericalCap;
 	}
 
-	private IEnumerator ShotEffect() {
+	private IEnumerator RaycastShotEffect() {
 		shotLine.enabled = true;
-		yield return lineDuration;
+		yield return new WaitForSeconds(lineDuration);
 		shotLine.enabled = false;
 	}
 
