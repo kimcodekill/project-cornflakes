@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 6703462120666448564}
   - component: {fileID: 4210382078722177768}
   m_Layer: 8
-  m_Name: DroneEnemy
+  m_Name: DEPRECATEDDroneEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -389,7 +389,7 @@ MonoBehaviour:
   eyeTransform: {fileID: 3245006856651615628}
   attackRange: 20
   attackDamage: 0.2
-  attackSpreadRadius: 0.25
+  attackSpread: 0
   attackSpeedRPM: 600
   states:
   - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
@@ -399,6 +399,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   weapon: {fileID: 6703462120666448564}
+  attackLimitDegrees: 0
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
   patrolBungeeDistance: 5
   body: {fileID: 8626059835950779692}
 --- !u!135 &8626059835950779692
@@ -430,9 +433,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
+  lineDuration: 0
   bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
     type: 3}
   useBulletProjectile: 0
+  targetLeadFactor: 0
 --- !u!120 &4210382078722177768
 LineRenderer:
   m_ObjectHideFlags: 0
