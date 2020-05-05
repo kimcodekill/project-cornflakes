@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
-public class Enemy : MonoBehaviour, IEntity 
+public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
-	
 	[Header("Enemy attributes")]
+	[SerializeField] protected float movementSpeed;
 	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
 	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
-	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
 	[SerializeField] protected float visionRange;
 	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] public Transform gunTransform;
 	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
-	
+	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
+	[SerializeField] protected float attackDamage;
+	[SerializeField] protected float attackSpread;
+	[SerializeField] protected float attackSpeedRPM;
+
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
-	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask layerMask;
-	[SerializeField] protected float movementSpeed;
+	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
+	[SerializeField] protected EnemyWeaponBase weapon;
+	[SerializeField] private float attackLimitDegrees;
+	[SerializeField] private GameObject deathExplosion;
+
+	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
 	private StateMachine enemyStateMachine;
-
-	public float weaponSpread;
+	protected Vector3 vectorToPlayer;
 
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
@@ -33,12 +39,20 @@ public class Enemy : MonoBehaviour, IEntity
 	/// Returns this enemy's target.
 	/// </summary>
 	public PlayerController Target { get; private set; }
-	
-	public Vector3 VectorToTarget { get; private set; }
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
+  /// <summary>
+  /// Returns the origin of this enemy.
+  /// </summary>
+	public Vector3 Origin { get; private set; }
+
+	private void Awake() {
+		Origin = transform.position;
+	}
+
 	protected void Start() {
+		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
 		audioSource = CreateAudioSource();
@@ -58,18 +72,16 @@ public class Enemy : MonoBehaviour, IEntity
 	}
 
 	protected void Update() {
-		VectorToTarget = GetVectorToTarget();
+		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
 		enemyStateMachine.Run();
 		if (audioSourceIdle.isPlaying == false) {
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
 			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
 		}
-		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
-		//Debug.Log(finishedSearching);
 	}
 
-	private Vector3 GetVectorToTarget() {
-		Vector3 v = Target.transform.position - transform.position;
+	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
+		Vector3 v = target.position - origin.position;
 		return v;
 	}
 
@@ -79,14 +91,13 @@ public class Enemy : MonoBehaviour, IEntity
 	/// <param name="v"></param>
 	/// <returns></returns>
 	public bool PlayerIsInSight() {
-		if (TargetIsInRange() && TargetIsInFOV(VectorToTarget) && CanSeeTarget(VectorToTarget)) { return true; }
+		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) { return true; }
 		else { return false; }
 	}
 
 	private bool TargetIsInFOV(Vector3 v) {
 		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
 		if (angleToTarget >= fieldOfView) {
-			//Debug.Log(Target.gameObject.name + " is in FOV of " + gameObject.name);
 			return true; 
 		}
 		else { return false; }
@@ -94,16 +105,15 @@ public class Enemy : MonoBehaviour, IEntity
 
 	private bool TargetIsInRange() {
 		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
-			//Debug.Log(Target.gameObject.name + " in range of " + gameObject.name);
 			return true;
 		}
 		else { return false; }
 	}
 
 	private bool CanSeeTarget(Vector3 v) {
-		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, layerMask);
+		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
-			Debug.DrawRay(eyeTransform.position, v, Color.red);
+			//Debug.DrawRay(eyeTransform.position, v, Color.red);
 			return true;
 		}
 		else { return false; }
@@ -114,12 +124,28 @@ public class Enemy : MonoBehaviour, IEntity
 	/// </summary>
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
-		if (PlayerIsInSight() && VectorToTarget.magnitude <= attackRange) {
-			if (!Physics.SphereCast(gunTransform.position, 0.1f, VectorToTarget, out _, VectorToTarget.magnitude, layerMask)) { return true; }
+		if (PlayerIsInSight() && vectorToPlayer.magnitude <= attackRange) {
+			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) { return true; }
 			else { return false; }
 		}
 		else return false;
 		
+	}
+
+	public bool WeaponIsAimed() {
+		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
+		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
+		float radAngle = Mathf.Acos((Vector3.Dot(sightToPlayer, gunAim)) / (sightToPlayer.magnitude * gunAim.magnitude));
+		float degrees = radAngle * (180 / Mathf.PI);		
+		if (degrees < attackLimitDegrees) {
+			return true;
+		}
+		else return false;
+	}
+
+	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
+		Vector3 v = v2 - v1;
+		return v;
 	}
 
 	/// <summary>
@@ -129,7 +155,7 @@ public class Enemy : MonoBehaviour, IEntity
 	/// <returns></returns>
 	public float TakeDamage(float amount) {
 		currentHealth -= amount;
-		if (currentHealth <= 0) { KillEnemy(); }
+		if (currentHealth <= 0) { Die(); }
 		return currentHealth;
 	}
 
@@ -144,25 +170,25 @@ public class Enemy : MonoBehaviour, IEntity
 		return currentHealth;
 	}
 
-	private void KillEnemy() {
-		//Destroy(gameObject);
+	private void Die() {
+		StopAllCoroutines();
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+		{
+			ExplosionEffect = deathExplosion,
+			WorldPosition = transform.position,
+			Rotation = Quaternion.identity,
+			Scale = 1
+		});
+		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
+		//explosion.gameObject.SetActive(true);
 		gameObject.SetActive(false);
+		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
-	public Vector3 AttackSpreadCone(float radius) {
-		//(sqrt(1 - z^2) * cosϕ, sqrt(1 - z^2) * sinϕ, z)
-		float radradius = radius * Mathf.PI / 360;
-		float z = Random.Range(Mathf.Cos(radradius), 1);
-		float t = Random.Range(0, Mathf.PI * 2);
-		return new Vector3(Mathf.Sqrt(1 - z * z) * Mathf.Cos(t), Mathf.Sqrt(1 - z * z) * Mathf.Sin(t), z);
-	}
-
-	public void DoAttack(float firingRate, float damage) { }
 	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSource.pitch = Random.Range(minPitch, maxPitch);
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
-
 public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
@@ -174,5 +200,11 @@ public virtual void StartIdleBehaviour() { }
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
-	
+	public bool InstanceIsCapturable() {
+		return true;
+	}
+
+	public object GetPersistentCaptureID() {
+		return Origin;
+	}
 }

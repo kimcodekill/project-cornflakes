@@ -6,14 +6,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "EnemyState/EnemyAttackingState")]
 public class EnemyAttackingState : EnemyBaseState
 {
-	[SerializeField] [Tooltip("Bullet object to instantiate when enemy attacks.")] private Bullet bulletPrefab;
-	[SerializeField] [Tooltip("How often/fast the enemy attacks.")] private float attackCooldown;
-	[SerializeField] [Tooltip("How much damage the enemy deals per shot.")] private float attackDamage;
-
-	private float internalAttackCD;
+	
+	private float internalAttackCD = 0;
 
 	public override void Enter() {
-		Debug.Log("attacking");
+		//Debug.Log("attacking");
 		Enemy.StartAttackBehaviour();
 	}
 
@@ -22,20 +19,10 @@ public class EnemyAttackingState : EnemyBaseState
 			StateMachine.TransitionTo<EnemyAlertedState>();
 		}
 
-		internalAttackCD += Time.deltaTime;
-		if(internalAttackCD > attackCooldown) {
-			AttackTarget(Enemy.VectorToTarget + Enemy.AttackSpreadCone(Enemy.weaponSpread));
-			internalAttackCD = 0;
+		if(Time.time > internalAttackCD && Enemy.WeaponIsAimed()) {
+			internalAttackCD = Time.time + Enemy.EnemyEquippedWeapon.GetFireRate();
+			Enemy.EnemyEquippedWeapon.DoAttack();
 		}
-
-	}
-
-	private void AttackTarget(Vector3 v) {
-		Bullet instance;
-		instance = Instantiate(bulletPrefab, Enemy.gunTransform.position, Enemy.transform.rotation);
-		instance.Initialize(v, v.magnitude);
-		Enemy.Target.TakeDamage(attackDamage);
-		Enemy.PlayAudio(4, 1, 0.8f, 1.3f);
 	}
 
 	public override void Exit() {

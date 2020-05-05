@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
 	/// </summary>
-	public float PlayerCurrentHealth { get; private set; }
+	public float PlayerCurrentHealth { get; set; } = -1;
 
 	/// <summary>
 	/// Returns the player's max health, but can never be set outside of the player script.
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void Start() {
-		PlayerCurrentHealth = PlayerMaxHealth;
+		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);

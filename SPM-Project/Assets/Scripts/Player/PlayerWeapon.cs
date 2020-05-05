@@ -17,6 +17,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// Whether or not the weapon is active.
 	/// </summary>
 	public bool WeaponIsActive { get; private set; } = false;
+	
+	public bool SwitchWeapon { get { return CheckInputs(); } }
 
 	[SerializeField] private State[] states;
 	[SerializeField] private AudioClip[] audioClips;
@@ -35,36 +37,42 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
-	private void Update() {
-		//Moved CheckInputs here because why wouldn't we do that first
-		CheckInputs();
+	private void Start() {
+		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
+	}
 
-		if (WeaponIsActive) {
-			if (weaponStateMachine != null) {
-				weaponStateMachine.Run();
-				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
-			}
+	private void Update() {
+		if (weaponStateMachine != null) {
+			weaponStateMachine.Run();
+			DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
 		}
 	}
 
-	private void CheckInputs() {
+	/// <summary>
+	/// Returns the list weapons the player is in possession of.
+	/// </summary>
+	/// <returns>The carried weapons.</returns>
+	public List<Weapon> GetWeapons() { return weapons; }
+
+	private bool CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
 			if (Input.GetKeyDown((i + 1).ToString()))
 			{
 				SwitchTo(i);
-				//Let player equip weapon by clicking the corresponding button
-				WeaponIsActive = true;
-				return;
+
+				return true;
 			}
 
-		//Doing this here bc there isnt a better way to do it at this time
-		if (CurrentWeapon == null) { WeaponIsActive = false; }
-		//else if (Input.GetKeyDown(KeyCode.E)) { WeaponIsActive = !WeaponIsActive; }
+		return false;
 	}
 
-	private void SwitchTo(int index) {
-		if (CurrentWeapon != weapons[index]) PlayAudio((index * 3) + 2);
+	/// <summary>
+	/// Switches to the weapon at the specified index.
+	/// </summary>
+	/// <param name="index">The specified index.</param>
+	public void SwitchTo(int index) {
 		CurrentWeapon = weapons[index];
+		if (CurrentWeapon != weapons[index]) PlayAudio((index * 3) + 2);
 	}
 
 	/// <summary>

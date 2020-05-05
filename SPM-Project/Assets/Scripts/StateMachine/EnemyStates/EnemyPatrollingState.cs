@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyPatrollingState : EnemyBaseState
 {
 	public override void Enter() {
-		Debug.Log("patrolling");
+		//Debug.Log("patrolling");
 		Enemy.StartPatrolBehaviour();
 		//Enemy.audioSource.clip = Enemy.audioClips[0];
 		Enemy.audioSource.Play();

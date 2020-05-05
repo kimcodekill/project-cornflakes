@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7794975306305105568}
   m_Layer: 0
   m_Name: SniperRiflePickup
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
   maxMagazines: 4
   reloadTime: 3
   recoil: 0
+  spreadAngle: 36
   spread: 0.1
   zoomFactor: 10
 --- !u!114 &7794975306305105568

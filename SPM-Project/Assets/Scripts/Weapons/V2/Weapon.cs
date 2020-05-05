@@ -19,7 +19,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the trigger is being pulled.
 	/// </summary>
-	public bool TriggerDown { get { return Input.GetKey(KeyCode.Mouse0) || OverrideTriggerDown; } }
+	public bool TriggerPulled { get { return Input.GetKeyDown(KeyCode.Mouse0); } }
+
+	/// <summary>
+	/// Whether or not the trigger is being held.
+	/// </summary>
+	public bool TriggerHeld { get { return Input.GetKey(KeyCode.Mouse0); } }
 
 	/// <summary>
 	/// Whether or not input is required to fire.
@@ -29,12 +34,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the reload key is being pressed.
 	/// </summary>
-	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R) || OverrideRequestedReload; } }
+	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R); } }
 
-	/// <summary>
-	/// Whether or not input is required to reload.
-	/// </summary>
-	public bool OverrideRequestedReload { get; set; } = false;
+	///// <summary>
+	///// Whether or not input is required to reload.
+	///// </summary>
+	//public bool OverrideRequestedReload { get; set; } = false;
 
 	/// <summary>
 	/// The type of ammunition the weapon uses.
@@ -84,7 +89,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of variance in the bullet path.
 	/// </summary>
-	public float Spread { get => spread; set => spread = value; }
+	public float SpreadAngle { get => spreadAngle; set => spreadAngle = value; }
 
 	/// <summary>
 	/// What the weapon should be able to hit.
@@ -112,7 +117,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private int maxMagazines;
 	[SerializeField] private float reloadTime;
 	[SerializeField] private float recoil;
-	[SerializeField] private float spread;
+	[SerializeField] private float spreadAngle;
 
 	#endregion
 
@@ -130,6 +135,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
+	}
+
+	public void Restart() {
+		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
 	#region Attribute Status Functions
@@ -186,7 +195,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	protected Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit.collider == null ? playerCamera.transform.forward + Vector3.forward : cameraHit.point;
+		return cameraHit.collider == null ? Muzzle.position + playerCamera.transform.forward: cameraHit.point;
 	}
 
 	/// <summary>
@@ -196,8 +205,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="target">The second point.</param>
 	/// <returns>The direction from <c>origin</c> to <c>target</c>.</returns>
 	protected Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
-		Vector3 direction = target - origin;
-		return direction /= direction.magnitude;
+		return (target - origin).normalized;
 	}
 
 	/// <summary>
@@ -223,11 +231,29 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="direction">The direction to adjust.</param>
 	/// <returns>The input vector with added variance.</returns>
 	protected virtual Vector3 AddSpread(Vector3 direction) {
-		return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
+		return RandomInCone(spreadAngle, direction);
+		//return new Vector3(Random.Range(-spread, spread) + direction.x, Random.Range(-spread, spread) + direction.y, Random.Range(-spread, spread) + direction.z).normalized;
+	}
+
+	public Vector3 RandomInCone(float spreadAngle, Vector3 axis)
+	{
+		float radians = Mathf.PI / 180 * spreadAngle / 2;
+		float dotProduct = Random.Range(Mathf.Cos(radians), 1);
+		float polarAngle = Mathf.Acos(dotProduct);
+		float azimuth = Random.Range(-Mathf.PI, Mathf.PI);
+		Vector3 yProjection = Vector3.ProjectOnPlane(Vector3.up, axis);
+		if (Vector3.Dot(axis, Vector3.up) > 0.9f)
+		{
+			yProjection = Vector3.ProjectOnPlane(Vector3.forward, axis);
+		}
+		Vector3 y = yProjection.normalized;
+		Vector3 x = Vector3.Cross(y, axis);
+		Vector3 pointOnSphericalCap = Mathf.Sin(polarAngle) * (Mathf.Cos(azimuth) * x + Mathf.Sin(azimuth) * y) + Mathf.Cos(polarAngle) * axis;
+		return pointOnSphericalCap;
 	}
 
 	#endregion
-	
+
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>

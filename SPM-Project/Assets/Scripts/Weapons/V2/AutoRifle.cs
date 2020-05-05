@@ -37,5 +37,4 @@ public class AutoRifle : Weapon {
 		AmmoInMagazine--;
 		if (AmmoInReserve < MagazineSize) AmmoInReserve = MagazineSize;
 	}
-
 }

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8254532318942674071}
   m_Layer: 0
   m_Name: ShotgunPickup
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   maxMagazines: 5
   reloadTime: 1
   recoil: 0
-  spread: 0.05
+  spreadAngle: 9
   pelletCount: 7
 --- !u!114 &8254532318942674071
 MonoBehaviour:
