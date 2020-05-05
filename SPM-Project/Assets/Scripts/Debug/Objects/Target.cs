@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class Target : MonoBehaviour, IEntity
 {
     [SerializeField] private TextMeshPro textAllDamage;

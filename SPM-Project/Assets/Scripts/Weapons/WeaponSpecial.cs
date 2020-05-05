@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class WeaponSpecial : WeaponBase
 {
     [SerializeField] [Tooltip("Pellet Amount per Shell")] private float pelletCount;

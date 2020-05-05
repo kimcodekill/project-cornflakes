@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class LevelExit : MonoBehaviour
 {
     [SerializeField] private bool visualizeVolume;

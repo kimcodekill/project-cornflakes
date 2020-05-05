@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class FPSLimiter : MonoBehaviour {
 
 	[SerializeField] [Tooltip("The FPS limit")] private int FPS;

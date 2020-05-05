@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 [CreateAssetMenu(menuName = "PlayerState/StandingState")]
 public class PlayerStandingState : PlayerGroundedState {
 

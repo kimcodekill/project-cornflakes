@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//Author: Erik Pilström
+//This script is no longer relevant for the project and can be deleted.
 public class NavMeshPatroller : MonoBehaviour
 {
 

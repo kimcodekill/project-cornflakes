@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FpStd = FunctionPlayerStandardLibrary;
 
+//Author: Viktor Dahlberg
 public class FunctionPlayerDemo : MonoBehaviour {
 
 	[SerializeField] private GameObject someGameObject;
