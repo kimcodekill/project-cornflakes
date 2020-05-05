@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
+
 public class HealthPack : Pickup {
 
 	#region Properties
