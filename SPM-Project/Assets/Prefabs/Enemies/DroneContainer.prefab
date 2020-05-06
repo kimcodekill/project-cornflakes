@@ -431,6 +431,8 @@ MonoBehaviour:
     m_Bits: 1536
   weapon: {fileID: 1047933442608628968}
   attackLimitDegrees: 10
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
   patrolBungeeDistance: 5
   body: {fileID: 2610276984800971632}
 --- !u!135 &2610276984800971632

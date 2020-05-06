@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public abstract class PlayerGroundedState : PlayerState {
 
 	/// <summary>

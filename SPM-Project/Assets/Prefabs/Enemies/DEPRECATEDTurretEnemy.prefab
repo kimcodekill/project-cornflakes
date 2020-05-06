@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 8312869452476444411}
   - component: {fileID: 6337579617854833025}
   m_Layer: 8
-  m_Name: TurretEnemy
+  m_Name: DEPRECATEDTurretEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,6 +227,8 @@ MonoBehaviour:
     m_Bits: 1536
   weapon: {fileID: 8312869452476444411}
   attackLimitDegrees: 0
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
 --- !u!65 &67879333961944059
 BoxCollider:
   m_ObjectHideFlags: 0

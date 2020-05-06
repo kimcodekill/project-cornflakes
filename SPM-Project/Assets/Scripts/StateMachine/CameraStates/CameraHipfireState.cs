@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "CameraState/HipfireState")]
 public class CameraHipfireState : CameraState {
 

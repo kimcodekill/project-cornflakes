@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 [CreateAssetMenu(menuName = "EnemyState/EnemySearchingState")]
 public class EnemySearchingState : EnemyBaseState
 {
 	public override void Enter() {
-		//Debug.Log("searching");
 		Enemy.StartSearchBehaviour();
 	}
 
@@ -19,8 +19,7 @@ public class EnemySearchingState : EnemyBaseState
 	}
 
 	public override void Exit() {
-		//Debug.Log("exiting search, " + "searching finished: " + Enemy.FinishedSearching);
-		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); }
+		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); } //Only calls StopSearch for the enemy if they didn't finish searching.
 	}
 
 }
