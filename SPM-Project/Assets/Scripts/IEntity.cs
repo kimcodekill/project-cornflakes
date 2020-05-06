@@ -12,5 +12,4 @@ public interface IEntity {
     float Heal(float amount);
 
     void Die();
-
 }

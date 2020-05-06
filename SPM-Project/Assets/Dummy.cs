@@ -13,7 +13,15 @@ public class Dummy : MonoBehaviour, IEntity
 
     public void Die()
     {
-        throw new System.NotImplementedException();
+        EventSystem.Current.FireEvent(new EnemyDeathEvent()
+        {
+            Description = "Dummy Died",
+            BaseDropChance = 0,
+            ScoreValue = maxHealth,
+            DeadObject = gameObject
+        }) ;
+
+        deathTime = Time.time;
     }
 
     public float Heal(float amount)

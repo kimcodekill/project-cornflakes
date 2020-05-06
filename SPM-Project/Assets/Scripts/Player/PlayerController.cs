@@ -101,8 +101,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		return PlayerCurrentHealth;
 	}
 
-	private void Die() {
-
+	public void Die() {
 		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
 		EventSystem.Current.FireEvent(new PlayerDeadEvent()
 		{

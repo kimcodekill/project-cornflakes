@@ -14,6 +14,11 @@ public class Target : MonoBehaviour, IEntity
     private float takenDamage;
     private float latestDamage;
 
+    public void Die()
+    {
+        return;
+    }
+
     public float Heal(float amount)
     {
         takenDamage = 0;

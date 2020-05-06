@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EnemyDeathEvent : Event {
 
-	public GameObject Source;
+	public GameObject DeadObject;
 
-	public float DropAnythingAtAllChance;
+	public float BaseDropChance;
 
 	public float ScoreValue;
 
