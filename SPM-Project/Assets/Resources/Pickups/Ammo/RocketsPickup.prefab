@@ -380,6 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56636e1183ffec4d959476e98c63405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runTimeSpawnedPickupLifeTime: 10
   ammoType: 2
   ammoAmount: 3
 --- !u!1 &3249186039061165497

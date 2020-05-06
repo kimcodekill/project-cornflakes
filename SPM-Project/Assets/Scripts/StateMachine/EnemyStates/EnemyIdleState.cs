@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 [CreateAssetMenu(menuName = "EnemyState/EnemyIdleState")]
 public class EnemyIdleState : EnemyBaseState
 {
 
 	public override void Enter() {
-		//Debug.Log("idling");
 		Enemy.StartIdleBehaviour();
 	}
 

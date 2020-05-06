@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 [CreateAssetMenu(menuName = "PlayerState/DashingState")]
 public class PlayerDashingState : PlayerState {
 

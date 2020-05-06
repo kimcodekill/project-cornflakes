@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class DebugTool : MonoBehaviour
 {
     public bool enabled;

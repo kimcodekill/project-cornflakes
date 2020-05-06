@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 [CreateAssetMenu(menuName = "EnemyState/EnemyPatrollingState")]
 public class EnemyPatrollingState : EnemyBaseState
 {
 	public override void Enter() {
-		//Debug.Log("patrolling");
 		Enemy.StartPatrolBehaviour();
 	}
 

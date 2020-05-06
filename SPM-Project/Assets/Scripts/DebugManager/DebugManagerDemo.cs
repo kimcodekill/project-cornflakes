@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class DebugManagerDemo : MonoBehaviour {
 
 	private string debugSectionName1, debugSectionName2, debugSectionName3;

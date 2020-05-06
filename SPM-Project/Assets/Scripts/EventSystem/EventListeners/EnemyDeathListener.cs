@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 public class EnemyDeathListener : MonoBehaviour
 {
 	private void Start() => EventSystem.Current.RegisterListener<EnemyDeathEvent>(OnDeath);

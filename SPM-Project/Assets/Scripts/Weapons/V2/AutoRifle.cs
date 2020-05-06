@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 /// <summary>
 /// The auto rifle fires automatically, has infinite ammo but can overheat.
 /// If AmmoInMagazine is 0, then the weapon has overheated.

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 /// <summary>
 /// The sniper rifle has the ability to aim down sights.
 /// </summary>
