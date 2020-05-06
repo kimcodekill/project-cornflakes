@@ -53,12 +53,11 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	public Vector3 Origin { get; private set; }
 
-	private void Awake() {
-
+	protected void Awake() {
+		Origin = transform.position;
 	}
 
 	protected void Start() {
-		Origin = gameObject.transform.parent.transform.position;
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		enemyStateMachine = new StateMachine(this, states);
