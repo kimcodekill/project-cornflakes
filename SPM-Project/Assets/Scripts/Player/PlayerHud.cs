@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ public class PlayerHud : MonoBehaviour
 	[SerializeField] [Tooltip("The slider field for player healthbar.")] private Slider healthBar;
 	[SerializeField] [Tooltip("Text for bullets left in current magazine.")] private Text bulletsInMag; 
 	[SerializeField] [Tooltip("Text for bullets in reserve, not counting magazine.")] private Text bulletsInReserve;
-	[SerializeField] [Tooltip("Text for pick-up information")] private Text pickupText;
+	[SerializeField] [Tooltip("Text for pick-up information")] private TextMeshProUGUI pickupText;
 
 	[Header("Hud behaviour controls")]
 	[SerializeField] [Tooltip("HUD border image.")] private Image hudBorder;
@@ -19,7 +20,7 @@ public class PlayerHud : MonoBehaviour
 	private float flashDuration = 0.1f;
 	private PlayerWeapon playerWeapon;
 	private Animator anim;
-	private List<Text> activepickupTexts = new List<Text>();
+	private List<TextMeshProUGUI> activepickupTexts = new List<TextMeshProUGUI>();
 
 	private void Start()
     {
@@ -58,14 +59,14 @@ public class PlayerHud : MonoBehaviour
 	}
 
 	public void ShowPickupText(string type, float amount) {
-		if (activepickupTexts.Count > 0) foreach (Text text in activepickupTexts) {
+		if (activepickupTexts.Count > 0) foreach (TextMeshProUGUI text in activepickupTexts) {
 				text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, text.rectTransform.anchoredPosition.y + 30);
 			}
-		else foreach (Text text in activepickupTexts) {
+		else foreach (TextMeshProUGUI text in activepickupTexts) {
 				activepickupTexts.Remove(text);
 				Destroy(text.gameObject);
 			}
-		Text newText = Instantiate(pickupText, this.gameObject.transform.GetChild(0));
+		TextMeshProUGUI newText = Instantiate(pickupText, this.gameObject.transform.GetChild(0));
 		activepickupTexts.Add(newText);
 
 		if (amount != 0) newText.text = amount + " " + type + " picked up";
