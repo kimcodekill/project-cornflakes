@@ -408,6 +408,8 @@ MonoBehaviour:
   healthBar: {fileID: 7841059611332117718}
   bulletsInMag: {fileID: 7841059611183370172}
   bulletsInReserve: {fileID: 7841059611711259450}
+  pickupText: {fileID: 8251664934832171634, guid: c0252cffae3b0d848b05c95788931cb2,
+    type: 3}
   hudBorder: {fileID: 7841059611166161776}
   player: {fileID: 7841059610958226998}
 --- !u!1 &7841059610752469684
