@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
+//Co Author: Joakim Linna
+
 public abstract class WeaponState : State {
 
 	private PlayerWeapon weaponOwner;

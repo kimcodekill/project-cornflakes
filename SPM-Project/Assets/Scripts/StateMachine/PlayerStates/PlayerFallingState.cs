@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 [CreateAssetMenu(menuName = "PlayerState/FallingState")]
 public class PlayerFallingState : PlayerAirState {
 

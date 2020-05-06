@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class WeaponPickup : Pickup {
 
 	protected override void OnPickup(Collider other) {
