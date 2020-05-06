@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Experimental.GlobalIllumination;
 
 //Author: Erik Pilström
 public class Enemy : MonoBehaviour, IEntity, ICapturable 
@@ -33,6 +35,13 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
+	[HideInInspector] public AudioSource audioSource;
+	[HideInInspector] public AudioSource audioSourceIdle;
+	public AudioClip[] audioClips;
+	[SerializeField] private AudioMixerGroup mixerGroup;
+	private int minSoundDelay = 5;
+	private int maxSoundDelay = 10;
+
 	/// <summary>
 	/// Returns this enemy's target.
 	/// </summary>
@@ -53,14 +62,17 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	public Vector3 Origin { get; private set; }
 
-	private void Awake() {
-
+	protected void Awake() {
+		Origin = transform.position;
 	}
 
 	protected void Start() {
-		Origin = gameObject.transform.parent.transform.position;
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+		audioSource = CreateAudioSource(1);
+		audioSourceIdle = CreateAudioSource(0.75f);
+
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
 	}
@@ -68,7 +80,21 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	protected void Update() {
 		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
 		enemyStateMachine.Run();
-		
+		if (audioSourceIdle.isPlaying == false) {
+			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
+			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
+		}
+	}
+
+	protected AudioSource CreateAudioSource(float volume) {
+		AudioSource aSource = gameObject.AddComponent<AudioSource>();
+		aSource.spatialBlend = 1;
+		aSource.rolloffMode = AudioRolloffMode.Linear;
+		aSource.minDistance = 10;
+		aSource.maxDistance = 30;
+		aSource.outputAudioMixerGroup = mixerGroup;
+		aSource.volume = volume;
+		return aSource;
 	}
 
 	/// <summary>
@@ -187,12 +213,17 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
-
+	
+	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
+		audioSource.pitch = Random.Range(minPitch, maxPitch);
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+	}
+	
 	/// <summary>
 	/// Signatures for all the behaviour coroutines that the various enemies need to be able to implement.
 	/// (Getting kinda ridiculous with these coroutines, considering reworking enemies from the base up to use behaviour trees instead.)
 	/// </summary>
-	public virtual void StartIdleBehaviour() { }
+public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
 	public virtual void StopPatrolBehaviour() { }

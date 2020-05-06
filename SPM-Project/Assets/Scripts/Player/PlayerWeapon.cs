@@ -22,7 +22,9 @@ public class PlayerWeapon : MonoBehaviour {
 	public bool SwitchWeapon { get { return CheckInputs(); } }
 
 	[SerializeField] private State[] states;
-	
+	[SerializeField] private AudioClip[] audioClips;
+	[SerializeField] [Tooltip("Audio Source component #2")] private AudioSource audioSource;
+
 	//Where the weapons will shoot from;
 	[SerializeField] private Transform muzzleTransform;
 
@@ -70,6 +72,10 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="index">The specified index.</param>
 	public void SwitchTo(int index) {
+		if (CurrentWeapon != weapons[index]) {
+			if (index != 1) PlayAudio((index * 3) + 2, 1);
+			else PlayAudio(5, 0.6f); //Temporary solution for the current sounds
+		}
 		CurrentWeapon = weapons[index];
 	}
 
@@ -85,6 +91,8 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 		weapons.Add(weapon);
+		weapon.playerWeapon = this;
+		PlayAudio((weapons.Count - 1) * 3, 1);
 		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
@@ -150,4 +158,7 @@ public class PlayerWeapon : MonoBehaviour {
 		return valid;
 	}
 
+	public void PlayAudio(int clipIndex, float volume) {
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+	}
 }

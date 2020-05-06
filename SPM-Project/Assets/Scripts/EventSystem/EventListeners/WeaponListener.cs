@@ -22,6 +22,7 @@ public class WeaponListener : MonoBehaviour {
 			}
 			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
 				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
+				pue.Target.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
 				pue.Source.SetActive(false);
 				if (ap.AmmoAmount > 1 || ap.AmmoType == Weapon.EAmmoType.Special) pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount);
 				else pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().Remove(ap.AmmoType.ToString().Length - 1).ToLower(), ap.AmmoAmount);
