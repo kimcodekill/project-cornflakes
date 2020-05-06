@@ -8,6 +8,6 @@ public class EnemyDeathEvent : Event {
 
 	public float DropAnythingAtAllChance;
 
-	public float ScorePoints;
+	public float ScoreValue;
 
 }

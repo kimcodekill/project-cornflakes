@@ -170,12 +170,14 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		return currentHealth;
 	}
 
-	private void Die() {
+	public void Die() {
 		StopAllCoroutines();
-		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+		EventSystem.Current.FireEvent(new EnemyDeathEvent()
+		{
 			Source = gameObject,
 			DropAnythingAtAllChance = 0.5f,
-		});
+			ScoreValue = maxHealth
+		}) ;
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
 		{
 			ExplosionEffect = deathExplosion,
