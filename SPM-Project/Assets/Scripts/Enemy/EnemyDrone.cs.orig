@@ -5,9 +5,15 @@ using UnityEngine;
 //Author: Erik Pilström
 public class EnemyDrone : Enemy, ILootable {
 
-	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
+<<<<<<< HEAD
+	[SerializeField] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
 
+=======
+	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
+	
+	private SphereCollider body;
+>>>>>>> 6c23f5c35e500a0896491c0b049c48ab77e50717
 	private Vector3 origin;
 
 	private void Awake() {
