@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public static class Atlas {
 
 	public class AtlasEntry {

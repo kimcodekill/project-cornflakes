@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//Author: Viktor Dahlberg
 public abstract class State : ScriptableObject {
     
 	/// <summary>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class Note : MonoBehaviour
 {
     [SerializeField] private bool logThis;

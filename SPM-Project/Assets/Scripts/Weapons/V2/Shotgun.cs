@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 /// <summary>
 /// The shotgun fires shells, containing some amount of pellets per shot.
 /// </summary>

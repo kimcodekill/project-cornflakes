@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Author: Viktor Dahlberg
 public class CheckPointSystem : MonoBehaviour {
 
 	/// <summary>

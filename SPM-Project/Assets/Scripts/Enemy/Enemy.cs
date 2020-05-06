@@ -4,31 +4,36 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Experimental.GlobalIllumination;
 
+//Author: Erik Pilström
 public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
 	[Header("Enemy attributes")]
-	[SerializeField] protected float movementSpeed;
+	[SerializeField] [Tooltip("How fast the enemy should move.")] protected float movementSpeed;
 	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
 	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
-	[SerializeField] protected float visionRange;
+	[SerializeField] [Tooltip("How far the enemy should see.")] protected float visionRange;
 	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] public Transform gunTransform;
 	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
 	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
-	[SerializeField] protected float attackDamage;
-	[SerializeField] protected float attackSpread;
-	[SerializeField] protected float attackSpeedRPM;
+	[SerializeField] [Tooltip("How much damage the enemy should deal per shot.")] protected float attackDamage;
+	[SerializeField] [Tooltip("The spread the enemy's attacks should have, angle in degress.")] protected float attackSpread;
+	[SerializeField] [Tooltip("How fast the enemy should attack, RPM.")] protected float attackSpeedRPM;
+	[SerializeField] [Tooltip("Within how many degrees (around the Y axis) does the enemy have to point its weapon at the player before attacking.")] private float attackLimitDegrees;
+	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
 
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
-	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
 	[SerializeField] protected EnemyWeaponBase weapon;
-	[SerializeField] private float attackLimitDegrees;
 	[SerializeField] private GameObject deathExplosion;
 
-	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
+	
+	protected Vector3 vectorToPlayer; //Vector to the player from the enemy's eyes. Used by Enemy-children.
+	private StateMachine enemyStateMachine; //Enemy's STM instance.
 
-	private StateMachine enemyStateMachine;
-	protected Vector3 vectorToPlayer;
+	/// <summary>
+	/// Returns the enemy's weapon instance.
+	/// </summary>
+	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
@@ -41,19 +46,28 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// Returns this enemy's target.
 	/// </summary>
 	public PlayerController Target { get; private set; }
+
+	/// <summary>
+	/// Is the enemy done searching for the player?
+	/// </summary>
 	public bool FinishedSearching { get; protected set; }
+
+	/// <summary>
+	/// Is this enemy a patroller?
+	/// </summary>
 	public bool IsPatroller { get; protected set; }
 
-  /// <summary>
-  /// Returns the origin of this enemy.
-  /// </summary>
+	/// <summary>
+	/// Returns the origin of this enemy.
+	/// </summary>
 	public Vector3 Origin { get; private set; }
 
 	private void Awake() {
-		Origin = transform.position;
+
 	}
 
 	protected void Start() {
+		Origin = gameObject.transform.parent.transform.position;
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
@@ -84,6 +98,12 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		return aSource;
 	}
 
+	/// <summary>
+	/// Calculates and returns the vector between an origin and a target.
+	/// </summary>
+	/// <param name="target">Position of the target.</param>
+	/// <param name="origin">Origin position.</param>
+	/// <returns></returns>
 	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
 		Vector3 v = target.position - origin.position;
 		return v;
@@ -94,12 +114,12 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	/// <param name="v"></param>
 	/// <returns></returns>
-	public bool PlayerIsInSight() {
+	public bool TargetIsInSight() { //Checks if the Enemy's Target is in sight by checking the different sight factors.
 		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) { return true; }
 		else { return false; }
 	}
 
-	private bool TargetIsInFOV(Vector3 v) {
+	private bool TargetIsInFOV(Vector3 v) { //Checks if the Enemy's Target is inside the specified field of view
 		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
 		if (angleToTarget >= fieldOfView) {
 			return true; 
@@ -107,14 +127,14 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		else { return false; }
 	}
 
-	private bool TargetIsInRange() {
+	private bool TargetIsInRange() { //Is Target within sight range?
 		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
 			return true;
 		}
 		else { return false; }
 	}
 
-	private bool CanSeeTarget(Vector3 v) {
+	private bool CanSeeTarget(Vector3 v) { //Is the line to the target obscured by something?
 		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
 			//Debug.DrawRay(eyeTransform.position, v, Color.red);
@@ -128,7 +148,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
-		if (PlayerIsInSight() && vectorToPlayer.magnitude <= attackRange) {
+		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange) {
 			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) { return true; }
 			else { return false; }
 		}
@@ -136,6 +156,10 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		
 	}
 
+	/// <summary>
+	/// Checks if the Enemy's weapon is aimed sufficiently towards the player.
+	/// </summary>
+	/// <returns></returns>
 	public bool WeaponIsAimed() {
 		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
 		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
@@ -176,6 +200,10 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
+		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+			Source = gameObject,
+			DropAnythingAtAllChance = 0.5f,
+		});
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
 		{
 			ExplosionEffect = deathExplosion,
@@ -186,11 +214,16 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
-
+	
 	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSource.pitch = Random.Range(minPitch, maxPitch);
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
+	
+	/// <summary>
+	/// Signatures for all the behaviour coroutines that the various enemies need to be able to implement.
+	/// (Getting kinda ridiculous with these coroutines, considering reworking enemies from the base up to use behaviour trees instead.)
+	/// </summary>
 public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
@@ -202,10 +235,18 @@ public virtual void StartIdleBehaviour() { }
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
+	/// <summary>
+	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
+	/// </summary>
+	/// <returns></returns>
 	public bool InstanceIsCapturable() {
 		return true;
 	}
 
+	/// <summary>
+	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
+	/// </summary>
+	/// <returns></returns>
 	public object GetPersistentCaptureID() {
 		return Origin;
 	}

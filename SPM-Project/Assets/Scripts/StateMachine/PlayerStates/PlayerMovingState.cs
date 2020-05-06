@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 [CreateAssetMenu(menuName = "PlayerState/MovingState")]
 public class PlayerMovingState : PlayerGroundedState {
 

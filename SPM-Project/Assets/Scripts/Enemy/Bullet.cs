@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Erik Pilström
 public class Bullet : MonoBehaviour {
 
-	[SerializeField] float projectileSpeed;
-	private Vector3 travelVector;
-	private TrailRenderer trail;
-	[SerializeField] private LayerMask bulletHitLayer;
-	[SerializeField] private GameObject hitEffect;
-	private EnemyWeaponBase owner;
+	[SerializeField] [Tooltip("How fast the bullet will move.")] private float projectileSpeed;
+	private Vector3 travelVector; //Movement vector the bullet should travel.
+	private TrailRenderer trail; //The bullet trail component.
+	[SerializeField] [Tooltip("The layers that the bullet should be able to intersect with.")] private LayerMask bulletHitLayer;
+	//[SerializeField] [Tooltip("Particle effect to play on impact.")] private GameObject hitEffect;
+	private EnemyWeaponBase owner; //The weapon that fired this bullet.
 
 	public float ProjectileSpeed { get => projectileSpeed; }
 
@@ -17,6 +18,7 @@ public class Bullet : MonoBehaviour {
 	/// Gives the Bullet some number of starting values through parameters.
 	/// </summary>
 	/// <param name="shootDir"> The vector the bullet should travel along.</param>
+	/// <param name="owner">The enemy weapon this bullet was fired from.</param>
 	public void Initialize(Vector3 shootDir, EnemyWeaponBase owner) {
 		travelVector = shootDir - transform.position;
 		this.owner = owner;
@@ -27,18 +29,20 @@ public class Bullet : MonoBehaviour {
 		trail.enabled = true;
 	}
 
+	//The bullet is moved, and does collision detection, in FixedUpdate for better consistency and reduced performance overhead.
 	private void FixedUpdate() {
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			Destroy(gameObject);
-			if (hit.collider.gameObject.GetComponent<PlayerController>()){
+			if (hit.collider.gameObject.GetComponent<PlayerController>()){  //This could probably be done in a better way, running GetComponent every frame not very performant.
 				EventSystem.Current.FireEvent(new HitEvent {
 					Description = " " + owner.owner.gameObject.name + " hit " + owner.owner.Target.name,
 					Source = owner.gameObject,
 					Target = owner.owner.Target.gameObject
 				});
 			}
-			
+			//GameObject hitGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal)); //Play the hit effect by instantiating/destroying the particle system.
+			//Destroy(hitGO, 0.5f);
 		}
 		transform.position += travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime;
 	}

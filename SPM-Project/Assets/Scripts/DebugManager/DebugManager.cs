@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//Author: Viktor Dahlberg
 public class DebugManager : MonoBehaviour {
 	
 	private static Text contents;

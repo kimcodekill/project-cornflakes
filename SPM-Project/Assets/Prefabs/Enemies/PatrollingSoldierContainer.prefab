@@ -149,7 +149,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
     type: 3}
   useBulletProjectile: 1
-  targetLeadFactor: 1
+  targetLeadFactor: 0.8
 --- !u!120 &9068805099154559088
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -577,7 +577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6168304084530303652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.46, y: 1.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6168304084560496786}

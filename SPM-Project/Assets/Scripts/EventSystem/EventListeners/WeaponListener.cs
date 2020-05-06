@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class WeaponListener : MonoBehaviour {
 
 	private void Start() => EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
