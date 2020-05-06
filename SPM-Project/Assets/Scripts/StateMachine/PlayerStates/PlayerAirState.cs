@@ -9,6 +9,9 @@ public abstract class PlayerAirState : PlayerState {
 	private static float startTime = -1;
 
 	public override void Enter() {
+		Player.playerAnimator.SetBool("Falling", true);
+		Player.thrust1.SetActive(true);
+		Player.thrust2.SetActive(true);
 		if (startTime == -1) startTime = Time.time;
 
 		base.Enter();

@@ -39,6 +39,9 @@ public class PlayerDashingState : PlayerState {
 	private bool warned;
 
 	public override void Enter() {
+		Player.dash1.SetActive(true);
+		Player.dash2.SetActive(true);
+		Player.playerAnimator.SetTrigger("Dashing");
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		
 		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
@@ -63,6 +66,8 @@ public class PlayerDashingState : PlayerState {
 	}
 
 	public override void Exit() {
+		Player.dash1.SetActive(false);
+		Player.dash2.SetActive(false);
 		Player.PhysicsBody.SetGravityEnabled(true);
 		dashed = false;
 		currentDashTime = 0f;

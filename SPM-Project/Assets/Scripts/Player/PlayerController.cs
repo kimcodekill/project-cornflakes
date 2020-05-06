@@ -5,6 +5,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	public Animator playerAnimator;
+	private float animHorizontal, animVertical;
 
 	/// <summary>
 	/// Singleton
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// The inputs the player decided on for the current fixed update interval.
 	/// </summary>
-	public CurrentInput Input { get; private set; }
+	public CurrentInput Input { get; private set; } //overrides UnityEngine.Input, can we change name pls? /E
 
 	/// <summary>
 	/// The container class for all the input parameters.
@@ -51,18 +54,26 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
-
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+		animVertical = UnityEngine.Input.GetAxis("Vertical");
+		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+		playerAnimator.SetFloat("Speed", animVertical);
+		playerAnimator.SetFloat("Direction", animHorizontal);
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		Input.doJump = false;
 		Input.doDash = false;
 	}
 
 	private void Update() {
-		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) {
+			Input.doJump = true;
+			
+		}
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
 		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);

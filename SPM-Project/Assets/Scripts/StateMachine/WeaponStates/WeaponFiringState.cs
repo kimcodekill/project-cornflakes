@@ -29,6 +29,7 @@ public class WeaponFiringState : WeaponState {
 			{
 				if (!semiShot)
 				{
+					PlayerController.Instance.playerAnimator.SetTrigger("Shooting");
 					Weapon.DoFire();
 					semiShot = true;
 				}
@@ -43,6 +44,7 @@ public class WeaponFiringState : WeaponState {
 				{
 					if ((Time.time - startTime) > Weapon.GetTimeBetweenShots())
 					{
+						
 						Weapon.DoFire();
 						startTime = Time.time;
 					}

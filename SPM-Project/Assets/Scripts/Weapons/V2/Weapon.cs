@@ -252,6 +252,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// Fires an event and then lets the <c>Fire()</c> function assume control.
 	/// </summary>
 	public void DoFire() {
+		
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
 			Description = this + " fired a shot",
 			GameObject = gameObject
