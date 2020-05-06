@@ -8,8 +8,8 @@ OcclusionCullingSettings:
     smallestOccluder: 5
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: d03776e205c4b3e47b86f878bb378e11
-  m_OcclusionCullingData: {fileID: 36300000, guid: f663278c058a460419e0fdf6cf020637,
+  m_SceneGUID: f59ca0407182a9d46a4756eee76c3a57
+  m_OcclusionCullingData: {fileID: 36300000, guid: 0ea70a027331a15439865e748a146059,
     type: 2}
 --- !u!104 &2
 RenderSettings:
@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 26ee535c7cb62d849962b4d76a36825f,
+  m_LightingDataAsset: {fileID: 112000000, guid: fc4da1cbc399a9b44918b46649f0d98f,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -10204,6 +10204,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8529143250559694456, guid: a4f7b044b89e91846b6dd7eac3f47c7f,
+        type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: f74e4ab598d763646b2a6907ab19090e,
+        type: 2}
     - target: {fileID: 8529143250559694457, guid: a4f7b044b89e91846b6dd7eac3f47c7f,
         type: 3}
       propertyPath: m_Name
