@@ -1334,7 +1334,7 @@ PrefabInstance:
     - target: {fileID: 3162255209440779520, guid: b5f24b3a3e21116429253aef729252b2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -64.9
+      value: -53.5
       objectReference: {fileID: 0}
     - target: {fileID: 3162255209440779520, guid: b5f24b3a3e21116429253aef729252b2,
         type: 3}
@@ -1404,7 +1404,7 @@ PrefabInstance:
     - target: {fileID: 8024478403163590008, guid: b5f24b3a3e21116429253aef729252b2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -88
+      value: -83.3
       objectReference: {fileID: 0}
     - target: {fileID: 8024478403163590008, guid: b5f24b3a3e21116429253aef729252b2,
         type: 3}
@@ -1646,6 +1646,12 @@ PrefabInstance:
       propertyPath: reverbSnapshot
       value: 
       objectReference: {fileID: 4778537012623800967, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+        type: 2}
+    - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
+        type: 3}
+      propertyPath: defaultSnapshot
+      value: 
+      objectReference: {fileID: -413188731917956711, guid: 3fa9793ed1744f849b801f2a37ad8c19,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf, type: 3}
@@ -27446,13 +27452,19 @@ PrefabInstance:
     - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
         type: 3}
       propertyPath: reverbPreset
-      value: 14
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
         type: 3}
       propertyPath: reverbSnapshot
       value: 
       objectReference: {fileID: -9041283403295673766, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+        type: 2}
+    - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
+        type: 3}
+      propertyPath: defaultSnapshot
+      value: 
+      objectReference: {fileID: -413188731917956711, guid: 3fa9793ed1744f849b801f2a37ad8c19,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf, type: 3}
@@ -32182,7 +32194,7 @@ GameObject:
   - component: {fileID: 712984108}
   - component: {fileID: 712984107}
   m_Layer: 0
-  m_Name: OneshotEmitter (3)
+  m_Name: OneshotEmitter (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32196,11 +32208,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712984105}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 100.9, y: 10, z: -1.5}
+  m_LocalPosition: {x: 58.9, y: 1.8000183, z: -312.7}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
-  m_Father: {fileID: 24174195}
-  m_RootOrder: 3
+  m_Father: {fileID: 1160993931}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &712984107
 AudioSource:
@@ -34523,6 +34535,12 @@ PrefabInstance:
       propertyPath: reverbSnapshot
       value: 
       objectReference: {fileID: 4481981228036749857, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+        type: 2}
+    - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
+        type: 3}
+      propertyPath: defaultSnapshot
+      value: 
+      objectReference: {fileID: -413188731917956711, guid: 3fa9793ed1744f849b801f2a37ad8c19,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf, type: 3}
@@ -38115,6 +38133,12 @@ PrefabInstance:
       propertyPath: reverbSnapshot
       value: 
       objectReference: {fileID: -6765869966142114513, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+        type: 2}
+    - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
+        type: 3}
+      propertyPath: defaultSnapshot
+      value: 
+      objectReference: {fileID: -413188731917956711, guid: 3fa9793ed1744f849b801f2a37ad8c19,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf, type: 3}
@@ -60915,6 +60939,12 @@ PrefabInstance:
       propertyPath: reverbSnapshot
       value: 
       objectReference: {fileID: 4481981228036749857, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+        type: 2}
+    - target: {fileID: 9068616788336341647, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf,
+        type: 3}
+      propertyPath: defaultSnapshot
+      value: 
+      objectReference: {fileID: -413188731917956711, guid: 3fa9793ed1744f849b801f2a37ad8c19,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1ddc7489dac2d41b3a5f5d9b29dcaf, type: 3}
