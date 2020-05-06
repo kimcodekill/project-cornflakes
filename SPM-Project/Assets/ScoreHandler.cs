@@ -6,15 +6,16 @@ using UnityEngine;
 public class ScoreHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private float levelParTime = 120.0f;
 
     private float score;
 
     void Start()
     {
         EventSystem.Current.RegisterListener<EnemyDeathEvent>(OnEnemyDied);
+        EventSystem.Current.RegisterListener<LevelEndEvent>(OnLevelEnd);
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         DisplayScore();
@@ -27,7 +28,16 @@ public class ScoreHandler : MonoBehaviour
         score += ede.ScoreValue;
     }
 
-    private void DisplayScore() { scoreText.text = "Score: " + CalculateScore(); }
+    private void OnLevelEnd(Event e)
+    {
+        LevelEndEvent lee = e as LevelEndEvent;
 
-    private float CalculateScore() { return score; }
+        Debug.Log(lee.EndTime);
+
+        //Dont know what the calc here should be, we'll have to implement the enemies first
+        //to see what feels good
+        score -=  score / (levelParTime - lee.EndTime);
+    }
+
+    private void DisplayScore() { scoreText.text = "Score: " + score; }
 }

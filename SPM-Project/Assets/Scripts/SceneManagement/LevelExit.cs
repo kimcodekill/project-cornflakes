@@ -25,8 +25,9 @@ public class LevelExit : MonoBehaviour
             Debug.Log("Player entered exit");
             EventSystem.Current.FireEvent(new LevelEndEvent()
             {
-                Description = "Player Finished Level"
-            });
+                Description = "Player Finished Level",
+                EndTime = Time.time
+            }) ;
 
             collider.enabled = false;
         }

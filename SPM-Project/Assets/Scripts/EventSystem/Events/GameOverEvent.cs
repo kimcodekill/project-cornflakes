@@ -12,6 +12,8 @@ public abstract class GameOverEvent : Event
 public class LevelEndEvent : GameOverEvent
 {
     public int NextLevel;
+
+    public float EndTime;
 }
 
 public class PlayerDeadEvent : GameOverEvent
