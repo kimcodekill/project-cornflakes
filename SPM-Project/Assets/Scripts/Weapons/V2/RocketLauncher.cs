@@ -49,4 +49,9 @@ public class RocketLauncher : Weapon {
 
 		AmmoInMagazine--;
 	}
+
+	public override string ToString() {
+		return "Rocket Launcher";
+	}
+
 }

@@ -24,12 +24,13 @@ public class EnemySoldier : Enemy, ILootable {
 		agent.destination = FindNewRandomNavMeshPoint(transform.position, 1f);
 	}
 
-	protected void Awake() {
+	protected new void Awake() {
 		if (IsPatroller) points = GetComponent<PatrollingSoldier>().patrolPoints;
 		agent = GetComponent<NavMeshAgent>();
+		base.Awake();
 	}
 
-	private void Start() {
+	private new void Start() {
 		agent.avoidancePriority = Random.Range(0, 99);
 		agent.radius = defaultAvoidanceRadius;
 		base.Start();

@@ -39,4 +39,8 @@ public class Shotgun : Weapon {
 		AmmoInMagazine--;
 	}
 
+	public override string ToString() {
+		return "Shotgun";
+	}
+
 }
