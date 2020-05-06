@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 /// <summary>
 /// Everything that wants to be captured should implement this interface,
 /// provided whether or not the GameObject is active is the only saved parameter.

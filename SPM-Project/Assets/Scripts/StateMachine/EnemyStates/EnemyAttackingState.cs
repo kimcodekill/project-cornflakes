@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+//Author: Erik Pilström
 [CreateAssetMenu(menuName = "EnemyState/EnemyAttackingState")]
 public class EnemyAttackingState : EnemyBaseState
 {
-	
 	private float internalAttackCD = 0;
 
 	public override void Enter() {
-		//Debug.Log("attacking");
 		Enemy.StartAttackBehaviour();
 	}
 
@@ -18,7 +17,6 @@ public class EnemyAttackingState : EnemyBaseState
 		if(!Enemy.TargetIsAttackable()) {
 			StateMachine.TransitionTo<EnemyAlertedState>();
 		}
-		//Debug.Log(Enemy.WeaponIsAimed());
 
 		if(Time.time > internalAttackCD && Enemy.WeaponIsAimed()) {
 			internalAttackCD = Time.time + Enemy.EnemyEquippedWeapon.GetFireRate();

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDeathEvent : Event
-{
-	public float ammoDropChance;
+public class EnemyDeathEvent : Event {
 
-	public float healthDropChance;
+	public GameObject Source;
 
-	public float scorePoints;
+	public float DropAnythingAtAllChance;
+
+	public float ScorePoints;
 
 }

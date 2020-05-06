@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "CameraState/ScopedState")]
 public class CameraScopedState : CameraState {
 
@@ -20,8 +22,8 @@ public class CameraScopedState : CameraState {
 			sniperRef = (SniperRifle)PlayerWeapon.Instance.CurrentWeapon;
 		}
 
-		defaultSpread = sniperRef.Spread;
-		sniperRef.Spread = 0;
+		defaultSpread = sniperRef.SpreadAngle;
+		sniperRef.SpreadAngle = 0;
 
 		base.Enter();
 	}
@@ -37,7 +39,7 @@ public class CameraScopedState : CameraState {
 
 	public override void Exit()
 	{
-		sniperRef.Spread = defaultSpread; 
+		sniperRef.SpreadAngle = defaultSpread; 
 
 		base.Exit();
 	}

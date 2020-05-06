@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Author: Joakim Linna
+
 [CreateAssetMenu(menuName = "Fetchable Scene")]
 public class FetchableScene : ScriptableObject
 {

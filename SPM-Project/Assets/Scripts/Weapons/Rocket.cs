@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Joakim Linna
+
 public class Rocket : MonoBehaviour, IPooledObject
 {
     [SerializeField] private LayerMask collisionMask;

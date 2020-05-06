@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class InteractionListener : MonoBehaviour {
 
 	private void Start() {

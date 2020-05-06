@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public abstract class PlayerAirState : PlayerState {
 
 	private const float recheckTimeTreshold = 0.1f;

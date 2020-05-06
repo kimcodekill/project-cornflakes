@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+//Author: Viktor Dahlberg
 public class PhysicsBody : MonoBehaviour {
 
 	#region Properties

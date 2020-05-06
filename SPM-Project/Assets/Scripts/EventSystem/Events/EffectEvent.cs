@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Author: Joakim Linna
+
 public abstract class EffectEvent : Event
 {
     public GameObject HitEffect;
