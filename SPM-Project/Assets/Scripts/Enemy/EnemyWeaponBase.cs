@@ -98,6 +98,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 					});
 				}
 			}
+		owner.PlayAudio(4, 1, 0.8f, 1.3f);
 		StartCoroutine(RaycastShotEffect());
 		}
 	}

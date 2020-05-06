@@ -20,6 +20,7 @@ public class WeaponListener : MonoBehaviour {
 			}
 			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
 				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
+				pue.Target.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
 				pue.Source.SetActive(false);
 			}
 		}

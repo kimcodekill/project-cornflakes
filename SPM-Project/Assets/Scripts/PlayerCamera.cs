@@ -28,11 +28,12 @@ public class PlayerCamera : MonoBehaviour {
 	/// Rotation values for camera around the X and Y axes, determines where the player is "looking". /E
 	/// </summary>
 	private float rotationX, rotationY;
-
 	/// <summary>
 	/// The camera's StateMachine instance (hereafter STM).
 	/// </summary>
 	private StateMachine stateMachine;
+
+	[HideInInspector] public int reverbZoned;
 
 	/// <summary>
 	/// The actual camera attached to the PlayerCamera game object in scene view. /E

@@ -19,6 +19,7 @@ public class HealthPickup : Pickup {
 
 	protected override void OnPickup(Collider other) {
 		other.GetComponent<PlayerController>().Heal(healAmount);
+		other.GetComponent<PlayerController>().PlayAudioPitched(8, 0.7f, 0.8f, 1.3f);
 		Destroy(gameObject);
 	}
 

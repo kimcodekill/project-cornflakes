@@ -20,6 +20,8 @@ public class PlayerJumpingState : PlayerAirState {
 		if (Player.GetInput().magnitude > 0f) Player.PhysicsBody.ChangeVelocityDirection(Player.GetInput().normalized);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		Player.PhysicsBody.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+		/*if (jumpCount == 0)*/ Player.PlayAudioMain(3, 1);
+		//else if (jumpCount == 1) Player.PlayAudioMain(3, 1);		If we make another sound for the double jump.
 
 		StateMachine.TransitionTo<PlayerFallingState>();
 	}

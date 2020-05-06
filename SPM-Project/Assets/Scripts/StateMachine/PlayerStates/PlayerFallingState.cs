@@ -13,5 +13,4 @@ public class PlayerFallingState : PlayerAirState {
 
 		base.Enter();
 	}
-
 }
