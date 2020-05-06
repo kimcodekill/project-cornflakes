@@ -5,12 +5,8 @@ using UnityEngine;
 //Author: Erik Pilström
 public class PlayerRenderer : MonoBehaviour
 {
-	private Material material;
 
-    void Start()
-    {
-		material = GetComponent<MeshRenderer>().material;
-    }
+	[SerializeField] private Material material;
 
 	/// <summary>
 	/// Sets transparency of the material on the player so that the camera can see through.

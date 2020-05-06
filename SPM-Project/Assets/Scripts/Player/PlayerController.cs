@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	public Animator playerAnimator;
+	private float animHorizontal, animVertical;
 
 	/// <summary>
 	/// Singleton
@@ -58,6 +61,12 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+		animVertical = UnityEngine.Input.GetAxis("Vertical");
+		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+		playerAnimator.SetFloat("Speed", animVertical);
+		playerAnimator.SetFloat("Direction", animHorizontal);
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		Input.doJump = false;
 		Input.doDash = false;
 	}

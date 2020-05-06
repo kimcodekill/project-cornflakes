@@ -162,7 +162,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   lineDuration: 0.25
-  bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
+  bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
     type: 3}
   useBulletProjectile: 1
   targetLeadFactor: 0.8
