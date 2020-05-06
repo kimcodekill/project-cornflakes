@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Experimental.GlobalIllumination;
 
 public class Enemy : MonoBehaviour, IEntity, ICapturable 
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
 	public AudioClip[] audioClips;
+	[SerializeField] private AudioMixerGroup mixerGroup;
 	private int minSoundDelay = 5;
 	private int maxSoundDelay = 10;
 
@@ -55,20 +57,11 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
-		audioSource = CreateAudioSource();
-		audioSourceIdle = CreateAudioSource();
+		audioSource = CreateAudioSource(1);
+		audioSourceIdle = CreateAudioSource(0.75f);
 
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
-	}
-
-	protected AudioSource CreateAudioSource() {
-		AudioSource aSource = gameObject.AddComponent<AudioSource>();
-		aSource.spatialBlend = 1;
-		aSource.rolloffMode = AudioRolloffMode.Linear;
-		aSource.minDistance = 1;
-		aSource.maxDistance = 40;
-		return aSource;
 	}
 
 	protected void Update() {
@@ -78,6 +71,17 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
 			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
 		}
+	}
+
+	protected AudioSource CreateAudioSource(float volume) {
+		AudioSource aSource = gameObject.AddComponent<AudioSource>();
+		aSource.spatialBlend = 1;
+		aSource.rolloffMode = AudioRolloffMode.Linear;
+		aSource.minDistance = 10;
+		aSource.maxDistance = 30;
+		aSource.outputAudioMixerGroup = mixerGroup;
+		aSource.volume = volume;
+		return aSource;
 	}
 
 	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
@@ -179,8 +183,6 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 			Rotation = Quaternion.identity,
 			Scale = 1
 		});
-		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
-		//explosion.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}

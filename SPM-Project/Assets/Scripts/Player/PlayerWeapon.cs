@@ -22,7 +22,7 @@ public class PlayerWeapon : MonoBehaviour {
 
 	[SerializeField] private State[] states;
 	[SerializeField] private AudioClip[] audioClips;
-	[SerializeField] private AudioSource audioSource;
+	[SerializeField] [Tooltip("Audio Source component #2")] private AudioSource audioSource;
 
 	//Where the weapons will shoot from;
 	[SerializeField] private Transform muzzleTransform;
@@ -71,8 +71,11 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="index">The specified index.</param>
 	public void SwitchTo(int index) {
+		if (CurrentWeapon != weapons[index]) {
+			if (index != 1) PlayAudio((index * 3) + 2, 1);
+			else PlayAudio(5, 0.6f); //Temporary solution for the current sounds
+		}
 		CurrentWeapon = weapons[index];
-		if (CurrentWeapon != weapons[index]) PlayAudio((index * 3) + 2);
 	}
 
 	/// <summary>
@@ -88,7 +91,7 @@ public class PlayerWeapon : MonoBehaviour {
 		}
 		weapons.Add(weapon);
 		weapon.playerWeapon = this;
-		PlayAudio((weapons.Count - 1) * 3);
+		PlayAudio((weapons.Count - 1) * 3, 1);
 		weapon.Muzzle = muzzleTransform;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
@@ -141,7 +144,7 @@ public class PlayerWeapon : MonoBehaviour {
 		throw new System.Exception("Tried to get ammo for a weapon that the Player doesn't have equipped, which shouldn't be the case.");
 	}
 
-	public void PlayAudio(int clipIndex) {
-		audioSource.PlayOneShot(audioClips[clipIndex], 1);
+	public void PlayAudio(int clipIndex, float volume) {
+		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
 }

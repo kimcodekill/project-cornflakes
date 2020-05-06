@@ -7,11 +7,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 	[SerializeField] private AudioClip[] audioClips;
-	[SerializeField] private AudioSource audioSource;
-	[SerializeField] public AudioSource audioPlayerSteps;
-	[SerializeField] private AudioSource audioPlayerIdle;
-
-	//private AudioSource[] audioSources;
+	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
+	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
+	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
 
 	/// <summary>
 	/// Singleton
@@ -58,9 +56,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
-		audioPlayerIdle = gameObject.AddComponent<AudioSource>();
+		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
 		audioPlayerIdle.loop = true;
-		audioPlayerIdle.clip = audioClips[0];
+		audioPlayerIdle.clip = audioClips[0];*/
 		audioPlayerIdle.Play();
 
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
@@ -122,12 +120,12 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	public void PlayAudioMain(int clipIndex, float volume) {
-		audioSource.pitch = 1;
-		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+		audioSourceMain.pitch = 1;
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
 	}
 
 	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
-		audioSource.pitch = Random.Range(minPitch, maxPitch);
-		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
 	}
 }

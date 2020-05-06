@@ -433,6 +433,16 @@ MonoBehaviour:
   attackLimitDegrees: 10
   deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
     type: 3}
+  audioSource: {fileID: 0}
+  audioSourceIdle: {fileID: 0}
+  audioClips:
+  - {fileID: 8300000, guid: b1c85877f2c9d034cb855ac17161c289, type: 3}
+  - {fileID: 8300000, guid: 952b3e0a8b8830c46980f8c7f4c820c4, type: 3}
+  - {fileID: 8300000, guid: 0be7d9c6a35bdba48847eed7e30a8c13, type: 3}
+  - {fileID: 8300000, guid: 42bf0f15cb36b434d928a1b25fc9ab86, type: 3}
+  - {fileID: 8300000, guid: d7d40717eaa4b94499ffd9cab5da9c8f, type: 3}
+  mixerGroup: {fileID: 9136798453681754332, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+    type: 2}
   patrolBungeeDistance: 5
   body: {fileID: 2610276984800971632}
 --- !u!135 &2610276984800971632

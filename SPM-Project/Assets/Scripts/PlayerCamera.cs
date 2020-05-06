@@ -20,8 +20,9 @@ public class PlayerCamera : MonoBehaviour {
 	private Vector3 cameraOffset;
 	private float rotationX, rotationY;
 
-
 	private StateMachine stateMachine;
+
+	[HideInInspector] public int reverbZoned;
 
 	/// <summary>
 	/// The actual camera attached to the PlayerCamera.

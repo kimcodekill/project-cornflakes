@@ -14,7 +14,7 @@ public class PlayerMovingState : PlayerGroundedState {
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		loops = 0;
-		if (AudioSettings.dspTime >= stepEndTime) { StartStepping(); /*Debug.Log("Started steppping from Enter");*/ }
+		Player.audioPlayerSteps.Play();
 
 		base.Enter();
 	}
@@ -26,26 +26,11 @@ public class PlayerMovingState : PlayerGroundedState {
 
 		Player.PhysicsBody.CapVelocity(TopSpeed);
 
-		if (playSteps == true) loops += Time.deltaTime;
-		if (AudioSettings.dspTime > stepEndTime && playSteps == false) { StartStepping(); /*Debug.Log("Started steppping from Run");*/ }
-
 		base.Run();
 	}
 
-	private void StartStepping() {
-		
-		stepStartTime = AudioSettings.dspTime;
-		Player.audioPlayerSteps.PlayScheduled(stepStartTime);
-		playSteps = true;
-	}
-
 	public override void Exit() {
-		//Debug.Log("playSteps was: " + playSteps);
-		if (playSteps == true) {
-			stepEndTime = stepStartTime + (Math.Floor(loops / Player.audioPlayerSteps.clip.length) + 1) * (Player.audioPlayerSteps.clip.length);
-			Player.audioPlayerSteps.SetScheduledEndTime(stepEndTime);
-			playSteps = false;
-		}
+		Player.audioPlayerSteps.Stop();
 
 		base.Exit();
 	}

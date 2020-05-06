@@ -103,7 +103,7 @@ public class RocketV2 : MonoBehaviour, IDamaging
             WorldPosition = transform.position,
             Rotation = Quaternion.identity,
             Scale = areaOfEffect
-        });
+        });;
 
         gameObject.SetActive(false);
     }

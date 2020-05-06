@@ -126,6 +126,16 @@ MonoBehaviour:
   attackLimitDegrees: 30
   deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
     type: 3}
+  audioSource: {fileID: 0}
+  audioSourceIdle: {fileID: 0}
+  audioClips:
+  - {fileID: 8300000, guid: b1c85877f2c9d034cb855ac17161c289, type: 3}
+  - {fileID: 8300000, guid: 952b3e0a8b8830c46980f8c7f4c820c4, type: 3}
+  - {fileID: 8300000, guid: 0be7d9c6a35bdba48847eed7e30a8c13, type: 3}
+  - {fileID: 8300000, guid: 42bf0f15cb36b434d928a1b25fc9ab86, type: 3}
+  - {fileID: 8300000, guid: 734548d0be7ba1943b12bb379fb5d2bc, type: 3}
+  mixerGroup: {fileID: 9136798453681754332, guid: 3fa9793ed1744f849b801f2a37ad8c19,
+    type: 2}
   searchRange: 10
   searchLoops: 7
   attackAvoidanceRadius: 2.5

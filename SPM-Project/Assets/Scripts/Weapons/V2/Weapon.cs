@@ -266,10 +266,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
 		ammoInReserve -= canTakeAmount;
 		ammoInMagazine += canTakeAmount;
-		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(0);
-		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(3);
-		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(6);
-		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(9);
+		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(0, 1);
+		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(3, 0.5f);
+		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(6, 1);
+		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(9, 1);
 	}
 
 	/// <summary>
@@ -281,10 +281,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 			Description = this + " fired a shot",
 			GameObject = gameObject
 		});
-		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(1);
-		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(4);
-		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(7);
-		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(10);
+		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(1, 0.8f);
+		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(4, 1);
+		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(7, 0.9f);
+		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(10, 0.9f);
 		Fire();
 	}
 
