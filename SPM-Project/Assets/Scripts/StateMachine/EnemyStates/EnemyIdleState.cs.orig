@@ -1,0 +1,30 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Erik Pilström
+=======
+>>>>>>> mechAnimation
+[CreateAssetMenu(menuName = "EnemyState/EnemyIdleState")]
+public class EnemyIdleState : EnemyBaseState
+{
+
+	public override void Enter() {
+<<<<<<< HEAD
+=======
+		//Debug.Log("idling");
+>>>>>>> mechAnimation
+		Enemy.StartIdleBehaviour();
+	}
+
+	public override void Run() {
+		base.Run();
+	}
+
+	public override void Exit() {
+		Enemy.StopIdleBehaviour();
+	}
+
+
+}

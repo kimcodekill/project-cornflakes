@@ -1,0 +1,29 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Erik Pilström
+=======
+>>>>>>> mechAnimation
+[CreateAssetMenu(menuName = "EnemyState/EnemyPatrollingState")]
+public class EnemyPatrollingState : EnemyBaseState
+{
+	public override void Enter() {
+<<<<<<< HEAD
+=======
+		//Debug.Log("patrolling");
+>>>>>>> mechAnimation
+		Enemy.StartPatrolBehaviour();
+	}
+
+	public override void Run() {
+		base.Run();
+	}
+
+	public override void Exit() {
+		Enemy.StopPatrolBehaviour();
+	}
+
+
+}

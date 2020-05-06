@@ -1,17 +1,32 @@
 ﻿using UnityEngine;
 
+<<<<<<< HEAD
+//Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
+=======
+>>>>>>> mechAnimation
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+<<<<<<< HEAD
+=======
+	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	public Animator playerAnimator;
+	private float animHorizontal, animVertical;
+>>>>>>> mechAnimation
+
+	/// <summary>
+	/// Singleton
+	/// </summary>
+	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
 	/// </summary>
-	public float PlayerCurrentHealth { get; private set; }
+	public float PlayerCurrentHealth { get; set; } = -1;
 
 	/// <summary>
 	/// Returns the player's max health, but can never be set outside of the player script.
@@ -26,36 +41,61 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// The inputs the player decided on for the current fixed update interval.
 	/// </summary>
+<<<<<<< HEAD
 	public CurrentInput Input { get; private set; }
+=======
+	public CurrentInput Input { get; private set; } //overrides UnityEngine.Input, can we change name pls? /E
+>>>>>>> mechAnimation
 
 	/// <summary>
 	/// The container class for all the input parameters.
 	/// If <c>discard</c> is <c>true</c>, the input set needs to be refreshed.
 	/// </summary>
 	public class CurrentInput {
-
 		public bool doJump;
 		public bool doDash;
-	
+	}
+
+	private void OnEnable() {
+		if (Instance == null) Instance = this;
 	}
 
 	private void Start() {
-		PlayerCurrentHealth = PlayerMaxHealth;
+		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+<<<<<<< HEAD
 
+=======
+>>>>>>> mechAnimation
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+<<<<<<< HEAD
+=======
+		animVertical = UnityEngine.Input.GetAxis("Vertical");
+		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+		playerAnimator.SetFloat("Speed", animVertical);
+		playerAnimator.SetFloat("Direction", animHorizontal);
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
+>>>>>>> mechAnimation
 		Input.doJump = false;
 		Input.doDash = false;
 	}
 
 	private void Update() {
+<<<<<<< HEAD
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+=======
+		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) {
+			Input.doJump = true;
+			
+		}
+>>>>>>> mechAnimation
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
 		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
@@ -95,7 +135,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void Die() {
 
+<<<<<<< HEAD
+		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
+=======
 		//Changed so player death now fires deathevent which (currently) reloads the scene instantly
+>>>>>>> mechAnimation
 		EventSystem.Current.FireEvent(new PlayerDeadEvent()
 		{
 			Description = "Player fricking died, yo."

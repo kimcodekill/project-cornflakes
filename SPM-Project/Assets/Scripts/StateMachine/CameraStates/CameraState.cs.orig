@@ -1,0 +1,36 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Joakim Linna
+//Secondary author: Erik Pilström
+
+=======
+>>>>>>> mechAnimation
+public abstract class CameraState : State
+{
+	public int CameraFOV;
+	public Vector3 CameraOffset;
+	public float CameraSensitivity;
+<<<<<<< HEAD
+	//^^^ Do these need to be public? private Serialized should be enough, no? /E
+=======
+>>>>>>> mechAnimation
+
+    private PlayerCamera camera;
+
+    public PlayerCamera Camera => camera = camera != null ? camera : (PlayerCamera)Owner;
+
+	public override void Enter()
+	{
+		Camera.SetFOV(CameraFOV);
+		Camera.SetOffset(CameraOffset);
+		Camera.SetSensitivity(CameraSensitivity);
+	}
+
+	public override void Run()
+	{
+		DebugManager.UpdateRow("CameraState", StateMachine.GetCurrentState().ToString());
+	}
+}

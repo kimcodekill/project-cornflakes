@@ -1,0 +1,19 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Erik Pilström
+public class IdleSoldier : EnemySoldier
+{
+	private void Awake() {
+		IsPatroller = false; //Sets that the Soldier this script is attached to should be an idle Soldier.
+=======
+public class IdleSoldier : EnemySoldier
+{
+	private void Awake() {
+		IsPatroller = false;
+>>>>>>> mechAnimation
+		base.Awake();
+	}
+}

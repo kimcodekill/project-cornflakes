@@ -2,6 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
+//Author: Erik Pilström
+public class Enemy : MonoBehaviour, IEntity, ICapturable 
+{
+	[Header("Enemy attributes")]
+	[SerializeField] [Tooltip("How fast the enemy should move.")] protected float movementSpeed;
+	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
+	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
+	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
+	[SerializeField] [Tooltip("How far the enemy should see.")] protected float visionRange;
+	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] public Transform gunTransform;
+	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
+	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
+	[SerializeField] [Tooltip("How much damage the enemy should deal per shot.")] protected float attackDamage;
+	[SerializeField] [Tooltip("The spread the enemy's attacks should have, angle in degress.")] protected float attackSpread;
+	[SerializeField] [Tooltip("How fast the enemy should attack, RPM.")] protected float attackSpeedRPM;
+	[SerializeField] [Tooltip("Within how many degrees (around the Y axis) does the enemy have to point its weapon at the player before attacking.")] private float attackLimitDegrees;
+	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
+
+	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
+	[SerializeField] protected EnemyWeaponBase weapon;
+	[SerializeField] private GameObject deathExplosion;
+
+	
+	protected Vector3 vectorToPlayer; //Vector to the player from the enemy's eyes. Used by Enemy-children.
+	private StateMachine enemyStateMachine; //Enemy's STM instance.
+
+	/// <summary>
+	/// Returns the enemy's weapon instance.
+	/// </summary>
+	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
+
+=======
 public class Enemy : MonoBehaviour, IEntity, ICapturable 
 {
 	[Header("Enemy attributes")]
@@ -26,19 +59,34 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	private StateMachine enemyStateMachine;
 	protected Vector3 vectorToPlayer;
 
+>>>>>>> mechAnimation
 	/// <summary>
 	/// Returns this enemy's target.
 	/// </summary>
 	public PlayerController Target { get; private set; }
+<<<<<<< HEAD
+
+	/// <summary>
+	/// Is the enemy done searching for the player?
+	/// </summary>
+	public bool FinishedSearching { get; protected set; }
+
+	/// <summary>
+	/// Is this enemy a patroller?
+	/// </summary>
+	public bool IsPatroller { get; protected set; }
+
+	/// <summary>
+	/// Returns the origin of this enemy.
+	/// </summary>
+=======
 	public bool FinishedSearching { get; protected set; }
 	public bool IsPatroller { get; protected set; }
 
-<<<<<<< HEAD
-=======
   /// <summary>
   /// Returns the origin of this enemy.
   /// </summary>
->>>>>>> 025ce7f6669d0996a24d4388b42cfef52a625c67
+>>>>>>> mechAnimation
 	public Vector3 Origin { get; private set; }
 
 	private void Awake() {
@@ -55,10 +103,18 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	protected void Update() {
 		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
 		enemyStateMachine.Run();
-		//Debug.Log(Vector3.Dot(transform.forward, VectorToTarget.normalized));
-		//Debug.Log(finishedSearching);
+		
 	}
 
+<<<<<<< HEAD
+	/// <summary>
+	/// Calculates and returns the vector between an origin and a target.
+	/// </summary>
+	/// <param name="target">Position of the target.</param>
+	/// <param name="origin">Origin position.</param>
+	/// <returns></returns>
+=======
+>>>>>>> mechAnimation
 	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
 		Vector3 v = target.position - origin.position;
 		return v;
@@ -69,29 +125,43 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	/// <param name="v"></param>
 	/// <returns></returns>
+<<<<<<< HEAD
+	public bool TargetIsInSight() { //Checks if the Enemy's Target is in sight by checking the different sight factors.
+=======
 	public bool PlayerIsInSight() {
+>>>>>>> mechAnimation
 		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) { return true; }
 		else { return false; }
 	}
 
+<<<<<<< HEAD
+	private bool TargetIsInFOV(Vector3 v) { //Checks if the Enemy's Target is inside the specified field of view
+=======
 	private bool TargetIsInFOV(Vector3 v) {
+>>>>>>> mechAnimation
 		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
 		if (angleToTarget >= fieldOfView) {
-			//Debug.Log(Target.gameObject.name + " is in FOV of " + gameObject.name);
 			return true; 
 		}
 		else { return false; }
 	}
 
+<<<<<<< HEAD
+	private bool TargetIsInRange() { //Is Target within sight range?
+=======
 	private bool TargetIsInRange() {
+>>>>>>> mechAnimation
 		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
-			//Debug.Log(Target.gameObject.name + " in range of " + gameObject.name);
 			return true;
 		}
 		else { return false; }
 	}
 
+<<<<<<< HEAD
+	private bool CanSeeTarget(Vector3 v) { //Is the line to the target obscured by something?
+=======
 	private bool CanSeeTarget(Vector3 v) {
+>>>>>>> mechAnimation
 		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
 			//Debug.DrawRay(eyeTransform.position, v, Color.red);
@@ -105,7 +175,11 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
+<<<<<<< HEAD
+		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange) {
+=======
 		if (PlayerIsInSight() && vectorToPlayer.magnitude <= attackRange) {
+>>>>>>> mechAnimation
 			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) { return true; }
 			else { return false; }
 		}
@@ -113,6 +187,13 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		
 	}
 
+<<<<<<< HEAD
+	/// <summary>
+	/// Checks if the Enemy's weapon is aimed sufficiently towards the player.
+	/// </summary>
+	/// <returns></returns>
+=======
+>>>>>>> mechAnimation
 	public bool WeaponIsAimed() {
 		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
 		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
@@ -124,8 +205,9 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		else return false;
 	}
 
-	protected void ResetWeapon() {
-		gunTransform.forward = Vector3.RotateTowards(gunTransform.forward, transform.forward, Time.deltaTime, 0);
+	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
+		Vector3 v = v2 - v1;
+		return v;
 	}
 
 	/// <summary>
@@ -152,10 +234,33 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
-		Destroy(gameObject, 0.5f);
-		//gameObject.SetActive(false);
+<<<<<<< HEAD
+		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
+			Source = gameObject,
+			DropAnythingAtAllChance = 0.5f,
+		});
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+		{
+			ExplosionEffect = deathExplosion,
+			WorldPosition = transform.position,
+			Rotation = Quaternion.identity,
+			Scale = 1
+		});
+		//GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity) as GameObject;
+		//explosion.gameObject.SetActive(true);
+=======
+>>>>>>> mechAnimation
+		gameObject.SetActive(false);
+		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
+<<<<<<< HEAD
+	/// <summary>
+	/// Signatures for all the behaviour coroutines that the various enemies need to be able to implement.
+	/// (Getting kinda ridiculous with these coroutines, considering reworking enemies from the base up to use behaviour trees instead.)
+	/// </summary>
+=======
+>>>>>>> mechAnimation
 	public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
@@ -167,10 +272,24 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	public virtual void StartSearchBehaviour() { }
 	public virtual void StopSearchBehaviour() { }
 
+<<<<<<< HEAD
+	/// <summary>
+	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
+	/// </summary>
+	/// <returns></returns>
+=======
+>>>>>>> mechAnimation
 	public bool InstanceIsCapturable() {
 		return true;
 	}
 
+<<<<<<< HEAD
+	/// <summary>
+	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
+	/// </summary>
+	/// <returns></returns>
+=======
+>>>>>>> mechAnimation
 	public object GetPersistentCaptureID() {
 		return Origin;
 	}

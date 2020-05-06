@@ -1,0 +1,24 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Viktor Dahlberg
+=======
+>>>>>>> mechAnimation
+[CreateAssetMenu(menuName = "PlayerState/FallingState")]
+public class PlayerFallingState : PlayerAirState {
+
+	public override void Enter() {
+		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+<<<<<<< HEAD
+
+=======
+		Player.playerAnimator.SetBool("Falling", true);
+>>>>>>> mechAnimation
+		if (jumpCount == 0) jumpCount++;
+
+		base.Enter();
+	}
+
+}

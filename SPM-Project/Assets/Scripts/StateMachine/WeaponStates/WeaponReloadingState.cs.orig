@@ -1,0 +1,30 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Viktor Dahlberg
+//Co Author: Joakim Linna
+
+=======
+>>>>>>> mechAnimation
+[CreateAssetMenu(menuName = "WeaponState/ReloadingState")]
+public class WeaponReloadingState : WeaponState {
+
+	private float startTime;
+
+	public override void Enter() {
+		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
+		
+		startTime = Time.time;
+	}
+
+	public override void Run() {
+		if ((Time.time - startTime) > Weapon.ReloadTime) {
+			Weapon.Reload();
+			StateMachine.TransitionTo<WeaponIdleState>();
+		}
+
+		base.Run();
+	}
+}

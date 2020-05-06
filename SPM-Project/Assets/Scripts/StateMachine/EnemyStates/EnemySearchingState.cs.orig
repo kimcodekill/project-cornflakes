@@ -1,0 +1,37 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+<<<<<<< HEAD
+//Author: Erik Pilström
+=======
+>>>>>>> mechAnimation
+[CreateAssetMenu(menuName = "EnemyState/EnemySearchingState")]
+public class EnemySearchingState : EnemyBaseState
+{
+	public override void Enter() {
+<<<<<<< HEAD
+=======
+		//Debug.Log("searching");
+>>>>>>> mechAnimation
+		Enemy.StartSearchBehaviour();
+	}
+
+	public override void Run() {
+		if (Enemy.FinishedSearching == true) {
+			if (Enemy.IsPatroller) StateMachine.TransitionTo<EnemyPatrollingState>();
+			else StateMachine.TransitionTo<EnemyIdleState>();
+		}
+		base.Run();
+	}
+
+	public override void Exit() {
+<<<<<<< HEAD
+		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); } //Only calls StopSearch for the enemy if they didn't finish searching.
+=======
+		//Debug.Log("exiting search, " + "searching finished: " + Enemy.FinishedSearching);
+		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); }
+>>>>>>> mechAnimation
+	}
+
+}
