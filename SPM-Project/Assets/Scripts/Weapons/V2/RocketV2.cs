@@ -18,12 +18,15 @@ public class RocketV2 : MonoBehaviour, IDamaging
     public Vector3 TargetDir { get; set; }
 
     private float startTime;
+	private AudioSource audioSource;
 
     private void Start()
     {
-        startTime = Time.time;
+		startTime = Time.time;
 		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
 		trail.transform.rotation = transform.rotation;
+		audioSource = GetComponent<AudioSource>();
+		audioSource.Play();
     }
 
     private void Update()
@@ -100,7 +103,7 @@ public class RocketV2 : MonoBehaviour, IDamaging
             WorldPosition = transform.position,
             Rotation = Quaternion.identity,
             Scale = areaOfEffect
-        });
+        });;
 
         gameObject.SetActive(false);
     }

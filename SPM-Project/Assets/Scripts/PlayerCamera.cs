@@ -15,6 +15,7 @@ public class PlayerCamera : MonoBehaviour {
 	[SerializeField] [Tooltip("Camera radius for collision detection.")] private float camRadius = 0.25f; 
 	[SerializeField] [Tooltip("Minimum allowed distance between camera and objects behind it.")] private float minCollisionDistance;
 	[SerializeField] [Tooltip("The Player transform the camera attaches to.")] private Transform playerMesh;
+	private PlayerRenderer pr;
 
 	// Since the StateMachine is responsible for cameraOffset now, 
 	// the value gets set through CameraState assetmenu instances /K
@@ -27,11 +28,12 @@ public class PlayerCamera : MonoBehaviour {
 	/// Rotation values for camera around the X and Y axes, determines where the player is "looking". /E
 	/// </summary>
 	private float rotationX, rotationY;
-
 	/// <summary>
 	/// The camera's StateMachine instance (hereafter STM).
 	/// </summary>
 	private StateMachine stateMachine;
+
+	[HideInInspector] public int reverbZoned;
 
 	/// <summary>
 	/// The actual camera attached to the PlayerCamera game object in scene view. /E
@@ -41,6 +43,7 @@ public class PlayerCamera : MonoBehaviour {
 	private void Start() {
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
+		pr = GetComponent<PlayerRenderer>();
 		stateMachine = new StateMachine(this, states);
 	}
 
@@ -53,22 +56,25 @@ public class PlayerCamera : MonoBehaviour {
 	// but the STM will run in Update /K
 	//Camera updates rotation in LateUpdate so that we don't try to change the rotation while the player is moving in a previous direction during the same frame.
 	//This can otherwise lead to wonky movement effects. /E
-	private void LateUpdate() {
+	private void FixedUpdate() {
 		RotateCamera();
 		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
-		playerMesh.GetComponent<PlayerRenderer>().SetTransparency(1);
+		pr.SetTransparency(1.0f);
 		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
-					playerMesh.GetComponent<PlayerRenderer>().SetTransparency(0.0f);
+					pr.SetTransparency(0.0f);
 				}
 				return relationVector.normalized * (hit.distance - camRadius);
 			}
-			else return Vector3.zero;
+			else {
+				pr.SetTransparency(0.0f);
+				return Vector3.up * 2.25f;
+			}
 		}
 		else return relationVector;
 	}
@@ -94,6 +100,18 @@ public class PlayerCamera : MonoBehaviour {
 	public void InjectRotation(float rotationX, float rotationY) {
 		this.rotationY += rotationY;
 		this.rotationX -= rotationX;
+		this.rotationX = Mathf.Clamp(this.rotationX, -60f, 60f);
+		transform.rotation = Quaternion.Euler(this.rotationX, this.rotationY, 0);
+	}
+
+	/// <summary>
+	/// Sets rotation values to the camera that won't be overwritten by the internal rotation script.
+	/// </summary>
+	/// <param name="rotationX">The desired rotation around the X axis.</param>
+	/// <param name="rotationY">The desired rotation around the Y axis.</param>
+	public void InjectSetRotation(float rotationX, float rotationY) {
+		this.rotationY = rotationY;
+		this.rotationX = rotationX;
 		this.rotationX = Mathf.Clamp(this.rotationX, -60f, 60f);
 		transform.rotation = Quaternion.Euler(this.rotationX, this.rotationY, 0);
 	}

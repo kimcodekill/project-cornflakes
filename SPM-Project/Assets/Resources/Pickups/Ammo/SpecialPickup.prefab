@@ -108,4 +108,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
   ammoType: 3
-  ammoAmount: 20
+  ammoAmount: 4
