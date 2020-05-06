@@ -57181,12 +57181,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MechPlayer (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 3029799343891364869, guid: ca809d3e62d2c114a82ba7f4150b8faf,
-        type: 3}
-      propertyPath: pickupText
-      value: 
-      objectReference: {fileID: 8251664934832171634, guid: c0252cffae3b0d848b05c95788931cb2,
-        type: 3}
     - target: {fileID: 3029799343891364870, guid: ca809d3e62d2c114a82ba7f4150b8faf,
         type: 3}
       propertyPath: m_LocalPosition.z
