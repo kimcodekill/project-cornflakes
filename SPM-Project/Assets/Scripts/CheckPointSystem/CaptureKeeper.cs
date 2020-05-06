@@ -83,7 +83,7 @@ public static class CaptureKeeper {
 		if (captures == null) captures = new List<Capture>();
 		captures.Add(new Capture() {
 			Weapons = CaptureWeapons(),
-			Player = CapturePlayer(checkPoint == null ? PlayerController.Instance.transform.position : checkPoint.transform.position, Quaternion.identity),
+			Player = CapturePlayer(checkPoint == null ? PlayerController.Instance.transform.position : checkPoint.transform.position, checkPoint.transform.rotation),
 			DichotomousGameObjects = CaptureDichotomousGameObjects()
 		});
 	}
