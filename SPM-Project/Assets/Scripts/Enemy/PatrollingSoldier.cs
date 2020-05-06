@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PatrollingSoldier : EnemySoldier
 {
-	[SerializeField] [Tooltip("The patrol points. NEVER USE ONLY ONE.")] public Transform[] points;
-	//Seriously, never have only one. If you want a non-patrolling soldier, use the IdleSoldier prefab instead.
+	[SerializeField] [Tooltip("The patrol points. NEVER USE ONLY ONE.")] public Transform[] patrolPoints;
+	//Seriously, never have only one. If you want a non-patrolling soldier, use the IdleSoldier instead.
 
 	private void Awake() {
 		IsPatroller = true;

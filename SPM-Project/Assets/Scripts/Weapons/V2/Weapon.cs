@@ -19,7 +19,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the trigger is being pulled.
 	/// </summary>
-	public bool TriggerDown { get { return Input.GetKey(KeyCode.Mouse0) || OverrideTriggerDown; } }
+	public bool TriggerPulled { get { return Input.GetKeyDown(KeyCode.Mouse0); } }
+
+	/// <summary>
+	/// Whether or not the trigger is being held.
+	/// </summary>
+	public bool TriggerHeld { get { return Input.GetKey(KeyCode.Mouse0); } }
 
 	/// <summary>
 	/// Whether or not input is required to fire.
@@ -29,12 +34,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Whether or not the reload key is being pressed.
 	/// </summary>
-	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R) || OverrideRequestedReload; } }
+	public bool RequestedReload { get { return Input.GetKeyDown(KeyCode.R); } }
 
-	/// <summary>
-	/// Whether or not input is required to reload.
-	/// </summary>
-	public bool OverrideRequestedReload { get; set; } = false;
+	///// <summary>
+	///// Whether or not input is required to reload.
+	///// </summary>
+	//public bool OverrideRequestedReload { get; set; } = false;
 
 	/// <summary>
 	/// The type of ammunition the weapon uses.
@@ -84,7 +89,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The amount of variance in the bullet path.
 	/// </summary>
-	public float Spread { get => spread; protected set => spread = value; }
+	public float Spread { get => spread; set => spread = value; }
 
 	/// <summary>
 	/// What the weapon should be able to hit.
@@ -109,19 +114,27 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private float damage;
 	[SerializeField] private float fireRate;
 	[SerializeField] private int magazineSize;
-	[SerializeField] private int ammoInMagazine;
-	[SerializeField] private int ammoInReserve;
+	[SerializeField] private int maxMagazines;
 	[SerializeField] private float reloadTime;
 	[SerializeField] private float recoil;
 	[SerializeField] private float spread;
 
 	#endregion
 
+	private int ammoInMagazine;
+	private int ammoInReserve;
+
 	private PlayerCamera playerCamera;
 
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
 	private void Start() {
+		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		ammoInMagazine = magazineSize;
+		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
+	}
+
+	public void Restart() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
@@ -179,7 +192,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	protected Vector3 GetCrosshairHitPoint() {
 		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit.collider == null ? playerCamera.transform.forward + Vector3.forward : cameraHit.point;
+		return cameraHit.collider == null ? Muzzle.position + playerCamera.transform.forward: cameraHit.point;
 	}
 
 	/// <summary>
@@ -189,8 +202,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <param name="target">The second point.</param>
 	/// <returns>The direction from <c>origin</c> to <c>target</c>.</returns>
 	protected Vector3 GetDirectionToPoint(Vector3 origin, Vector3 target) {
-		Vector3 direction = target - origin;
-		return direction /= direction.magnitude;
+		return (target - origin).normalized;
 	}
 
 	/// <summary>
@@ -220,7 +232,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	}
 
 	#endregion
-
+	
 	/// <summary>
 	/// Reloads the weapon.
 	/// </summary>
@@ -254,4 +266,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 		AmmoInMagazine--;
 	}
 
+	public int GetMaxAmmo()	{
+		return maxMagazines * magazineSize;
+	}
+
+	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+	{
+		throw new System.NotImplementedException();
+	}
 }

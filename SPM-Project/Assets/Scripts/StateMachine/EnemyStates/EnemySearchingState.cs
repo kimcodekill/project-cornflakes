@@ -6,21 +6,21 @@ using UnityEngine;
 public class EnemySearchingState : EnemyBaseState
 {
 	public override void Enter() {
-		Debug.Log("searching");
+		//Debug.Log("searching");
 		Enemy.StartSearchBehaviour();
 	}
 
 	public override void Run() {
-		base.Run();
 		if (Enemy.FinishedSearching == true) {
 			if (Enemy.IsPatroller) StateMachine.TransitionTo<EnemyPatrollingState>();
 			else StateMachine.TransitionTo<EnemyIdleState>();
 		}
+		base.Run();
 	}
 
 	public override void Exit() {
-		Enemy.StopSearchBehaviour();
+		//Debug.Log("exiting search, " + "searching finished: " + Enemy.FinishedSearching);
+		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); }
 	}
-
 
 }

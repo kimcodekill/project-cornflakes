@@ -9,7 +9,7 @@ public abstract class PlayerAirState : PlayerState {
 	private static float startTime = -1;
 
 	public override void Enter() {
-		if (startTime == -1 && !Player.PhysicsBody.IsGrounded()) startTime = Time.time;
+		if (startTime == -1) startTime = Time.time;
 
 		base.Enter();
 	}

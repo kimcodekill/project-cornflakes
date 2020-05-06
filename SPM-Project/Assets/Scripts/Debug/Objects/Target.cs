@@ -1,28 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class Target : MonoBehaviour
+public class Target : MonoBehaviour, IEntity
 {
-    [SerializeField] [Range(0, 100)] private float distance;
+    [SerializeField] private TextMeshPro textAllDamage;
+    [SerializeField] private TextMeshPro textDPS;
+    [SerializeField] private TextMeshPro textLatestDamage;
 
-    private Vector3 localPos;
+    private float takenDamage;
+    private float latestDamage;
 
-    private string name;
-
-    private void Awake()
+    public float Heal(float amount)
     {
-        localPos = new Vector3(transform.localPosition.x, transform.localPosition.y, distance);
-        name = gameObject.name;
+        takenDamage = 0;
+        WriteToText();
+        return 0;
+    }
+
+    public float TakeDamage(float amount)
+    {
+        takenDamage += amount;
+        latestDamage = amount;
+        return amount;
     }
 
     private void Update()
     {
-        //let target have variable distance
-        if (transform.localPosition != (localPos = new Vector3(transform.localPosition.x, transform.localPosition.y, distance)))
-        {
-            transform.localPosition = localPos;
-            gameObject.name = string.Format("{0} [{1} u]", name, distance);
-        }
+        WriteToText();
+    }
+
+    private void WriteToText()
+    {
+        textAllDamage.text = "Total damage: " + takenDamage;
+        //textDPS.text = "Damage per second: " + (takenDamage / -(Time.deltaTime - Time.time));
+        textLatestDamage.text = "Latest damage: " + latestDamage;
     }
 }
