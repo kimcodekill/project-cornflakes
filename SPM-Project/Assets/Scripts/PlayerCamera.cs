@@ -56,7 +56,7 @@ public class PlayerCamera : MonoBehaviour {
 	// but the STM will run in Update /K
 	//Camera updates rotation in LateUpdate so that we don't try to change the rotation while the player is moving in a previous direction during the same frame.
 	//This can otherwise lead to wonky movement effects. /E
-	private void LateUpdate() {
+	private void FixedUpdate() {
 		RotateCamera();
 		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 		Debug.DrawRay(transform.position, transform.forward * 10);
