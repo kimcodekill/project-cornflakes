@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
 	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
-	public Animator playerAnimator:
+	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
 
 	/// <summary>

@@ -1,20 +1,22 @@
-﻿using UnityEngine;
+﻿using UnityEditor.SceneManagement;
+using UnityEngine;
 
-<<<<<<< HEAD
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
-=======
->>>>>>> mechAnimation
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 <<<<<<< HEAD
-=======
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
->>>>>>> mechAnimation
+=======
+	[SerializeField] private AudioClip[] audioClips;
+	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
+	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
+	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
+>>>>>>> 362cc0acdfdc44ba73f6e7f0f17b2ac6ed6bca24
 
 	/// <summary>
 	/// Singleton
@@ -41,11 +43,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// The inputs the player decided on for the current fixed update interval.
 	/// </summary>
-<<<<<<< HEAD
 	public CurrentInput Input { get; private set; }
-=======
-	public CurrentInput Input { get; private set; } //overrides UnityEngine.Input, can we change name pls? /E
->>>>>>> mechAnimation
 
 	/// <summary>
 	/// The container class for all the input parameters.
@@ -65,37 +63,28 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
-<<<<<<< HEAD
+		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
+		audioPlayerIdle.loop = true;
+		audioPlayerIdle.clip = audioClips[0];*/
+		audioPlayerIdle.Play();
 
-=======
->>>>>>> mechAnimation
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
-<<<<<<< HEAD
-=======
 		animVertical = UnityEngine.Input.GetAxis("Vertical");
 		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 		playerAnimator.SetFloat("Speed", animVertical);
 		playerAnimator.SetFloat("Direction", animHorizontal);
 		float yRot = cam.transform.rotation.eulerAngles.y;
 		transform.rotation = Quaternion.Euler(0, yRot, 0);
->>>>>>> mechAnimation
 		Input.doJump = false;
 		Input.doDash = false;
 	}
 
 	private void Update() {
-<<<<<<< HEAD
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
-=======
-		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) {
-			Input.doJump = true;
-			
-		}
->>>>>>> mechAnimation
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
 		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
@@ -113,7 +102,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	/// <summary>
-	/// Regenerats the player's health. Implements <c>IEntity.TakeDamage()</c>
+	/// Regenerates the player's health. Implements <c>IEntity.TakeDamage()</c>
 	/// </summary>
 	/// <param name="amount"> The amount the player should heal.</param>
 	public float Heal(float amount) {
@@ -127,6 +116,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <param name="amount">The amount of damage the player will take.</param>
 	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
+		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
@@ -135,14 +125,20 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void Die() {
 
-<<<<<<< HEAD
 		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
-=======
-		//Changed so player death now fires deathevent which (currently) reloads the scene instantly
->>>>>>> mechAnimation
 		EventSystem.Current.FireEvent(new PlayerDeadEvent()
 		{
 			Description = "Player fricking died, yo."
 		});
+	}
+
+	public void PlayAudioMain(int clipIndex, float volume) {
+		audioSourceMain.pitch = 1;
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
+		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
 	}
 }

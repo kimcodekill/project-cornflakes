@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
 //Author: Viktor Dahlberg
-=======
->>>>>>> mechAnimation
 public abstract class PlayerGroundedState : PlayerState {
 
 	/// <summary>
@@ -16,14 +13,12 @@ public abstract class PlayerGroundedState : PlayerState {
 	private static float startTime = -1;
 
 	public override void Enter() {
-<<<<<<< HEAD
-		startTime = -1;
-
-=======
 		Player.playerAnimator.SetBool("Falling", false);
 		startTime = -1;
+<<<<<<< HEAD
 		ThrustersOff();
->>>>>>> mechAnimation
+=======
+>>>>>>> 362cc0acdfdc44ba73f6e7f0f17b2ac6ed6bca24
 		base.Enter();
 	}
 
@@ -37,12 +32,9 @@ public abstract class PlayerGroundedState : PlayerState {
 		base.Run();
 	}
 
-<<<<<<< HEAD
-=======
 	private void ThrustersOff() {
 		Player.thrust1.SetActive(false);
 		Player.thrust2.SetActive(false);
 	}
 
->>>>>>> mechAnimation
 }
