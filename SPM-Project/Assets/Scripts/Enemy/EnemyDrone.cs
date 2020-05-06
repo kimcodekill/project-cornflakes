@@ -6,7 +6,7 @@ public class EnemyDrone : Enemy {
 
 	[SerializeField] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
-	
+
 	private Vector3 origin;
 
 	private void Awake() {
