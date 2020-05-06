@@ -7,7 +7,7 @@ public class EnemyDrone : Enemy, ILootable {
 
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	
-	private SphereCollider body;
+	[SerializeField] private SphereCollider body;
 	private Vector3 origin;
 
 	private void Awake() {
