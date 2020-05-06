@@ -8,20 +8,6 @@ public class EnemyDrone : Enemy, ILootable {
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
 
-	private Vector3 origin;
-
-	private void Awake() {
-		origin = transform.position;
-	}
-
-	private void Start() {
-		base.Start();
-	}
-
-	private void Update() {
-		base.Update();
-	}
-
 	/// <summary>
 	/// Finds a new position for patrolling.
 	/// </summary>
@@ -42,7 +28,7 @@ public class EnemyDrone : Enemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Patrol() {
-		Vector3 newPos = FindRandomPosition(origin, patrolBungeeDistance);
+		Vector3 newPos = FindRandomPosition(Origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
 			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));
 			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed);
