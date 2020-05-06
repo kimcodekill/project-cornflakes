@@ -32,6 +32,7 @@ public class WeaponFiringState : WeaponState {
 			{
 				if (!semiShot)
 				{
+					PlayerController.Instance.playerAnimator.SetTrigger("Shooting");
 					Weapon.DoFire();
 					semiShot = true;
 				}
