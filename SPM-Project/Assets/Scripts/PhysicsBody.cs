@@ -57,6 +57,14 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.useGravity = enabled;
 	}
 
+	/// <summary>
+	/// Returns the current velocity of the PhysicsBody.
+	/// </summary>
+	/// <returns>The velocity as a Vector3.</returns>
+	public Vector3 GetCurrentVelocity() {
+		return rigidBody.velocity;
+	}
+
 	#region Adjust Velocity
 
 	/// <summary>

@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public static PlayerController Instance;
 
-	private StateMachine stateMachine;
+	public StateMachine StateMachine { get; set; }
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
@@ -51,13 +51,13 @@ public class PlayerController : MonoBehaviour, IEntity {
 		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
-		stateMachine = new StateMachine(this, states);
+		StateMachine = new StateMachine(this, states);
 
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
-		stateMachine.Run();
+		StateMachine.Run();
 		Input.doJump = false;
 		Input.doDash = false;
 	}
