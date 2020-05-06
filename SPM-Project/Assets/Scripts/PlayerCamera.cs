@@ -99,6 +99,18 @@ public class PlayerCamera : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Sets rotation values to the camera that won't be overwritten by the internal rotation script.
+	/// </summary>
+	/// <param name="rotationX">The desired rotation around the X axis.</param>
+	/// <param name="rotationY">The desired rotation around the Y axis.</param>
+	public void InjectSetRotation(float rotationX, float rotationY) {
+		this.rotationY = rotationY;
+		this.rotationX = rotationX;
+		this.rotationX = Mathf.Clamp(this.rotationX, -60f, 60f);
+		transform.rotation = Quaternion.Euler(this.rotationX, this.rotationY, 0);
+	}
+
+	/// <summary>
 	/// Needs to be public to allow for setting camera FoV in the STM. /E
 	/// </summary>
 	/// <param name="fov">The cameras field of view value.</param>
