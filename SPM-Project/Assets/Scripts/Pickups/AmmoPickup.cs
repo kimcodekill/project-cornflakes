@@ -30,7 +30,7 @@ public class AmmoPickup : Pickup {
 
 	protected override bool IsValid(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
-			PlayerWeapon.AmmoPool ap = PlayerWeapon.Instance.GetAmmoPool(ammoType);
+			PlayerWeapon.AmmoPool ap = PlayerController.Instance.PlayerWeapon.GetAmmoPool(ammoType);
 			if (ap.reserveAmmo >= ap.maxAmmo) return false;
 			if (ap.reserveAmmo + ammoAmount > ap.maxAmmo) ammoAmount = ap.maxAmmo - ap.reserveAmmo;
 			return true;

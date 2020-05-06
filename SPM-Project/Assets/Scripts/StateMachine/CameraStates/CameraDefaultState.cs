@@ -13,7 +13,7 @@ public class CameraDefaultState : CameraState
 	public override void Run()
 	{
 		// Weapon? Hipfire.
-		if(PlayerWeapon.Instance.WeaponIsActive) { 
+		if(PlayerController.Instance.PlayerWeapon.WeaponIsActive) { 
 			StateMachine.Push<CameraHipfireState>(); 
 		}
 

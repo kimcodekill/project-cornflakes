@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
 
+	//WE NEED TO CLEAN THIS UP.
+	//PLAYERCONTROLLER DOES TOO MUCH STUFF!!!! /K
+
+	public static PlayerController Instance;
+
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
-
-	/// <summary>
-	/// Singleton
-	/// </summary>
-	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
 
@@ -29,6 +30,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
+	public PlayerWeapon PlayerWeapon { get; private set; }
+
 	/// <summary>
 	/// The inputs the player decided on for the current fixed update interval.
 	/// </summary>
@@ -43,13 +46,24 @@ public class PlayerController : MonoBehaviour, IEntity {
 		public bool doDash;
 	}
 
-	private void OnEnable() {
-		if (Instance == null) Instance = this;
+	private string playerSpawnKey = "PlayerSpawn";
+
+	//Singleton stuff expanded and moved from OnEnable (for no real reason other than idk why we used OnEnable) /K
+	private void Awake() {
+		if (Instance == null) { Instance = this; }
+		else if (Instance != this) { Destroy(gameObject); }
+
+		DontDestroyOnLoad(gameObject);
 	}
 
 	private void Start() {
 		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
+
+		//I chose to do this in accordance to PhysicsBody.
+		//I don't have to but I did. /K
+		PlayerWeapon = GetComponentInChildren<PlayerWeapon>();
+
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
 
@@ -107,5 +121,15 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{
 			Description = "Player fricking died, yo."
 		});
+	}
+
+	//THIS IS HACKY, AFTER PLAYTEST WE NEED TO TALK ABOUT THIS /K
+	private void OnLevelWasLoaded(int level)
+	{
+		Transform playerSpawn = GameObject.Find(playerSpawnKey).transform;
+		if (playerSpawn != null) { transform.position = playerSpawn.position; }
+		else { transform.position = Vector3.zero; }
+
+		if(PhysicsBody != null) { PhysicsBody.ResetVelocity(); }
 	}
 }

@@ -104,9 +104,9 @@ public class EnemyDrone : Enemy, ILootable {
 	public LootTable GetLootTable() {
 		return new LootTable {
 			["Pickups/HealthPickup"] = 0.2f,
-			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
-			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.4f : 0f,
-			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.4f : 0f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.4f : 0f,
+			["Pickups/Ammo/SpecialPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.4f : 0f,
 		};
 	}
 }

@@ -5,9 +5,12 @@ using UnityEngine;
 //Author: Viktor Dahlberg
 public class PlayerWeapon : MonoBehaviour {
 
-	//Singleton
-	//Needed (atm) for PlayerCamera StateMachine to get the current weapon
-	public static PlayerWeapon Instance;
+
+
+	//Removed for between level permanence reasons /K
+		//Singleton
+		//Needed (atm) for PlayerCamera StateMachine to get the current weapon
+		//public static PlayerWeapon Instance;
 
 	/// <summary>
 	/// The weapon the player is currently using.
@@ -29,12 +32,6 @@ public class PlayerWeapon : MonoBehaviour {
 	private List<Weapon> weapons = new List<Weapon>();
 
 	private StateMachine weaponStateMachine;
-
-	private void OnEnable()
-	{
-		//Just sets the static instance to this if it's null
-		if (Instance == null) { Instance = this; }
-	}
 
 	private void Start() {
 		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }

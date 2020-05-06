@@ -7,11 +7,14 @@ public class ScoreHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private float levelParTime = 120.0f;
+    [SerializeField] private string scoreKey = "score";
 
     private float score;
 
     void Start()
     {
+        //LoadScore();
+
         EventSystem.Current.RegisterListener<EnemyDeathEvent>(OnEnemyDied);
         EventSystem.Current.RegisterListener<LevelEndEvent>(OnLevelEnd);
     }
@@ -37,6 +40,8 @@ public class ScoreHandler : MonoBehaviour
         //Dont know what the calc here should be, we'll have to implement the enemies first
         //to see what feels good
         score -=  score / (levelParTime - lee.EndTime);
+
+        //SaveScore();
     }
 
     private void DisplayScore() { scoreText.text = "Score: " + score; }

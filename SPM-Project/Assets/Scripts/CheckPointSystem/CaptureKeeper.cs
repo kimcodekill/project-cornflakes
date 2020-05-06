@@ -49,7 +49,7 @@ public static class CaptureKeeper {
 		playerGameObject.transform.position = player.position;
 		Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
-		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
+		if (player.currentWeapon != -1) PlayerController.Instance.PlayerWeapon.SwitchTo(player.currentWeapon);
 	}
 
 	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
@@ -59,7 +59,7 @@ public static class CaptureKeeper {
 			weapon.Restart();
 			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
 			weapon.AmmoInReserve = weapons[i].ammoInReserve;
-			PlayerWeapon.Instance.PickUpWeapon(weapon);
+			PlayerController.Instance.PlayerWeapon.PickUpWeapon(weapon);
 		}
 	}
 
@@ -94,13 +94,13 @@ public static class CaptureKeeper {
 			position = checkPointPosition,
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
-			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon)
+			currentWeapon = PlayerController.Instance.PlayerWeapon.GetWeapons().IndexOf(PlayerController.Instance.PlayerWeapon.CurrentWeapon)
 		}; 
 	}
 
 	private static List<Capture.WeaponStats> CaptureWeapons() {
 		List<Capture.WeaponStats> capturedWeapons = new List<Capture.WeaponStats>();
-		List<Weapon> weapons = new List<Weapon>(PlayerWeapon.Instance.GetWeapons().ToArray());
+		List<Weapon> weapons = new List<Weapon>(PlayerController.Instance.PlayerWeapon.GetWeapons().ToArray());
 		for (int i = 0; i < weapons.Count; i++) {
 			Weapon w = weapons[i];
 			Object.DontDestroyOnLoad(w);

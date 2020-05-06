@@ -19,7 +19,7 @@ public class CameraScopedState : CameraState {
 	{
 		if(sniperRef == null)
 		{
-			sniperRef = (SniperRifle)PlayerWeapon.Instance.CurrentWeapon;
+			sniperRef = (SniperRifle)PlayerController.Instance.PlayerWeapon.CurrentWeapon;
 		}
 
 		defaultSpread = sniperRef.SpreadAngle;
@@ -30,7 +30,7 @@ public class CameraScopedState : CameraState {
 	
 	public override void Run() {
 		//In order of appearance: Stop aiming if weapon is no longer active, or the equipped weapon isn't a sniper rifle, or toggle mode is used and the aim key was pressed, or toggle mode isn't used and the aim key simply was released.
-		if (!PlayerWeapon.Instance.WeaponIsActive || !(PlayerWeapon.Instance.CurrentWeapon is SniperRifle) || (Toggle && Input.GetKeyDown(KeyCode.Mouse1)) || (!Toggle && Input.GetKeyUp(KeyCode.Mouse1))) {
+		if (!PlayerController.Instance.PlayerWeapon.WeaponIsActive || !(PlayerController.Instance.PlayerWeapon.CurrentWeapon is SniperRifle) || (Toggle && Input.GetKeyDown(KeyCode.Mouse1)) || (!Toggle && Input.GetKeyUp(KeyCode.Mouse1))) {
 			StateMachine.TransitionTo<CameraHipfireState>();
 		}
 
@@ -45,7 +45,7 @@ public class CameraScopedState : CameraState {
 	}
 
 	public override bool CanEnter() {
-		return PlayerWeapon.Instance.CurrentWeapon != null && PlayerWeapon.Instance.CurrentWeapon is SniperRifle;
+		return PlayerController.Instance.PlayerWeapon.CurrentWeapon != null && PlayerController.Instance.PlayerWeapon.CurrentWeapon is SniperRifle;
 	}
 
 }
