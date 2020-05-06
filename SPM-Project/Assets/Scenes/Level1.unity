@@ -14521,7 +14521,7 @@ PrefabInstance:
     - target: {fileID: 7841059610958226996, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7841059610958226996, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
@@ -57180,6 +57180,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MechPlayer (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029799343891364869, guid: ca809d3e62d2c114a82ba7f4150b8faf,
+        type: 3}
+      propertyPath: pickupText
+      value: 
+      objectReference: {fileID: 8251664934832171634, guid: c0252cffae3b0d848b05c95788931cb2,
+        type: 3}
+    - target: {fileID: 3029799343891364870, guid: ca809d3e62d2c114a82ba7f4150b8faf,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca809d3e62d2c114a82ba7f4150b8faf, type: 3}
