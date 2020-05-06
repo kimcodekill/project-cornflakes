@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Viktor Dahlberg
+
 public class WeaponListener : MonoBehaviour {
 
 	private void Start() => EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
@@ -22,7 +23,8 @@ public class WeaponListener : MonoBehaviour {
 			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
 				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
 				pue.Source.SetActive(false);
-				pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount);
+				if (ap.AmmoAmount > 1 || ap.AmmoType == Weapon.EAmmoType.Special) pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount);
+				else pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().Remove(ap.AmmoType.ToString().Length - 1).ToLower(), ap.AmmoAmount);
 			}
 		}
 	}

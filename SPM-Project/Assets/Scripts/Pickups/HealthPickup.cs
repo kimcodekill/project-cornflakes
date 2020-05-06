@@ -19,6 +19,7 @@ public class HealthPickup : Pickup {
 
 	protected override void OnPickup(Collider other) {
 		other.GetComponent<PlayerController>().Heal(healAmount);
+		other.GetComponentInChildren<PlayerHud>().ShowPickupText("health", healAmount);
 		Destroy(gameObject);
 	}
 
