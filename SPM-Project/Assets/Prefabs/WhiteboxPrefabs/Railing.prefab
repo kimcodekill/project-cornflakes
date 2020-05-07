@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 937873214620255172}
   - component: {fileID: 937873214620255171}
   - component: {fileID: 937873214620255170}
-  - component: {fileID: 937873214620255169}
   m_Layer: 10
   m_Name: Bars
   m_TagString: Untagged
@@ -80,19 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &937873214620255169
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 937873214620255168}
-  m_Material: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3275395931324724302
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +90,6 @@ GameObject:
   - component: {fileID: 3275395931324724298}
   - component: {fileID: 3275395931324724301}
   - component: {fileID: 3275395931324724300}
-  - component: {fileID: 3275395931324724303}
   m_Layer: 10
   m_Name: Bars
   m_TagString: Untagged
@@ -173,19 +158,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3275395931324724303
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3275395931324724302}
-  m_Material: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3995372902479270524
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +200,6 @@ GameObject:
   - component: {fileID: 5434578870695585634}
   - component: {fileID: 5434578870695585637}
   - component: {fileID: 5434578870695585636}
-  - component: {fileID: 5434578870695585639}
   m_Layer: 10
   m_Name: Bars
   m_TagString: Untagged
@@ -297,19 +268,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5434578870695585639
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5434578870695585638}
-  m_Material: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5928097895139955169
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +279,6 @@ GameObject:
   - component: {fileID: 5928097895139955173}
   - component: {fileID: 5928097895139955170}
   - component: {fileID: 5928097895139955171}
-  - component: {fileID: 5928097895139955168}
   m_Layer: 10
   m_Name: Bars
   m_TagString: Untagged
@@ -390,19 +347,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5928097895139955168
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5928097895139955169}
-  m_Material: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7008107117087121506
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +358,6 @@ GameObject:
   - component: {fileID: 7008107117087121510}
   - component: {fileID: 7008107117087121505}
   - component: {fileID: 7008107117087121504}
-  - component: {fileID: 7008107117087121507}
   m_Layer: 10
   m_Name: Bars
   m_TagString: Untagged
@@ -483,19 +426,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &7008107117087121507
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7008107117087121506}
-  m_Material: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9133319664104019601
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,5 +522,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 8.3, z: 1}
+  m_Center: {x: 0, y: -3.65, z: 0}
