@@ -29,6 +29,9 @@ public static class CaptureKeeper {
 
 	private static List<Capture> captures;
 
+
+	public static bool NewLevel { get; set; }
+
 	#endregion
 
 	#region Load Capture
@@ -41,13 +44,13 @@ public static class CaptureKeeper {
 		Capture latestCapture = captures[captures.Count - 1];
 		LoadWeaponCapture(latestCapture.Weapons);
 		LoadPlayerCapture(latestCapture.Player);
-		LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
+		if (!NewLevel) LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
 	}
 
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
-		playerGameObject.transform.position = player.position;
-		Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+		if (!NewLevel) playerGameObject.transform.position = player.position;
+		if (!NewLevel) Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
@@ -155,6 +158,10 @@ public static class CaptureKeeper {
 				Object.Destroy(captures[i].Weapons[j].weapon.gameObject);
 			}
 		}
+	}
+
+	public static bool HasCapture() {
+		return captures != null && captures.Count > 0;
 	}
 
 	#endregion

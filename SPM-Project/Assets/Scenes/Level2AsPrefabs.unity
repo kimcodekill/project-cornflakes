@@ -145,6 +145,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AutoRiflePickup
       objectReference: {fileID: 0}
+    - target: {fileID: 7626634061086666968, guid: 334abebd7026ff243a85bff259c19e0a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7626634061086666969, guid: 334abebd7026ff243a85bff259c19e0a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,6 +238,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RocketLauncherPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5878737985512538774, guid: e1f4414e9eb7d564f9e475c074a1a833,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5878737985512538775, guid: e1f4414e9eb7d564f9e475c074a1a833,
         type: 3}
@@ -392,6 +402,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SniperRiflePickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 7794975306305105595, guid: 4127adb415061344aae0e11466b7a50a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4127adb415061344aae0e11466b7a50a, type: 3}
@@ -706,6 +721,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ShotgunPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254532318942674060, guid: 715861eeed43d44469554fe78f20fada,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8254532318942674061, guid: 715861eeed43d44469554fe78f20fada,
         type: 3}
