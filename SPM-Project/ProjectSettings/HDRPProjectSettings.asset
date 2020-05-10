@@ -15,8 +15,9 @@ MonoBehaviour:
   version: 1
   m_DefaultScenePrefabSaved: {fileID: 4893056312182120781, guid: 14f12f05f8e8acd4ca341cdd5741923d,
     type: 3}
-  m_DefaultDXRScenePrefabSaved: {fileID: 0}
+  m_DefaultDXRScenePrefabSaved: {fileID: 4893056312182120781, guid: 4861dd30f0456954da3138c81ab932ed,
+    type: 3}
   m_ProjectSettingFolderPath: HDRPDefaultResources
   m_WizardPopupAtStart: 0
-  m_WizardActiveTab: 0
+  m_WizardActiveTab: 2
   m_PackageVersionForMaterials: 7.1.8
