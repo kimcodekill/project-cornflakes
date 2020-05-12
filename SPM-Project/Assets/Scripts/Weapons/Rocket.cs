@@ -4,7 +4,7 @@ using System.Linq;
 using System.Transactions;
 using UnityEngine;
 
-public class RocketV2 : MonoBehaviour, IDamaging
+public class Rocket : MonoBehaviour, IDamaging
 {
 
     [SerializeField] private float damage;
