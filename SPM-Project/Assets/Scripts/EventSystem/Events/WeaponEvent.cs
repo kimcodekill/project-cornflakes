@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Viktor Dahlberg
+//Currently unused
+/*
 public abstract class WeaponEvent : Event {
 
 	public GameObject GameObject;
@@ -13,18 +15,10 @@ public abstract class WeaponEvent : Event {
 
 }
 
-public class WeaponFiredEvent : WeaponEvent {
-
-}
-
-public class WeaponReloadingEvent : WeaponEvent {
-
-}
-
 public class WeaponAimingDownSightsEvent : Event {
 
 	public bool IsAiming;
 
 	public float ZoomFactor;
 
-}
+}*/
