@@ -4,7 +4,6 @@ using UnityEngine;
 
 //Author: Viktor Dahlberg
 /// Materials are stored in arrays because skinned mesh renderers need an array of materials assigned.
-/// As to not ruin performance, these arrays are created only once and then stored in the dictionary.
 /// The reason we don't just change the rendering mode of a single material is because the Standard shader is a little quirky like that.
 public class PlayerRenderer : MonoBehaviour {
 
