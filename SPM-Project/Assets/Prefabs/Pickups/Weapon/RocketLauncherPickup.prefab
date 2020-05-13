@@ -125,21 +125,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   muzzle: {fileID: 0}
-  reloadAudio:
-    AudioClip: {fileID: 8300000, guid: 1bb00f5304d302a4d8784cfd36c328af, type: 3}
-    AudioSource: {fileID: 7337061835024060214, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-      type: 3}
-    Volume: 0.5
-  shootAudio:
-    AudioClip: {fileID: 8300000, guid: 138cfd67ecdadb24d87a213277c86603, type: 3}
-    AudioSource: {fileID: 7337061835024060214, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-      type: 3}
-    Volume: 1
-  switchAudio:
-    AudioClip: {fileID: 8300000, guid: 879852ff77f30784785a6befc3d7f9f1, type: 3}
-    AudioSource: {fileID: 7337061835024060214, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-      type: 3}
-    Volume: 0.5
+  reloadAudio: {fileID: 8300000, guid: 1bb00f5304d302a4d8784cfd36c328af, type: 3}
+  shootAudio: {fileID: 8300000, guid: 138cfd67ecdadb24d87a213277c86603, type: 3}
+  switchAudio: {fileID: 8300000, guid: 879852ff77f30784785a6befc3d7f9f1, type: 3}
   ammoType: 2
   fullAuto: 0
   damage: -1
