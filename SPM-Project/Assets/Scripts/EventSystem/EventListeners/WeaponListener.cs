@@ -10,7 +10,6 @@ public class WeaponListener : MonoBehaviour {
 
 	private void OnPickUp(Event e) {
 		PickUpEvent pue = (PickUpEvent) e;
-		Debug.Log(pue.Description);
 		PlayerWeapon pw;
 		if ((pw = pue.Target.GetComponent<PlayerWeapon>()) != null) {
 			Weapon w;

@@ -59,7 +59,7 @@ public static class CaptureKeeper {
 		for (int i = 0; i < weapons.Count; i++) {
 			Weapon weapon = weapons[i].weapon;
 			weapon.enabled = true;
-			weapon.Restart();
+			weapon.Initialize();
 			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
 			weapon.AmmoInReserve = weapons[i].ammoInReserve;
 			PlayerWeapon.Instance.PickUpWeapon(weapon);

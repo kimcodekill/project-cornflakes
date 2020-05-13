@@ -8,10 +8,22 @@ using UnityEngine.UI;
 public abstract class EffectEvent : Event
 {
     public GameObject HitEffect;
-    public AudioClip AudioClip;
     public Vector3 WorldPosition;
     public Quaternion Rotation;
     public float Scale;
+	public AudioClip AudioClip;
+	public AudioSource AudioSource;
+}
+
+public class WeaponFiredEvent : EffectEvent {
+
+}
+
+public class WeaponReloadingEvent : EffectEvent {
+
+}
+public class WeaponSwitchedEvent : EffectEvent {
+
 }
 
 public class BulletEffectEvent : EffectEvent

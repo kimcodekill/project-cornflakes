@@ -102,6 +102,11 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// </summary>
 	public Transform Muzzle { get => muzzle; set => muzzle = value; }
 
+	/// <summary>
+	/// The sound to be played when reloading.
+	/// </summary>
+	public AudioClip ReloadAudio { get => reloadAudio; }
+
 	#endregion
 
 	#region Serialized
@@ -109,6 +114,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[Header("Misc. Attributes")]
 	[SerializeField] private LayerMask bulletHitMask;
 	[SerializeField] private Transform muzzle;
+	[Header("Sounds")]
+	[SerializeField] private AudioClip reloadAudio;
+	[SerializeField] private AudioClip shootAudio;
+	[SerializeField] private AudioClip switchAudio;
 	[Header("Base Attributes")]
 	[SerializeField] private EAmmoType ammoType;
 	[SerializeField] private bool fullAuto;
@@ -129,16 +138,14 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
-	public PlayerWeapon playerWeapon;
-
 	private void Start() {
-		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		Initialize();
 
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
 
-	public void Restart() {
+	public void Initialize() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
@@ -259,18 +266,10 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// Reloads the weapon.
 	/// </summary>
 	public void Reload() {
-		EventSystem.Current.FireEvent(new WeaponReloadingEvent() {
-			Description = this + " is reloading",
-			GameObject = gameObject
-		});
 		int usedBullets = magazineSize - ammoInMagazine;
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
 		ammoInReserve -= canTakeAmount;
 		ammoInMagazine += canTakeAmount;
-		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(0, 1);
-		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(3, 0.5f);
-		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(6, 1);
-		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(9, 1);
 	}
 
 	/// <summary>
@@ -280,12 +279,9 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void DoFire() {
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
 			Description = this + " fired a shot",
-			GameObject = gameObject
+			AudioClip = shootAudio,
+			AudioSource = PlayerWeapon.Instance.WeaponAudio
 		});
-		if (ammoType == EAmmoType.Infinite) playerWeapon.PlayAudio(1, 0.8f);
-		else if (ammoType == EAmmoType.Rockets) playerWeapon.PlayAudio(4, 1);
-		else if (ammoType == EAmmoType.Shells) playerWeapon.PlayAudio(7, 0.9f);
-		else if (ammoType == EAmmoType.Special) playerWeapon.PlayAudio(10, 0.9f);
 		Fire();
 	}
 
@@ -294,6 +290,14 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// </summary>
 	protected virtual void Fire() {
 		AmmoInMagazine--;
+	}
+
+	public void SwitchTo() {
+		EventSystem.Current.FireEvent(new WeaponSwitchedEvent() {
+			Description = this + " fired a shot",
+			AudioClip = switchAudio,
+			AudioSource = PlayerWeapon.Instance.WeaponAudio
+		});
 	}
 
 	public int GetMaxAmmo()	{

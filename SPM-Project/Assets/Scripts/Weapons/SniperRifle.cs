@@ -39,23 +39,6 @@ public class SniperRifle : Weapon {
 		AmmoInMagazine--;
 	}
 
-	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Mouse1) && !wasAiming) {
-			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
-				IsAiming = true,
-				ZoomFactor = zoomFactor
-			});
-			wasAiming = true;
-		}
-		if (Input.GetKeyUp(KeyCode.Mouse1) && wasAiming) {
-			EventSystem.Current.FireEvent(new WeaponAimingDownSightsEvent() {
-				IsAiming = false,
-				ZoomFactor = zoomFactor
-			});
-			wasAiming = false;
-		}
-	}
-
 	public override string ToString() {
 		return "Sniper Rifle";
 	}
