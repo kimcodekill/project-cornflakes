@@ -114,16 +114,16 @@ MonoBehaviour:
   attackDamage: 1
   attackSpread: 10
   attackSpeedRPM: 360
+  attackLimitDegrees: 30
+  ObscuringLayers:
+    serializedVersion: 2
+    m_Bits: 1536
   states:
   - {fileID: 11400000, guid: a8626c4f02bafbe41a90e8ab74816983, type: 2}
   - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
   - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
   - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
-  ObscuringLayers:
-    serializedVersion: 2
-    m_Bits: 1536
   weapon: {fileID: 5867486603805195414}
-  attackLimitDegrees: 30
   deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
     type: 3}
   audioSource: {fileID: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   lineDuration: 0.25
-  bulletPrefab: {fileID: 4627892254241955636, guid: 06dad8e40eb523a44a770eb6a360b9d2,
+  bulletPrefab: {fileID: 8805001218220254724, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
     type: 3}
   useBulletProjectile: 1
   targetLeadFactor: 0.8
