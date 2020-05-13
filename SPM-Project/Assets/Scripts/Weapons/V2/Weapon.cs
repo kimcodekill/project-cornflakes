@@ -102,6 +102,11 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// </summary>
 	public Transform Muzzle { get => muzzle; set => muzzle = value; }
 
+	/// <summary>
+	/// The sound to be played when reloading.
+	/// </summary>
+	public Audio ReloadAudio { get => reloadAudio; }
+
 	#endregion
 
 	#region Serialized
@@ -264,10 +269,6 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// Reloads the weapon.
 	/// </summary>
 	public void Reload() {
-		EventSystem.Current.FireEvent(new WeaponReloadingEvent() {
-			Description = this + " is reloading",
-			Audio = reloadAudio
-		});
 		int usedBullets = magazineSize - ammoInMagazine;
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
 		ammoInReserve -= canTakeAmount;

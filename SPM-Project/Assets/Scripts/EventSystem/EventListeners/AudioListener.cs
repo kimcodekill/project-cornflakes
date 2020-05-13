@@ -16,11 +16,6 @@ public class AudioListener : MonoBehaviour {
 		ee.Audio.AudioSource.PlayOneShot(ee.Audio.AudioClip, ee.Audio.Volume);
 	}
 
-	public static bool ChannelIsBusy(AudioMixer channel) {
-
-		return false;
-	}
-
 }
 
 /// <summary>
