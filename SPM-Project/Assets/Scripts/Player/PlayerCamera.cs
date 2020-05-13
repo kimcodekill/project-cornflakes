@@ -50,6 +50,7 @@ public class PlayerCamera : MonoBehaviour {
 	private void Update()
 	{
 		stateMachine.Run();
+		AccumulateRotation();
 	}
 
 	// I don't fully understand why we're doing camera updates in LateUpdate, 
@@ -85,10 +86,13 @@ public class PlayerCamera : MonoBehaviour {
 		else return false;
 	}
 
-	private void RotateCamera() {
+	private void AccumulateRotation() {
 		rotationY += lookSensitivity * Input.GetAxis("Mouse X");
 		rotationX -= lookSensitivity * Input.GetAxis("Mouse Y");
 		rotationX = Mathf.Clamp(rotationX, -60f, 60f);
+	}
+
+	private void RotateCamera() {
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 	}
 
