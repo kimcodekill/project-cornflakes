@@ -12,17 +12,7 @@ public class AudioListener : MonoBehaviour {
 
 	private void PlaySound(Event e) {
 		EffectEvent ee = e as EffectEvent;
-		ee.Audio.AudioSource.PlayOneShot(ee.Audio.AudioClip, ee.Audio.Volume);
+		ee.AudioSource.PlayOneShot(ee.AudioClip);
 	}
 
-}
-
-/// <summary>
-/// Note: If the AudioSource belongs to another GameObject family (not parent nor child), set it in code instead.
-/// </summary>
-[System.Serializable]
-public struct Audio {
-	public AudioClip AudioClip;
-	public AudioSource AudioSource;
-	public float Volume;
 }

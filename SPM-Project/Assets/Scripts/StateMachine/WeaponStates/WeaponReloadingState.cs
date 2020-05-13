@@ -14,7 +14,8 @@ public class WeaponReloadingState : WeaponState {
 		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
 		EventSystem.Current.FireEvent(new WeaponReloadingEvent() {
 			Description = this + " is reloading",
-			Audio = Weapon.ReloadAudio
+			AudioClip = Weapon.ReloadAudio,
+			AudioSource = PlayerWeapon.Instance.WeaponAudio
 		});
 		startTime = Time.time;
 	}

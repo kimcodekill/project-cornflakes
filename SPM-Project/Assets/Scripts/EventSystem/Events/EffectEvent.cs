@@ -11,7 +11,8 @@ public abstract class EffectEvent : Event
     public Vector3 WorldPosition;
     public Quaternion Rotation;
     public float Scale;
-	public Audio Audio;
+	public AudioClip AudioClip;
+	public AudioSource AudioSource;
 }
 
 public class WeaponFiredEvent : EffectEvent {

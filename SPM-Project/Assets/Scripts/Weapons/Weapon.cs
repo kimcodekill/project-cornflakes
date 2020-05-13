@@ -105,7 +105,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// The sound to be played when reloading.
 	/// </summary>
-	public Audio ReloadAudio { get => reloadAudio; }
+	public AudioClip ReloadAudio { get => reloadAudio; }
 
 	#endregion
 
@@ -115,9 +115,9 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[SerializeField] private LayerMask bulletHitMask;
 	[SerializeField] private Transform muzzle;
 	[Header("Sounds")]
-	[SerializeField] private Audio reloadAudio;
-	[SerializeField] private Audio shootAudio;
-	[SerializeField] private Audio switchAudio;
+	[SerializeField] private AudioClip reloadAudio;
+	[SerializeField] private AudioClip shootAudio;
+	[SerializeField] private AudioClip switchAudio;
 	[Header("Base Attributes")]
 	[SerializeField] private EAmmoType ammoType;
 	[SerializeField] private bool fullAuto;
@@ -147,9 +147,6 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 
 	public void Initialize() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
-		reloadAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
-		shootAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
-		switchAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
 	}
 
 	#region Attribute Status Functions
@@ -282,7 +279,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void DoFire() {
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
 			Description = this + " fired a shot",
-			Audio = shootAudio
+			AudioClip = shootAudio,
+			AudioSource = PlayerWeapon.Instance.WeaponAudio
 		});
 		Fire();
 	}
@@ -297,7 +295,8 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void SwitchTo() {
 		EventSystem.Current.FireEvent(new WeaponSwitchedEvent() {
 			Description = this + " fired a shot",
-			Audio = switchAudio
+			AudioClip = switchAudio,
+			AudioSource = PlayerWeapon.Instance.WeaponAudio
 		});
 	}
 
