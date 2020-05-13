@@ -30,10 +30,6 @@ public class BulletEffectEvent : EffectEvent
 
 }
 
-public class SFXEvent : EffectEvent {
-
-}
-
 public class ExplosionEffectEvent : EffectEvent
 {
     public GameObject ExplosionEffect;
