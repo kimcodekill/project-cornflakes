@@ -134,14 +134,17 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
 	private void Start() {
-		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		Initialize();
 
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
 	}
 
-	public void Restart() {
+	public void Initialize() {
 		playerCamera = Camera.main.GetComponent<PlayerCamera>();
+		reloadAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
+		shootAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
+		switchAudio.AudioSource = PlayerWeapon.Instance.WeaponAudio;
 	}
 
 	#region Attribute Status Functions
@@ -263,11 +266,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void Reload() {
 		EventSystem.Current.FireEvent(new WeaponReloadingEvent() {
 			Description = this + " is reloading",
-			Audio = new Audio() {
-				AudioClip = reloadAudio.AudioClip,
-				AudioSource = PlayerWeapon.Instance.WeaponAudio,
-				Volume = reloadAudio.Volume
-			}
+			Audio = reloadAudio
 		});
 		int usedBullets = magazineSize - ammoInMagazine;
 		int canTakeAmount = (-Mathf.Abs(ammoInReserve - usedBullets - Mathf.Abs(ammoInReserve - usedBullets)) + (2 * usedBullets)) / 2;
@@ -282,11 +281,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void DoFire() {
 		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
 			Description = this + " fired a shot",
-			Audio = new Audio() {
-				AudioClip = shootAudio.AudioClip,
-				AudioSource = PlayerWeapon.Instance.WeaponAudio,
-				Volume = shootAudio.Volume
-			}
+			Audio = shootAudio
 		});
 		Fire();
 	}
@@ -301,11 +296,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	public void SwitchTo() {
 		EventSystem.Current.FireEvent(new WeaponSwitchedEvent() {
 			Description = this + " fired a shot",
-			Audio = new Audio() {
-				AudioClip = switchAudio.AudioClip,
-				AudioSource = PlayerWeapon.Instance.WeaponAudio,
-				Volume = switchAudio.Volume
-			}
+			Audio = switchAudio
 		});
 	}
 

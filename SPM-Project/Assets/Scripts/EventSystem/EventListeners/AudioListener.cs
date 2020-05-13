@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioListener : MonoBehaviour {
 
@@ -13,6 +14,11 @@ public class AudioListener : MonoBehaviour {
 	private void PlaySound(Event e) {
 		EffectEvent ee = e as EffectEvent;
 		ee.Audio.AudioSource.PlayOneShot(ee.Audio.AudioClip, ee.Audio.Volume);
+	}
+
+	public static bool ChannelIsBusy(AudioMixer channel) {
+
+		return false;
 	}
 
 }
