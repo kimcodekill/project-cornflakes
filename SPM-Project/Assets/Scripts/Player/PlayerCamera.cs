@@ -63,16 +63,16 @@ public class PlayerCamera : MonoBehaviour {
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
-		pr.SetTransparency(1.0f);
+		pr.SetRenderMode(RenderMode.Opaque);
 		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
-					pr.SetTransparency(0.0f);
+					pr.SetRenderMode(RenderMode.Transparent);
 				}
 				return relationVector.normalized * (hit.distance - camRadius);
 			}
 			else {
-				pr.SetTransparency(0.0f);
+				pr.SetRenderMode(RenderMode.Transparent);
 				return Vector3.up * 2.25f;
 			}
 		}

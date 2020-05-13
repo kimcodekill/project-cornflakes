@@ -2,17 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Author: Erik Pilström
-public class PlayerRenderer : MonoBehaviour
-{
+//Author: Viktor Dahlberg
+/// Materials are stored in arrays because skinned mesh renderers need an array of materials assigned.
+/// As to not ruin performance, these arrays are created only once and then stored in the dictionary.
+/// The reason we don't just change the rendering mode of a single material is because the Standard shader is a little quirky like that.
+public class PlayerRenderer : MonoBehaviour {
 
-	[SerializeField] private Material material;
+	[SerializeField][Tooltip("and starting mode.")] private RenderMode currentMode;
+	[SerializeField] private RenderModeItem[] renderModes;
+	[SerializeField] private SkinnedMeshRenderer[] playerRenderers;
+
+	private Dictionary<RenderMode, Material[]> renderModeLookup;
+	
+	private void Awake() {
+		renderModeLookup = new Dictionary<RenderMode, Material[]>();
+		for (int i = 0; i < renderModes.Length; i++) {
+			renderModeLookup.Add(renderModes[i].Keyword, renderModes[i].Materials);
+		}
+		SetMaterialOnRenderers(renderModeLookup[currentMode]);
+	}
 
 	/// <summary>
-	/// Sets transparency of the material on the player so that the camera can see through.
+	/// Changes the way the player material should be rendered.
 	/// </summary>
-	/// <param name="transparency"></param>
-	public void SetTransparency(float transparency) {
-		material.SetColor("_Color", new Color(material.color.r, material.color.g, material.color.b, transparency));
+	/// <param name="renderMode">The way the player should be rendered.</param>
+	public void SetRenderMode(RenderMode renderMode) {
+		if (currentMode == renderMode) return;
+		currentMode = renderMode;
+		SetMaterialOnRenderers(renderModeLookup[currentMode]);
 	}
+
+	private void SetMaterialOnRenderers(Material[] material) {
+		for (int i = 0; i < playerRenderers.Length; i++) {
+			playerRenderers[i].materials = material;
+		}
+	}
+
+}
+
+[System.Serializable]
+public struct RenderModeItem {
+	public RenderMode Keyword;
+	public Material[] Materials;
+}
+
+public enum RenderMode {
+	Opaque,
+	Transparent
 }
