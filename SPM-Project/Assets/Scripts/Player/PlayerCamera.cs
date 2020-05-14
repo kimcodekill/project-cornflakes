@@ -52,14 +52,12 @@ public class PlayerCamera : MonoBehaviour {
 	{
 		stateMachine.Run();
 		AccumulateRotation();
-		
-		Debug.DrawRay(transform.position, transform.forward * 10);
-		
 	}
 
 	private void FixedUpdate() {
 		RotateCamera();
 		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
+		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {

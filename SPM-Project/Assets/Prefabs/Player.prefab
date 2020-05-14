@@ -824,7 +824,7 @@ MonoBehaviour:
   thrust2: {fileID: 3745030277368027055}
   dash1: {fileID: 3790685401954395183}
   dash2: {fileID: 3057476334920611650}
-  rotationSpeed: 10
+  rotationSpeed: 20
   playerAnimator: {fileID: 6358656477459953120}
 --- !u!114 &7841059610958226997
 MonoBehaviour:
