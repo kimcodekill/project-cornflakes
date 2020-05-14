@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
 	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	[SerializeField] private float rotationSpeed;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
 
@@ -21,6 +22,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
+
+	/// <summary>
+	/// The camera targeting the player
+	/// </summary>
+	public PlayerCamera Camera { get => cam; }
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
@@ -75,7 +81,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		playerAnimator.SetFloat("Speed", animVertical);
 		playerAnimator.SetFloat("Direction", animHorizontal);
 		float yRot = cam.transform.rotation.eulerAngles.y;
-		transform.rotation = Quaternion.Euler(0, yRot, 0);
+		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, yRot, 0), rotationSpeed * Time.deltaTime);
 		Input.doJump = false;
 		Input.doDash = false;
 	}

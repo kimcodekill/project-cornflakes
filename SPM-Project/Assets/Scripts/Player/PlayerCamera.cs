@@ -28,6 +28,7 @@ public class PlayerCamera : MonoBehaviour {
 	/// Rotation values for camera around the X and Y axes, determines where the player is "looking". /E
 	/// </summary>
 	private float rotationX, rotationY;
+	
 	/// <summary>
 	/// The camera's StateMachine instance (hereafter STM).
 	/// </summary>
@@ -51,16 +52,14 @@ public class PlayerCamera : MonoBehaviour {
 	{
 		stateMachine.Run();
 		AccumulateRotation();
+		
+		Debug.DrawRay(transform.position, transform.forward * 10);
+		
 	}
 
-	// I don't fully understand why we're doing camera updates in LateUpdate, 
-	// but the STM will run in Update /K
-	//Camera updates rotation in LateUpdate so that we don't try to change the rotation while the player is moving in a previous direction during the same frame.
-	//This can otherwise lead to wonky movement effects. /E
 	private void FixedUpdate() {
 		RotateCamera();
 		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
-		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
@@ -144,4 +143,5 @@ public class PlayerCamera : MonoBehaviour {
 	public void SetSensitivity(float sensitivty) {
 		lookSensitivity = sensitivty;
 	}
+
 }
