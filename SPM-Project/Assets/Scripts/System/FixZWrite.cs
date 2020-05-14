@@ -21,10 +21,8 @@ public class FixZWrite : MonoBehaviour {
 		if (mr == null) return;
 		switch (mr.sharedMaterial.shader.name) {
 			case "Standard":
-				if (mr.sharedMaterial.GetFloat("_Mode") == 3f) {
-					Material m = new Material(mr.sharedMaterial);
-					mr.sharedMaterial = m;
-					m.SetInt("_ZWrite", 1);
+				if (mr.sharedMaterial.GetFloat("_Mode") == 3f) {;
+					mr.material.SetInt("_ZWrite", 1);
 					count++;
 				}
 				break;
