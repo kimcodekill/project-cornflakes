@@ -4,24 +4,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MenuButton : MonoBehaviour, IPointerEnterHandler
-{
+public class MenuButton : MonoBehaviour, IPointerEnterHandler {
 
-	[SerializeField] private AudioClip[] audioClips = new AudioClip[2];
-	private AudioSource audioSource;
-	private Button theButton;
+	private Button button;
 
-	private void Start() {
-		audioSource = GetComponent<AudioSource>();
-		theButton = GetComponent<Button>();
-		theButton.onClick.AddListener(ClickButton);
+	public void Start() {
+		button = gameObject.GetComponent<Button>();
+		button.onClick.AddListener(delegate { ClickButton(); });
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		audioSource.PlayOneShot(audioClips[0], 1);
+		transform.root.gameObject.GetComponent<MenuScript>().PlayAudio(0, 1f);
 	}
 
 	public void ClickButton() {
-		audioSource.PlayOneShot(audioClips[1], 1);
+		transform.root.gameObject.GetComponent<MenuScript>().PlayAudio(1, 1f);
 	}
 }
