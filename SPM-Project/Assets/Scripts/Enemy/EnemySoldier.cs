@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class EnemySoldier : Enemy, ILootable {
+public class EnemySoldier : MobileEnemy, ILootable {
 
 	[SerializeField] [Tooltip("How far the Soldier should look while searching.")]public float searchRange;
 	[SerializeField] [Tooltip("How many search loops the Soldier should go through.")] private int searchLoops;
@@ -129,7 +129,7 @@ public class EnemySoldier : Enemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Search() {
-		FinishedSearching = false;
+		HasFinishedSearching = false;
 		float searches = 0;
 		bool areaScanned = false;
 		Vector3 lastKnownPosition1, lastKnownPosition2;
@@ -186,7 +186,7 @@ public class EnemySoldier : Enemy, ILootable {
 			searches++;
 		}
 		StartCoroutine(AvoidanceLerp(defaultAvoidanceRadius));
-		FinishedSearching = true;
+		HasFinishedSearching = true;
 	}
 
 	/// <summary>

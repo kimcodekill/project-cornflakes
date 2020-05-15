@@ -1,18 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class GruntDroid : Enemy
+//Author: Erik Pilström
+public class GruntDroid : MobileEnemy
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	[Header("Grunt AI vars")]
+	EliteDroid squadCommander;
+	float bravery;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	
+
 }

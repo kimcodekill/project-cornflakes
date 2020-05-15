@@ -4,10 +4,10 @@ using UnityEngine;
 
 //Author: Erik Pilström
 public class EnemyWeaponBase : MonoBehaviour, IDamaging {
-	//This class exists on its own, instead of implementing the Weapon-base that we use for player weapons
-	//because I needed to make it different enough that it feels like inheritance wasn't quite appropriate.
+	///This class exists on its own, instead of implementing the Weapon-base that we use for player weapons
+	///because I needed to make it different enough that it feels like inheritance wasn't quite appropriate.
 
-	public Enemy owner;
+	public EnemyBase owner;
 	private float fireRate;
 	private float damagePerShot;
 	private float weaponSpread;
@@ -16,7 +16,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private LineRenderer shotLine;
 	[SerializeField] [Tooltip ("For how long should the LineRenderer be drawn? Only applies to Raycast attacks.")] private float lineDuration;
 	[SerializeField] [Tooltip("Which Bullet gameobject to instantiate.")] private Bullet bulletPrefab;
-	[SerializeField] [Tooltip ("Determines whether or not this weapon shot fire bullet projectiles or raycasts.")] private bool useBulletProjectile;
+	[SerializeField] [Tooltip ("Determines whether or not this weapon shoots bullet projectiles or raycasts.")] private bool useBulletProjectile;
 	[SerializeField] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
 	//^ Needs to be moved from this class to the Enemy to keep things centralised. Pass through SetParams() instead.
 	private Vector3 previousTargetDir;
@@ -30,7 +30,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// <param name="damage">Damage per round.</param>
 	/// <param name="spreadAngle">The maximum spread of the enemy's attacks.</param>
 	/// <param name="range">How far the enemy shoots.</param>
-	public void SetParams(Enemy owner, float rof, float damage, float spreadAngle, float range) {
+	public void SetParams(EnemyBase owner, float rof, float damage, float spreadAngle, float range) {
 		this.owner = owner;
 		fireRate = rof;
 		damagePerShot = damage;
@@ -47,7 +47,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// <summary>
 	/// Implements IDamaging, accessed from a number of places to read how much damage the enemy will do.
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>The damage dealt per hit.</returns>
 	public float GetDamage() {
 		return damagePerShot;
 	}
@@ -57,7 +57,6 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// </summary>
 	/// <param name="pos"></param>
 	/// <param name="pos2"></param>
-	/// <returns></returns>
 	public float GetExplosionDamage(Vector3 pos, Vector3 pos2) {
 		return 0;
 	}
@@ -76,7 +75,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// </summary>
 	public void DoAttack() {
 		//Debug.Log(owner.gameObject + " attacked");
-		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
+		Vector3 attackVector = owner.GetVectorFromAtoB(owner.gunTransform, owner.Target.transform);
 		if (useBulletProjectile) {
 			Vector3 collatedAttackVector = LeadTarget(attackVector);
 			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;

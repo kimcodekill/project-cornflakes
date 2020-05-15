@@ -11,7 +11,7 @@ public class EnemySearchingState : EnemyBaseState
 	}
 
 	public override void Run() {
-		if (Enemy.FinishedSearching == true) {
+		if (Enemy.HasFinishedSearching == true) {
 			if (Enemy.IsPatroller) StateMachine.TransitionTo<EnemyPatrollingState>();
 			else StateMachine.TransitionTo<EnemyIdleState>();
 		}
@@ -19,7 +19,7 @@ public class EnemySearchingState : EnemyBaseState
 	}
 
 	public override void Exit() {
-		if (!Enemy.FinishedSearching) { Enemy.StopSearchBehaviour(); } //Only calls StopSearch for the enemy if they didn't finish searching.
+		if (!Enemy.HasFinishedSearching) { Enemy.StopSearchBehaviour(); } //Only calls StopSearch for the enemy if they didn't finish searching.
 	}
 
 }

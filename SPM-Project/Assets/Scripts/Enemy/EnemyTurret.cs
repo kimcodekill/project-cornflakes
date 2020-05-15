@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTurret : Enemy, ILootable {
+//Author: Erik Pilström
+public class EnemyTurret : EnemyBase, ILootable {
 
 	public LootTable GetLootTable() {
 		return new LootTable {

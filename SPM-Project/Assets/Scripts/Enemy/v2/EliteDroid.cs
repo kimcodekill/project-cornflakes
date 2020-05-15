@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EliteDroid : Enemy
+//Author: Erik Pilström
+public class EliteDroid : MobileEnemy
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	[Header("Elite AI vars")]
+	private Transform[] waypoints;
+	private int currentWaypoint = 0;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

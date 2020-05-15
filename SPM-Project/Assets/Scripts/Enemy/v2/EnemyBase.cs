@@ -5,42 +5,46 @@ using UnityEngine.Audio;
 using UnityEngine.Experimental.GlobalIllumination;
 
 //Author: Erik Pilström
-public class Enemy : MonoBehaviour, IEntity, ICapturable 
-{
-	[Header("Enemy attributes")]
-	[SerializeField] [Tooltip("How fast the enemy should move.")] protected float movementSpeed;
-	[SerializeField] [Tooltip("This enemy's current health")] private float currentHealth;
+public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
+	[Header("Health vars")]
+	[SerializeField] [Tooltip("This enemy's current health.")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
-	[SerializeField] [Tooltip("This enemy's field of view given as dot product.")] private float fieldOfView;
-	[SerializeField] [Tooltip("How far the enemy should see.")] protected float visionRange;
-	[SerializeField] [Tooltip("The relative position of the enemy's gun.")] public Transform gunTransform;
-	[SerializeField] [Tooltip("The relative position of the enemy's eyes.")] public Transform eyeTransform;
+
+	[Header("Sight vars")]
+	[SerializeField] [Tooltip("This enemy's sight cone's angle in degrees.")] private float fieldOfView;
+	[SerializeField] [Tooltip("How far this enemy should see.")] protected float visionRange;
 	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
-	[SerializeField] [Tooltip("How much damage the enemy should deal per shot.")] protected float attackDamage;
-	[SerializeField] [Tooltip("The spread the enemy's attacks should have, angle in degress.")] protected float attackSpread;
-	[SerializeField] [Tooltip("How fast the enemy should attack, RPM.")] protected float attackSpeedRPM;
-	[SerializeField] [Tooltip("Within how many degrees (around the Y axis) does the enemy have to point its weapon at the player before attacking.")] private float attackLimitDegrees;
-	[SerializeField] [Tooltip("Layers that this enemy can't see through.")] protected LayerMask ObscuringLayers;
+	[SerializeField] [Tooltip("How close to the player (angle in degrees) this enemy has to point its weapon before attacking.")] private float attackLimitDegrees;
+	[SerializeField] [Tooltip("The relative position of this enemy's gun.")] public Transform gunTransform;
+	[SerializeField] [Tooltip("The relative position of this enemy's eyes.")] public Transform eyeTransform;
+	[SerializeField] [Tooltip("Layers that this enemy cannot see through.")] protected LayerMask ObscuringLayers;
 
-	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
-	[SerializeField] protected EnemyWeaponBase weapon;
-	[SerializeField] private GameObject deathExplosion;
+	[Header("Attacking vars")]
+	[SerializeField] [Tooltip("The damage this enemy should deal per shot.")] protected float attackDamage;
+	[SerializeField] [Tooltip("The spread this enemy's attacks should have, angle in degrees.")] protected float attackSpread;
+	[SerializeField] [Tooltip("The speed that this enemy should attack, RPM.")] protected float attackSpeedRPM;
 
-	
-	protected Vector3 vectorToPlayer; //Vector to the player from the enemy's eyes. Used by Enemy-children.
-	private StateMachine enemyStateMachine; //Enemy's STM instance.
-
-	/// <summary>
-	/// Returns the enemy's weapon instance.
-	/// </summary>
-	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
-
+	[Header("Sound vars")]
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
 	public AudioClip[] audioClips;
 	[SerializeField] private AudioMixerGroup mixerGroup;
 	private int minSoundDelay = 5;
 	private int maxSoundDelay = 10;
+
+	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
+	[SerializeField] protected EnemyWeaponBase weapon;
+	[SerializeField] private GameObject deathExplosion;
+
+	///Each enemy's STM instance.
+	private StateMachine enemyStateMachine;
+	///Vector to the player from the enemy's eyes. Used by Enemy-children.
+	protected Vector3 vectorToPlayer;
+
+	/// <summary>
+	/// Returns the enemy's weapon instance.
+	/// </summary>
+	public EnemyWeaponBase EnemyEquippedWeapon { get => weapon; }
 
 	/// <summary>
 	/// Returns this enemy's target.
@@ -50,7 +54,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// <summary>
 	/// Is the enemy done searching for the player?
 	/// </summary>
-	public bool FinishedSearching { get; protected set; }
+	public bool HasFinishedSearching { get; protected set; }
 
 	/// <summary>
 	/// Is this enemy a patroller?
@@ -68,7 +72,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	protected void Start() {
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
-		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+		Target = PlayerController.Instance;
 
 		audioSource = CreateAudioSource(1);
 		audioSourceIdle = CreateAudioSource(0.75f);
@@ -78,7 +82,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	}
 
 	protected void Update() {
-		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
+		vectorToPlayer = GetVectorFromAtoB(eyeTransform, Target.transform);
 		enemyStateMachine.Run();
 		if (audioSourceIdle.isPlaying == false) {
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
@@ -98,48 +102,50 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	}
 
 	/// <summary>
-	/// Calculates and returns the vector between an origin and a target.
-	/// </summary>
-	/// <param name="target">Position of the target.</param>
-	/// <param name="origin">Origin position.</param>
-	/// <returns></returns>
-	public Vector3 GetVectorToTarget(Transform target, Transform origin) {
-		Vector3 v = target.position - origin.position;
-		return v;
-	}
-
-	/// <summary>
 	/// Checks to see if the enemy can see the player in its field of view and sight range, and that the player is not obscured by objects.
 	/// </summary>
 	/// <param name="v"></param>
 	/// <returns></returns>
 	public bool TargetIsInSight() { //Checks if the Enemy's Target is in sight by checking the different sight factors.
-		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) { return true; }
-		else { return false; }
-	}
-
-	private bool TargetIsInFOV(Vector3 v) { //Checks if the Enemy's Target is inside the specified field of view
-		float angleToTarget = Vector3.Dot(eyeTransform.forward, v.normalized);
-		if (angleToTarget >= fieldOfView) {
-			return true; 
+		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) {
+			return true;
 		}
-		else { return false; }
+		else {
+			return false;
+		}
 	}
 
-	private bool TargetIsInRange() { //Is Target within sight range?
+
+	///Checks if the Enemy's Target is inside the specified field of view
+	private bool TargetIsInFOV(Vector3 v) {
+		float angleToTarget = Vector3.Angle(eyeTransform.forward, v.normalized);
+		if (angleToTarget >= fieldOfView) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	///Is Target within sight range?
+	private bool TargetIsInRange() {
 		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
 			return true;
 		}
-		else { return false; }
+		else {
+			return false;
+		}
 	}
 
-	private bool CanSeeTarget(Vector3 v) { //Is the line to the target obscured by something?
+	///Is the line to the target obscured by something?
+	private bool CanSeeTarget(Vector3 v) {
 		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
-			//Debug.DrawRay(eyeTransform.position, v, Color.red);
 			return true;
 		}
-		else { return false; }
+		else {
+			return false;
+		}
 	}
 
 	/// <summary>
@@ -148,11 +154,16 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
 		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange) {
-			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) { return true; }
-			else { return false; }
+			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
-		else return false;
-		
+		else {
+			return false;
+		}
 	}
 
 	/// <summary>
@@ -163,15 +174,34 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
 		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
 		float radAngle = Mathf.Acos((Vector3.Dot(sightToPlayer, gunAim)) / (sightToPlayer.magnitude * gunAim.magnitude));
-		float degrees = radAngle * (180 / Mathf.PI);		
+		float degrees = radAngle * (180 / Mathf.PI);
 		if (degrees < attackLimitDegrees) {
 			return true;
 		}
-		else return false;
+		else {
+			return false;
+		}
 	}
 
+	/// <summary>
+	/// Does what it says it does: calculates delta-V between two vectors.
+	/// </summary>
+	/// <param name="v1">The first vector.</param>
+	/// <param name="v2">The second vector.</param>
+	/// <returns>Velocity between v2 and v1.</returns>
 	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
 		Vector3 v = v2 - v1;
+		return v;
+	}
+
+	/// <summary>
+	/// Calculates and returns the vector from a base transform A to a target transform B.
+	/// </summary>
+	/// <param name="A">Base transform.</param>
+	/// <param name="B">Target transform.</param>
+	/// <returns>The vector from A to B.</returns>
+	public Vector3 GetVectorFromAtoB(Transform A, Transform B) {
+		Vector3 v = B.position - A.position;
 		return v;
 	}
 
@@ -182,7 +212,9 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// <returns></returns>
 	public float TakeDamage(float amount) {
 		currentHealth -= amount;
-		if (currentHealth <= 0) { Die(); }
+		if (currentHealth <= 0) {
+			Die();
+		}
 		return currentHealth;
 	}
 
@@ -193,7 +225,9 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// <returns></returns>
 	public float Heal(float amount) {
 		currentHealth += amount;
-		if (currentHealth > maxHealth) { currentHealth = maxHealth; }
+		if (currentHealth > maxHealth) {
+			currentHealth = maxHealth;
+		}
 		return currentHealth;
 	}
 
@@ -203,8 +237,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 			Source = gameObject,
 			DropAnythingAtAllChance = 0.5f,
 		});
-		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
-		{
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent() {
 			ExplosionEffect = deathExplosion,
 			WorldPosition = transform.position,
 			Rotation = Quaternion.identity,
@@ -213,17 +246,17 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
-	
+
 	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSource.pitch = Random.Range(minPitch, maxPitch);
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
-	
+
 	/// <summary>
 	/// Signatures for all the behaviour coroutines that the various enemies need to be able to implement.
 	/// (Getting kinda ridiculous with these coroutines, considering reworking enemies from the base up to use behaviour trees instead.)
 	/// </summary>
-public virtual void StartIdleBehaviour() { }
+	public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }
 	public virtual void StopPatrolBehaviour() { }

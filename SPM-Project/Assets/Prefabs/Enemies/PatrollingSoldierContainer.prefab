@@ -47,7 +47,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1327413923285096283}
   m_Enabled: 1
   m_AgentTypeID: -334000983
-  m_Radius: 0.5
+  m_Radius: 1.25
   m_Speed: 8
   m_Acceleration: 8
   avoidancePriority: 50
@@ -72,29 +72,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51ad2e986998e54799dd1a1c9458c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 8
   currentHealth: 0
   maxHealth: 75
   fieldOfView: 0.3
   visionRange: 40
+  attackRange: 30
+  attackLimitDegrees: 30
   gunTransform: {fileID: 1327413924585744622}
   eyeTransform: {fileID: 1327413924363410733}
-  attackRange: 30
-  attackDamage: 1
-  attackSpread: 10
-  attackSpeedRPM: 360
-  states:
-  - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
-  - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
-  - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
-  - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
   ObscuringLayers:
     serializedVersion: 2
     m_Bits: 1536
-  weapon: {fileID: 204679302339680043}
-  attackLimitDegrees: 30
-  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
-    type: 3}
+  attackDamage: 1
+  attackSpread: 10
+  attackSpeedRPM: 360
   audioSource: {fileID: 0}
   audioSourceIdle: {fileID: 0}
   audioClips:
@@ -105,6 +96,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 734548d0be7ba1943b12bb379fb5d2bc, type: 3}
   mixerGroup: {fileID: 9136798453681754332, guid: 3fa9793ed1744f849b801f2a37ad8c19,
     type: 2}
+  states:
+  - {fileID: 11400000, guid: c2b1f03fc4d594248b01e478a332bf5b, type: 2}
+  - {fileID: 11400000, guid: a50482c5754240345a2518ac3080d9e6, type: 2}
+  - {fileID: 11400000, guid: 69356e274376fcb41af36788656d0dd9, type: 2}
+  - {fileID: 11400000, guid: 2609d2bd5d14d0b48972c7ff53fba480, type: 2}
+  weapon: {fileID: 204679302339680043}
+  deathExplosion: {fileID: 6693338581429669251, guid: c0ac9fe20ad9afb44a0f6c143c0deabc,
+    type: 3}
+  movementSpeed: 8
   searchRange: 10
   searchLoops: 7
   attackAvoidanceRadius: 2.5
