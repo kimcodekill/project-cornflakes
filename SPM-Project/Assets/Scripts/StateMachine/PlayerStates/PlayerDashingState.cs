@@ -62,10 +62,7 @@ public class PlayerDashingState : PlayerState {
 			//but we still want them to be able to dash uphill,
 			//so if they are grounded when the Y axis delta exceeds the limit we set a new limit from that point on
 			if (Player.transform.position.y - initialY > MaxYGain) {
-				if (!Player.PhysicsBody.IsGrounded()) {
-					Player.PhysicsBody.SetAxisVelocity('y', 0);
-					Debug.Log("waw");
-				}
+				if (!Player.PhysicsBody.IsGrounded()) Player.PhysicsBody.SetAxisVelocity('y', 0);
 				else initialY = Player.transform.position.y;
 			}
 			currentDashTime += Time.deltaTime;

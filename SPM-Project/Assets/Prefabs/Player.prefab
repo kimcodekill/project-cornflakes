@@ -742,6 +742,7 @@ GameObject:
   - component: {fileID: 7841059610958226998}
   - component: {fileID: 7841059610958226997}
   - component: {fileID: 2726617569804467269}
+  - component: {fileID: 454887566523546452}
   - component: {fileID: 5486548003356286568}
   - component: {fileID: 7337061835024060214}
   - component: {fileID: -2639569253377107532}
@@ -858,6 +859,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c90e08d5d467f8c4d8697e06bd6d377c, type: 2}
   weaponAudio: {fileID: 7337061835024060214}
   muzzleTransform: {fileID: 2965801763724568574}
+--- !u!114 &454887566523546452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841059610958226992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad8daf83ecca364bba3580624bdee0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHeatLevel: 10
+  heatDispersalDelay: 2
+  heatDispersalRate: 3
 --- !u!82 &5486548003356286568
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2493,9 +2509,9 @@ SkinnedMeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 6358656477450485888}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6358656477450361360 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400016, guid: b0c68e6eb763a604694ce6e49557bfb4,
+--- !u!95 &6358656477459953120 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: b0c68e6eb763a604694ce6e49557bfb4,
     type: 3}
   m_PrefabInstance: {fileID: 6358656477450485888}
   m_PrefabAsset: {fileID: 0}
@@ -2541,9 +2557,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6358656477450485888}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &6358656477459953120 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 9500000, guid: b0c68e6eb763a604694ce6e49557bfb4,
+--- !u!4 &6358656477450361360 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400016, guid: b0c68e6eb763a604694ce6e49557bfb4,
     type: 3}
   m_PrefabInstance: {fileID: 6358656477450485888}
   m_PrefabAsset: {fileID: 0}
