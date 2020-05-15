@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.PlayerLoop;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Windows.WebCam;
 
+//Author: Joakim Linna
+//Co Author: Viktor Dahlberg
 public class Reticle : MonoBehaviour
 {
     [SerializeField] private LayerMask rayMask;
@@ -21,10 +18,8 @@ public class Reticle : MonoBehaviour
 
     private void Start()
     {
-
-        
         cam = Camera.main;
-        Debug.Log(cam.pixelWidth + ":" + cam.pixelHeight);
+
         //I'm using the PlayerWeaponInstanceMuzzle bc the weapons dont have it themselves
         muzzle = PlayerWeapon.Instance.Muzzle;
 
@@ -57,9 +52,9 @@ public class Reticle : MonoBehaviour
     {
         if (reticleImage.enabled)
         {
-            //commented out by Viktor//rect.localPosition = GetOffset();
-			rect.anchorMin = GetOffset();
-			rect.anchorMax = GetOffset();
+            //Viktor wrote this
+            //Kim: im not sure we should actually be moving the anchors, but i dont have a better idea so :shrug:
+            rect.anchorMin = rect.anchorMax = GetOffset();
         }
     }
 
@@ -69,22 +64,23 @@ public class Reticle : MonoBehaviour
     /// <returns>pixel offset vector</returns>
     private Vector2 GetOffset()
     {
+        Vector3 dir = cam.transform.forward;
+        
         //Thows a ray forward from the camera
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit camHit, float.PositiveInfinity, rayMask))
         {
-            Vector3 hitDirection = (camHit.point - muzzle.position).normalized;
-
-            //Throws a ray from the muzzle to the camera ray hitpoint
-            if (Physics.Raycast(muzzle.position, hitDirection, out RaycastHit muzzleHit, float.PositiveInfinity, rayMask))
-            {
-                if (muzzleHit.point != camHit.point)
-                {
-					//commented out by Viktor//float muzzleHitCanvasY = (cam.WorldToViewportPoint(muzzleHit.point).y * cam.scaledPixelHeight) - (cam.scaledPixelHeight / 2.0f);
-					return cam.WorldToViewportPoint(muzzleHit.point);
-					//commented out by Viktor//return new Vector2(0.0f, muzzleHitCanvasY);
-				}
-			}
+            dir = (camHit.point - muzzle.position).normalized;
         }
+            
+        if (Physics.Raycast(muzzle.position, dir, out RaycastHit muzzleHit, float.PositiveInfinity, rayMask))
+        {
+            if (muzzleHit.point != camHit.point)
+            {
+                //Viktor wrote this
+                return cam.WorldToViewportPoint(muzzleHit.point);
+            }
+        }
+        
         return center;
     }
 }
