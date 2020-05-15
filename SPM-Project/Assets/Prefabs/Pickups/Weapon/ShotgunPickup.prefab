@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6cb03edc193bc4585a540045aa1ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reticle: {fileID: 21300000, guid: 63313ef7a51104241b9a284d922c61b7, type: 3}
+  model: {fileID: 0}
   bulletHitMask:
     serializedVersion: 2
     m_Bits: 1792
