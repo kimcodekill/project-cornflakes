@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	public Weapon CurrentWeapon { get; private set; }
 
+	//Kim: bruh we aint using this, can we get a woop woop for the
+	//     fact that we should remove any reference to it..
 	/// <summary>
 	/// Whether or not the weapon is active.
 	/// </summary>
@@ -26,6 +29,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	public bool SwitchWeapon { get { return CheckInputs(); } }
 
+	public Transform Muzzle { get => muzzle; }
+
 	public AudioSource WeaponAudio { get => weaponAudio; }
 
 	#endregion
@@ -35,7 +40,7 @@ public class PlayerWeapon : MonoBehaviour {
 	[SerializeField] private State[] states;
 	[SerializeField] private AudioSource weaponAudio;
 	//Where the weapons will shoot from;
-	[SerializeField] private Transform muzzleTransform;
+	[SerializeField] private Transform muzzle;
 
 	#endregion
 
@@ -49,7 +54,7 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
-	private void Start() {
+	private void Start() { 
 		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
 	}
 
@@ -83,8 +88,8 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="index">The specified index.</param>
 	public void SwitchTo(int index) {
-		weapons[index].SwitchTo();
 		CurrentWeapon = weapons[index];
+		weapons[index].SwitchTo();
 	}
 
 	/// <summary>
@@ -92,14 +97,15 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="weapon">The weapon to pick up.</param>
 	public void PickUpWeapon(Weapon weapon) {
-		if (weapons.Count == 0)
+		weapons.Add(weapon);
+		
+		if (weapons.Count == 1)
 		{
-			CurrentWeapon = weapon;
+			SwitchTo(0);
 			WeaponIsActive = true;
 		}
-		weapons.Add(weapon);
-		weapon.SwitchTo();
-		weapon.Muzzle = muzzleTransform;
+
+		weapon.Muzzle = muzzle;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}

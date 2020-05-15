@@ -121,6 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f31c44bc8e6d34191e6c302e3f002b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reticle: {fileID: 21300000, guid: 7e90cea843ee9eb41b782c463717fcff, type: 3}
+  model: {fileID: 0}
   bulletHitMask:
     serializedVersion: 2
     m_Bits: 1792

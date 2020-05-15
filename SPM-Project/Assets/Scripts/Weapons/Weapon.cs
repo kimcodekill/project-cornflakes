@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Author: Viktor Dahlberg
 public abstract class Weapon : MonoBehaviour, IDamaging {
@@ -106,11 +107,17 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// The sound to be played when reloading.
 	/// </summary>
 	public AudioClip ReloadAudio { get => reloadAudio; }
+	
+	public Sprite Reticle { get => reticle; }
+	public GameObject Model { get => model; }
 
 	#endregion
 
 	#region Serialized
 
+	[Header("Graphical Assets")]
+	[SerializeField] private Sprite reticle;
+	[SerializeField] private GameObject model;
 	[Header("Misc. Attributes")]
 	[SerializeField] private LayerMask bulletHitMask;
 	[SerializeField] private Transform muzzle;
@@ -293,10 +300,12 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	}
 
 	public void SwitchTo() {
-		EventSystem.Current.FireEvent(new WeaponSwitchedEvent() {
-			Description = this + " fired a shot",
+		EventSystem.Current.FireEvent(new WeaponSwitchedEvent()
+		{
+			Description = " switched to " + this,
 			AudioClip = switchAudio,
-			AudioSource = PlayerWeapon.Instance.WeaponAudio
+			AudioSource = PlayerWeapon.Instance.WeaponAudio,
+			SelectedWeapon = this
 		});
 	}
 
