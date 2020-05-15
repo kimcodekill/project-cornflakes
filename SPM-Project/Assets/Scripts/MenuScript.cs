@@ -14,6 +14,7 @@ public class MenuScript : MonoBehaviour {
 	[SerializeField] private AudioSource audioSource;
 	[SerializeField] private AudioClip[] audioClips = new AudioClip[2];
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
+	[SerializeField] private Toggle fullscreenToggle;
 	private Resolution[] resolutions;
 
 	public void Start() {
@@ -23,19 +24,25 @@ public class MenuScript : MonoBehaviour {
 		Resolution[] resolutionsTemp = Screen.resolutions;
 		resolutions = resolutionsTemp.Reverse().ToArray();
 
+		ToggleFullscreen(Screen.fullScreen);
+		if (Screen.fullScreen == false) fullscreenToggle.isOn = false;
+
 		List<string> options = new List<string>();
+		int dropdownValue = 0;
+
 		for (int i = 0; i < resolutions.Length; i++) {
 			string option = resolutions[i].width + " x " + resolutions[i].height;
 			options.Add(option);
 
-			if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height) {
-				resolutionDropdown.value = i;
+			if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height) {
+				dropdownValue = i;
 				resolutionDropdown.RefreshShownValue();
 			}
 		}
 
 		resolutionDropdown.ClearOptions();
 		resolutionDropdown.AddOptions(options);
+		resolutionDropdown.value = dropdownValue;
 	}
 
 	public void NewGame() {
@@ -45,12 +52,12 @@ public class MenuScript : MonoBehaviour {
 		});
 	}
 
-	public void HowToPlay() {
+	public void GoToControls() {
 		mainPanel.gameObject.SetActive(false);
 		howToPlayPanel.gameObject.SetActive(true);
 	}
 
-	public void Settings() {
+	public void GoToSettings() {
 		mainPanel.gameObject.SetActive(false);
 		settingsPanel.gameObject.SetActive(true);
 
@@ -61,8 +68,11 @@ public class MenuScript : MonoBehaviour {
 		Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
 	}
 
-	public void ToggleFullscreen(bool toggleValue)
-	{
+	public void ToggleFullscreen(bool toggleValue) {
+		if (Screen.fullScreen == false) {
+			SetResolution(0);
+			resolutionDropdown.value = 0;
+		}
 		Screen.fullScreen = toggleValue;
 	}
 
