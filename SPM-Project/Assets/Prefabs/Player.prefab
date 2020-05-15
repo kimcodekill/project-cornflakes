@@ -130,6 +130,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   reticleImage: {fileID: 5832028640297714552}
+  playerTransparentViewportYTreshold: 0.45
 --- !u!1 &224233461678482037
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Reticle : MonoBehaviour
 {
     [SerializeField] private LayerMask rayMask;
     [SerializeField] private Image reticleImage;
+	[SerializeField] private float playerTransparentViewportYTreshold;
 
     private Camera cam;
     private Transform muzzle;
@@ -16,6 +17,8 @@ public class Reticle : MonoBehaviour
 	//the center of the screen in viewport coordinates
 	private Vector2 center = new Vector2(0.5f, 0.5f);
 
+	private PlayerRenderer playerRenderer;
+
     private void Start()
     {
         cam = Camera.main;
@@ -24,6 +27,8 @@ public class Reticle : MonoBehaviour
         muzzle = PlayerWeapon.Instance.Muzzle;
 
         rect = reticleImage.rectTransform;
+
+		playerRenderer = cam.GetComponent<PlayerRenderer>();
 
         EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickup);
         EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(OnWeaponSwitch);
@@ -52,9 +57,11 @@ public class Reticle : MonoBehaviour
     {
         if (reticleImage.enabled)
         {
-            //Viktor wrote this
-            //Kim: im not sure we should actually be moving the anchors, but i dont have a better idea so :shrug:
-            rect.anchorMin = rect.anchorMax = GetOffset();
+			//Viktor wrote this
+			//Kim: im not sure we should actually be moving the anchors, but i dont have a better idea so :shrug:
+			Vector2 offset = GetOffset();
+            rect.anchorMin = rect.anchorMax = offset;
+			if (offset.y < playerTransparentViewportYTreshold) playerRenderer.SetRenderMode(RenderMode.Transparent);
         }
     }
 
