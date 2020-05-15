@@ -68,6 +68,10 @@ public class PhysicsBody : MonoBehaviour {
 		rigidBody.useGravity = enabled;
 	}
 
+	/// <summary>
+	/// Enables or disables the usage of the stationary physics material.
+	/// </summary>
+	/// <param name="use">Whether or not the stationary physics material should be used.</param>
 	public void UseStationaryPhysicsMaterial(bool use) {
 		if (use) collider.material = stationaryPhysicsMaterial;
 		else collider.material = initialPhysicsMaterial;
