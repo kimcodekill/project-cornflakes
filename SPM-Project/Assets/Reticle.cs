@@ -16,6 +16,9 @@ public class Reticle : MonoBehaviour
 
     private RectTransform rect;
 
+	//the center of the screen in viewport coordinates
+	private Vector2 center = new Vector2(0.5f, 0.5f);
+
     private void Start()
     {
 
@@ -54,7 +57,9 @@ public class Reticle : MonoBehaviour
     {
         if (reticleImage.enabled)
         {
-            rect.localPosition = GetOffset();
+            //commented out by Viktor//rect.localPosition = GetOffset();
+			rect.anchorMin = GetOffset();
+			rect.anchorMax = GetOffset();
         }
     }
 
@@ -73,13 +78,13 @@ public class Reticle : MonoBehaviour
             if (Physics.Raycast(muzzle.position, hitDirection, out RaycastHit muzzleHit, float.PositiveInfinity, rayMask))
             {
                 if (muzzleHit.point != camHit.point)
-                { 
-                    float muzzleHitCanvasY = (cam.WorldToViewportPoint(muzzleHit.point).y * cam.scaledPixelHeight) - (cam.scaledPixelHeight / 2.0f);
-
-                    return new Vector2(0.0f, muzzleHitCanvasY);
-                }
-            }
+                {
+					//commented out by Viktor//float muzzleHitCanvasY = (cam.WorldToViewportPoint(muzzleHit.point).y * cam.scaledPixelHeight) - (cam.scaledPixelHeight / 2.0f);
+					return cam.WorldToViewportPoint(muzzleHit.point);
+					//commented out by Viktor//return new Vector2(0.0f, muzzleHitCanvasY);
+				}
+			}
         }
-        return Vector2.zero;
+        return center;
     }
 }
