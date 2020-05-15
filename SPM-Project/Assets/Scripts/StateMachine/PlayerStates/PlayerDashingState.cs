@@ -58,7 +58,16 @@ public class PlayerDashingState : PlayerState {
 
 	public override void Run() {
 		if (dashed) {
-			if (Player.transform.position.y - initialY > MaxYGain) Player.PhysicsBody.SetAxisVelocity('y', 0);
+			//We want to make sure the player cant fly up by dashing,
+			//but we still want them to be able to dash uphill,
+			//so if they are grounded when the Y axis delta exceeds the limit we set a new limit from that point on
+			if (Player.transform.position.y - initialY > MaxYGain) {
+				if (!Player.PhysicsBody.IsGrounded()) {
+					Player.PhysicsBody.SetAxisVelocity('y', 0);
+					Debug.Log("waw");
+				}
+				else initialY = Player.transform.position.y;
+			}
 			currentDashTime += Time.deltaTime;
 			if (currentDashTime > DashDuration || Vector3.Dot(Vector3.down, Player.PhysicsBody.GetCurrentSurfaceNormal()) > StopDotTreshold) StateMachine.TransitionTo<PlayerFallingState>();
 		}
@@ -70,6 +79,7 @@ public class PlayerDashingState : PlayerState {
 		Player.dash1.SetActive(false);
 		Player.dash2.SetActive(false);
 		Player.PhysicsBody.SetGravityEnabled(true);
+		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		dashed = false;
 		currentDashTime = 0f;
 
