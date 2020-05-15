@@ -840,6 +840,8 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1792
+  stationaryDynamicFriction: 1
+  stationaryFrictionCombine: 3
 --- !u!114 &2726617569804467269
 MonoBehaviour:
   m_ObjectHideFlags: 0

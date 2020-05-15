@@ -30,15 +30,26 @@ public class PhysicsBody : MonoBehaviour {
 	#endregion
 
 	[SerializeField] private LayerMask mask;
+	[SerializeField] private float stationaryDynamicFriction;
+	[SerializeField] private PhysicMaterialCombine stationaryFrictionCombine;
 
 	private Collider collider;
 
 	private Rigidbody rigidBody;
 
+	private PhysicMaterial initialPhysicsMaterial;
+
+	private PhysicMaterial stationaryPhysicsMaterial;
+
 	private void Awake() {
 		collider = GetComponent<Collider>();
 		rigidBody = gameObject.AddComponent<Rigidbody>();
 		rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+		initialPhysicsMaterial = collider.material;
+		stationaryPhysicsMaterial = new PhysicMaterial {
+			dynamicFriction = stationaryDynamicFriction,
+			frictionCombine = stationaryFrictionCombine
+		};
 	}
 
 	/// <summary>
@@ -55,6 +66,11 @@ public class PhysicsBody : MonoBehaviour {
 	/// <param name="enabled">Whether or not gravity should be enabled.</param>
 	public void SetGravityEnabled(bool enabled) {
 		rigidBody.useGravity = enabled;
+	}
+
+	public void UseStationaryPhysicsMaterial(bool use) {
+		if (use) collider.material = stationaryPhysicsMaterial;
+		else collider.material = initialPhysicsMaterial;
 	}
 
 	#region Adjust Velocity
