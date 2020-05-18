@@ -16,16 +16,19 @@ public class MenuScript : MonoBehaviour {
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
 	[SerializeField] private Toggle fullscreenToggle;
 	private Resolution[] resolutions;
+	private int savedResolution = 0;
+	private bool isFullscreen = true;
 
 	public void Start() {
 		howToPlayPanel.gameObject.SetActive(false);
 		settingsPanel.gameObject.SetActive(false);
 
-		Resolution[] resolutionsTemp = Screen.resolutions;
-		resolutions = resolutionsTemp.Reverse().ToArray();
+		resolutions = Screen.resolutions.Reverse().ToArray();
 
-		ToggleFullscreen(Screen.fullScreen);
-		if (Screen.fullScreen == false) fullscreenToggle.isOn = false;
+		if (Screen.fullScreen == false) {
+			fullscreenToggle.isOn = false;
+			isFullscreen = false;
+		}
 
 		List<string> options = new List<string>();
 		int dropdownValue = 0;
@@ -60,20 +63,26 @@ public class MenuScript : MonoBehaviour {
 	public void GoToSettings() {
 		mainPanel.gameObject.SetActive(false);
 		settingsPanel.gameObject.SetActive(true);
-
 	}
 
 	public void SetResolution(int index) {
 		Resolution resolution = resolutions[index];
-		Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+		Screen.SetResolution(resolution.width, resolution.height, isFullscreen);
+		if (isFullscreen == false) {
+			savedResolution = index;
+			resolutionDropdown.value = savedResolution;
+		}
 	}
 
 	public void ToggleFullscreen(bool toggleValue) {
-		if (Screen.fullScreen == false) {
+		isFullscreen = toggleValue;
+		Screen.fullScreen = isFullscreen;
+
+		if (isFullscreen == true) {
 			SetResolution(0);
 			resolutionDropdown.value = 0;
 		}
-		Screen.fullScreen = toggleValue;
+		else SetResolution(savedResolution);
 	}
 
 	public void BackToMain() {
