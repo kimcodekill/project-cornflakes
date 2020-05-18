@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Viktor Dahlberg
-public class AmmoPickup : Pickup {
+public class AmmoPickup : Pickup, ISpawnable {
 
 	#region Properties
 
@@ -17,6 +17,7 @@ public class AmmoPickup : Pickup {
 
 	[SerializeField] private Weapon.EAmmoType ammoType;
 	[SerializeField] private int ammoAmount;
+	[SerializeField] private int spawnedAmmoAmount;
 
 	#endregion
 
@@ -36,6 +37,11 @@ public class AmmoPickup : Pickup {
 			return true;
 		}
 		else return false;
+	}
+
+	public new void Spawned() {
+		ammoAmount = spawnedAmmoAmount;
+		base.Spawned();
 	}
 
 }

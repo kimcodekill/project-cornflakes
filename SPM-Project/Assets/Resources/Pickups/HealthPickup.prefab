@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8959660159161600597}
   - component: {fileID: 7867582776813105238}
   - component: {fileID: 2928802286754646986}
-  - component: {fileID: 1784093356849673146}
+  - component: {fileID: -6165115137464716695}
   m_Layer: 13
   m_Name: HealthPickup
   m_TagString: Pickup
@@ -94,7 +94,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1784093356849673146
+--- !u!114 &-6165115137464716695
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,8 +103,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8392051933083500112}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43e189034fbb3cf47b466e326604dad4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c3d472517e59ce45afd3e31bd5d1604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
   healAmount: 25
+  spawnedHealthMinPercentage: 25
+  spawnedHealthMaxPercentage: 100

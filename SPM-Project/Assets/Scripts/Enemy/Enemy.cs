@@ -201,7 +201,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 		StopAllCoroutines();
 		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
 			Source = gameObject,
-			DropAnythingAtAllChance = 0.5f,
+			AdditionalDropChance = 0.5f,
 		});
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
 		{
