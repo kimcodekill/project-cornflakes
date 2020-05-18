@@ -9,11 +9,13 @@ public class PlayerRenderer : MonoBehaviour {
 
 	[SerializeField][Tooltip("and starting mode.")] private RenderMode currentMode;
 	[SerializeField] private RenderModeItem[] renderModes;
-	[SerializeField] private SkinnedMeshRenderer[] playerRenderers;
+	
+	private SkinnedMeshRenderer[] playerRenderers;
 
 	private Dictionary<RenderMode, Material[]> renderModeLookup;
 	
-	private void Awake() {
+	private void Start() {
+		playerRenderers = PlayerController.Instance.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 		renderModeLookup = new Dictionary<RenderMode, Material[]>();
 		for (int i = 0; i < renderModes.Length; i++) {
 			renderModeLookup.Add(renderModes[i].Keyword, renderModes[i].Materials);

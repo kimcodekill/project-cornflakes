@@ -14,7 +14,6 @@ public class PlayerCamera : MonoBehaviour {
 	[SerializeField] [Tooltip("The speed with which the camera moves.")] private float lookSensitivity = 1f;
 	[SerializeField] [Tooltip("Camera radius for collision detection.")] private float camRadius = 0.25f; 
 	[SerializeField] [Tooltip("Minimum allowed distance between camera and objects behind it.")] private float minCollisionDistance;
-	[SerializeField] [Tooltip("The Player transform the camera attaches to.")] private Transform playerMesh;
 	private PlayerRenderer pr;
 
 	// Since the StateMachine is responsible for cameraOffset now, 
@@ -41,9 +40,13 @@ public class PlayerCamera : MonoBehaviour {
 	/// </summary>
 	public Camera Camera { get; private set; }
 
+	public Transform Target { get; private set; }
+
 	private void Start() {
-		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
+		
+		Camera = GetComponent<Camera>();
+		Target = PlayerController.Instance.gameObject.transform;
 		pr = GetComponent<PlayerRenderer>();
 		stateMachine = new StateMachine(this, states);
 	}
@@ -52,17 +55,17 @@ public class PlayerCamera : MonoBehaviour {
 	{
 		stateMachine.Run();
 		AccumulateRotation();
+		transform.position = Target.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 	}
 
 	private void FixedUpdate() {
 		RotateCamera();
-		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
 		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
 		pr.SetRenderMode(RenderMode.Opaque);
-		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
+		if (Physics.SphereCast(Target.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
 					pr.SetRenderMode(RenderMode.Transparent);

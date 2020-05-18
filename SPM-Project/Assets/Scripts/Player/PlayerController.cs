@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
-	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 	[SerializeField] private AudioClip[] audioClips;
 	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
@@ -26,7 +25,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <summary>
 	/// The camera targeting the player
 	/// </summary>
-	public PlayerCamera Camera { get => cam; }
+	public PlayerCamera Camera { get; private set; }
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
@@ -71,6 +70,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 		audioPlayerIdle.clip = audioClips[0];*/
 		audioPlayerIdle.Play();
 
+		Camera = UnityEngine.Camera.main.GetComponent<PlayerCamera>();
+
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 		playerAnimator.SetFloat("Speed", animVertical);
 		playerAnimator.SetFloat("Direction", animHorizontal);
-		float yRot = cam.transform.rotation.eulerAngles.y;
+		float yRot = Camera.transform.rotation.eulerAngles.y;
 		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, yRot, 0), rotationSpeed * Time.deltaTime);
 		Input.doJump = false;
 		Input.doDash = false;
@@ -100,7 +101,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public Vector3 GetInput() {
 		Vector3 movementInput = new Vector3(UnityEngine.Input.GetAxisRaw("Horizontal"), 0, UnityEngine.Input.GetAxisRaw("Vertical"));
 		movementInput = movementInput.magnitude > 1 ? movementInput.normalized : movementInput;
-		Vector3 planarProjection = Vector3.ProjectOnPlane(cam.transform.rotation * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
+		Vector3 planarProjection = Vector3.ProjectOnPlane(Camera.transform.rotation * movementInput, PhysicsBody.IsGrounded() ? PhysicsBody.GetCurrentSurfaceNormal().normalized : Vector3.up);
 		return planarProjection;
 	}
 
