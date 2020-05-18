@@ -2,7 +2,12 @@
 using UnityEngine;
 
 //Author: Viktor Dahlberg
+/// <summary>
+/// This class wraps a rigidbody with helper methods, including a ground detection system.
+/// </summary>
 public class PhysicsBody : MonoBehaviour {
+
+	#region Fields
 
 	#region Properties
 
@@ -29,17 +34,30 @@ public class PhysicsBody : MonoBehaviour {
 
 	#endregion
 
+	#region Serialized
+
 	[SerializeField] private LayerMask mask;
+	[Header("Stationary Physics Material Properties")]
 	[SerializeField] private float stationaryDynamicFriction;
 	[SerializeField] private PhysicMaterialCombine stationaryFrictionCombine;
+
+	#endregion
 
 	private Collider collider;
 
 	private Rigidbody rigidBody;
 
+	/// <summary>
+	/// Used so we don't get stuck on walls while moving.
+	/// </summary>
 	private PhysicMaterial initialPhysicsMaterial;
 
+	/// <summary>
+	/// Used so we don't slide on even the smallest of inclines while standing still.
+	/// </summary>
 	private PhysicMaterial stationaryPhysicsMaterial;
+
+	#endregion
 
 	private void Awake() {
 		collider = GetComponent<Collider>();
@@ -51,6 +69,8 @@ public class PhysicsBody : MonoBehaviour {
 			frictionCombine = stationaryFrictionCombine
 		};
 	}
+
+	#region Toggles
 
 	/// <summary>
 	/// Sets the drag of the PhysicsBody. 0 is no drag, 10 is usually enough to prevent sliding.
@@ -76,6 +96,8 @@ public class PhysicsBody : MonoBehaviour {
 		if (use) collider.material = stationaryPhysicsMaterial;
 		else collider.material = initialPhysicsMaterial;
 	}
+
+	#endregion
 
 	#region Adjust Velocity
 
@@ -179,18 +201,26 @@ public class PhysicsBody : MonoBehaviour {
 	#region Ground Check
 
 	/// <summary>
-	/// Determines whether or not the PhysicsBody is grounded, by checking if the <c>leftFoot</c> or <c>rightFoot</c> positions are in contact with the ground.
+	/// Determines whether or not the PhysicsBody is grounded according to the chosen detection method.
 	/// </summary>
+	/// <param name="detectionMethod">How we should determine whether or not the PhysicsBody is grounded.</param>
 	/// <returns><c>true</c> if the PhysicsBody is grounded, <c>false</c> if it is not.</returns>
-	public bool IsGrounded(bool useNewMethod = true) {
-		if (useNewMethod) {
-			CapsuleCollider c = (CapsuleCollider) collider;
-			Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
-			Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
-			Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
-			return hit.collider && Vector3.Dot(Vector3.down, hit.normal) < -0.5f;
+	public bool IsGrounded(DetectionMethod detectionMethod = DetectionMethod.Capsule) {
+		switch(detectionMethod) {
+			case DetectionMethod.Capsule:
+				CapsuleCollider c = (CapsuleCollider) collider;
+				Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius);
+				Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
+				Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
+				return hit.collider && Vector3.Dot(Vector3.down, hit.normal) < DotProductTreshold;
+			case DetectionMethod.Feet:
+				return FootIsGrounded(LeftFoot) || FootIsGrounded(RightFoot);
+			default: return false;
 		}
-		else return Physics.Raycast(GetPositionWithOffset(LeftFoot), Vector3.down, collider.bounds.extents.y + GroundedDistanceOffset, mask) || Physics.Raycast(GetPositionWithOffset(RightFoot), Vector3.down, collider.bounds.extents.y + GroundedDistanceOffset, mask);
+	}
+
+	private bool FootIsGrounded(Vector3 footPosition) {
+		return Physics.Raycast(GetPositionWithOffset(footPosition), Vector3.down, collider.bounds.extents.y + GroundedDistanceOffset, mask);
 	}
 
 	/// <summary>
@@ -210,7 +240,6 @@ public class PhysicsBody : MonoBehaviour {
 		Vector3 topCircle = transform.position + c.center + Vector3.up * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
 		Vector3 bottomCircle = transform.position + c.center + Vector3.down * (c.height / 2 - c.radius) + (Vector3.up * GroundedDistanceOffset);
 		Physics.CapsuleCast(topCircle, bottomCircle, c.radius, Vector3.down, out RaycastHit hit, GroundedDistanceOffset * 2f, mask);
-		Debug.DrawRay(hit.point, hit.normal, Color.red);
 		return hit.collider ? hit.normal : Vector3.up;
 	}
 
@@ -221,3 +250,15 @@ public class PhysicsBody : MonoBehaviour {
 	#endregion
 
 }
+
+#region Enums
+
+/// <summary>
+/// Feet method means we will check if each individual foot is grounded, instead of using the collider.
+/// </summary>
+public enum DetectionMethod {
+	Feet,
+	Capsule
+}
+
+#endregion
