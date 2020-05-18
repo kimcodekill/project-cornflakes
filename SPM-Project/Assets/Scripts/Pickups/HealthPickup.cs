@@ -14,8 +14,7 @@ public class HealthPickup : Pickup {
 	#region Serialized
 
 	[SerializeField] private float healAmount;
-	[SerializeField] private float spawnedHealthMinPercentage;
-	[SerializeField] private float spawnedHealthMaxPercentage;
+	[SerializeField] [Tooltip("0-1f")] private Range spawnedHealthPercentageRange;
 
 	#endregion
 
@@ -31,7 +30,12 @@ public class HealthPickup : Pickup {
 	}
 
 	protected override void OnSpawned() {
-		healAmount = PlayerController.Instance.PlayerMaxHealth * Random.Range(spawnedHealthMinPercentage, spawnedHealthMaxPercentage);
+		healAmount = PlayerController.Instance.PlayerMaxHealth * Random.Range(spawnedHealthPercentageRange.min, spawnedHealthPercentageRange.max);
+	}
+
+	[System.Serializable]
+	public struct Range {
+		public float min, max;
 	}
 
 }

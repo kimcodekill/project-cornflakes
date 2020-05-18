@@ -108,5 +108,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
   healAmount: 25
-  spawnedHealthMinPercentage: 0
-  spawnedHealthMaxPercentage: 100
+  spawnedHealthPercentageRange:
+    min: 0.1
+    max: 0.4
