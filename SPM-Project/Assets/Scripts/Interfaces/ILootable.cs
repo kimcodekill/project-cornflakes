@@ -52,9 +52,13 @@ public struct LootTable {
 			chanceSum += lootTableItems[i].dropChance;
 			range[i] = chanceSum;
 		}
-		float winningValue = Random.Range(0f, chanceSum);
-		for (int i = 0; i < range.Length; i++) {
-			if (range[i] >= winningValue) return lootTableItems[i].lootObjectPath;
+		//If the total drop chances are 0, the winning value will also be 0, causing the first loot table item
+		//to be chosen even though its drop chance is 0. To amend this we check the sum of chances.
+		if (chanceSum > 0) {
+			float winningValue = Random.Range(0f, chanceSum);
+			for (int i = 0; i < range.Length; i++) {
+				if (range[i] >= winningValue) return lootTableItems[i].lootObjectPath;
+			}
 		}
 		return null;
 	}
