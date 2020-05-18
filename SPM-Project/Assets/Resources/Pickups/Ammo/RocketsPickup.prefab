@@ -109,3 +109,4 @@ MonoBehaviour:
   runTimeSpawnedPickupLifeTime: 10
   ammoType: 2
   ammoAmount: 3
+  spawnedAmmoAmount: 3
