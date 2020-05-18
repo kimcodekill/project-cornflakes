@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,24 +10,39 @@ public class PlayerWeapon : MonoBehaviour {
 	//Needed (atm) for PlayerCamera StateMachine to get the current weapon
 	public static PlayerWeapon Instance;
 
+	#region Properties
+
 	/// <summary>
 	/// The weapon the player is currently using.
 	/// </summary>
 	public Weapon CurrentWeapon { get; private set; }
 
+	//Kim: bruh we aint using this, can we get a woop woop for the
+	//     fact that we should remove any reference to it..
 	/// <summary>
 	/// Whether or not the weapon is active.
 	/// </summary>
 	public bool WeaponIsActive { get; private set; } = false;
 	
+	/// <summary>
+	/// Returns whether or not the appropriate inputs were input.
+	/// </summary>
 	public bool SwitchWeapon { get { return CheckInputs(); } }
 
-	[SerializeField] private State[] states;
-	[SerializeField] private AudioClip[] audioClips;
-	[SerializeField] [Tooltip("Audio Source component #2")] private AudioSource audioSource;
+	public Transform Muzzle { get => muzzle; }
 
+	public AudioSource WeaponAudio { get => weaponAudio; }
+
+	#endregion
+
+	#region Serialized
+
+	[SerializeField] private State[] states;
+	[SerializeField] private AudioSource weaponAudio;
 	//Where the weapons will shoot from;
-	[SerializeField] private Transform muzzleTransform;
+	[SerializeField] private Transform muzzle;
+
+	#endregion
 
 	private List<Weapon> weapons = new List<Weapon>();
 
@@ -38,7 +54,7 @@ public class PlayerWeapon : MonoBehaviour {
 		if (Instance == null) { Instance = this; }
 	}
 
-	private void Start() {
+	private void Start() { 
 		try { DebugManager.AddSection("WeaponSTM", "", "", "", ""); } catch (System.ArgumentException) { }
 	}
 
@@ -72,28 +88,24 @@ public class PlayerWeapon : MonoBehaviour {
 	/// </summary>
 	/// <param name="index">The specified index.</param>
 	public void SwitchTo(int index) {
-		if (CurrentWeapon != weapons[index]) {
-			if (index != 1) PlayAudio((index * 3) + 2, 1);
-			else PlayAudio(5, 0.6f); //Temporary solution for the current sounds
-		}
 		CurrentWeapon = weapons[index];
+		weapons[index].SwitchTo();
 	}
 
 	/// <summary>
 	/// Adds the specified weapon to the weapon list, sets its muzzle location and equips it if no other weapons are equipped.
-	/// TODO: APPROPRIATE MUZZLE LOCATIONS
 	/// </summary>
 	/// <param name="weapon">The weapon to pick up.</param>
 	public void PickUpWeapon(Weapon weapon) {
-		if (weapons.Count == 0)
+		weapons.Add(weapon);
+		
+		if (weapons.Count == 1)
 		{
-			CurrentWeapon = weapon;
+			SwitchTo(0);
 			WeaponIsActive = true;
 		}
-		weapons.Add(weapon);
-		weapon.playerWeapon = this;
-		PlayAudio((weapons.Count - 1) * 3, 1);
-		weapon.Muzzle = muzzleTransform;
+
+		weapon.Muzzle = muzzle;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}
@@ -102,7 +114,7 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <summary>
 	/// Toggles whether or not the player is using a weapon.
 	/// Set to false if you don't want the gun to fire when Mouse0 is pressed, and so on.
-	/// TODO: MESH SWITCHING/CAMERA TOGGLING
+	/// TODO: MESH SWITCHING
 	/// </summary>
 	/// <param name="isActive">Whether or not the gun should be active.</param>
 	public void SetWeaponActive(bool isActive) {
@@ -158,7 +170,4 @@ public class PlayerWeapon : MonoBehaviour {
 		return valid;
 	}
 
-	public void PlayAudio(int clipIndex, float volume) {
-		audioSource.PlayOneShot(audioClips[clipIndex], volume);
-	}
 }

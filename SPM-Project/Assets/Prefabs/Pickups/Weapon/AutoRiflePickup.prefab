@@ -107,10 +107,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ae019181214d14cb15bfe62b493395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reticle: {fileID: 21300000, guid: 1df6e46a30938cc4698312d21a5a2381, type: 3}
+  model: {fileID: 0}
   bulletHitMask:
     serializedVersion: 2
     m_Bits: 1792
   muzzle: {fileID: 0}
+  reloadAudio: {fileID: 8300000, guid: cc84d258d29e0014589205d80aed3c2c, type: 3}
+  shootAudio: {fileID: 8300000, guid: a0f73091814b9e0499a05dbb00eecac5, type: 3}
+  switchAudio: {fileID: 8300000, guid: 0f5843908d1067748ad3c5adc81040d0, type: 3}
   ammoType: 0
   fullAuto: 1
   damage: 3

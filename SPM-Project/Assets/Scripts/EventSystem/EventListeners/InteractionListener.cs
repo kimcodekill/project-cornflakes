@@ -18,7 +18,7 @@ public class InteractionListener : MonoBehaviour {
 				Source = he.Source,
 				Target = he.Target,
 				//I don't like how the explosion checks the distance from the center of the hit object, but no one will notice (probably)
-				Damage = he.Source.GetComponent<RocketV2>() ? he.Source.GetComponent<IDamaging>().GetExplosionDamage(he.Source.transform.position, he.Target.transform.position) : he.Source.GetComponent<IDamaging>().GetDamage()
+				Damage = he.Source.GetComponent<Rocket>() ? he.Source.GetComponent<IDamaging>().GetExplosionDamage(he.Source.transform.position, he.Target.transform.position) : he.Source.GetComponent<IDamaging>().GetDamage()
 			});
 		}
 	}

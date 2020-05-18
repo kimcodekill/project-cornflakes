@@ -1,80 +1,117 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 using UnityEngine;
 
-//Author: Joakim Linna
-
-public class Rocket : MonoBehaviour, IPooledObject
+public class Rocket : MonoBehaviour, IDamaging
 {
-    [SerializeField] private LayerMask collisionMask;
-    [SerializeField] private LayerMask damageMask;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float rotationSpeed;
-    [SerializeField] private float maxLifeTime;
-    [SerializeField] private float explosionRadius;
+
     [SerializeField] private float damage;
-	[SerializeField] private ParticleSystem ps;
+    [SerializeField] private float speed;
+    [SerializeField] private float areaOfEffect;
+    [SerializeField] private float lifeTime;
+    [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private GameObject trail;
+    [SerializeField] private GameObject explosion;
 
-    private Vector3 targetPos;
-    private Vector3 targetSurfaceNormal;
-    private float lifeTime;
+    public Vector3 TargetDir { get; set; }
 
-    public void SetTarget(Vector3 position, Vector3 surfaceNormal)
+    private float startTime;
+	private AudioSource audioSource;
+
+    private void Start()
     {
-        targetPos = position;
-        targetSurfaceNormal = -surfaceNormal;
+		startTime = Time.time;
+		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
+		trail.transform.rotation = transform.rotation;
+		audioSource = GetComponent<AudioSource>();
+		audioSource.Play();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (targetPos != Vector3.zero)
+        if (Time.time - startTime < lifeTime)
         {
-            if (Physics.SphereCast(transform.position, 0.2f, transform.forward, out RaycastHit hit, 0.2f, collisionMask) ||
-               lifeTime > maxLifeTime)
+            if (TargetDir != Vector3.zero)
             {
-				ps.Play();
-                Invoke("Explode", 0.5f);
-            }
-            else
-            {
-                transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetPos - transform.position, rotationSpeed, 0.0f));
-                transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                transform.position += TargetDir * speed * Time.deltaTime;
             }
         }
+        else
+        {
+            Explode();
+        }
+    }
 
-        lifeTime += Time.fixedDeltaTime;
+    public float GetDamage()
+    {
+        return damage;
+    }
+
+    public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
+    {
+        float distance = (hitPos - explosionCenter).magnitude;
+
+        float damageScale = (areaOfEffect - distance) / areaOfEffect;
+
+        float actualDamage = Mathf.Round(damage * damageScale);
+
+        return actualDamage < 0 ? 0 : actualDamage;
     }
 
     private void Explode()
     {
-		//Debug.Log("boom");
+        //Because we're using OverlapSphere we cant get the actual hit point
+        //Could be solved using SphereCast, but I cant get that working.
+        Collider[] nearColliders = Physics.OverlapSphere(transform.position, areaOfEffect / areaOfEffect);
+        Collider[] farColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius, damageMask);
-
-        //RaycastHit[] hits = Physics.SphereCastAll(transform.position, explosionRadius, Vector3.zero, explosionRadius, damageMask);
-
-        //Probably unnecessary
-        List<IEntity> hitPawns = new List<IEntity>();
-
-        for (int i = 0; i < hits.Length; i++)
+        //Makes sure the colliders within 1 unit of the explosion get f'd in the b
+        for (int i = 0; i < nearColliders.Length; i++)
         {
-            IEntity pawn = hits[i].gameObject.GetComponent<IEntity>();
-
-            if (pawn != null && !hitPawns.Contains(pawn)) //probably dont need to look at hitpawns
+            EventSystem.Current.FireEvent(new HitEvent()
             {
-                pawn.TakeDamage(damage);
-                hitPawns.Add(pawn); //probably not necessary
-            }
-
-            Debug.Log(hits[i].gameObject.name);
+                Source = gameObject,
+                Target = nearColliders[i].gameObject,
+                HitPoint = nearColliders[i].transform.position,
+            });
         }
+
+        //Smooches the other ones
+        for (int i = 0; i < farColliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new HitEvent()
+            {
+                Source = gameObject,
+                Target = farColliders[i].gameObject,
+                HitPoint = transform.position,
+            });
+        }
+
+        //Makes the trail stop emitting particles
+		ParticleSystem[] trailParticleSystems = trail.gameObject.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem childPS in trailParticleSystems)
+        {
+			ParticleSystem.EmissionModule childPSEmissionModule = childPS.emission;
+			childPSEmissionModule.rateOverDistance = 0;
+		}
+
+        EventSystem.Current.FireEvent(new ExplosionEffectEvent()
+        {
+            ExplosionEffect = explosion,
+            WorldPosition = transform.position,
+            Rotation = Quaternion.identity,
+            Scale = areaOfEffect
+        });;
 
         gameObject.SetActive(false);
     }
 
-    public void OnObjectSpawn()
+    private void OnTriggerEnter(Collider other)
     {
-
+        //checks if the collided gameobject's layer is in the collisionlayers
+        if (collisionLayers == (collisionLayers | (1 << other.gameObject.layer)))
+            Explode();
     }
 }
