@@ -17,14 +17,16 @@ public class WeaponListener : MonoBehaviour {
 			if ((w = pue.Source.GetComponent<Weapon>()) != null) {
 				pw.PickUpWeapon(w);
 				pue.Source.SetActive(false);
-				pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(w.ToString(), 0);
+				pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(w.ToString(), 0, "picked up");
+				pue.Target.GetComponentInChildren<PlayerHud>().NewCarriedWeapon(pw.GetWeapons().Count - 1);
+				if (pw.GetWeapons().Count == 1) pue.Target.GetComponentInChildren<PlayerHud>().UpdateActiveWeapon(0);
 			}
 			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
 				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
 				pue.Target.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
 				pue.Source.SetActive(false);
-				if (ap.AmmoAmount > 1 || ap.AmmoType == Weapon.EAmmoType.Special) pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount);
-				else pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().Remove(ap.AmmoType.ToString().Length - 1).ToLower(), ap.AmmoAmount);
+				if (ap.AmmoAmount > 1 || ap.AmmoType == Weapon.EAmmoType.Special) pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount, "picked up");
+				else pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().Remove(ap.AmmoType.ToString().Length - 1).ToLower(), ap.AmmoAmount, "picked up");
 			}
 		}
 	}

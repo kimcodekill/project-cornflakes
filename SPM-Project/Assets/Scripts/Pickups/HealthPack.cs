@@ -18,11 +18,24 @@ public class HealthPack : Pickup {
 
 	protected override void OnPickup(Collider other) {
 		other.GetComponent<PlayerController>().Heal(healAmount);
+		other.GetComponentInChildren<PlayerHud>().ShowPickupText("health", healAmount, "restored");
+		other.GetComponent<PlayerController>().PlayAudioPitched(8, 0.7f, 0.8f, 1.3f);
 		Destroy(gameObject);
 	}
 
 	protected override bool IsValid(Collider other) {
-		return other.gameObject.CompareTag("Player") && PlayerController.Instance.PlayerCurrentHealth < PlayerController.Instance.PlayerMaxHealth;
+		if (other.gameObject.CompareTag("Player")) {
+			float playerHealth = PlayerController.Instance.PlayerCurrentHealth;
+			float playerMaxHealth = PlayerController.Instance.PlayerMaxHealth;
+			if (playerHealth >= playerMaxHealth - 0.5) {
+				other.GetComponentInChildren<PlayerHud>().ShowPickupText("Health", 0, "full");
+				return false;
+			}
+			if (playerHealth + healAmount > playerMaxHealth) healAmount = Mathf.Round(playerMaxHealth - playerHealth);
+
+			return true;
+		}
+		else return false;
 	}
 
 }

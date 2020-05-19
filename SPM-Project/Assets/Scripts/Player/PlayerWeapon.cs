@@ -85,6 +85,7 @@ public class PlayerWeapon : MonoBehaviour {
 	public void SwitchTo(int index) {
 		weapons[index].SwitchTo();
 		CurrentWeapon = weapons[index];
+		gameObject.GetComponentInChildren<PlayerHud>().UpdateActiveWeapon(index);
 	}
 
 	/// <summary>
