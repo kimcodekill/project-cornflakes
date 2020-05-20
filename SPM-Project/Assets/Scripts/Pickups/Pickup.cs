@@ -37,7 +37,11 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 			}
 			despawner = new Despawner(gameObject, runTimeSpawnedPickupLifeTime);
 		}
+
+		Init();
 	}
+
+	protected virtual void Init() {}
 
 	private void OnTriggerEnter(Collider other) {
 		if (IsValid(other)) OnPickup(other);

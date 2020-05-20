@@ -105,7 +105,7 @@ public class PlayerWeapon : MonoBehaviour {
 			WeaponIsActive = true;
 		}
 
-		weapon.Muzzle = muzzle;
+		//weapon.Muzzle = muzzle;
 		if (weaponStateMachine == null) {
 			weaponStateMachine = new StateMachine(this, states);
 		}

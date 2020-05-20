@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// The sniper rifle has the ability to aim down sights.
 /// </summary>
+[CreateAssetMenu(menuName = "Weapon/Sniper Rifle")]
 public class SniperRifle : Weapon {
 
 	#region Properties
@@ -29,11 +30,12 @@ public class SniperRifle : Weapon {
 	protected override void Fire() {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {
-			EventSystem.Current.FireEvent(new HitEvent() {
+			EventSystem.Current.FireEvent(new BulletHitEvent() {
 				Description = this + " hit " + hit.collider.gameObject,
-				Source = gameObject,
+				Source = PlayerWeapon.Instance.gameObject,
 				Target = hit.collider.gameObject,
-				HitPoint = hit.point
+				HitPoint = hit.point,
+				Weapon = this				
 			});
 		}
 		AmmoInMagazine--;

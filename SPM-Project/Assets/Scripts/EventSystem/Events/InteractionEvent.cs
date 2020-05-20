@@ -17,17 +17,33 @@ public class HitEvent : InteractionEvent {
 
 }
 
-public class DamageEvent : InteractionEvent {
+public class BulletHitEvent : HitEvent
+{
+	public Weapon Weapon;
+}
 
-	public float Damage;
+public class ExplosionHitEvent : HitEvent
+{
 
 }
 
-public class PickUpEvent : InteractionEvent {
+public class DamageEvent : InteractionEvent
+{
+	public IEntity Entity;
+	public IDamaging Damager;
+}
+
+public abstract class PickUpEvent : InteractionEvent {
 
 }
 
 public class WeaponPickUpEvent : PickUpEvent
 {
 	public Weapon Weapon;
+}
+
+public class AmmoPickUpEvent : PickUpEvent
+{
+	public Weapon.EAmmoType AmmoType;
+	public int AmmoAmount;
 }

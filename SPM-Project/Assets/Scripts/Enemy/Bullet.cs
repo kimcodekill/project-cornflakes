@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour {
 		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			Destroy(gameObject);
 			if (hit.collider.gameObject.GetComponent<PlayerController>()){  //This could probably be done in a better way, running GetComponent every frame not very performant.
-				EventSystem.Current.FireEvent(new HitEvent {
+				EventSystem.Current.FireEvent(new BulletHitEvent {
 					Description = " " + owner.owner.gameObject.name + " hit " + owner.owner.Target.name,
 					Source = owner.gameObject,
 					Target = owner.owner.Target.gameObject

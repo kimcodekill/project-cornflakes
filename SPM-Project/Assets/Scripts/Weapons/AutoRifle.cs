@@ -9,6 +9,7 @@ using UnityEngine;
 /// The reload time here becomes the "cooldown" stage.
 /// Ammo in reserve is irrelevant, so we refill it all the time.
 /// </summary>
+[CreateAssetMenu(menuName = "Weapon/Auto Rifle")]
 public class AutoRifle : Weapon {
 
 	#region Properties
@@ -28,11 +29,12 @@ public class AutoRifle : Weapon {
 	protected override void Fire() {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {
-			EventSystem.Current.FireEvent(new HitEvent() {
+			EventSystem.Current.FireEvent(new BulletHitEvent() {
 				Description = this + " hit " + hit.collider.gameObject,
-				Source = gameObject,
+				Source = PlayerWeapon.Instance.gameObject,
 				Target = hit.collider.gameObject,
-				HitPoint = hit.point
+				HitPoint = hit.point,
+				Weapon = this
 			});
 		}
 		AmmoInMagazine--;

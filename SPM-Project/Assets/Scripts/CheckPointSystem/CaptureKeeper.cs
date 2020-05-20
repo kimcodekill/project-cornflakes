@@ -58,8 +58,8 @@ public static class CaptureKeeper {
 	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
 		for (int i = 0; i < weapons.Count; i++) {
 			Weapon weapon = weapons[i].weapon;
-			weapon.enabled = true;
-			weapon.Initialize();
+			//weapon.enabled = true;
+			//weapon.Initialize();
 			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
 			weapon.AmmoInReserve = weapons[i].ammoInReserve;
 			PlayerWeapon.Instance.PickUpWeapon(weapon);
@@ -144,21 +144,12 @@ public static class CaptureKeeper {
 	/// Removes all captures.
 	/// </summary>
 	public static void ClearCaptures() {
-		DestroyDontDestroyOnLoad();
 		captures = null;
 	}
 
 	#endregion
 
 	#region Helper Functions
-
-	private static void DestroyDontDestroyOnLoad() {
-		for (int i = 0; i < captures.Count; i++) {
-			for (int j = 0; j < captures.Count; j++) {
-				Object.Destroy(captures[i].Weapons[j].weapon.gameObject);
-			}
-		}
-	}
 
 	public static bool HasCapture() {
 		return captures != null && captures.Count > 0;

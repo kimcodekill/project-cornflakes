@@ -5,7 +5,8 @@ using UnityEngine;
 //Author: Viktor Dahlberg
 /// <summary>
 /// The shotgun fires shells, containing some amount of pellets per shot.
-/// </summary>
+/// </summary> 
+[CreateAssetMenu(menuName = "Weapon/Shotgun")]
 public class Shotgun : Weapon {
 
 	#region Properties
@@ -28,11 +29,13 @@ public class Shotgun : Weapon {
 		for (int i = 0; i < pelletCount; i++) {
 			RaycastHit hit = MuzzleCast();
 			if (hit.collider != null) {
-				EventSystem.Current.FireEvent(new HitEvent() {
+				EventSystem.Current.FireEvent(new BulletHitEvent()
+				{
 					Description = this + " hit " + hit.collider.gameObject,
-					Source = gameObject,
+					Source = PlayerWeapon.Instance.gameObject,
 					Target = hit.collider.gameObject,
-					HitPoint = hit.point
+					HitPoint = hit.point,
+					Weapon = this
 				});
 			}
 		}

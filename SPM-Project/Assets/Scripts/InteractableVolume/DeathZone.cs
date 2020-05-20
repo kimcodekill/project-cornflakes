@@ -15,11 +15,12 @@ public class DeathZone : MonoBehaviour, IDamaging {
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		EventSystem.Current.FireEvent(new HitEvent() {
-			Source = gameObject,
-			Target = other.gameObject,
-			HitPoint = transform.position
-		});
+		IEntity entity;
+		
+		if((entity = other.gameObject.GetComponent<IEntity>()) != null)
+		{
+			
+		}
 	}
 
 }

@@ -6,25 +6,51 @@ using UnityEngine;
 public class InteractionListener : MonoBehaviour {
 
 	private void Start() {
-		EventSystem.Current.RegisterListener<HitEvent>(OnHit);
 		EventSystem.Current.RegisterListener<DamageEvent>(OnDamage);
+		EventSystem.Current.RegisterListener<HitEvent>(OnHit);
+		EventSystem.Current.RegisterListener<BulletHitEvent>(OnBulletHit);
 	}
 
 	private void OnHit(Event e) {
 		HitEvent he = (HitEvent) e;
-		if (he.Target.GetComponent<IEntity>() != null) {
-			EventSystem.Current.FireEvent(new DamageEvent() {
-				Description = he.Source + " damaged " + he.Target,
-				Source = he.Source,
-				Target = he.Target,
-				//I don't like how the explosion checks the distance from the center of the hit object, but no one will notice (probably)
-				Damage = he.Source.GetComponent<Rocket>() ? he.Source.GetComponent<IDamaging>().GetExplosionDamage(he.Source.transform.position, he.Target.transform.position) : he.Source.GetComponent<IDamaging>().GetDamage()
-			});
+
+		IEntity entity;
+
+		if ((entity = he.Target.GetComponent<IEntity>()) != null) {
+			IDamaging damager;
+			if((damager = he.Source.GetComponent<IDamaging>()) != null)
+			{
+				EventSystem.Current.FireEvent(new DamageEvent()
+				{
+					Entity = entity,
+					Damager = damager
+				});
+			}
 		}
+	}
+
+	private void OnBulletHit(Event e)
+	{
+		BulletHitEvent bhe = e as BulletHitEvent;
+
+		OnHit(e);
+
+		EventSystem.Current.FireEvent(new BulletEffectEvent()
+		{
+			HitEffect = bhe.Weapon.HitDecal,
+			WorldPosition = bhe.HitPoint,
+			Scale = 1.0f,
+			Rotation = Quaternion.identity,
+		});
+	}
+
+	private void OnExplosionHit(Event e)
+	{
+		ExplosionHitEvent ehe = e as ExplosionHitEvent;
 	}
 
 	private void OnDamage(Event e) {
 		DamageEvent de = (DamageEvent) e;
-		de.Target.GetComponent<IEntity>().TakeDamage(de.Damage);
+		de.Entity.TakeDamage(de.Damager.GetDamage());
 	}
 }

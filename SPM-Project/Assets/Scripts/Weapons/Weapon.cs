@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //Author: Viktor Dahlberg
-public abstract class Weapon : MonoBehaviour, IDamaging {
+//Co Author: Joakim Linna
+public abstract class Weapon : ScriptableObject, IDamaging {
 	
 	/// <summary>
 	/// The possible types of ammunition the weapon may use.
@@ -110,6 +111,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	
 	public Sprite Reticle { get => reticle; }
 	public GameObject Model { get => model; }
+	public GameObject HitDecal { get => hitDecal; }
 
 	#endregion
 
@@ -118,6 +120,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	[Header("Graphical Assets")]
 	[SerializeField] private Sprite reticle;
 	[SerializeField] private GameObject model;
+	[SerializeField] private GameObject hitDecal;
 	[Header("Misc. Attributes")]
 	[SerializeField] private LayerMask bulletHitMask;
 	[SerializeField] private Transform muzzle;
@@ -141,19 +144,13 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	private int ammoInMagazine;
 	private int ammoInReserve;
 
-	private PlayerCamera playerCamera;
-
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
-	private void Start() {
-		Initialize();
+	public void Initialize() {
+		if (muzzle == null) muzzle = PlayerWeapon.Instance.Muzzle;
 
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
-	}
-
-	public void Initialize() {
-		playerCamera = Camera.main.GetComponent<PlayerCamera>();
 	}
 
 	#region Attribute Status Functions
@@ -208,9 +205,13 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// </summary>
 	/// <returns>The point the crosshair is looking at.</returns>
 	protected Vector3 GetCrosshairHitPoint() {
-		Ray cameraRay = playerCamera.Camera.ScreenPointToRay(screenCenter);
+		//Ray cameraRay = PlayerCamera.Instance.Camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+		Ray cameraRay = PlayerCamera.Instance.Camera.ScreenPointToRay(new Vector2(PlayerCamera.Instance.Camera.pixelWidth / 2.0f, PlayerCamera.Instance.Camera.pixelHeight / 2.0f));
+		
+
+		Debug.DrawLine(cameraRay.origin, cameraRay.origin + cameraRay.direction * 10.0f, Color.green, 10.0f);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
-		return cameraHit.collider == null ? Muzzle.position + playerCamera.transform.forward: cameraHit.point;
+		return cameraHit.collider == null ? Muzzle.position + PlayerCamera.Instance.transform.forward: cameraHit.point;
 	}
 
 	/// <summary>
@@ -229,6 +230,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// <returns>The resulting RaycastHit</returns>
 	protected RaycastHit MuzzleCast() {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
+		Debug.DrawLine(Muzzle.position, Muzzle.position + direction * 10.0f, Color.red, 10.0f);
 		Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask);
 		return hit;
 	}
@@ -237,7 +239,7 @@ public abstract class Weapon : MonoBehaviour, IDamaging {
 	/// Adds recoil by adjusting camera X rotation.
 	/// </summary>
 	protected virtual void AddRecoil() {
-		playerCamera.InjectRotation(Mathf.Lerp(playerCamera.transform.rotation.x,  recoil, 0.01f), 0);
+		PlayerCamera.Instance.InjectRotation(Mathf.Lerp(PlayerCamera.Instance.Camera.transform.rotation.x,  recoil, 0.01f), 0);
 	}
 
 	/// <summary>

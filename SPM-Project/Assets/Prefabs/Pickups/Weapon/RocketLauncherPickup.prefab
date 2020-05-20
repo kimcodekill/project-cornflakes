@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5878737985512538771}
   - component: {fileID: 5878737985512538764}
   - component: {fileID: 5878737985512538765}
-  - component: {fileID: 5878737985512538768}
   - component: {fileID: -6123285920607715974}
   m_Layer: 0
   m_Name: RocketLauncherPickup
@@ -109,37 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
---- !u!114 &5878737985512538768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5878737985512538774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f31c44bc8e6d34191e6c302e3f002b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reticle: {fileID: 21300000, guid: 7e90cea843ee9eb41b782c463717fcff, type: 3}
-  model: {fileID: 0}
-  bulletHitMask:
-    serializedVersion: 2
-    m_Bits: 1792
-  muzzle: {fileID: 0}
-  reloadAudio: {fileID: 8300000, guid: 1bb00f5304d302a4d8784cfd36c328af, type: 3}
-  shootAudio: {fileID: 8300000, guid: 138cfd67ecdadb24d87a213277c86603, type: 3}
-  switchAudio: {fileID: 8300000, guid: 879852ff77f30784785a6befc3d7f9f1, type: 3}
-  ammoType: 2
-  fullAuto: 0
-  damage: -1
-  fireRate: 50
-  magazineSize: 1
-  maxMagazines: 9
-  reloadTime: 2
-  recoil: 0
-  spreadAngle: 0
-  rocket: {fileID: 8592894640773638139, guid: 6c5e67c6eba194941baf5964b95854d0, type: 3}
+  weapon: {fileID: 11400000, guid: 2a9369028ec777d4ba8aea005ee348bb, type: 2}
 --- !u!82 &-6123285920607715974
 AudioSource:
   m_ObjectHideFlags: 0
