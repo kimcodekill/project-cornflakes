@@ -75,8 +75,8 @@ public class PlayerDashingState : PlayerState {
 	public override void Exit() {
 		Player.dash1.SetActive(false);
 		Player.dash2.SetActive(false);
-		Player.PhysicsBody.SetGravityEnabled(true);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
+		Player.PhysicsBody.SetGravityEnabled(true);
 		dashed = false;
 		currentDashTime = 0f;
 
