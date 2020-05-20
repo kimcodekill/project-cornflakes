@@ -109,5 +109,5 @@ MonoBehaviour:
   runTimeSpawnedPickupLifeTime: 10
   healAmount: 25
   spawnedHealthPercentageRange:
-    min: 0.1
-    max: 0.4
+    min: 0.05
+    max: 0.1

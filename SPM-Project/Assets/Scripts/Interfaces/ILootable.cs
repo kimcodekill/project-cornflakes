@@ -19,6 +19,8 @@ public interface ILootable {
 /// </summary>
 public struct LootTable {
 
+	public static string Nothing = null;
+
 	public struct LootTableItem {
 		public string lootObjectPath;
 		public float dropChance;
