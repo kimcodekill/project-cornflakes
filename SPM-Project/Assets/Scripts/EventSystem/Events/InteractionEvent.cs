@@ -26,3 +26,8 @@ public class DamageEvent : InteractionEvent {
 public class PickUpEvent : InteractionEvent {
 
 }
+
+public class WeaponPickUpEvent : PickUpEvent
+{
+	public Weapon Weapon;
+}

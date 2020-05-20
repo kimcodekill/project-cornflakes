@@ -15,15 +15,20 @@ public abstract class EffectEvent : Event
 	public AudioSource AudioSource;
 }
 
+//Move to playerevent
 public class WeaponFiredEvent : EffectEvent {
 
 }
 
+//Move to playerevent
 public class WeaponReloadingEvent : EffectEvent {
 
 }
-public class WeaponSwitchedEvent : EffectEvent {
 
+//Move to playerevent
+public class WeaponSwitchedEvent : EffectEvent
+{
+    public Weapon SelectedWeapon;
 }
 
 public class BulletEffectEvent : EffectEvent

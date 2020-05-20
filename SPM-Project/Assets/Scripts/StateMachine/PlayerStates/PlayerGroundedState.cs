@@ -16,6 +16,7 @@ public abstract class PlayerGroundedState : PlayerState {
 		Player.playerAnimator.SetBool("Falling", false);
 		startTime = -1;
 		ThrustersOff();
+
 		base.Enter();
 	}
 
