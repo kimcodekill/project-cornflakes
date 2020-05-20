@@ -9,6 +9,7 @@ public class PlayerStandingState : PlayerGroundedState {
 	public override void Enter() {
 		try { DebugManager.AddSection("PlayerSTM" + Player.gameObject.GetInstanceID(), ""); } catch (System.ArgumentException) { }
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
+		Player.PhysicsBody.UseStationaryPhysicsMaterial(true);
 
 		base.Enter();
 	}
@@ -17,6 +18,12 @@ public class PlayerStandingState : PlayerGroundedState {
 		if (Player.GetInput().magnitude > 0) StateMachine.TransitionTo<PlayerMovingState>();
 		
 		base.Run();
+	}
+
+	public override void Exit() {
+		Player.PhysicsBody.UseStationaryPhysicsMaterial(false);
+
+		base.Exit();
 	}
 
 }
