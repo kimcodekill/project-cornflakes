@@ -30,13 +30,7 @@ public class SniperRifle : Weapon {
 	protected override void Fire() {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {
-			EventSystem.Current.FireEvent(new BulletHitEvent() {
-				Description = this + " hit " + hit.collider.gameObject,
-				Source = PlayerWeapon.Instance.gameObject,
-				Target = hit.collider.gameObject,
-				HitPoint = hit.point,
-				Weapon = this				
-			});
+			EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), this));
 		}
 		AmmoInMagazine--;
 	}

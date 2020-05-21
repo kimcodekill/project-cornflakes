@@ -5,6 +5,7 @@ using UnityEngine;
 //Author: Viktor Dahlberg
 public class EventSystem : MonoBehaviour {
 
+	//K: Using FindObjectOfType feels dangerous, but what do i know.
 	/// <summary>
 	/// The current static instance of the EventSystem. Use this member to access the event system.
 	/// </summary>

@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +9,16 @@ using UnityEngine.UI;
 
 public abstract class EffectEvent : Event
 {
-    
+    protected EffectEvent(Vector3 worldPosition, Quaternion rotation, float scale)
+    {
+        WorldPosition = worldPosition;
+        Rotation = rotation;
+        Scale = scale;
+    }
+
+    public readonly Vector3 WorldPosition;
+    public readonly Quaternion Rotation;
+    public readonly float Scale;
 }
 
 public abstract class WeaponEffectEvent : Event
@@ -32,20 +43,22 @@ public class WeaponSwitchedEvent : WeaponEffectEvent
     public Weapon SelectedWeapon;
 }
 
-public abstract class HitEffectEvent : EffectEvent
+public class BulletHitEffectEvent : EffectEvent
 {
-    public GameObject HitEffect;
-    public Vector3 WorldPosition;
-    public Quaternion Rotation;
-    public float Scale;
+    public BulletHitEffectEvent(GameObject hitEffect, Vector3 worldPosition, Quaternion rotation, float scale) : base(worldPosition, rotation, scale) 
+    {
+        HitEffect = hitEffect;
+    }
+
+    public readonly GameObject HitEffect;
 }
 
-public class BulletEffectEvent : HitEffectEvent
+public class ExplosionEffectEvent : EffectEvent
 {
+    public ExplosionEffectEvent(GameObject explosionEffect, Vector3 worldPosition, Quaternion rotation, float scale) : base(worldPosition, rotation, scale) 
+    {
+        ExplosionEffect = explosionEffect;
+    }
 
-}
-
-public class ExplosionEffectEvent : HitEffectEvent
-{
-    public GameObject ExplosionEffect;
+    public readonly GameObject ExplosionEffect;
 }

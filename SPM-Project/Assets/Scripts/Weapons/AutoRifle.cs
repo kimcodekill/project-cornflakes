@@ -26,17 +26,16 @@ public class AutoRifle : Weapon {
 
 	#endregion
 
-	protected override void Fire() {
+	protected override void Fire() 
+	{
 		RaycastHit hit = MuzzleCast();
-		if (hit.collider != null) {
-			EventSystem.Current.FireEvent(new BulletHitEvent() {
-				Description = this + " hit " + hit.collider.gameObject,
-				Source = PlayerWeapon.Instance.gameObject,
-				Target = hit.collider.gameObject,
-				HitPoint = hit.point,
-				Weapon = this
-			});
+		if (hit.collider != null) 
+		{
+			EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), this));
+
+			EventSystem.Current.FireEvent(new BulletHitEffectEvent(HitDecal, hit.point, Quaternion.identity, 1.0f));
 		}
+
 		AmmoInMagazine--;
 		if (AmmoInReserve < MagazineSize) AmmoInReserve = MagazineSize;
 	}

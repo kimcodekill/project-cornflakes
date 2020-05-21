@@ -26,19 +26,17 @@ public class Shotgun : Weapon {
 	#endregion
 
 	protected override void Fire() {
-		for (int i = 0; i < pelletCount; i++) {
+		for (int i = 0; i < pelletCount; i++) 
+		{
 			RaycastHit hit = MuzzleCast();
-			if (hit.collider != null) {
-				EventSystem.Current.FireEvent(new BulletHitEvent()
-				{
-					Description = this + " hit " + hit.collider.gameObject,
-					Source = PlayerWeapon.Instance.gameObject,
-					Target = hit.collider.gameObject,
-					HitPoint = hit.point,
-					Weapon = this
-				});
+			if (hit.collider != null) 
+			{
+				EventSystem.Current.FireEvent(new DamageEvent(hit.collider.gameObject.GetComponent<IEntity>(), this));
+
+				EventSystem.Current.FireEvent(new BulletHitEffectEvent(HitDecal, hit.point, Quaternion.identity, 1.0f));
 			}
 		}
+
 		AmmoInMagazine--;
 	}
 

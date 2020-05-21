@@ -260,6 +260,8 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 1792
+  hitDecal: {fileID: 4863819665713101924, guid: 7b74c22ed065c3c4a9823ae522910bb9,
+    type: 3}
   trail: {fileID: 5219472522693736386, guid: cea31cf8032113845817ea59016b9351, type: 3}
   explosion: {fileID: 1828176872806910, guid: 099d478b979a93e489806f5ca53b12ea, type: 3}
 --- !u!54 &8592894640773638133

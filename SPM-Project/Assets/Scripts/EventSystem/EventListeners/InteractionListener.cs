@@ -7,50 +7,54 @@ public class InteractionListener : MonoBehaviour {
 
 	private void Start() {
 		EventSystem.Current.RegisterListener<DamageEvent>(OnDamage);
-		EventSystem.Current.RegisterListener<HitEvent>(OnHit);
-		EventSystem.Current.RegisterListener<BulletHitEvent>(OnBulletHit);
+		EventSystem.Current.RegisterListener<ExplosiveDamageEvent>(OnExplosiveDamage);
+		//EventSystem.Current.RegisterListener<HitEvent>(OnHit);
+		//EventSystem.Current.RegisterListener<BulletHitEvent>(OnBulletHit);
 	}
 
-	private void OnHit(Event e) {
-		HitEvent he = (HitEvent) e;
+	//private void OnHit(Event e) {
+	//	HitEvent he = (HitEvent) e;
 
-		IEntity entity;
+	//	IEntity entity;
 
-		if ((entity = he.Target.GetComponent<IEntity>()) != null) {
-			IDamaging damager;
-			if((damager = he.Source.GetComponent<IDamaging>()) != null)
-			{
-				EventSystem.Current.FireEvent(new DamageEvent()
-				{
-					Entity = entity,
-					Damager = damager
-				});
-			}
-		}
-	}
+	//	if ((entity = he.Target.GetComponent<IEntity>()) != null) {
+	//		IDamaging damager;
+	//		if((damager = he.Source.GetComponent<IDamaging>()) != null)
+	//		{
+	//			EventSystem.Current.FireEvent(new DamageEvent(entity, damager));
+	//		}
+	//	}
+	//}
 
-	private void OnBulletHit(Event e)
-	{
-		BulletHitEvent bhe = e as BulletHitEvent;
+	//private void OnBulletHit(Event e)
+	//{
+	//	BulletHitEvent bhe = e as BulletHitEvent;
 
-		OnHit(e);
+	//	OnHit(e);
 
-		EventSystem.Current.FireEvent(new BulletEffectEvent()
-		{
-			HitEffect = bhe.Weapon.HitDecal,
-			WorldPosition = bhe.HitPoint,
-			Scale = 1.0f,
-			Rotation = Quaternion.identity,
-		});
-	}
-
-	private void OnExplosionHit(Event e)
-	{
-		ExplosionHitEvent ehe = e as ExplosionHitEvent;
-	}
+	//	EventSystem.Current.FireEvent(new BulletEffectEvent(bhe.Weapon.HitDecal)
+	//	{
+	//		HitEffect = bhe.Weapon.HitDecal,
+	//		WorldPosition = bhe.HitPoint,
+	//		Scale = 1.0f,
+	//		Rotation = Quaternion.identity,
+	//	});
+	//}
 
 	private void OnDamage(Event e) {
 		DamageEvent de = (DamageEvent) e;
-		de.Entity.TakeDamage(de.Damager.GetDamage());
+		if (de.Entity != null && de.Damager != null)
+		{
+			de.Entity.TakeDamage(de.Damager.GetDamage());
+		}
+	}
+
+	private void OnExplosiveDamage(Event e)
+	{
+		ExplosiveDamageEvent ede = e as ExplosiveDamageEvent;
+		if (ede.Entity != null && ede.Damager != null)
+		{
+			ede.Entity.TakeDamage(ede.Damager.GetDamage() * ede.DamageScale);
+		}
 	}
 }

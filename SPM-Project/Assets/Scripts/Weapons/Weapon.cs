@@ -163,6 +163,11 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 		return Damage;
 	}
 
+	public float GetDamage(float distanceRadius)
+	{
+		return Damage;
+	}
+
 	/// <summary>
 	/// Calculates the amount of ammunition remaining in the magazine.
 	/// </summary>
