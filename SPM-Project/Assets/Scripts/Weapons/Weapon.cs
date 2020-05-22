@@ -210,7 +210,6 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	protected Vector3 GetCrosshairHitPoint() {
 		//Ray cameraRay = PlayerCamera.Instance.Camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
 		Ray cameraRay = PlayerCamera.Instance.Camera.ScreenPointToRay(new Vector2(PlayerCamera.Instance.Camera.pixelWidth / 2.0f, PlayerCamera.Instance.Camera.pixelHeight / 2.0f));
-		
 
 		//Debug.DrawLine(cameraRay.origin, cameraRay.origin + cameraRay.direction * 10.0f, Color.green, 10.0f);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);

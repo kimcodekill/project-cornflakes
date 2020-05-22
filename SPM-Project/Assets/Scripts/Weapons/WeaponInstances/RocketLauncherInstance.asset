@@ -19,7 +19,6 @@ MonoBehaviour:
   bulletHitMask:
     serializedVersion: 2
     m_Bits: 1792
-  muzzle: {fileID: 0}
   reloadAudio: {fileID: 8300000, guid: 1bb00f5304d302a4d8784cfd36c328af, type: 3}
   shootAudio: {fileID: 8300000, guid: 138cfd67ecdadb24d87a213277c86603, type: 3}
   switchAudio: {fileID: 8300000, guid: 879852ff77f30784785a6befc3d7f9f1, type: 3}
@@ -29,7 +28,7 @@ MonoBehaviour:
   fireRate: 50
   magazineSize: 1
   maxMagazines: 9
-  reloadTime: 2
+  reloadTime: 1
   recoil: 0
   spreadAngle: 0
   rocket: {fileID: 8592894640773638139, guid: 6c5e67c6eba194941baf5964b95854d0, type: 3}
