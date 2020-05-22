@@ -9,15 +9,22 @@ public class EventSystem : MonoBehaviour {
 	/// <summary>
 	/// The current static instance of the EventSystem. Use this member to access the event system.
 	/// </summary>
-	public static EventSystem Current { get => current == null ? current = FindObjectOfType<EventSystem>() : current; }
+	public static EventSystem Current;
 
 	public delegate void EventListener(Event e);
-
-	private static EventSystem current;
 
 	private Dictionary<System.Type, List<EventListener>> eventListeners;
 
 	private Dictionary<System.Type, List<EventListener>> toRemove;
+
+	private void OnEnable()
+	{
+		if(Current == null) { 
+			Current = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (Current != this) { Destroy(gameObject); }
+	}
 
 	/// <summary>
 	/// Registers an event listener to a certain event.
@@ -29,7 +36,7 @@ public class EventSystem : MonoBehaviour {
 		eventListeners = eventListeners ?? new Dictionary<System.Type, List<EventListener>>();
 		if (!eventListeners.ContainsKey(type) || eventListeners[type] == null) eventListeners[type] = new List<EventListener>();
 		eventListeners[type].Add(eventListener);
-		Debug.Log("Registered " + eventListener.Target + ":" + eventListener.Method.Name);
+		//Debug.Log("Registered " + eventListener.Target + ":" + eventListener.Method.Name);
 	}
 
 	/// <summary>

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 //Co Author: Viktor Dahlberg
 public class Reticle : MonoBehaviour
 {
+    public static Reticle Instance;
+
     [SerializeField] private LayerMask rayMask;
     [SerializeField] private Image reticleImage;
 	[SerializeField] private float playerTransparentViewportYTreshold;
@@ -21,11 +23,19 @@ public class Reticle : MonoBehaviour
 
     private void Start()
     {
+        if (Instance == null) { 
+            Instance = this;
+            Init();
+        }
+    }
+
+    private void Init()
+    {
         cam = Camera.main;
 
         rect = reticleImage.rectTransform;
 
-		playerRenderer = cam.GetComponent<PlayerRenderer>();
+        playerRenderer = cam.GetComponent<PlayerRenderer>();
 
         EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickup);
         EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(OnWeaponSwitch);
