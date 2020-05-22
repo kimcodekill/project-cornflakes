@@ -31,6 +31,7 @@ public class SniperRifle : Weapon {
 		RaycastHit hit = MuzzleCast();
 		if (hit.collider != null) {
 			EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), this));
+			EventSystem.Current.FireEvent(new BulletHitEffectEvent(HitDecal, hit.point, Quaternion.identity, 1.0f));
 		}
 		AmmoInMagazine--;
 	}

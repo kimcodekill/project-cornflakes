@@ -214,7 +214,7 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 		Ray cameraRay = PlayerCamera.Instance.Camera.ScreenPointToRay(new Vector2(PlayerCamera.Instance.Camera.pixelWidth / 2.0f, PlayerCamera.Instance.Camera.pixelHeight / 2.0f));
 		
 
-		Debug.DrawLine(cameraRay.origin, cameraRay.origin + cameraRay.direction * 10.0f, Color.green, 10.0f);
+		//Debug.DrawLine(cameraRay.origin, cameraRay.origin + cameraRay.direction * 10.0f, Color.green, 10.0f);
 		Physics.Raycast(cameraRay, out RaycastHit cameraHit, float.MaxValue, bulletHitMask);
 		return cameraHit.collider == null ? Muzzle.position + PlayerCamera.Instance.transform.forward: cameraHit.point;
 	}
@@ -235,7 +235,7 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	/// <returns>The resulting RaycastHit</returns>
 	protected RaycastHit MuzzleCast() {
 		Vector3 direction = GetDirectionToPoint(Muzzle.position, GetCrosshairHitPoint());
-		Debug.DrawLine(Muzzle.position, Muzzle.position + direction * 10.0f, Color.red, 10.0f);
+		//Debug.DrawLine(Muzzle.position, Muzzle.position + direction * 10.0f, Color.red, 10.0f);
 		Physics.Raycast(Muzzle.position, AddSpread(direction), out RaycastHit hit, float.MaxValue, BulletHitMask);
 		return hit;
 	}
