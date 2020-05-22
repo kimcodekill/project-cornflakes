@@ -10,7 +10,7 @@ public class Reticle : MonoBehaviour
 	[SerializeField] private float playerTransparentViewportYTreshold;
 
     private Camera cam;
-    private Transform muzzle;
+    private Transform Muzzle { get => PlayerWeapon.Instance.Muzzle; }
 
     private RectTransform rect;
 
@@ -22,9 +22,6 @@ public class Reticle : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
-
-        //I'm using the PlayerWeaponInstanceMuzzle bc the weapons dont have it themselves
-        muzzle = PlayerWeapon.Instance.Muzzle;
 
         rect = reticleImage.rectTransform;
 
@@ -76,10 +73,10 @@ public class Reticle : MonoBehaviour
         //Thows a ray forward from the camera
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit camHit, float.PositiveInfinity, rayMask))
         {
-            dir = (camHit.point - muzzle.position).normalized;
+            dir = (camHit.point - Muzzle.position).normalized;
         }
             
-        if (Physics.Raycast(muzzle.position, dir, out RaycastHit muzzleHit, float.PositiveInfinity, rayMask))
+        if (Physics.Raycast(Muzzle.position, dir, out RaycastHit muzzleHit, float.PositiveInfinity, rayMask))
         {
             if (muzzleHit.point != camHit.point)
             {

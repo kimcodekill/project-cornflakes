@@ -102,7 +102,7 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	/// <summary>
 	/// The transform of the muzzle of the weapon.
 	/// </summary>
-	public Transform Muzzle { get => muzzle; set => muzzle = value; }
+	public Transform Muzzle { get => PlayerWeapon.Instance.Muzzle;}
 
 	/// <summary>
 	/// The sound to be played when reloading.
@@ -123,7 +123,6 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	[SerializeField] private GameObject hitDecal;
 	[Header("Misc. Attributes")]
 	[SerializeField] private LayerMask bulletHitMask;
-	[SerializeField] private Transform muzzle;
 	[Header("Sounds")]
 	[SerializeField] private AudioClip reloadAudio;
 	[SerializeField] private AudioClip shootAudio;
@@ -147,7 +146,6 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
 	public void Initialize() {
-		if (muzzle == null) muzzle = PlayerWeapon.Instance.Muzzle;
 
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;

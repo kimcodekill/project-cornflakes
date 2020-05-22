@@ -53,6 +53,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void OnEnable() {
 		if (Instance == null) Instance = this;
+		else if (Instance != this) Destroy(gameObject);
+
+		DontDestroyOnLoad(gameObject);
 	}
 
 	private void Start() {

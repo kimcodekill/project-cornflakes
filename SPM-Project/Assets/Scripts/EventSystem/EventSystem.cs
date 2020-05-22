@@ -55,7 +55,7 @@ public class EventSystem : MonoBehaviour {
 		if (eventListeners == null || !eventListeners.ContainsKey(type) || eventListeners[type] == null) return;
 		for (int i = 0; i < eventListeners[type].Count; i++) {
 			eventListeners[type][i](e);
-			Debug.Log(e + " sent to " + eventListeners[type][i].Target + ":" + eventListeners[type][i].Method.Name);
+			//Debug.Log(e + " sent to " + eventListeners[type][i].Target + ":" + eventListeners[type][i].Method.Name);
 		}
 	}
 
@@ -64,9 +64,10 @@ public class EventSystem : MonoBehaviour {
 		foreach (KeyValuePair<System.Type, List<EventListener>> kv in toRemove) {
 			for (int i = 0; i < toRemove[kv.Key].Count; i++) {
 				eventListeners[kv.Key].Remove(toRemove[kv.Key][i]);
-				Debug.Log("Unregistered " + toRemove[kv.Key][i].Target + ":" + toRemove[kv.Key][i].Method.Name);
+				//Debug.Log("Unregistered " + toRemove[kv.Key][i].Target + ":" + toRemove[kv.Key][i].Method.Name);
 			}
 		}
-	}
 
+		toRemove = null;
+	}
 }
