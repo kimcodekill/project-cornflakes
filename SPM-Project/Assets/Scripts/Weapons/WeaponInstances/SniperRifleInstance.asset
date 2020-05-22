@@ -29,7 +29,7 @@ MonoBehaviour:
   fireRate: 50
   magazineSize: 4
   maxMagazines: 4
-  reloadTime: 3
+  reloadTime: 2
   recoil: 0
   spreadAngle: 36
   zoomFactor: 10

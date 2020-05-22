@@ -1118,6 +1118,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 952490264, guid: c69ff102103f8a34ba0e12172a40c911, type: 3}
+      propertyPath: nextSceneName
+      value: KimL
+      objectReference: {fileID: 0}
     - target: {fileID: 5164862922155292312, guid: c69ff102103f8a34ba0e12172a40c911,
         type: 3}
       propertyPath: m_Name
@@ -2941,6 +2945,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656339553945875046, guid: a995378be5c94154186493bd1e56816e,
+        type: 3}
+      propertyPath: visualizeVolume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8656339553945875065, guid: a995378be5c94154186493bd1e56816e,
         type: 3}

@@ -26,10 +26,10 @@ MonoBehaviour:
   ammoType: 0
   fullAuto: 1
   damage: 3
-  fireRate: 1000
-  magazineSize: 40
+  fireRate: 1500
+  magazineSize: 100
   maxMagazines: 1
-  reloadTime: 3
+  reloadTime: 1.5
   recoil: 0
   spreadAngle: 1.8
   cooldownWait: 0.75
