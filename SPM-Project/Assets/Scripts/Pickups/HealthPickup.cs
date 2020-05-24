@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Author: Erik Pilström
+//Author: Viktor Dahlberg
 public class HealthPickup : Pickup {
 
 	#region Properties
