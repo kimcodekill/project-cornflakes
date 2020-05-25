@@ -27,6 +27,11 @@ public class PlayerDashingState : PlayerState {
 	/// </summary>
 	public bool AllowGrounded;
 
+	/// <summary>
+	/// Whether or not dashing should add heat to the afterburner.
+	/// </summary>
+	public bool UseAfterburner;
+
 	private float startTime = -1;
 
 	private float currentDashTime = 0;
@@ -84,13 +89,13 @@ public class PlayerDashingState : PlayerState {
 	}
 
 	public override bool CanEnter() {
-		return !dashed && OffCooldown(Time.time) && (afterburner == null || afterburner.CanFire()) && dashCount < 1 && ((!AllowGrounded && !Player.PhysicsBody.IsGrounded()) || AllowGrounded);
+		return !dashed && OffCooldown(Time.time) && (afterburner == null || UseAfterburner ||  afterburner.CanFire()) && dashCount < 1 && ((!AllowGrounded && !Player.PhysicsBody.IsGrounded()) || AllowGrounded);
 	}
 
 	private void Dash() {
 		initialY = Player.transform.position.y;
 		dashCount++;
-		if (afterburner != null) afterburner.Fire();
+		if (afterburner != null && UseAfterburner) afterburner.Fire();
 		Player.PhysicsBody.ResetVelocity();
 		Vector3 input = Player.GetInput();
 		Vector3 impulse = (input.magnitude != 0 ? input.normalized : Vector3.ProjectOnPlane(Camera.main.transform.rotation * Vector3.forward, Vector3.up).normalized) * DashSpeed;
