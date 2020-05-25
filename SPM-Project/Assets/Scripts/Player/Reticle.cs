@@ -25,12 +25,16 @@ public class Reticle : MonoBehaviour
     {
         if (Instance == null) { 
             Instance = this;
+
+            EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(OnWeaponSwitch);
             Init();
         }
     }
 
-    private void Init()
+    public void Init()
     {
+        reticleImage.enabled = false;
+
         cam = Camera.main;
 
         rect = reticleImage.rectTransform;
@@ -38,7 +42,6 @@ public class Reticle : MonoBehaviour
         playerRenderer = cam.GetComponent<PlayerRenderer>();
 
         EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickup);
-        EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(OnWeaponSwitch);
     }
 
     private void OnWeaponSwitch(Event e)

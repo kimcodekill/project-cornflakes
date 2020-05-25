@@ -105,7 +105,7 @@ public class Rocket : MonoBehaviour, IDamaging
 
         if (Physics.Raycast(transform.position, other.position - transform.position, out RaycastHit hit, areaOfEffect, damageLayers) )
         {
-            Debug.DrawRay(transform.position, other.position - transform.position, Color.green, 30.0f);
+            //Debug.DrawRay(transform.position, other.position - transform.position, Color.green, 30.0f);
 
             distance = (hit.point - transform.position).magnitude;
 
@@ -113,7 +113,7 @@ public class Rocket : MonoBehaviour, IDamaging
             return (areaOfEffect - distance + collider.height) / areaOfEffect;
         }
 
-        Debug.DrawRay(transform.position, other.position - transform.position, Color.red, 30.0f);
+        //Debug.DrawRay(transform.position, other.position - transform.position, Color.red, 30.0f);
         return 0;
     }
 

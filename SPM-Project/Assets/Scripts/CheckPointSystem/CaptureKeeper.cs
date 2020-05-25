@@ -74,12 +74,16 @@ public static class CaptureKeeper {
 	/// </summary>
 	private static void LoadWeaponCapture(List<Weapon> weapons) {
 		PlayerWeapon.Instance.ResetInventory();
+
 		for (int i = 0; i < weapons.Count; i++) {
 			//Instantiate because we don't want the player to be able to modify captured weapons.
 			Weapon w = Object.Instantiate(weapons[i]);
 			w.Initialize(weapons[i].AmmoInMagazine, weapons[i].AmmoInReserve);
 			PlayerWeapon.Instance.PickUpWeapon(w);
 		}
+
+		//K: no better place to do this
+		if (PlayerWeapon.Instance.GetWeapons().Count == 0) { Reticle.Instance.Init(); }
 	}
 
 	/// <summary>
