@@ -17,13 +17,8 @@ public static class CaptureKeeper {
 			public float health;
 			public int currentWeapon;
 		}
-		public struct WeaponStats {
-			public Weapon weapon;
-			public int ammoInMagazine;
-			public int ammoInReserve;
-		}
 		public PlayerStats Player;
-		public List<WeaponStats> Weapons;
+		public List<Weapon> Weapons;
 		public List<object> DichotomousGameObjects;
 	}
 
@@ -42,11 +37,15 @@ public static class CaptureKeeper {
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
 		Capture latestCapture = captures[captures.Count - 1];
-		LoadWeaponCapture(latestCapture.Weapons);
+		if (!NewLevel) LoadWeaponCapture(latestCapture.Weapons);
 		LoadPlayerCapture(latestCapture.Player);
 		if (!NewLevel) LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
 	}
 
+	/// <summary>
+	///	Sets the player position, rotation and current weapon according to the last checkpoint.
+	///	If a new scene is loaded, only the current weapon is set.
+	/// </summary>
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
 		if (!NewLevel) playerGameObject.transform.position = player.position;
@@ -55,17 +54,21 @@ public static class CaptureKeeper {
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
 
-	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
+	/// <summary>
+	/// Removes the players old weapons and replaces them with the ones equipped by the last checkpoint.
+	/// </summary>
+	private static void LoadWeaponCapture(List<Weapon> weapons) {
+		PlayerWeapon.Instance.ResetInventory();
 		for (int i = 0; i < weapons.Count; i++) {
-			Weapon weapon = weapons[i].weapon;
-			//weapon.enabled = true;
-			//weapon.Initialize();
-			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
-			weapon.AmmoInReserve = weapons[i].ammoInReserve;
-			PlayerWeapon.Instance.PickUpWeapon(weapon);
+			PlayerWeapon.Instance.PickUpWeapon(weapons[i]);
 		}
 	}
 
+	/// <summary>
+	/// Disables dichotomous GameObjects according to their state by the last checkpoint.
+	/// Dichotomous - "dividing into two parts", a.k.a. we only care if these GameObjects are enabled or not,
+	/// no other information about them is saved.
+	/// </summary>
 	private static void LoadDichotomousGameObjectCapture(List<object> capturedGameObjects) {
 		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
 		for (int i = 0; i < gameObjects.Length; i++) {
@@ -101,17 +104,13 @@ public static class CaptureKeeper {
 		}; 
 	}
 
-	private static List<Capture.WeaponStats> CaptureWeapons() {
-		List<Capture.WeaponStats> capturedWeapons = new List<Capture.WeaponStats>();
+	private static List<Weapon> CaptureWeapons() {
+		List<Weapon> capturedWeapons = new List<Weapon>();
 		List<Weapon> weapons = new List<Weapon>(PlayerWeapon.Instance.GetWeapons().ToArray());
 		for (int i = 0; i < weapons.Count; i++) {
-			Weapon w = weapons[i];
-			Object.DontDestroyOnLoad(w);
-			capturedWeapons.Add(new Capture.WeaponStats() {
-				weapon = w,
-				ammoInMagazine = weapons[i].AmmoInMagazine,
-				ammoInReserve = weapons[i].AmmoInReserve
-			});
+			Weapon w = Object.Instantiate(weapons[i]);
+			w.Initialize(weapons[i].AmmoInMagazine, weapons[i].AmmoInReserve);
+			capturedWeapons.Add(w);
 		}
 		return capturedWeapons;
 	}

@@ -71,6 +71,15 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <returns>The carried weapons.</returns>
 	public List<Weapon> GetWeapons() { return weapons; }
 
+	/// <summary>
+	/// Removes all weapons from the player, and removes the state machine since there are no weapons to be ran.
+	/// </summary>
+	public void ResetInventory() {
+		weapons = new List<Weapon>();
+		CurrentWeapon = null;
+		weaponStateMachine = null;
+	}
+
 	private bool CheckInputs() {
 		for (int i = 0; i < weapons.Count; i++)
 			if (Input.GetKeyDown((i + 1).ToString()))

@@ -146,9 +146,13 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	private Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
 	public void Initialize() {
-
 		ammoInMagazine = magazineSize;
 		ammoInReserve = 2 * magazineSize < GetMaxAmmo() ? 2 * magazineSize : GetMaxAmmo() ;
+	}
+
+	public void Initialize(int ammoInMagazine, int ammoInReserve) {
+		this.ammoInMagazine = ammoInMagazine;
+		this.ammoInReserve = ammoInReserve;
 	}
 
 	#region Attribute Status Functions
