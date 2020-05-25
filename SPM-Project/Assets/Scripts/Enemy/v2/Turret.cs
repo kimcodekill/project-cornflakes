@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Erik Pilström
-public class TurretDroid : EnemyBase
+public class Turret : EnemyBase
 {
     
 }

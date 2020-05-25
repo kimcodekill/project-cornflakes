@@ -252,10 +252,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
 
-	/// <summary>
-	/// Signatures for all the behaviour coroutines that the various enemies need to be able to implement.
-	/// (Getting kinda ridiculous with these coroutines, considering reworking enemies from the base up to use behaviour trees instead.)
-	/// </summary>
+	// Signatures for all the behaviour transitions that the various enemies need to be able to implement.
 	public virtual void StartIdleBehaviour() { }
 	public virtual void StopIdleBehaviour() { }
 	public virtual void StartPatrolBehaviour() { }

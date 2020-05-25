@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Erik Pilström
-public class EnemyDrone : MobileEnemy, ILootable {
+public class EnemyDrone : EnemyBase, ILootable {
 
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
@@ -31,7 +31,7 @@ public class EnemyDrone : MobileEnemy, ILootable {
 		Vector3 newPos = FindRandomPosition(Origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
 			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));
-			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed);
+			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * 3/*movementSpeed*/);
 			yield return null;
 		}
 
@@ -56,7 +56,7 @@ public class EnemyDrone : MobileEnemy, ILootable {
 	private IEnumerator Alerted() {
 		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
 		if ((Vector3.Distance(transform.position, Target.transform.position) > attackRange)) {
-			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
+			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * 3/*movementSpeed*/);
 		}
 		yield return null;
 		StartCoroutine("Alerted");
