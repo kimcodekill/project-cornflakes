@@ -12,6 +12,7 @@ public class Rocket : MonoBehaviour, IDamaging
     [SerializeField] private float areaOfEffect;
     [SerializeField] private float lifeTime;
     [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private LayerMask damageLayers;
     [SerializeField] private GameObject hitDecal;
     [SerializeField] private GameObject trail;
     [SerializeField] private GameObject explosion;
@@ -106,7 +107,7 @@ public class Rocket : MonoBehaviour, IDamaging
 
     private float GetDamageScale(Transform other)
     {
-        if (Physics.Raycast(transform.position, other.position - transform.position, out RaycastHit hit, areaOfEffect, collisionLayers) )
+        if (Physics.Raycast(transform.position, other.position - transform.position, out RaycastHit hit, areaOfEffect, damageLayers) )
         {
             float distance = (hit.point - transform.position).magnitude;
 

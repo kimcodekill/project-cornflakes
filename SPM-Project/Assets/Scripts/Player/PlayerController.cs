@@ -150,6 +150,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void OnLevelWasLoaded(int level)
 	{
 		transform.position = PlayerSpawn.Instance.Position;
-		//transform.rotation = PlayerSpawn.Instance.Rotation;
+		//transform.localRotation = PlayerSpawn.Instance.Rotation;
 	}
 }
