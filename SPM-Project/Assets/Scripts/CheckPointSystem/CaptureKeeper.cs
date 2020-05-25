@@ -24,8 +24,15 @@ public static class CaptureKeeper {
 
 	private static List<Capture> captures;
 
-
+	/// <summary>
+	/// If a scene load was triggered by a level transition rather than a death.
+	/// </summary>
 	public static bool NewLevel { get; set; }
+
+	/// <summary>
+	/// If this scene has been captured at least once
+	/// </summary>
+	public static bool LevelHasBeenCaptured { get; set; }
 
 	#endregion
 
@@ -33,13 +40,19 @@ public static class CaptureKeeper {
 
 	/// <summary>
 	/// Loads the latest capture.
+	/// If the current level is a new one we don't load weapons and dichotomous GameObjects.
 	/// </summary>
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
 		Capture latestCapture = captures[captures.Count - 1];
-		if (!NewLevel) LoadWeaponCapture(latestCapture.Weapons);
-		LoadPlayerCapture(latestCapture.Player);
-		if (!NewLevel) LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
+		if (!NewLevel) {
+			LoadWeaponCapture(latestCapture.Weapons);
+			LoadPlayerCapture(latestCapture.Player);
+		}
+		if (LevelHasBeenCaptured) {
+			LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
+		}
+		NewLevel = false;
 	}
 
 	/// <summary>
@@ -48,8 +61,10 @@ public static class CaptureKeeper {
 	/// </summary>
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
-		if (!NewLevel) playerGameObject.transform.position = player.position;
-		if (!NewLevel) Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+		if (!NewLevel) {
+			playerGameObject.transform.position = player.position;
+			Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+		}
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
@@ -60,7 +75,10 @@ public static class CaptureKeeper {
 	private static void LoadWeaponCapture(List<Weapon> weapons) {
 		PlayerWeapon.Instance.ResetInventory();
 		for (int i = 0; i < weapons.Count; i++) {
-			PlayerWeapon.Instance.PickUpWeapon(weapons[i]);
+			//Instantiate because we don't want the player to be able to modify captured weapons.
+			Weapon w = Object.Instantiate(weapons[i]);
+			w.Initialize(weapons[i].AmmoInMagazine, weapons[i].AmmoInReserve);
+			PlayerWeapon.Instance.PickUpWeapon(w);
 		}
 	}
 
