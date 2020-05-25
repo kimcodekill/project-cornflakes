@@ -55,15 +55,6 @@ public class Rocket : MonoBehaviour, IDamaging
         return damage;
     }
 
-    public float GetDamage(float distanceRadius)
-    {
-        float damageScale = (areaOfEffect - distanceRadius) / areaOfEffect;
-
-        float actualDamage = Mathf.Round(damage * damageScale);
-
-        return actualDamage < 0 ? 0 : actualDamage;
-    }
-
     private void Explode()
     {
         //Because we're using OverlapSphere we cant get the actual hit point
@@ -107,14 +98,22 @@ public class Rocket : MonoBehaviour, IDamaging
 
     private float GetDamageScale(Transform other)
     {
+
+        float distance = (other.position - transform.position).magnitude;
+
+        if (distance < 2 * collider.height) { return 1.0f; }
+
         if (Physics.Raycast(transform.position, other.position - transform.position, out RaycastHit hit, areaOfEffect, damageLayers) )
         {
-            float distance = (hit.point - transform.position).magnitude;
+            Debug.DrawRay(transform.position, other.position - transform.position, Color.green, 30.0f);
+
+            distance = (hit.point - transform.position).magnitude;
 
             //We're adding collider.height just to get closer to 1.0f scale
             return (areaOfEffect - distance + collider.height) / areaOfEffect;
         }
 
+        Debug.DrawRay(transform.position, other.position - transform.position, Color.red, 30.0f);
         return 0;
     }
 
