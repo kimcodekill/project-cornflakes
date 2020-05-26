@@ -19,9 +19,8 @@ public class Scout : MobileEnemy
 	}
 	
 	/// <summary>
-	/// Soldier Idle-behaviour.
+	/// Scout Idle-behaviour.
 	/// </summary>
-	/// <returns></returns>
 	private IEnumerator Idle() {
 		eyeTransform.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
@@ -42,9 +41,8 @@ public class Scout : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Patrol-behaviour.
+	/// Scout Patrol-behaviour.
 	/// </summary>
-	/// <returns></returns>
 	private IEnumerator Patrol() {
 		eyeTransform.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
@@ -55,9 +53,8 @@ public class Scout : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Alerted-behaviour.
+	/// Scout Alerted-behaviour.
 	/// </summary>
-	/// <returns></returns>
 	private IEnumerator Alerted() {
 		agent.destination = Target.transform.position;
 		while (!agent.pathPending && agent.remainingDistance > attackRange * 0.8f) {
@@ -69,9 +66,8 @@ public class Scout : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Attack-behaviour.
+	/// Scout Attack-behaviour.
 	/// </summary>
-	/// <returns></returns>
 	private IEnumerator Attack() {
 
 		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
@@ -94,12 +90,10 @@ public class Scout : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Search-behaviour.
-	/// 
+	/// Scout Search-behaviour.
 	/// This whole function is a steaming pile of garbage. It works, but man is it bad. Needs major overhaul.
 	/// A lot of code repetition that I tried to get rid of, but couldn't really find a way to make it work within the coroutine, so it will stay for now.
 	/// </summary>
-	/// <returns></returns>
 	private IEnumerator Search() {
 		HasFinishedSearching = false;
 		float searches = 0;

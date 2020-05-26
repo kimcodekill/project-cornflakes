@@ -14,7 +14,7 @@ public class Warrior : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Idle-behaviour.
+	/// Warrior Idle-behaviour.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Idle() {
@@ -37,7 +37,7 @@ public class Warrior : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Patrol-behaviour.
+	/// Warrior Patrol-behaviour.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Patrol() {
@@ -52,7 +52,7 @@ public class Warrior : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Alerted-behaviour.
+	/// Warrior Alerted-behaviour.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Alerted() {
@@ -66,7 +66,7 @@ public class Warrior : MobileEnemy
 	}
 
 	/// <summary>
-	/// Soldier Attack-behaviour.
+	/// Warrior Attack-behaviour.
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Attack() {
