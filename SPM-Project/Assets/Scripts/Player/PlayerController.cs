@@ -52,7 +52,12 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void OnEnable() {
-		if (Instance == null) Instance = this;
+		if (Instance == null) 
+		{ 
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (Instance != this) Destroy(gameObject);
 	}
 
 	private void Start() {
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+
 		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
 		audioPlayerIdle.loop = true;
 		audioPlayerIdle.clip = audioClips[0];*/
@@ -137,5 +143,13 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
 		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	
+
+	private void OnLevelWasLoaded(int level)
+	{
+		transform.position = PlayerSpawn.Instance.Position;
+		//transform.localRotation = PlayerSpawn.Instance.Rotation;
 	}
 }

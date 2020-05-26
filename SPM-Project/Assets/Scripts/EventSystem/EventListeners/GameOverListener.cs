@@ -33,6 +33,11 @@ public class GameOverListener : MonoBehaviour
         LevelEndEvent lee = (LevelEndEvent)e;
         Debug.Log(e.Description);
 
+        foreach (Weapon w in PlayerWeapon.Instance.GetWeapons())
+        {
+            Debug.Log(w.ToString());
+        }
+
         //Not sure if this should be done here, probably should be sent to some other class that likes taking care of scenes
         LoadNextScene();
     }

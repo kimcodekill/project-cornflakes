@@ -7,6 +7,8 @@ using UnityEngine.UI;
 //Author: Erik Pilström
 public class PlayerHud : MonoBehaviour
 {
+	public static PlayerHud Instance;
+
 	[Header("Player attributes")]
 	[SerializeField] [Tooltip("The slider field for player healthbar.")] private Slider healthBar;
 	[SerializeField] [Tooltip("Text for bullets left in current magazine.")] private Text bulletsInMag; 
@@ -24,6 +26,8 @@ public class PlayerHud : MonoBehaviour
 
 	private void Start()
     {
+		if (Instance == null) { Instance = this; }
+
 		hudBorder.color = defaultPanelColour;
 		playerWeapon = player.gameObject.GetComponent<PlayerWeapon>();
 		//anim = GetComponentInChildren<Animator>();

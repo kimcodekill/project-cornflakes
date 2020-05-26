@@ -9,15 +9,15 @@ public class EffectListener : MonoBehaviour
 {
     void Start()
     {
-        EventSystem.Current.RegisterListener<BulletEffectEvent>(OnBulletHit);
+        EventSystem.Current.RegisterListener<BulletHitEffectEvent>(OnBulletHit);
         EventSystem.Current.RegisterListener<ExplosionEffectEvent>(OnExplosion);
     }
 
     private void OnBulletHit(Event e)
     {
-        BulletEffectEvent bee = e as BulletEffectEvent;
+        BulletHitEffectEvent bhee = e as BulletHitEffectEvent;
 
-        Instantiate(bee.HitEffect, bee.WorldPosition, bee.Rotation);
+        Instantiate(bhee.HitEffect, bhee.WorldPosition, bhee.Rotation);
     }
 
     

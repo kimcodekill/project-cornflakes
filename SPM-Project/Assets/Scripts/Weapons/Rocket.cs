@@ -12,6 +12,8 @@ public class Rocket : MonoBehaviour, IDamaging
     [SerializeField] private float areaOfEffect;
     [SerializeField] private float lifeTime;
     [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] private LayerMask damageLayers;
+    [SerializeField] private GameObject hitDecal;
     [SerializeField] private GameObject trail;
     [SerializeField] private GameObject explosion;
 
@@ -19,14 +21,18 @@ public class Rocket : MonoBehaviour, IDamaging
 
     private float startTime;
 	private AudioSource audioSource;
+    private CapsuleCollider collider;
 
     private void Start()
     {
 		startTime = Time.time;
 		trail = Instantiate(trail, transform.position, Quaternion.identity) as GameObject;
 		trail.transform.rotation = transform.rotation;
-		audioSource = GetComponent<AudioSource>();
+        collider = GetComponent<CapsuleCollider>();
+
+        audioSource = GetComponent<AudioSource>();
 		audioSource.Play();
+        
     }
 
     private void Update()
@@ -49,45 +55,32 @@ public class Rocket : MonoBehaviour, IDamaging
         return damage;
     }
 
-    public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
-    {
-        float distance = (hitPos - explosionCenter).magnitude;
-
-        float damageScale = (areaOfEffect - distance) / areaOfEffect;
-
-        float actualDamage = Mathf.Round(damage * damageScale);
-
-        return actualDamage < 0 ? 0 : actualDamage;
-    }
-
     private void Explode()
     {
         //Because we're using OverlapSphere we cant get the actual hit point
         //Could be solved using SphereCast, but I cant get that working.
-        Collider[] nearColliders = Physics.OverlapSphere(transform.position, areaOfEffect / areaOfEffect);
-        Collider[] farColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
+
+        //Collider[] nearColliders = Physics.OverlapSphere(transform.position, areaOfEffect / areaOfEffect);
+        //Collider[] farColliders = Physics.OverlapSphere(transform.position, areaOfEffect);
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, areaOfEffect);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            EventSystem.Current.FireEvent(new ExplosiveDamageEvent(colliders[i].GetComponent<IEntity>(), this, GetDamageScale(colliders[i].transform)));
+        }
 
         //Makes sure the colliders within 1 unit of the explosion get f'd in the b
-        for (int i = 0; i < nearColliders.Length; i++)
-        {
-            EventSystem.Current.FireEvent(new HitEvent()
-            {
-                Source = gameObject,
-                Target = nearColliders[i].gameObject,
-                HitPoint = nearColliders[i].transform.position,
-            });
-        }
+        //for (int i = 0; i < nearColliders.Length; i++)
+        //{
+        //    EventSystem.Current.FireEvent(new ExplosiveDamageEvent(nearColliders[i].gameObject.GetComponent<IEntity>(), this, ));
+        //}
 
         //Smooches the other ones
-        for (int i = 0; i < farColliders.Length; i++)
-        {
-            EventSystem.Current.FireEvent(new HitEvent()
-            {
-                Source = gameObject,
-                Target = farColliders[i].gameObject,
-                HitPoint = transform.position,
-            });
-        }
+        //for (int i = 0; i < farColliders.Length; i++)
+        //{
+        //    EventSystem.Current.FireEvent(new ExplosiveDamageEvent(farColliders[i].gameObject.GetComponent<IEntity>(), this));
+        //}
 
         //Makes the trail stop emitting particles
 		ParticleSystem[] trailParticleSystems = trail.gameObject.GetComponentsInChildren<ParticleSystem>();
@@ -97,15 +90,31 @@ public class Rocket : MonoBehaviour, IDamaging
 			childPSEmissionModule.rateOverDistance = 0;
 		}
 
-        EventSystem.Current.FireEvent(new ExplosionEffectEvent()
-        {
-            ExplosionEffect = explosion,
-            WorldPosition = transform.position,
-            Rotation = Quaternion.identity,
-            Scale = areaOfEffect
-        });;
+        EventSystem.Current.FireEvent(new ExplosionEffectEvent(explosion, transform.position, Quaternion.identity, areaOfEffect));
+        EventSystem.Current.FireEvent(new BulletHitEffectEvent(hitDecal, transform.position, Quaternion.identity, areaOfEffect));
 
         gameObject.SetActive(false);
+    }
+
+    private float GetDamageScale(Transform other)
+    {
+
+        float distance = (other.position - transform.position).magnitude;
+
+        if (distance < 2 * collider.height) { return 1.0f; }
+
+        if (Physics.Raycast(transform.position, other.position - transform.position, out RaycastHit hit, areaOfEffect, damageLayers) )
+        {
+            //Debug.DrawRay(transform.position, other.position - transform.position, Color.green, 30.0f);
+
+            distance = (hit.point - transform.position).magnitude;
+
+            //We're adding collider.height just to get closer to 1.0f scale
+            return (areaOfEffect - distance + collider.height) / areaOfEffect;
+        }
+
+        //Debug.DrawRay(transform.position, other.position - transform.position, Color.red, 30.0f);
+        return 0;
     }
 
     private void OnTriggerEnter(Collider other)

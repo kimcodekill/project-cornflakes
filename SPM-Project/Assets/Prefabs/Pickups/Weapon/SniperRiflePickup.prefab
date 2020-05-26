@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7794975306305105596}
   - component: {fileID: 7794975306305105598}
   - component: {fileID: 7794975306305105569}
-  - component: {fileID: 7794975306305105593}
   - component: {fileID: 7794975306305105568}
   m_Layer: 0
   m_Name: SniperRiflePickup
@@ -95,35 +94,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7794975306305105593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7794975306305105595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b753b032e5658e44682f1c48c8ff7880, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletHitMask:
-    serializedVersion: 2
-    m_Bits: 1792
-  muzzle: {fileID: 0}
-  reloadAudio: {fileID: 8300000, guid: 8fe696357b0d00340b6c6db373a5146d, type: 3}
-  shootAudio: {fileID: 8300000, guid: d3358f0471880f149b57f7623c4b127d, type: 3}
-  switchAudio: {fileID: 8300000, guid: 38a596d7217d8954c8725ebbcf12c4ca, type: 3}
-  ammoType: 3
-  fullAuto: 0
-  damage: 100
-  fireRate: 50
-  magazineSize: 4
-  maxMagazines: 4
-  reloadTime: 3
-  recoil: 0
-  spreadAngle: 36
-  zoomFactor: 10
 --- !u!114 &7794975306305105568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,3 +107,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
+  weapon: {fileID: 11400000, guid: 4d4e24ccc000f72418ff42b2dc9fc32b, type: 2}

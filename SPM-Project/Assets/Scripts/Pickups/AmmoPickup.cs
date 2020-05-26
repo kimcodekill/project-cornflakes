@@ -22,11 +22,8 @@ public class AmmoPickup : Pickup {
 	#endregion
 
 	protected override void OnPickup(Collider other) {
-		EventSystem.Current.FireEvent(new PickUpEvent() {
-			Description = this + " was picked up by " + other.gameObject,
-			Source = gameObject,
-			Target = other.gameObject,
-		});
+
+		EventSystem.Current.FireEvent(new AmmoPickUpEvent(gameObject, other.gameObject, ammoType, ammoAmount));
 	}
 
 	protected override bool IsValid(Collider other) {
