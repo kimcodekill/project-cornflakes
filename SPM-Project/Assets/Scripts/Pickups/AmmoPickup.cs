@@ -17,25 +17,27 @@ public class AmmoPickup : Pickup {
 
 	[SerializeField] private Weapon.EAmmoType ammoType;
 	[SerializeField] private int ammoAmount;
+	[SerializeField] private int spawnedAmmoAmount;
 
 	#endregion
 
 	protected override void OnPickup(Collider other) {
-		EventSystem.Current.FireEvent(new PickUpEvent() {
-			Description = this + " was picked up by " + other.gameObject,
-			Source = gameObject,
-			Target = other.gameObject,
-		});
+
+		EventSystem.Current.FireEvent(new AmmoPickUpEvent(gameObject, other.gameObject, ammoType, ammoAmount));
 	}
 
 	protected override bool IsValid(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
-			PlayerWeapon.AmmoPool ap = PlayerController.Instance.PlayerWeapon.GetAmmoPool(ammoType);
+			PlayerWeapon.AmmoPool ap = PlayerWeapon.Instance.GetAmmoPool(ammoType);
 			if (ap.reserveAmmo >= ap.maxAmmo) return false;
 			if (ap.reserveAmmo + ammoAmount > ap.maxAmmo) ammoAmount = ap.maxAmmo - ap.reserveAmmo;
 			return true;
 		}
 		else return false;
+	}
+
+	protected override void OnSpawned() {
+		ammoAmount = spawnedAmmoAmount;
 	}
 
 }

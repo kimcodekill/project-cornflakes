@@ -3,26 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Viktor Dahlberg
+
 public class WeaponListener : MonoBehaviour {
 
-	private void Start() => EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
-
-	private void OnPickUp(Event e) {
-		PickUpEvent pue = (PickUpEvent) e;
-		Debug.Log(pue.Description);
-		PlayerWeapon pw;
-		if ((pw = pue.Target.GetComponent<PlayerWeapon>()) != null) {
-			Weapon w;
-			AmmoPickup ap;
-			if ((w = pue.Source.GetComponent<Weapon>()) != null) {
-				pw.PickUpWeapon(w);
-				pue.Source.SetActive(false);
-			}
-			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
-				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
-				pue.Source.SetActive(false);
-			}
-		}
+	private void Start() {
+		//EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
+		EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickUp);
+		EventSystem.Current.RegisterListener<AmmoPickUpEvent>(OnAmmoPickUp);
 	}
 
+	private void OnWeaponPickUp(Event e) {
+		WeaponPickUpEvent wpue = e as WeaponPickUpEvent;
+
+		PlayerWeapon.Instance.PickUpWeapon(wpue.Weapon);
+		wpue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(wpue.Weapon.ToString(), 0);
+		wpue.Pickup.SetActive(false);
+	}
+
+	private void OnAmmoPickUp(Event e) {
+		AmmoPickUpEvent apue = e as AmmoPickUpEvent;
+
+		PlayerWeapon.Instance.AddAmmo(apue.AmmoType, apue.AmmoAmount);
+		
+		//K: Not sure why we're telling the playercontroller to play audio but whatever
+		apue.Other.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
+		apue.Pickup.SetActive(false);
+
+		//K: This hud shit isnt very nice. We should redo it.
+		if (apue.AmmoAmount > 1 || apue.AmmoType == Weapon.EAmmoType.Special) apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().ToLower(), apue.AmmoAmount);
+		else apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().Remove(apue.AmmoType.ToString().Length - 1).ToLower(), apue.AmmoAmount);
+	}
 }

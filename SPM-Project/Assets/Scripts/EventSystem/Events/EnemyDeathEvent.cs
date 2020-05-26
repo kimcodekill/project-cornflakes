@@ -7,7 +7,6 @@ public class EnemyDeathEvent : Event {
 	public GameObject DeadObject;
 
 	public float BaseDropChance;
-
 	public float ScoreValue;
 
 }

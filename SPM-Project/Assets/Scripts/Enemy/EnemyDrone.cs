@@ -6,21 +6,7 @@ using UnityEngine;
 public class EnemyDrone : Enemy, ILootable {
 
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
-	
-	private SphereCollider body;
-	private Vector3 origin;
-
-	private void Awake() {
-		origin = transform.position;
-	}
-
-	private void Start() {
-		base.Start();
-	}
-
-	private void Update() {
-		base.Update();
-	}
+	[SerializeField] private SphereCollider body;
 
 	/// <summary>
 	/// Finds a new position for patrolling.
@@ -42,7 +28,7 @@ public class EnemyDrone : Enemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Patrol() {
-		Vector3 newPos = FindRandomPosition(origin, patrolBungeeDistance);
+		Vector3 newPos = FindRandomPosition(Origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
 			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));
 			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed);
@@ -103,10 +89,10 @@ public class EnemyDrone : Enemy, ILootable {
 
 	public LootTable GetLootTable() {
 		return new LootTable {
-			["Pickups/HealthPickup"] = 0.2f,
-			["Pickups/Ammo/RocketsPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
-			["Pickups/Ammo/ShellsPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.4f : 0f,
-			["Pickups/Ammo/SpecialPickup"] = PlayerController.Instance.PlayerWeapon.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.4f : 0f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.2f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.2f : 0f,
+			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.2f : 0f,
+			[LootTable.Nothing] = 0.8f,
 		};
 	}
 }

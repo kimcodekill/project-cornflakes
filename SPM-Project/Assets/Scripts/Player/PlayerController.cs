@@ -1,17 +1,24 @@
-﻿using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEditor.SceneManagement;
+using UnityEngine;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
 
-	//WE NEED TO CLEAN THIS UP.
-	//PLAYERCONTROLLER DOES TOO MUCH STUFF!!!! /K
-
-	public static PlayerController Instance;
-
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
 	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
+	[SerializeField] private AudioClip[] audioClips;
+	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
+	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
+	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
+	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	public Animator playerAnimator;
+	private float animHorizontal, animVertical;
+
+	/// <summary>
+	/// Singleton
+	/// </summary>
+	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
 
@@ -30,8 +37,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// </summary>
 	public PhysicsBody PhysicsBody { get; private set; }
 
-	public PlayerWeapon PlayerWeapon { get; private set; }
-
 	/// <summary>
 	/// The inputs the player decided on for the current fixed update interval.
 	/// </summary>
@@ -46,32 +51,37 @@ public class PlayerController : MonoBehaviour, IEntity {
 		public bool doDash;
 	}
 
-	private string playerSpawnKey = "PlayerSpawn";
-
-	//Singleton stuff expanded and moved from OnEnable (for no real reason other than idk why we used OnEnable) /K
-	private void Awake() {
-		if (Instance == null) { Instance = this; }
-		else if (Instance != this) { Destroy(gameObject); }
-
-		DontDestroyOnLoad(gameObject);
+	private void OnEnable() {
+		if (Instance == null) 
+		{ 
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (Instance != this) Destroy(gameObject);
 	}
 
 	private void Start() {
 		if (PlayerCurrentHealth == -1) PlayerCurrentHealth = PlayerMaxHealth;
 		PhysicsBody = GetComponent<PhysicsBody>();
-
-		//I chose to do this in accordance to PhysicsBody.
-		//I don't have to but I did. /K
-		PlayerWeapon = GetComponentInChildren<PlayerWeapon>();
-
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+
+		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
+		audioPlayerIdle.loop = true;
+		audioPlayerIdle.clip = audioClips[0];*/
+		audioPlayerIdle.Play();
 
 		DebugManager.AddSection("Input", "Jump: ", "Dash: ");
 	}
 
 	private void FixedUpdate() {
 		stateMachine.Run();
+		animVertical = UnityEngine.Input.GetAxis("Vertical");
+		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+		playerAnimator.SetFloat("Speed", animVertical);
+		playerAnimator.SetFloat("Direction", animHorizontal);
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		Input.doJump = false;
 		Input.doDash = false;
 	}
@@ -95,7 +105,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	/// <summary>
-	/// Regenerats the player's health. Implements <c>IEntity.TakeDamage()</c>
+	/// Regenerates the player's health. Implements <c>IEntity.TakeDamage()</c>
 	/// </summary>
 	/// <param name="amount"> The amount the player should heal.</param>
 	public float Heal(float amount) {
@@ -109,6 +119,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// <param name="amount">The amount of damage the player will take.</param>
 	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
+		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
@@ -123,13 +134,21 @@ public class PlayerController : MonoBehaviour, IEntity {
 		});
 	}
 
-	//THIS IS HACKY, AFTER PLAYTEST WE NEED TO TALK ABOUT THIS /K
+	public void PlayAudioMain(int clipIndex, float volume) {
+		audioSourceMain.pitch = 1;
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
+		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
+		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	
+
 	private void OnLevelWasLoaded(int level)
 	{
-		Transform playerSpawn = GameObject.Find(playerSpawnKey).transform;
-		if (playerSpawn != null) { transform.position = playerSpawn.position; }
-		else { transform.position = Vector3.zero; }
-
-		if(PhysicsBody != null) { PhysicsBody.ResetVelocity(); }
+		transform.position = PlayerSpawn.Instance.Position;
+		//transform.localRotation = PlayerSpawn.Instance.Rotation;
 	}
 }

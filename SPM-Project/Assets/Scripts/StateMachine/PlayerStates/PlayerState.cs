@@ -6,9 +6,7 @@ using UnityEngine;
 public abstract class PlayerState : State {
 	
 	public float Drag;
-
 	public float Acceleration;
-
 	public float TopSpeed;
 
 	private PlayerController player;

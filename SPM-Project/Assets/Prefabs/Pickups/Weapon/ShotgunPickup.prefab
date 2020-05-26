@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8254532318942674059}
   - component: {fileID: 8254532318942674057}
   - component: {fileID: 8254532318942674070}
-  - component: {fileID: 8254532318942674058}
   - component: {fileID: 8254532318942674071}
   m_Layer: 0
   m_Name: ShotgunPickup
@@ -95,32 +94,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8254532318942674058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8254532318942674060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d6cb03edc193bc4585a540045aa1ff9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletHitMask:
-    serializedVersion: 2
-    m_Bits: 1792
-  muzzle: {fileID: 0}
-  ammoType: 1
-  fullAuto: 0
-  damage: 8
-  fireRate: 100
-  magazineSize: 5
-  maxMagazines: 5
-  reloadTime: 1
-  recoil: 0
-  spreadAngle: 9
-  pelletCount: 7
 --- !u!114 &8254532318942674071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,3 +107,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
+  weapon: {fileID: 11400000, guid: 4d360f9500ac3b346a836bff3da01385, type: 2}

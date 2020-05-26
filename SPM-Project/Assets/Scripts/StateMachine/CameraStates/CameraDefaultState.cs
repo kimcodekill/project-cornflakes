@@ -12,8 +12,10 @@ public class CameraDefaultState : CameraState
 
 	public override void Run()
 	{
+		// Kim: This will be broken if we deprecate WeaponIsActive (bc it's a deferred bool)
+
 		// Weapon? Hipfire.
-		if(PlayerController.Instance.PlayerWeapon.WeaponIsActive) { 
+		if(PlayerWeapon.Instance.WeaponIsActive) { 
 			StateMachine.Push<CameraHipfireState>(); 
 		}
 
