@@ -8,7 +8,6 @@ public class PlayerStandingState : PlayerGroundedState {
 
 	public override void Enter() {
 		try { DebugManager.AddSection("PlayerSTM" + Player.gameObject.GetInstanceID(), ""); } catch (System.ArgumentException) { }
-		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		Player.PhysicsBody.UseStationaryPhysicsMaterial(true);
 
 		base.Enter();

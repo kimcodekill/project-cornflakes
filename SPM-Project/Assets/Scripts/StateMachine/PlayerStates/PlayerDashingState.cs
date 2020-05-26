@@ -48,7 +48,6 @@ public class PlayerDashingState : PlayerState {
 		Player.dash1.SetActive(true);
 		Player.dash2.SetActive(true);
 		Player.playerAnimator.SetTrigger("Dashing");
-		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
 		
 		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
 		if (afterburner == null && !warned) {

@@ -1256,6 +1256,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: firingHeatIncrement
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: maxHeatLevel
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: heatDispersalRate
+      value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: heatDispersalDelay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2304939023186376868, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1385,26 +1405,6 @@ PrefabInstance:
         type: 3}
       propertyPath: playerLayer.m_Bits
       value: 2048
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059612424627893, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059612424627893, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059612424627893, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7841059612424627893, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7841059612424627893, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}

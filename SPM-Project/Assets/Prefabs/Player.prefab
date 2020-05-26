@@ -1220,6 +1220,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5936724643d1f5b4081626c8db9943de, type: 2}
   - {fileID: 11400000, guid: 248b71c3989f24846ad3162667c5cf28, type: 2}
   - {fileID: 11400000, guid: db4b5d507fe558a4c8b7375400d537f8, type: 2}
+  - {fileID: 11400000, guid: 29b4479654b14de4797146972417c2ef, type: 2}
   cam: {fileID: 7841059611673499746}
   playerHud: {fileID: 7841059610537404106}
   audioClips:

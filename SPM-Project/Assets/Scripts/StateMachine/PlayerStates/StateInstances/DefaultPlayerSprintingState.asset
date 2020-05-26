@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b6fd65d6946ebc43a5ca8cce817051e, type: 3}
-  m_Name: DefaultPlayerFallingState
+  m_Script: {fileID: 11500000, guid: 2802e859661740f479a94c94ba67d32a, type: 3}
+  m_Name: DefaultPlayerSprintingState
   m_EditorClassIdentifier: 
   UseEffects:
     UseThrusters: 1
-  Drag: 0
-  Acceleration: 10
-  TopSpeed: 15
+  Drag: 10
+  Acceleration: 400
+  TopSpeed: 40
+  JumpGracePeriod: 0.25
+  UseAfterburner: 1
