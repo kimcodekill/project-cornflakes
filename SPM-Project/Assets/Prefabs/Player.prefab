@@ -1288,10 +1288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad8daf83ecca364bba3580624bdee0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firingHeatIncrement: 2
-  maxHeatLevel: 10
-  heatDispersalDelay: 2
-  heatDispersalRate: 3
+  firingHeatIncrement: 0.001
+  maxHeatLevel: 1000
+  heatDispersalDelay: 1
+  heatDispersalRate: 130
   slider: {fileID: 1801680666427396551}
 --- !u!82 &5486548003356286568
 AudioSource:
