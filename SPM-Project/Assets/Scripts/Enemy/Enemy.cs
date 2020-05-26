@@ -199,17 +199,13 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 
 	private void Die() {
 		StopAllCoroutines();
+		
 		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
 			Source = gameObject,
-			DropAnythingAtAllChance = 0.5f,
 		});
-		EventSystem.Current.FireEvent(new ExplosionEffectEvent()
-		{
-			ExplosionEffect = deathExplosion,
-			WorldPosition = transform.position,
-			Rotation = Quaternion.identity,
-			Scale = 1
-		});
+
+		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
+		
 		gameObject.SetActive(false);
 		Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
