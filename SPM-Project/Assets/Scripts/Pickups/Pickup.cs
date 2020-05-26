@@ -76,5 +76,9 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 
 	public void Spawned() {
 		fromSpawner = true;
+		OnSpawned();
 	}
+
+	protected virtual void OnSpawned() {}
+
 }

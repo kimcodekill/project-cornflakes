@@ -17,6 +17,7 @@ public class AmmoPickup : Pickup {
 
 	[SerializeField] private Weapon.EAmmoType ammoType;
 	[SerializeField] private int ammoAmount;
+	[SerializeField] private int spawnedAmmoAmount;
 
 	#endregion
 
@@ -36,6 +37,10 @@ public class AmmoPickup : Pickup {
 			return true;
 		}
 		else return false;
+	}
+
+	protected override void OnSpawned() {
+		ammoAmount = spawnedAmmoAmount;
 	}
 
 }
