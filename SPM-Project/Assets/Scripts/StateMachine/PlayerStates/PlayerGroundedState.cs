@@ -15,7 +15,6 @@ public abstract class PlayerGroundedState : PlayerState {
 	public override void Enter() {
 		Player.playerAnimator.SetBool("Falling", false);
 		startTime = -1;
-		ThrustersOff();
 
 		base.Enter();
 	}
@@ -28,11 +27,6 @@ public abstract class PlayerGroundedState : PlayerState {
 		}
 
 		base.Run();
-	}
-
-	private void ThrustersOff() {
-		Player.thrust1.SetActive(false);
-		Player.thrust2.SetActive(false);
 	}
 
 }

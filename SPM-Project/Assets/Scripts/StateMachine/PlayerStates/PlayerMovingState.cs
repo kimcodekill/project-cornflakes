@@ -7,14 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerState/MovingState")]
 public class PlayerMovingState : PlayerGroundedState {
 
-	private double stepStartTime;
-	private double stepEndTime;
-	private double loops = 0;
-	private bool playSteps;
-
 	public override void Enter() {
-		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
-		loops = 0;
 		Player.audioPlayerSteps.Play();
 
 		base.Enter();

@@ -11,17 +11,15 @@ public abstract class PlayerAirState : PlayerState {
 
 	public override void Enter() {
 		Player.playerAnimator.SetBool("Falling", true);
-		Player.thrust1.SetActive(true);
-		Player.thrust2.SetActive(true);
 		if (startTime == -1) startTime = Time.time;
 
 		base.Enter();
 	}
 
 	public override void Run() {
-		if (Player.PhysicsBody.IsGrounded() && Time.time - startTime > recheckTimeTreshold) {
+		if (Player.PhysicsBody.IsGrounded() && (StateMachine.IsPreviousState<PlayerDashingState>() || Time.time - startTime > recheckTimeTreshold)) {
+			Player.PhysicsBody.SetAxisVelocity('y', 0f);
 			jumpCount = 0;
-			dashCount = 0;
 			startTime = -1;
 			Player.PlayAudioMain(4, 1);
 			StateMachine.TransitionTo<PlayerStandingState>();
