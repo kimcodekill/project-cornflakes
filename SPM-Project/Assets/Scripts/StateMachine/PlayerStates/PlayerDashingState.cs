@@ -8,8 +8,6 @@ public class PlayerDashingState : PlayerState {
 
 	public float DashSpeed;
 
-	public float Cooldown;
-
 	public float DashDuration;
 
 	/// <summary>
@@ -22,38 +20,20 @@ public class PlayerDashingState : PlayerState {
 	/// </summary>
 	public float StopDotTreshold;
 
-	/// <summary>
-	/// Toggles whether or not the player should be allowed to dash while grounded.
-	/// </summary>
-	public bool AllowGrounded;
-
-	/// <summary>
-	/// Whether or not dashing should add heat to the afterburner.
-	/// </summary>
-	public bool UseAfterburner;
-
-	private float startTime = -1;
-
 	private float currentDashTime = 0;
 
 	private float initialY;
 
 	private bool dashed = false;
 
-	private Afterburner afterburner;
-
-	private bool warned;
+	private Charge charge;
 
 	public override void Enter() {
 		Player.dash1.SetActive(true);
 		Player.dash2.SetActive(true);
 		Player.playerAnimator.SetTrigger("Dashing");
 		
-		afterburner = afterburner == null ? Player.GetComponent<Afterburner>() : afterburner;
-		if (afterburner == null && !warned) {
-			warned = true;
-			Debug.LogWarning("No active Afterburner. Add an Afterburner component to your Player.");
-		}
+		charge = charge == null ? Player.GetComponent<Charge>() : charge;
 		
 		Dash();
 
@@ -79,6 +59,7 @@ public class PlayerDashingState : PlayerState {
 	public override void Exit() {
 		Player.dash1.SetActive(false);
 		Player.dash2.SetActive(false);
+		
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		Player.PhysicsBody.SetGravityEnabled(true);
 		dashed = false;
@@ -88,30 +69,23 @@ public class PlayerDashingState : PlayerState {
 	}
 
 	public override bool CanEnter() {
-		return !dashed && OffCooldown(Time.time) && (afterburner == null || UseAfterburner ||  afterburner.CanFire()) && dashCount < 1 && ((!AllowGrounded && !Player.PhysicsBody.IsGrounded()) || AllowGrounded);
+		return !dashed && (charge == null || charge.IsReady());
 	}
 
 	private void Dash() {
 		initialY = Player.transform.position.y;
-		dashCount++;
-		if (afterburner != null && UseAfterburner) afterburner.Fire();
+		if (charge != null) charge.Trigger();
 		Player.PhysicsBody.ResetVelocity();
+		
 		Vector3 input = Player.GetInput();
 		Vector3 impulse = (input.magnitude != 0 ? input.normalized : Vector3.ProjectOnPlane(Camera.main.transform.rotation * Vector3.forward, Vector3.up).normalized) * DashSpeed;
 		impulse.y = 0;
 		Player.PhysicsBody.AddForce(impulse, ForceMode.Impulse);
 		Player.PhysicsBody.SetGravityEnabled(false);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);
+		
 		dashed = true;
 		Player.PlayAudioMain(2, 1);
-	}
-
-	private bool OffCooldown(float currentTime) {
-		if (startTime == -1 || currentTime - startTime > Cooldown) {
-			startTime = currentTime;
-			return true;
-		}
-		else return false;
 	}
 
 }

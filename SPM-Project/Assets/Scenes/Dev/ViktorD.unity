@@ -1256,25 +1256,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    - target: {fileID: 1995143260991940883, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
-      propertyPath: firingHeatIncrement
-      value: 0.001
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    - target: {fileID: 2170718304258603116, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
-      propertyPath: maxHeatLevel
-      value: 1000
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+    - target: {fileID: 2170718304258603116, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
-      propertyPath: heatDispersalRate
-      value: 130
-      objectReference: {fileID: 0}
-    - target: {fileID: 750032442715062799, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
-        type: 3}
-      propertyPath: heatDispersalDelay
-      value: 1
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2304939023186376868, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
@@ -1294,6 +1289,11 @@ PrefabInstance:
     - target: {fileID: 4128704959101827264, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5496902572441198938, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5677913012457115718, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
@@ -1305,6 +1305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7618830388194334735, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7841059610537404105, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}

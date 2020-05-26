@@ -16,7 +16,6 @@ public class PlayerMovingState : PlayerGroundedState {
 	public override void Run() {
 		Vector3 input = Player.GetInput().normalized;
 		if (input.magnitude == 0) StateMachine.TransitionTo<PlayerStandingState>();
-		else if (Input.GetKey(KeyCode.LeftShift)) StateMachine.TransitionTo<PlayerSprintingState>();
 		else Player.PhysicsBody.AddForce(input * Acceleration, ForceMode.Acceleration);
 
 		Player.PhysicsBody.CapVelocity(TopSpeed);

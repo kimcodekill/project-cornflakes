@@ -16,17 +16,18 @@ public abstract class PlayerState : State {
 	public PlayerController Player => player = player != null ? player : (PlayerController) Owner;
 
 	protected static int jumpCount = 0;
-	protected static int dashCount = 0;
 
 	public override void Enter() {
 		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), StateMachine.GetCurrentState().ToString());
 		Player.PhysicsBody.SetSlideRate(Drag);
-		if (Player.PhysicsBody.IsGrounded()) dashCount = 0;
 		ToggleEffects(UseEffects);
 	}
 
 	public override void Run() {
-		if (Player.Input.doJump && StateMachine.CanEnterState<PlayerJumpingState>()) {
+		if (Player.Input.doDash && StateMachine.CanEnterState<PlayerDashingState>()) {
+			StateMachine.TransitionTo<PlayerDashingState>();
+		}
+		else if (Player.Input.doJump && StateMachine.CanEnterState<PlayerJumpingState>()) {
 			StateMachine.TransitionTo<PlayerJumpingState>();
 		}
 		

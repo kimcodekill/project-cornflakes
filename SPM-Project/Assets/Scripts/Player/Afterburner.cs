@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 //Author: Viktor Dahlberg
+[Obsolete("This class is unused in favor of Charge")]
 public class Afterburner : MonoBehaviour {
 	
 	/// <summary>
