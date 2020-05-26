@@ -163,6 +163,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5002246384653909074, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: multiplierText
+      value: 
+      objectReference: {fileID: 1138880533}
+    - target: {fileID: 5002246384653909074, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
+        type: 3}
+      propertyPath: multiplierTime
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7841059610537404104, guid: 09c76aa4a4f019c41a45cfc9c75d0027,
         type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
