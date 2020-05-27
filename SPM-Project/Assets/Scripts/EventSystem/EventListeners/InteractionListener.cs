@@ -6,25 +6,55 @@ using UnityEngine;
 public class InteractionListener : MonoBehaviour {
 
 	private void Start() {
-		EventSystem.Current.RegisterListener<HitEvent>(OnHit);
 		EventSystem.Current.RegisterListener<DamageEvent>(OnDamage);
+		EventSystem.Current.RegisterListener<ExplosiveDamageEvent>(OnExplosiveDamage);
+		//EventSystem.Current.RegisterListener<HitEvent>(OnHit);
+		//EventSystem.Current.RegisterListener<BulletHitEvent>(OnBulletHit);
 	}
 
-	private void OnHit(Event e) {
-		HitEvent he = (HitEvent) e;
-		if (he.Target.GetComponent<IEntity>() != null) {
-			EventSystem.Current.FireEvent(new DamageEvent() {
-				Description = he.Source + " damaged " + he.Target,
-				Source = he.Source,
-				Target = he.Target,
-				//I don't like how the explosion checks the distance from the center of the hit object, but no one will notice (probably)
-				Damage = he.Source.GetComponent<Rocket>() ? he.Source.GetComponent<IDamaging>().GetExplosionDamage(he.Source.transform.position, he.Target.transform.position) : he.Source.GetComponent<IDamaging>().GetDamage()
-			});
-		}
-	}
+	//private void OnHit(Event e) {
+	//	HitEvent he = (HitEvent) e;
+
+	//	IEntity entity;
+
+	//	if ((entity = he.Target.GetComponent<IEntity>()) != null) {
+	//		IDamaging damager;
+	//		if((damager = he.Source.GetComponent<IDamaging>()) != null)
+	//		{
+	//			EventSystem.Current.FireEvent(new DamageEvent(entity, damager));
+	//		}
+	//	}
+	//}
+
+	//private void OnBulletHit(Event e)
+	//{
+	//	BulletHitEvent bhe = e as BulletHitEvent;
+
+	//	OnHit(e);
+
+	//	EventSystem.Current.FireEvent(new BulletEffectEvent(bhe.Weapon.HitDecal)
+	//	{
+	//		HitEffect = bhe.Weapon.HitDecal,
+	//		WorldPosition = bhe.HitPoint,
+	//		Scale = 1.0f,
+	//		Rotation = Quaternion.identity,
+	//	});
+	//}
 
 	private void OnDamage(Event e) {
 		DamageEvent de = (DamageEvent) e;
-		de.Target.GetComponent<IEntity>().TakeDamage(de.Damage);
+		if (de.Entity != null && de.Damager != null)
+		{
+			de.Entity.TakeDamage(de.Damager.GetDamage());
+		}
+	}
+
+	private void OnExplosiveDamage(Event e)
+	{
+		ExplosiveDamageEvent ede = e as ExplosiveDamageEvent;
+		if (ede.Entity != null && ede.Damager != null)
+		{
+			ede.Entity.TakeDamage(ede.Damager.GetDamage() * ede.DamageScale);
+		}
 	}
 }

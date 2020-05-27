@@ -35,11 +35,7 @@ public class Bullet : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			if (hit.collider.gameObject.Equals(PlayerController.Instance.gameObject)){
-				EventSystem.Current.FireEvent(new HitEvent {
-					Description = " " + owner.owner.gameObject.name + " hit " + owner.owner.Target.name,
-					Source = owner.gameObject,
-					Target = owner.owner.Target.gameObject
-				});
+				EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), owner) );
 			}
 
 			//GameObject hitGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal)); //Play the hit effect by instantiating/destroying the particle system.

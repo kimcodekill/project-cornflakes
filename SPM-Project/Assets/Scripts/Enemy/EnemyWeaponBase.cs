@@ -52,6 +52,11 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		return damagePerShot;
 	}
 
+	public float GetDamage(float distanceRadius)
+	{
+		return damagePerShot;
+	}
+
 	/// <summary>
 	/// Implements IDamaging, not strictly used on this script but if we want to make an enemy weapon that has an AoE this will be properly implemented.
 	/// </summary>
@@ -88,11 +93,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
 				if (hit.collider.gameObject.GetComponent<PlayerController>()) {
 					shotLine.SetPosition(1, hit.point);
-					EventSystem.Current.FireEvent(new HitEvent {
-						Description = " " + owner.gameObject.name + " hit " + owner.Target.name,
-						Source = gameObject,
-						Target = owner.Target.gameObject
-					});
+					EventSystem.Current.FireEvent(new DamageEvent(owner.Target.gameObject.GetComponent<IEntity>(), this));
 				}
 			}
 		owner.PlayAudio(4, 1, 0.8f, 1.3f);
@@ -135,6 +136,5 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		yield return new WaitForSeconds(lineDuration);
 		shotLine.enabled = false;
 	}
-
 }
 

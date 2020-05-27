@@ -11,8 +11,8 @@ public class AudioListener : MonoBehaviour {
 	}
 
 	private void PlaySound(Event e) {
-		EffectEvent ee = e as EffectEvent;
-		ee.AudioSource.PlayOneShot(ee.AudioClip);
+		WeaponEffectEvent wee = e as WeaponEffectEvent;
+		wee.AudioSource.PlayOneShot(wee.AudioClip);
 	}
 
 }

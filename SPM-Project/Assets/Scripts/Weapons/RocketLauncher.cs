@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// The rocket launcher fires relatively slow moving rockets instead of bullets.
 /// </summary>
+[CreateAssetMenu(menuName = "Weapon/Rocket Launcher")]
 public class RocketLauncher : Weapon {
 
     #region PreWeaponRework
