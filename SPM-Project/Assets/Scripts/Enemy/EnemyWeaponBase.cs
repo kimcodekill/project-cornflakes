@@ -74,14 +74,12 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// Can be done with either bullet projectile or raycast attack, as determined by the bool.
 	/// </summary>
 	public void DoAttack() {
-		//Debug.Log(owner.gameObject + " attacked");
 		Vector3 attackVector = owner.GetVectorFromAtoB(owner.gunTransform, owner.Target.transform);
 		if (useBulletProjectile) {
 			Vector3 collatedAttackVector = LeadTarget(attackVector);
 			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
-			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.identity);
-			//^ Going to change this to pull the bullets from our objectpooler instead, far more performant, but will leave for the time being. 
-			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
+			GameObject bullet = ObjectPooler.Instance.SpawnFromPool("EnemyBullet", owner.gunTransform.position, Quaternion.identity);
+			bullet.GetComponent<Bullet>().Initialize(owner.gunTransform.position + spreadedAttack, this);
 		}
 		if (!useBulletProjectile) {
 			Vector3 spreadedAttack = RandomInCone(weaponSpread, attackVector.normalized) * attackRange;
