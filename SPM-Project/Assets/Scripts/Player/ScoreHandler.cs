@@ -58,7 +58,7 @@ public class ScoreHandler : MonoBehaviour
     {
         EnemyDeathEvent ede = e as EnemyDeathEvent;
 
-        score += ede.ScorePoints * multiplier;
+        score += ede.ScoreValue * multiplier;
         multiplier++;
         multiplierStartTime = Time.time;
     }

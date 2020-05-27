@@ -20,12 +20,7 @@ public class Dummy : MonoBehaviour, IEntity
 
     public void Die()
     {
-        EventSystem.Current.FireEvent(new EnemyDeathEvent()
-        {
-            Description = "Dummy Died",
-            ScorePoints = maxHealth,
-            Source = gameObject
-        }) ;
+        EventSystem.Current.FireEvent(new EnemyDeathEvent(gameObject, maxHealth));
 
         deathTime = Time.time;
     }
