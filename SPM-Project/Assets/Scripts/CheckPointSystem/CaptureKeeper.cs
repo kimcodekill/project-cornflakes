@@ -16,6 +16,7 @@ public static class CaptureKeeper {
 			public Quaternion rotation;
 			public float health;
 			public int currentWeapon;
+			public float score;
 		}
 		public PlayerStats Player;
 		public List<Weapon> Weapons;
@@ -66,6 +67,7 @@ public static class CaptureKeeper {
 			Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		}
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
+		PlayerHud.Instance.ScoreHandler.Score = player.score;
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
 
@@ -122,7 +124,8 @@ public static class CaptureKeeper {
 			position = checkPointPosition,
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
-			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon)
+			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon),
+			score = PlayerHud.Instance.ScoreHandler.Score
 		}; 
 	}
 

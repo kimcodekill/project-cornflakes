@@ -12,9 +12,10 @@ public class ScoreHandler : MonoBehaviour
     
     //private readonly string scoreKey = "score";
 
-    private float score;
     private int multiplier = 1;
     private float multiplierStartTime;
+
+    public float Score { get; set; }
 
     private void OnEnable()
     {
@@ -58,7 +59,7 @@ public class ScoreHandler : MonoBehaviour
     {
         EnemyDeathEvent ede = e as EnemyDeathEvent;
 
-        score += ede.ScoreValue * multiplier;
+        Score += ede.ScoreValue * multiplier;
         multiplier++;
         multiplierStartTime = Time.time;
     }
@@ -71,14 +72,14 @@ public class ScoreHandler : MonoBehaviour
 
         //Dont know what the calc here should be, we'll have to implement the enemies first
         //to see what feels good
-        score -=  score / (levelParTime - lee.EndTime);
+        Score -=  Score / (levelParTime - lee.EndTime);
 
         //SaveScore();
     }
 
     private void DisplayScore() 
     { 
-        scoreText.text = "Score: " + score;
+        scoreText.text = "Score: " + Score;
         multiplierText.text = multiplier + "X";
     }
 }
