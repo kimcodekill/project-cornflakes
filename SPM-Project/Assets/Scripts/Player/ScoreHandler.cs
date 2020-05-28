@@ -81,7 +81,7 @@ public class ScoreHandler : MonoBehaviour
         Score += timeBonus > 0 ? timeBonus : 0;
 
         string parTimeString = string.Format("Level: {0} | Time: {1}", SceneManager.GetActiveScene().name, lee.EndTime - StartTime);
-        Debug.Log(parTimeString);
+        //Debug.Log(parTimeString);
 
         //SaveScore();
     }
@@ -90,5 +90,12 @@ public class ScoreHandler : MonoBehaviour
     { 
         scoreText.text = "Score: " + Score;
         multiplierText.text = multiplier + "X";
+    }
+
+    private void OnDestroy()
+    {
+        EventSystem.Current.UnRegisterListener<EnemyDeathEvent>(OnEnemyDied);
+        EventSystem.Current.UnRegisterListener<LevelEndEvent>(OnLevelEnd);
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

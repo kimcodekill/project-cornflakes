@@ -1,5 +1,6 @@
 ﻿using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
@@ -56,8 +57,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{ 
 			Instance = this;
 			DontDestroyOnLoad(gameObject);
+			SceneManager.sceneLoaded += OnSceneLoaded;
 		}
 		else if (Instance != this) Destroy(gameObject);
+
 	}
 
 	private void Start() {
@@ -145,11 +148,21 @@ public class PlayerController : MonoBehaviour, IEntity {
 		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
 	}
 
-	
-
-	private void OnLevelWasLoaded(int level)
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		transform.position = PlayerSpawn.Instance.Position;
+		if (PlayerSpawn.Instance != null)
+		{
+			transform.position = PlayerSpawn.Instance.Position;
+		}
 		//transform.localRotation = PlayerSpawn.Instance.Rotation;
+	}
+
+	void OnDestroy()
+	{
+		if (Instance == this)
+		{
+			SceneManager.sceneLoaded -= OnSceneLoaded;
+			Instance = null;
+		}
 	}
 }

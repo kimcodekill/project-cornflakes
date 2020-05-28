@@ -100,4 +100,13 @@ public class Reticle : MonoBehaviour
         
         return center;
     }
+
+    private void OnDestroy()
+    {
+        if(Instance == this)
+        {
+            EventSystem.Current.UnRegisterListener<WeaponSwitchedEvent>(OnWeaponSwitch);
+            Instance = null;
+        }
+    }
 }

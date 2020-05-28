@@ -22,14 +22,14 @@ public class GameEndHandler : MonoBehaviour
 
         highScorePanel.SetActive(prevScore < score);
 
-        if (PlayerController.Instance != null) PlayerController.Instance.gameObject.SetActive(false);
+        if (PlayerController.Instance != null) Destroy(PlayerController.Instance.gameObject);
 
         CursorVisibility.Instance.EnableCursor();
     }
 
     public void SaveNew()
     {
-        PlayerPrefs.SetString("scoreName", nameInput.text);
+        PlayerPrefs.SetString("scoreName", nameInput.text != string.Empty ? nameInput.text : "Anon");
         PlayerPrefs.SetFloat("scoreValue", score);
 
         MainMenu();
