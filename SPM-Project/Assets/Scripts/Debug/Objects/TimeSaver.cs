@@ -10,7 +10,11 @@ public class TimeSaver : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void Start()
+    {
+        EventSystem.Current.RegisterListener<LevelEndEvent>(OnLevelEnd);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -18,9 +22,9 @@ public class TimeSaver : MonoBehaviour
         startTime = Time.time;
     }
 
-    private void OnSceneUnloaded(Scene scene)
+    private void OnLevelEnd(Event e)
     {
-        string parTimeString = string.Format("Level: {0} | Time: {1}", scene.name, Time.time - startTime);
+        string parTimeString = string.Format("Level: {0} | Time: {1}", SceneManager.GetActiveScene().name, Time.time - startTime);
         Debug.Log(parTimeString);
     }
 }

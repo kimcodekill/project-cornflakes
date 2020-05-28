@@ -16,6 +16,8 @@ public class ScoreHandler : MonoBehaviour
     private int multiplier = 1;
     private float multiplierStartTime;
 
+    public float StartTime { get; set; }
+
     public float Score { get; set; }
 
     private void OnEnable()
@@ -33,9 +35,13 @@ public class ScoreHandler : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        string path = "Scene/vars" + scene.name;
-        SceneVars currentSceneVars = Resources.Load(path) as SceneVars;
-        levelParTime = currentSceneVars.GetParTime();
+        if (!scene.name.Contains("Menu"))
+        {
+            StartTime = Time.time;
+            string path = "Scene/vars" + scene.name;
+            SceneVars currentSceneVars = Resources.Load(path) as SceneVars;
+            levelParTime = currentSceneVars.GetParTime();
+        }
     }
 
     void FixedUpdate()
@@ -71,8 +77,11 @@ public class ScoreHandler : MonoBehaviour
 
         //this seems decent enough
         // ex: timeBonus = 975 / (124.68 - 98.18) * 10 == 367.90f
-        float timeBonus = (Score / (levelParTime - lee.EndTime)) * levelBonusScale;
+        float timeBonus = Score / (levelParTime - (lee.EndTime - StartTime)) * levelBonusScale;
         Score += timeBonus > 0 ? timeBonus : 0;
+
+        string parTimeString = string.Format("Level: {0} | Time: {1}", SceneManager.GetActiveScene().name, lee.EndTime - StartTime);
+        Debug.Log(parTimeString);
 
         //SaveScore();
     }

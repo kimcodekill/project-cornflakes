@@ -53,8 +53,10 @@ public class GameOverListener : MonoBehaviour
 
     private void LoadNextScene()
     {
-        if (!nextSceneName.Equals(string.Empty)) { SceneManager.LoadScene(nextSceneName); }
-        else                                     { SceneManager.LoadScene(RootSceneName); }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        //if (!nextSceneName.Equals(string.Empty)) { SceneManager.LoadScene(nextSceneName); }
+        //else                                     { SceneManager.LoadScene(RootSceneName); }
     }
 
     //This just wraps the code inside it for prettifyness
