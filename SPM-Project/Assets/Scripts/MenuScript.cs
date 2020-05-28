@@ -14,6 +14,7 @@ public class MenuScript : MonoBehaviour {
 	//K: THIS SHOULD NOT FIRE A LEVEL END EVENT
 	//   bad.
 	public void NewGame() {
+		CheckPointSystem.NewGame = true;
 		EventSystem.Current.FireEvent(new LevelEndEvent(-1, Time.time));
 	}
 
