@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Elevator : MonoBehaviour
 {
     public Transform elevatorTarget;
-    public GameObject playerMech;
     private AudioSource audioSource;
     public AudioClip elevatorClip;
 
@@ -35,7 +34,8 @@ public class Elevator : MonoBehaviour
         fadeImage.GetComponent<Image>().CrossFadeAlpha(255f, 1.0f, true);
         audioSource.Play();
         yield return new WaitForSecondsRealtime(4);
-        playerMech.transform.position = elevatorTarget.transform.position;
+        //K: ez fix for elevator not having playerref, set the static instance transform.position
+        PlayerController.Instance.transform.position = elevatorTarget.transform.position;
         Time.timeScale = 1f;
         fadeImage.GetComponent<Image>().CrossFadeAlpha(1f, 1.0f, true);
         yield return new WaitForSecondsRealtime(1);
