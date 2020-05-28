@@ -1,5 +1,4 @@
-﻿using UnityEditor.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
