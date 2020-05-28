@@ -8,6 +8,7 @@ public class ScoreHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI multiplierText;
     [SerializeField] private float levelParTime = 120.0f;
+    [SerializeField] private float levelBonusScale = 10.0f;
     [SerializeField] private float multiplierTime;
     
     //private readonly string scoreKey = "score";
@@ -26,15 +27,15 @@ public class ScoreHandler : MonoBehaviour
     {
         //LoadScore();
         
-
         EventSystem.Current.RegisterListener<EnemyDeathEvent>(OnEnemyDied);
         EventSystem.Current.RegisterListener<LevelEndEvent>(OnLevelEnd);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //temp
-        levelParTime = scene.buildIndex * 120.0f;
+        string path = "Scene/vars" + scene.name;
+        SceneVars currentSceneVars = Resources.Load(path) as SceneVars;
+        levelParTime = currentSceneVars.GetParTime();
     }
 
     void FixedUpdate()
@@ -68,11 +69,10 @@ public class ScoreHandler : MonoBehaviour
     {
         LevelEndEvent lee = e as LevelEndEvent;
 
-        Debug.Log(lee.EndTime);
-
-        //Dont know what the calc here should be, we'll have to implement the enemies first
-        //to see what feels good
-        Score -=  Score / (levelParTime - lee.EndTime);
+        //this seems decent enough
+        // ex: timeBonus = 975 / (124.68 - 98.18) * 10 == 367.90f
+        float timeBonus = (Score / (levelParTime - lee.EndTime)) * levelBonusScale;
+        Score += timeBonus > 0 ? timeBonus : 0;
 
         //SaveScore();
     }
