@@ -35,7 +35,7 @@ public class ScoreHandler : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (!scene.name.Contains("Menu"))
+        if (!scene.name.Contains("Menu") && !scene.path.Contains("Dev"))
         {
             StartTime = Time.time;
             string path = "Scene/vars" + scene.name;
