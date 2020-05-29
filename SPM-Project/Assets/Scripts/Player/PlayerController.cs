@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
+	[Header("Debug")]
+	[SerializeField] private bool godMode;
 
 	/// <summary>
 	/// Singleton
@@ -123,7 +125,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
-		PlayerCurrentHealth -= amount;
+		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
 		return PlayerCurrentHealth;
@@ -150,11 +152,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		if (PlayerSpawn.Instance != null)
+		if (PlayerSpawn.Instance != null && CaptureKeeper.NewLevel)
 		{
 			transform.position = PlayerSpawn.Instance.Position;
+			transform.localRotation = PlayerSpawn.Instance.Rotation;
 		}
-		//transform.localRotation = PlayerSpawn.Instance.Rotation;
 	}
 
 	void OnDestroy()
