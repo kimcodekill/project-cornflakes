@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 //Author: Erik Pilström
@@ -17,19 +18,26 @@ public class PlayerHud : MonoBehaviour
 
 	[Header("Hud behaviour controls")]
 	[SerializeField] [Tooltip("HUD border image.")] private Image hudBorder;
+	//K: This reference to PlayerController seems outdated
 	[SerializeField] [Tooltip("The Player the HUD belongs to.")] private PlayerController player;
+	
 	private Color defaultPanelColour = new Color(1, 1, 1, 0);
 	private float flashDuration = 0.1f;
 	private PlayerWeapon playerWeapon;
 	private Animator anim;
 	private List<TextMeshProUGUI> activepickupTexts = new List<TextMeshProUGUI>();
+	private ScoreHandler scoreHandler;
 
-	private void Start()
+
+	public ScoreHandler ScoreHandler { get => scoreHandler;}
+
+    private void Start()
     {
 		if (Instance == null) { Instance = this; }
 
 		hudBorder.color = defaultPanelColour;
 		playerWeapon = player.gameObject.GetComponent<PlayerWeapon>();
+		scoreHandler = GetComponentInChildren<ScoreHandler>();
 		//anim = GetComponentInChildren<Animator>();
 	}
 
