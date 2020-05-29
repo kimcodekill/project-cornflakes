@@ -6483,6 +6483,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 57319a2a11999b54dabe5cd2522a9adc,
         type: 2}
+    - target: {fileID: 1302830867874202251, guid: 76f115ae195cef9478801a93206aa600,
+        type: 3}
+      propertyPath: m_Name
+      value: StatueBall
+      objectReference: {fileID: 0}
     - target: {fileID: 1999150924492182673, guid: 76f115ae195cef9478801a93206aa600,
         type: 3}
       propertyPath: m_Material
