@@ -9,17 +9,23 @@ public class DeathZone : MonoBehaviour, IDamaging {
 		return 99999f;		
 	}
 
+	public float GetDamage(float distanceRadius)
+	{
+		return 99999f;
+	}
+
 	public float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos)
 	{
 		throw new System.NotImplementedException();
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		EventSystem.Current.FireEvent(new HitEvent() {
-			Source = gameObject,
-			Target = other.gameObject,
-			HitPoint = transform.position
-		});
+		IEntity entity;
+		
+		if((entity = other.gameObject.GetComponent<IEntity>()) != null)
+		{
+			EventSystem.Current.FireEvent(new DamageEvent(entity, this));
+		}
 	}
 
 }

@@ -1,13 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyDeathEvent : Event {
 
-	public GameObject Source;
+	public EnemyDeathEvent(GameObject deadObject, float scoreValue)
+	{
+		DeadObject = deadObject;
+		ScoreValue = scoreValue;
+	}
 
-	public float DropAnythingAtAllChance;
+	public GameObject DeadObject { get; }
 
-	public float ScorePoints;
+	public float ScoreValue { get; }
 
 }
