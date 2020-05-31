@@ -22,7 +22,8 @@ public class AudioRandomizer : MonoBehaviour
     void Start()
     {
         source = GetComponent<AudioSource>();
-        StartDelay();
+        //StartDelay();
+        timeDelay = 1;
     }
 
     void Update()

@@ -52,6 +52,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b6435e5bb7ddfa54d95a491a277be515, type: 3}
   - {fileID: 8300000, guid: 7e9cc7176deb0844280de76fe323db4f, type: 3}
   - {fileID: 8300000, guid: 3c688761351566b4893e75d926f7f1fb, type: 3}
+  - {fileID: 8300000, guid: 985d0c9f133e022449dedcf903b6d0e8, type: 3}
+  - {fileID: 8300000, guid: d695ab4b953e5c84fa6f8ac68c4ecc48, type: 3}
+  - {fileID: 8300000, guid: 3a8e301cd78f5e147bba98794029cf4d, type: 3}
+  - {fileID: 8300000, guid: b79125fc0cc18514d9070673978974e1, type: 3}
   minDelay: 5
   maxDelay: 15
   volLowRange: 0.8
