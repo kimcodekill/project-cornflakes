@@ -7,7 +7,7 @@ using UnityEngine;
 
 public interface IEntity {
     
-	float TakeDamage(float amount);
+	float TakeDamage(float amount, DamageType damageType);
 
     float Heal(float amount);
 
