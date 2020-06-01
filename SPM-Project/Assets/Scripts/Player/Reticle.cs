@@ -39,7 +39,7 @@ public class Reticle : MonoBehaviour
 
         rect = reticleImage.rectTransform;
 
-        playerRenderer = cam.GetComponent<PlayerRenderer>();
+        playerRenderer = PlayerController.Instance.GetComponent<PlayerRenderer>();
 
         EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickup);
     }
@@ -63,7 +63,8 @@ public class Reticle : MonoBehaviour
         EventSystem.Current.UnRegisterListener<WeaponPickUpEvent>(OnWeaponPickup);
     }
 
-    private void Update()
+    //K: This was moved from Update bc jitters.
+    private void LateUpdate()
     {
         if (reticleImage.enabled)
         {

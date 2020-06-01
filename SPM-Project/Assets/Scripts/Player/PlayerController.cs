@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
-	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 	[SerializeField] private AudioClip[] audioClips;
 	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
@@ -24,6 +23,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
+	private PlayerCamera cam;
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
@@ -60,6 +60,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 			Instance = this;
 			DontDestroyOnLoad(gameObject);
 			SceneManager.sceneLoaded += OnSceneLoaded;
+
+			if (cam == null)
+			{
+				cam = Instantiate(Resources.Load("Player/PlayerCamera") as GameObject, transform.position, Quaternion.identity).GetComponent<PlayerCamera>();
+			}
 		}
 		else if (Instance != this) Destroy(gameObject);
 
