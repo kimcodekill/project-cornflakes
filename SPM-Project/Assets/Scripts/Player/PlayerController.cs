@@ -93,12 +93,15 @@ public class PlayerController : MonoBehaviour, IEntity {
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
+		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+	}
 
+	private void LateUpdate()
+	{
 		//K: Moved these here so it's not as choppy
 		float yRot = cam.transform.rotation.eulerAngles.y;
 		transform.rotation = Quaternion.Euler(0, yRot, 0);
-
-		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+		Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
 	}
 
 	/// <summary>
