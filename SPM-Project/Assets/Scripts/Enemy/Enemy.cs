@@ -200,9 +200,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	private void Die() {
 		StopAllCoroutines();
 		
-		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
-			Source = gameObject,
-		});
+		EventSystem.Current.FireEvent(new EnemyDeathEvent(gameObject, maxHealth));
 
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
 		
