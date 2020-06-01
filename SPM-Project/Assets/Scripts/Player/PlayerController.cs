@@ -1,5 +1,6 @@
 ﻿using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
+	[Header("Debug")]
+	[SerializeField] private bool godMode;
 
 	/// <summary>
 	/// Singleton
@@ -52,7 +55,14 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void OnEnable() {
-		if (Instance == null) Instance = this;
+		if (Instance == null) 
+		{ 
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+			SceneManager.sceneLoaded += OnSceneLoaded;
+		}
+		else if (Instance != this) Destroy(gameObject);
+
 	}
 
 	private void Start() {
@@ -60,6 +70,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+
 		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
 		audioPlayerIdle.loop = true;
 		audioPlayerIdle.clip = audioClips[0];*/
@@ -114,7 +125,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public float TakeDamage(float amount) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
-		PlayerCurrentHealth -= amount;
+		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
 		return PlayerCurrentHealth;
@@ -137,5 +148,23 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
 		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
+		{
+			transform.position = PlayerSpawn.Instance.Position;
+			transform.localRotation = PlayerSpawn.Instance.Rotation;
+		}
+	}
+
+	void OnDestroy()
+	{
+		if (Instance == this)
+		{
+			SceneManager.sceneLoaded -= OnSceneLoaded;
+			Instance = null;
+		}
 	}
 }

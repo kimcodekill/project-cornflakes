@@ -6,6 +6,8 @@ using UnityEngine;
 //Author: Erik Pilström
 public class PlayerCamera : MonoBehaviour {
 
+	public static PlayerCamera Instance;
+
 	[SerializeField] [Tooltip("The camera's possible states")] private State[] states;
 
 	[Header("Camera attributes")]
@@ -41,6 +43,9 @@ public class PlayerCamera : MonoBehaviour {
 	public Camera Camera { get; private set; }
 
 	private void Start() {
+		if (Instance == null)
+			Instance = this;
+
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
 		pr = GetComponent<PlayerRenderer>();
