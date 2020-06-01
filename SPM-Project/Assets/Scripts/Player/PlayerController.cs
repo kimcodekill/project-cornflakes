@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// Makes the player take damage. Implements <c>IEntity.TakeDamage()</c>.
 	/// </summary>
 	/// <param name="amount">The amount of damage the player will take.</param>
-	public float TakeDamage(float amount) {
+	public float TakeDamage(float amount, DamageType damageType) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		if (!godMode) PlayerCurrentHealth -= amount;

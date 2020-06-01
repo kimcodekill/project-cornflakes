@@ -22,9 +22,10 @@ public class KanelbulleEgg : MonoBehaviour, IEntity
         return -1;
     }
 
-    public float TakeDamage(float amount)
+    public float TakeDamage(float amount, DamageType damageType)
     {
-        DoEasterEgg();
+        if(damageType == DamageType.Bullet) { DoEasterEgg(); }
+        
         return -1;
     }
 

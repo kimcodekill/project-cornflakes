@@ -31,7 +31,7 @@ public class Dummy : MonoBehaviour, IEntity
         return currentHealth = maxHealth;
     }
 
-    public float TakeDamage(float amount)
+    public float TakeDamage(float amount, DamageType damageType)
     {
         if (!IsDead)
         {
