@@ -85,8 +85,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 		playerAnimator.SetFloat("Speed", animVertical);
 		playerAnimator.SetFloat("Direction", animHorizontal);
-		float yRot = cam.transform.rotation.eulerAngles.y;
-		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		Input.doJump = false;
 		Input.doDash = false;
 	}
@@ -94,6 +92,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void Update() {
 		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
+
+
+		//K: Moved these here so it's not as choppy
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
 
 		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
 	}
