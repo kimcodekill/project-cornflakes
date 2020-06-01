@@ -62,7 +62,7 @@ public class MenuScript : MonoBehaviour {
 			fullscreenToggle.isOn = false;
 			isFullscreen = false;
 		}
-		mouseSlider.value = PlayerPrefs.GetFloat("mouseSensitivity") * 5;
+		mouseSlider.value = PlayerPrefs.GetFloat("mouseSensitivity", 1) * 5;
 	}
 
 	public void SwitchPanel(int index)
@@ -129,7 +129,7 @@ public class MenuScript : MonoBehaviour {
 		highScore = PlayerPrefs.GetFloat("scoreValue", 0);
 
 		if (!name.Equals(string.Empty) && highScore != 0) {
-			highScoreText.text = string.Format("High Score. {0} - {1}", name, (int)highScore);
+			highScoreText.text = string.Format("High Score: {0} - {1}", name, (int)highScore);
 		}
 		else {
 			highScoreText.gameObject.SetActive(false);
