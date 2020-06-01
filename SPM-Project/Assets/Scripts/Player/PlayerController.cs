@@ -61,10 +61,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 			DontDestroyOnLoad(gameObject);
 			SceneManager.sceneLoaded += OnSceneLoaded;
 
-			if (cam == null)
-			{
-				cam = Instantiate(Resources.Load("Player/PlayerCamera") as GameObject, transform.position, Quaternion.identity).GetComponent<PlayerCamera>();
-			}
+			if (cam == null) { CreateCamera(); }
 		}
 		else if (Instance != this) Destroy(gameObject);
 
@@ -107,6 +104,11 @@ public class PlayerController : MonoBehaviour, IEntity {
 		float yRot = cam.transform.rotation.eulerAngles.y;
 		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+	}
+
+	private void CreateCamera()
+	{
+		cam = Instantiate(Resources.Load("Player/PlayerCamera") as GameObject, transform.position, Quaternion.identity).GetComponent<PlayerCamera>();
 	}
 
 	/// <summary>
@@ -166,7 +168,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
 		{
 			transform.position = PlayerSpawn.Instance.Position;
-			transform.localRotation = PlayerSpawn.Instance.Rotation;
+
+			if(cam == null) { CreateCamera(); }
+
+			cam.InjectSetRotation(PlayerSpawn.Instance.Rotation.eulerAngles.x, PlayerSpawn.Instance.Rotation.eulerAngles.y);
 		}
 	}
 

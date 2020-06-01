@@ -43,7 +43,8 @@ public class PlayerCamera : MonoBehaviour {
 	/// </summary>
 	public Camera Camera { get; private set; }
 
-	private void Start() {
+	private void OnEnable()
+	{
 		if (Instance == null)
 		{
 			Instance = this;
@@ -53,7 +54,9 @@ public class PlayerCamera : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
+	}
 
+	private void Start() {
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
 		pr = PlayerController.Instance.gameObject.GetComponent<PlayerRenderer>();
