@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class SliderVolume : MonoBehaviour {
+public class VolumeSlider : MonoBehaviour {
 
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private string exposedParameter;

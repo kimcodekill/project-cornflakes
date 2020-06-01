@@ -45,6 +45,7 @@ public class PlayerCamera : MonoBehaviour {
 		DebugManager.AddSection("CameraState", "");
 		pr = GetComponent<PlayerRenderer>();
 		stateMachine = new StateMachine(this, states);
+		lookSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 	}
 
 	private void Update()
