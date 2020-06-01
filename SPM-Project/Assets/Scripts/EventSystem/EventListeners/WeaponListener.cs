@@ -6,29 +6,31 @@ using UnityEngine;
 
 public class WeaponListener : MonoBehaviour {
 
-	private void Start() => EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
-
-	private void OnPickUp(Event e) {
-		PickUpEvent pue = (PickUpEvent) e;
-		PlayerWeapon pw;
-		if ((pw = pue.Target.GetComponent<PlayerWeapon>()) != null) {
-			Weapon w;
-			AmmoPickup ap;
-			if ((w = pue.Source.GetComponent<Weapon>()) != null) {
-				pw.PickUpWeapon(w);
-				pue.Source.SetActive(false);
-				pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(w.ToString(), 0, "picked up");
-				pue.Target.GetComponentInChildren<PlayerHud>().NewCarriedWeapon(pw.GetWeapons().Count - 1);
-				if (pw.GetWeapons().Count == 1) pue.Target.GetComponentInChildren<PlayerHud>().UpdateActiveWeapon(0);
-			}
-			else if ((ap = pue.Source.GetComponent<AmmoPickup>()) != null) {
-				pw.AddAmmo(ap.AmmoType, ap.AmmoAmount);
-				pue.Target.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
-				pue.Source.SetActive(false);
-				if (ap.AmmoAmount > 1 || ap.AmmoType == Weapon.EAmmoType.Special) pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().ToLower(), ap.AmmoAmount, "picked up");
-				else pue.Target.GetComponentInChildren<PlayerHud>().ShowPickupText(ap.AmmoType.ToString().Remove(ap.AmmoType.ToString().Length - 1).ToLower(), ap.AmmoAmount, "picked up");
-			}
-		}
+	private void Start() {
+		//EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
+		EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickUp);
+		EventSystem.Current.RegisterListener<AmmoPickUpEvent>(OnAmmoPickUp);
 	}
 
+	private void OnWeaponPickUp(Event e) {
+		WeaponPickUpEvent wpue = e as WeaponPickUpEvent;
+
+		PlayerWeapon.Instance.PickUpWeapon(wpue.Weapon);
+		wpue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(wpue.Weapon.ToString(), 0);
+		wpue.Pickup.SetActive(false);
+	}
+
+	private void OnAmmoPickUp(Event e) {
+		AmmoPickUpEvent apue = e as AmmoPickUpEvent;
+
+		PlayerWeapon.Instance.AddAmmo(apue.AmmoType, apue.AmmoAmount);
+		
+		//K: Not sure why we're telling the playercontroller to play audio but whatever
+		apue.Other.GetComponent<PlayerController>().PlayAudioPitched(7, 1, 0.8f, 1.3f);
+		apue.Pickup.SetActive(false);
+
+		//K: This hud shit isnt very nice. We should redo it.
+		if (apue.AmmoAmount > 1 || apue.AmmoType == Weapon.EAmmoType.Special) apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().ToLower(), apue.AmmoAmount);
+		else apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().Remove(apue.AmmoType.ToString().Length - 1).ToLower(), apue.AmmoAmount);
+	}
 }

@@ -14,8 +14,6 @@ public class PlayerJumpingState : PlayerAirState {
 	private float startTime = -1;
 
 	public override void Enter() {
-		DebugManager.UpdateRow("PlayerSTM" + Player.gameObject.GetInstanceID(), GetType().ToString());
-		
 		startTime = Time.time;
 		if (Player.GetInput().magnitude > 0f) Player.PhysicsBody.ChangeVelocityDirection(Player.GetInput().normalized);
 		Player.PhysicsBody.SetAxisVelocity('y', 0f);

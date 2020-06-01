@@ -6,6 +6,8 @@ using UnityEngine;
 //Author: Erik Pilström
 public class PlayerCamera : MonoBehaviour {
 
+	public static PlayerCamera Instance;
+
 	[SerializeField] [Tooltip("The camera's possible states")] private State[] states;
 
 	[Header("Camera attributes")]
@@ -41,6 +43,9 @@ public class PlayerCamera : MonoBehaviour {
 	public Camera Camera { get; private set; }
 
 	private void Start() {
+		if (Instance == null)
+			Instance = this;
+
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
 		pr = GetComponent<PlayerRenderer>();
@@ -51,6 +56,7 @@ public class PlayerCamera : MonoBehaviour {
 	private void Update()
 	{
 		stateMachine.Run();
+		AccumulateRotation();
 	}
 
 	// I don't fully understand why we're doing camera updates in LateUpdate, 
@@ -64,16 +70,16 @@ public class PlayerCamera : MonoBehaviour {
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
-		pr.SetTransparency(1.0f);
+		pr.SetRenderMode(RenderMode.Opaque);
 		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
-					pr.SetTransparency(0.0f);
+					pr.SetRenderMode(RenderMode.Transparent);
 				}
 				return relationVector.normalized * (hit.distance - camRadius);
 			}
 			else {
-				pr.SetTransparency(0.0f);
+				pr.SetRenderMode(RenderMode.Transparent);
 				return Vector3.up * 2.25f;
 			}
 		}
@@ -86,10 +92,13 @@ public class PlayerCamera : MonoBehaviour {
 		else return false;
 	}
 
-	private void RotateCamera() {
+	private void AccumulateRotation() {
 		rotationY += lookSensitivity * Input.GetAxis("Mouse X");
 		rotationX -= lookSensitivity * Input.GetAxis("Mouse Y");
 		rotationX = Mathf.Clamp(rotationX, -60f, 60f);
+	}
+
+	private void RotateCamera() {
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 	}
 

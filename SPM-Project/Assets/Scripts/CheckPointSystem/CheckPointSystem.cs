@@ -36,7 +36,10 @@ public class CheckPointSystem : MonoBehaviour {
 	}
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode lsm) {
-		if (lastSceneBuildIndex != scene.buildIndex) CaptureKeeper.NewLevel = true;
+		if (lastSceneBuildIndex != scene.buildIndex) {
+			CaptureKeeper.NewLevel = true;
+			CaptureKeeper.LevelHasBeenCaptured = false;
+		}
 		CaptureKeeper.LoadLatestCapture();
 	}
 

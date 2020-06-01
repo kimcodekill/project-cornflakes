@@ -11,7 +11,14 @@ public abstract class GameOverEvent : Event
 
 public class LevelEndEvent : GameOverEvent
 {
-    public int NextLevel;
+    public LevelEndEvent(int nextLevel, float endTime)
+    {
+        EndTime = endTime;
+        NextLevel = nextLevel;
+    }
+
+    public int NextLevel { get; }
+    public float EndTime { get; }
 }
 
 public class PlayerDeadEvent : GameOverEvent
