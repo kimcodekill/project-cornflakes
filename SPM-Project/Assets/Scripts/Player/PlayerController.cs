@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		if (PlayerSpawn.Instance != null && CaptureKeeper.NewLevel)
+		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
 		{
 			transform.position = PlayerSpawn.Instance.Position;
 			transform.localRotation = PlayerSpawn.Instance.Rotation;
