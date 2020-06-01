@@ -25,8 +25,22 @@ public class HealthPickup : Pickup {
 		Destroy(gameObject);
 	}
 
-	protected override bool IsValid(Collider other) {
-		return other.gameObject.CompareTag("Player") && PlayerController.Instance.PlayerCurrentHealth < PlayerController.Instance.PlayerMaxHealth;
+	protected override bool IsValid(Collider other)
+	{
+		if (other.gameObject.CompareTag("Player"))
+		{
+			float playerHealth = PlayerController.Instance.PlayerCurrentHealth;
+			float playerMaxHealth = PlayerController.Instance.PlayerMaxHealth;
+			if (playerHealth >= playerMaxHealth - 0.5)
+			{
+				other.GetComponentInChildren<PlayerHud>().ShowPickupText("Health", 0, "full");
+				return false;
+			}
+			if (playerHealth + healAmount > playerMaxHealth) healAmount = playerMaxHealth - playerHealth;
+
+			return true;
+		}
+		else return false;
 	}
 
 	protected override void OnSpawned() {
