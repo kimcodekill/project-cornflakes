@@ -65,7 +65,7 @@ public static class CaptureKeeper {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
 		if (!NewLevel) {
 			playerGameObject.transform.position = player.position;
-			Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+			PlayerCamera.Instance.InjectSetRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		}
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
 		PlayerHud.Instance.ScoreHandler.Score = player.score;

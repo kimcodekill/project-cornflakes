@@ -1365,6 +1365,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RotationZone
       objectReference: {fileID: 0}
+    - target: {fileID: 4447607972666524214, guid: fb4b8f7744443e24f936826f6a6c9d30,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb4b8f7744443e24f936826f6a6c9d30, type: 3}
 --- !u!1001 &311767610

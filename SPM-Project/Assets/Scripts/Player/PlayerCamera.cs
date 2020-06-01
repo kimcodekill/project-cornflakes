@@ -45,7 +45,14 @@ public class PlayerCamera : MonoBehaviour {
 
 	private void Start() {
 		if (Instance == null)
+		{
 			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (Instance != this)
+		{
+			Destroy(gameObject);
+		}
 
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
