@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		//K: Moved these here so it's not as choppy
 		float yRot = cam.transform.rotation.eulerAngles.y;
 		transform.rotation = Quaternion.Euler(0, yRot, 0);
-		Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+		//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
 	}
 
 	/// <summary>

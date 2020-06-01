@@ -100,7 +100,7 @@ public class PlayerCamera : MonoBehaviour {
 
 	private void RotateCamera() {
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
-		Debug.Log("Camera: " + transform.rotation.eulerAngles.y);
+		//Debug.Log("Camera: " + transform.rotation.eulerAngles.y);
 	}
 
 	/// <summary>
