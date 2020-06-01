@@ -66,9 +66,9 @@ Material:
     - _DstBlend: 0
     - _Exposure: 1
     - _FogBottom: 1
-    - _FogEnd: 0.106
+    - _FogEnd: 0.15
     - _FogIntens: 1
-    - _FogStart: 0
+    - _FogStart: 0.05
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
