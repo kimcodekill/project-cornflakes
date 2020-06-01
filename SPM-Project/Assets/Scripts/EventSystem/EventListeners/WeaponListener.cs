@@ -16,7 +16,8 @@ public class WeaponListener : MonoBehaviour {
 		WeaponPickUpEvent wpue = e as WeaponPickUpEvent;
 
 		PlayerWeapon.Instance.PickUpWeapon(wpue.Weapon);
-		wpue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(wpue.Weapon.ToString(), 0);
+		wpue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(wpue.Weapon.ToString(), 0, "picked up");
+		wpue.Other.GetComponentInChildren<PlayerHud>().NewCarriedWeapon(PlayerWeapon.Instance.GetWeapons().Count - 1);
 		wpue.Pickup.SetActive(false);
 	}
 
@@ -30,7 +31,7 @@ public class WeaponListener : MonoBehaviour {
 		apue.Pickup.SetActive(false);
 
 		//K: This hud shit isnt very nice. We should redo it.
-		if (apue.AmmoAmount > 1 || apue.AmmoType == Weapon.EAmmoType.Special) apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().ToLower(), apue.AmmoAmount);
-		else apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().Remove(apue.AmmoType.ToString().Length - 1).ToLower(), apue.AmmoAmount);
+		if (apue.AmmoAmount > 1 || apue.AmmoType == Weapon.EAmmoType.Special) apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().ToLower(), apue.AmmoAmount, "picked up");
+		else apue.Other.GetComponentInChildren<PlayerHud>().ShowPickupText(apue.AmmoType.ToString().Remove(apue.AmmoType.ToString().Length - 1).ToLower(), apue.AmmoAmount, "picked up");
 	}
 }

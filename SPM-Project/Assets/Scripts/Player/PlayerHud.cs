@@ -80,6 +80,7 @@ public class PlayerHud : MonoBehaviour
 
 	public void NewCarriedWeapon(int weapon) {
 		carriedWeapons[weapon].gameObject.SetActive(true);
+		if (PlayerWeapon.Instance.GetWeapons().Count == 1) UpdateActiveWeapon(0);
 	}
 
 	public void UpdateActiveWeapon(int weapon) {

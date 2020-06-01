@@ -16,6 +16,7 @@ public class MenuScript : MonoBehaviour {
 	[SerializeField] private Toggle fullscreenToggle;
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
 	[SerializeField] private Slider mouseSlider;
+	[SerializeField] private TextMeshProUGUI highScoreText;
 
 	public Color color;
 
@@ -23,6 +24,8 @@ public class MenuScript : MonoBehaviour {
 	private List<Resolution> filteredResolutions = new List<Resolution>();
 	private int savedResolution = 0;
 	private bool isFullscreen = true;
+	private float highScore;
+	private string name;
 
 	public void Start() {
 
@@ -67,10 +70,11 @@ public class MenuScript : MonoBehaviour {
 		panels[index].SetActive(true);
 	}
 
+	//K: THIS SHOULD NOT FIRE A LEVEL END EVENT
+	//   bad.
 	public void NewGame() {
-		EventSystem.Current.FireEvent(new LevelEndEvent() {
-			Description = "Starting New Game"
-		});
+		CheckPointSystem.NewGame = true;
+		EventSystem.Current.FireEvent(new LevelEndEvent(-1, Time.time));
 	}
 
 	public void ToggleMuteAll(bool toggleValue) {
@@ -118,5 +122,17 @@ public class MenuScript : MonoBehaviour {
 
 	public void PlayAudio(int clipIndex, float volume) {
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	private void OnEnable() {
+		name = PlayerPrefs.GetString("scoreName", string.Empty);
+		highScore = PlayerPrefs.GetFloat("scoreValue", 0);
+
+		if (!name.Equals(string.Empty) && highScore != 0) {
+			highScoreText.text = string.Format("High Score. {0} - {1}", name, (int)highScore);
+		}
+		else {
+			highScoreText.gameObject.SetActive(false);
+		}
 	}
 }
