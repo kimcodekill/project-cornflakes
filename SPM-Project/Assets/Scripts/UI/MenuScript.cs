@@ -20,6 +20,7 @@ public class MenuScript : MonoBehaviour {
 
 	public Color color;
 
+	[HideInInspector] public List<VolumeSlider> volumeSliders = new List<VolumeSlider>();
 	private Resolution[] resolutions;
 	private List<Resolution> filteredResolutions = new List<Resolution>();
 	private int savedResolution = 0;
@@ -27,14 +28,27 @@ public class MenuScript : MonoBehaviour {
 	private float highScore;
 	private string name;
 
+	public void Awake() {
+		SetPlayerPreferences("masterVolume", 0f);
+		SetPlayerPreferences("ambienceVolume", 1f);
+		SetPlayerPreferences("musicVolume", 1f);
+		SetPlayerPreferences("sfxVolume", 1f);
+		SetPlayerPreferences("voiceVolume", 1f);
+		SetPlayerPreferences("mouseSensitivity", 1f);
+	}
+
 	public void Start() {
 
 		panels[0].SetActive(true);
 		panels[1].SetActive(false);
 		panels[2].SetActive(false);
+		
+		foreach (VolumeSlider slider in volumeSliders) {
+			slider.SetInitialValue();
+		}
 
 		if (PlayerPrefs.GetFloat("masterVolume") == -80) muteAllToggle.isOn = true;
-		savedResolution = PlayerPrefs.GetInt("savedResolution");
+		savedResolution = PlayerPrefs.GetInt("savedResolution", 0);
 
 		resolutions = Screen.resolutions.Reverse().ToArray();
 
@@ -65,8 +79,11 @@ public class MenuScript : MonoBehaviour {
 		mouseSlider.value = PlayerPrefs.GetFloat("mouseSensitivity", 1) * 5;
 	}
 
-	public void SwitchPanel(int index)
-	{
+	public void SetPlayerPreferences(string prefString, float defaultValue) {
+		PlayerPrefs.SetFloat(prefString, PlayerPrefs.GetFloat(prefString, defaultValue));
+	}
+
+	public void SwitchPanel(int index) {
 		panels[index].SetActive(true);
 	}
 
@@ -92,7 +109,7 @@ public class MenuScript : MonoBehaviour {
 	public void SetResolution(int index) {
 		Resolution resolution = filteredResolutions[index];
 		Screen.SetResolution(resolution.width, resolution.height, isFullscreen);
-		if (isFullscreen == false) {
+		if (isFullscreen == false || index != 0) {
 			savedResolution = index;
 			PlayerPrefs.SetInt("savedResolution", savedResolution);
 			resolutionDropdown.value = savedResolution;

@@ -6,14 +6,19 @@ using UnityEngine.UI;
 
 public class VolumeSlider : MonoBehaviour {
 
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private string exposedParameter;
-    private Slider slider;
-
-    public void Start() {
+    public AudioMixer audioMixer;
+    public string exposedParameter;
+    [HideInInspector] public Slider slider;
+    
+    public void Awake() {
+        transform.root.GetComponent<MenuScript>().volumeSliders.Add(this);
         slider = gameObject.GetComponent<Slider>();
         slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
-        slider.value = PlayerPrefs.GetFloat(exposedParameter, 1f);
+    }
+
+    public void SetInitialValue() {
+		slider.value = PlayerPrefs.GetFloat(exposedParameter);
+		audioMixer.SetFloat(exposedParameter, Mathf.Log10(slider.value) * 20);
     }
 
     public void ValueChangeCheck() {
