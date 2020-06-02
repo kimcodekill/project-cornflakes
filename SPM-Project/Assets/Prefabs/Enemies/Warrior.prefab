@@ -332,6 +332,7 @@ MonoBehaviour:
   attackDamage: 5
   attackSpread: 5
   attackSpeedRPM: 60
+  hardAggroRange: 5
   audioSource: {fileID: 0}
   audioSourceIdle: {fileID: 0}
   audioClips:

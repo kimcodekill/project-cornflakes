@@ -88,7 +88,7 @@ public class Scout : MobileEnemy
 		lastKnownPosition2 = Target.transform.position;
 		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
 		agent.destination = targetLocation;
-		Debug.Log("" + agent.destination);
+		//Debug.Log("" + agent.destination);
 		while (agent.pathPending) {
 			yield return null;
 		}

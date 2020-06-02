@@ -27,12 +27,13 @@ public class MobileEnemy : EnemyBase
 
 	protected new void Start() {
 		EventSystem.Current.RegisterListener<EnemyHurt>(WasHurt);
-		EventSystem.Current.RegisterListener<EnemyHurt>(AlertNearbyEnemies);
+		EventSystem.Current.RegisterListener<EnemyHurt>(ReactToNearbyHurtEnemy);
 		wasHurtRecently = false;
 		agent.speed = agentMoveSpeed;
 		base.Start();
 		
 	}
+
 
 	/// <summary>
 	/// Returns the agent to its spawn point.
@@ -61,13 +62,13 @@ public class MobileEnemy : EnemyBase
 		}
 	}
 
-	protected IEnumerator GradualLookAtPlayer() {
+	protected override IEnumerator GradualLookAtPlayer() {
 		while (Vector3.Angle(transform.forward, vectorToPlayer) > 5) {
 			transform.forward = Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
 		wasHurtRecently = false;
-		Debug.Log("" + gameObject.transform.parent.gameObject + " is looking at player");
+		//Debug.Log("" + gameObject.transform.parent.gameObject + " is looking at player");
 	}
 
 	/// <summary>
@@ -102,7 +103,7 @@ public class MobileEnemy : EnemyBase
 		//visionRange = 100f;
 	}
 
-	public void AlertNearbyEnemies(Event e) {
+	public void ReactToNearbyHurtEnemy(Event e) {
 		EnemyHurt he = (EnemyHurt)e;
 		if (!he.Entity.Equals(this) && this.gameObject.activeInHierarchy == true) {
 			float distance = Vector3.Distance(transform.position, he.Entity.gameObject.transform.position);
