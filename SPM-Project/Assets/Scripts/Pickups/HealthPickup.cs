@@ -36,7 +36,7 @@ public class HealthPickup : Pickup {
 				other.GetComponentInChildren<PlayerHud>().ShowPickupText("Health", 0, "full");
 				return false;
 			}
-			if (playerHealth + healAmount > playerMaxHealth) healAmount = playerMaxHealth - playerHealth;
+			if (playerHealth + healAmount > playerMaxHealth) healAmount = Mathf.Round(playerMaxHealth - playerHealth);
 
 			return true;
 		}
