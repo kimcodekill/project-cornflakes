@@ -18,22 +18,13 @@ public class Warrior : MobileEnemy
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Idle() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
 			yield return null;
 		}
-		Vector3 right = transform.right;
-		Vector3 left = transform.right * -1;
-		while (Vector3.Dot(transform.forward, right) < 0.9) {
-			transform.forward = Vector3.RotateTowards(transform.forward, right, Time.deltaTime, 0f);
-			yield return null;
-		}
-		while (Vector3.Dot(transform.forward, left) < 0.9) {
-			transform.forward = Vector3.RotateTowards(transform.forward, left, Time.deltaTime, 0f);
-			yield return null;
-		}
-		yield return new WaitForSeconds(1f);
-
+		yield return StartCoroutine(ScanArea());
+		//Debug.Log("scanned");
+		StartCoroutine("Idle");
 	}
 
 	/// <summary>
@@ -41,13 +32,11 @@ public class Warrior : MobileEnemy
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Patrol() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
 			GoToNextPoint();
 		}
-		yield return null;
-		StartCoroutine(Idle());
-		yield return null;
+		yield return StartCoroutine(ScanArea());
 		StartCoroutine("Patrol");
 	}
 
@@ -83,7 +72,7 @@ public class Warrior : MobileEnemy
 			}
 			agent.ResetPath();
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
-			eyeTransform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransform.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
+			eyeTransformPosition.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransformPosition.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
 			yield return null;
 		}
 		yield return null;

@@ -52,7 +52,7 @@ public class EnemySoldier : MobileEnemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Idle() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		GoToGuardPoint();
 		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
 			yield return null;
@@ -71,7 +71,7 @@ public class EnemySoldier : MobileEnemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Patrol() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
 			GoToNextPoint();
 		}
@@ -111,7 +111,7 @@ public class EnemySoldier : MobileEnemy, ILootable {
 			}
 			agent.ResetPath();
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
-			eyeTransform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransform.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
+			eyeTransformPosition.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransformPosition.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
 			yield return null;
 		}
 		yield return null;

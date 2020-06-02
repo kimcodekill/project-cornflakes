@@ -6,49 +6,37 @@ using UnityEngine.AI;
 //Author: Erik Pilström
 public class Scout : MobileEnemy
 {
-
-	[SerializeField] [Tooltip("How far the Scout should look while searching.")] public float searchRange;
-	[SerializeField] [Tooltip("How many search loops the Scout should go through.")] private int searchLoops;
 	[SerializeField] [Tooltip("What radius the Scout should use for avoidance while searching.")] private float searchingAvoidanceRadius;
-
 
 	private new void Start() {
 		agent.avoidancePriority = Random.Range(0, 50);
 		agent.radius = defaultAgentAvoidanceRadius;
 		base.Start();
+		
 	}
 	
 	/// <summary>
 	/// Scout Idle-behaviour.
 	/// </summary>
 	private IEnumerator Idle() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance > 0.5f) {
 			yield return null;
 		}
-		Vector3 right = transform.right;
-		Vector3 left = transform.right * -1;
-		while (Vector3.Dot(transform.forward, right) < 0.9) {
-			transform.forward = Vector3.RotateTowards(transform.forward, right, Time.deltaTime, 0f);
-			yield return null;
-		}
-		while (Vector3.Dot(transform.forward, left) < 0.9) {
-				transform.forward = Vector3.RotateTowards(transform.forward, left, Time.deltaTime, 0f);
-				yield return null;
-		}
-		yield return new WaitForSeconds(1f);
-		
+		yield return StartCoroutine(ScanArea());
+		//Debug.Log("scanned");
+		StartCoroutine("Idle");
 	}
 
 	/// <summary>
 	/// Scout Patrol-behaviour.
 	/// </summary>
 	private IEnumerator Patrol() {
-		eyeTransform.forward = transform.forward;
+		eyeTransformPosition.forward = transform.forward;
 		while (!agent.pathPending && agent.remainingDistance < 0.5f) {
 			GoToNextPoint();
 		}
-		yield return null;
+		yield return StartCoroutine(ScanArea());
 		StartCoroutine("Patrol");
 	}
 
@@ -82,7 +70,7 @@ public class Scout : MobileEnemy
 			}
 			agent.ResetPath();
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
-			eyeTransform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransform.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
+			eyeTransformPosition.rotation = Quaternion.LookRotation(Vector3.RotateTowards(eyeTransformPosition.forward, vectorToPlayer, Time.deltaTime * 7.5f, 0f));
 			yield return null;
 		}
 		yield return null;
@@ -91,72 +79,31 @@ public class Scout : MobileEnemy
 
 	/// <summary>
 	/// Scout Search-behaviour.
-	/// This whole function is a steaming pile of garbage. It works, but man is it bad. Needs major overhaul.
-	/// A lot of code repetition that I tried to get rid of, but couldn't really find a way to make it work within the coroutine, so it will stay for now.
 	/// </summary>
 	private IEnumerator Search() {
 		HasFinishedSearching = false;
-		float searches = 0;
-		bool areaScanned = false;
 		Vector3 lastKnownPosition1, lastKnownPosition2;
 		lastKnownPosition1 = Target.transform.position;
-		yield return null;
+		yield return new WaitForSeconds(0.25f);
 		lastKnownPosition2 = Target.transform.position;
 		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
 		agent.destination = targetLocation;
+		Debug.Log("" + agent.destination);
 		while (agent.pathPending) {
 			yield return null;
 		}
 		while (agent.remainingDistance > 1.5f) {
 			yield return null;
 		}
-		areaScanned = false;
-		while (!areaScanned) {
-			Vector3 scanLeft = (transform.position + (transform.right * -1)) - transform.position;
-			Vector3 scanRight = (transform.position + transform.right) - transform.position;
-			while (Vector3.Dot(transform.forward, scanLeft) < 0.95) {
-				transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime * 3, 0f);
-				yield return null;
-			}
-			while (Vector3.Dot(transform.forward, scanRight) < 0.95) {
-				transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime * 3, 0f);
-				yield return null;
-			}
-			yield return new WaitForSeconds(1f);
-			areaScanned = true;
-		}
-		while (searches < searchLoops) {
-			agent.destination = FindNewRandomNavMeshPoint(targetLocation + (CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized * searchRange / 2), searchRange);
-			while (agent.pathPending) {
-				yield return null;
-			}
-			while (agent.remainingDistance > 1.5f) {
-				yield return null;
-			}
-			areaScanned = false;
-			while (!areaScanned) {
-				Vector3 scanLeft = (transform.position + (transform.right * -1)) - transform.position;
-				Vector3 scanRight = (transform.position + transform.right) - transform.position;
-				while (Vector3.Dot(transform.forward, scanLeft) < 0.95f) {
-					transform.forward = Vector3.RotateTowards(transform.forward, scanLeft, Time.deltaTime * 3, 0f);
-					yield return null;
-				}
-				while (Vector3.Dot(transform.forward, scanRight) < 0.95f) {
-					transform.forward = Vector3.RotateTowards(transform.forward, scanRight, Time.deltaTime * 3, 0f);
-					yield return null;
-				}
-				yield return new WaitForSeconds(1f);
-				areaScanned = true;
-			}
-			yield return new WaitForSeconds(1f);
-			searches++;
-		}
+		Debug.Log("break");
+		yield return StartCoroutine(ScanArea());
 		StartCoroutine(AvoidanceRadiusLerp(defaultAgentAvoidanceRadius));
 		HasFinishedSearching = true;
 	}
 
 	//All of the below handle transitions between the different behaviours.
 	public override void StartPatrolBehaviour() {
+		isInCombat = false;
 		agent.ResetPath();
 		StartCoroutine("Patrol");
 	}
@@ -166,6 +113,7 @@ public class Scout : MobileEnemy
 	}
 
 	public override void StartAlertedBehaviour() {
+		isInCombat = true;
 		agent.ResetPath();
 		StartCoroutine("Alerted");
 	}
@@ -196,6 +144,7 @@ public class Scout : MobileEnemy
 	}
 
 	public override void StartIdleBehaviour() {
+		isInCombat = false;
 		agent.ResetPath();
 		StartCoroutine("Idle");
 	}

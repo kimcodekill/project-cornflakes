@@ -13,10 +13,11 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	[Header("Sight vars")]
 	[SerializeField] [Tooltip("This enemy's sight cone's angle in degrees.")] private float fieldOfView;
 	[SerializeField] [Tooltip("How far this enemy should see.")] protected float visionRange;
+	protected float defaultVisionRange;
 	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
 	[SerializeField] [Tooltip("How close to the player (angle in degrees) this enemy has to point its weapon before attacking.")] private float attackLimitDegrees;
-	[SerializeField] [Tooltip("The relative position of this enemy's gun.")] public Transform gunTransform;
-	[SerializeField] [Tooltip("The relative position of this enemy's eyes.")] public Transform eyeTransform;
+	[SerializeField] [Tooltip("The relative position of this enemy's gun.")] public Transform gunTransformPosition;
+	[SerializeField] [Tooltip("The relative position of this enemy's eyes.")] public Transform eyeTransformPosition;
 	[SerializeField] [Tooltip("Layers that this enemy cannot see through.")] protected LayerMask ObscuringLayers;
 
 	[Header("Attacking vars")]
@@ -24,17 +25,20 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	[SerializeField] [Tooltip("The spread this enemy's attacks should have, angle in degrees.")] protected float attackSpread;
 	[SerializeField] [Tooltip("The speed that this enemy should attack, RPM.")] protected float attackSpeedRPM;
 
-	[Header("Sound vars")]
+	
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
+	[Header("Sound vars")]
 	public AudioClip[] audioClips;
 	[SerializeField] private AudioMixerGroup mixerGroup;
 	private int minSoundDelay = 5;
 	private int maxSoundDelay = 10;
 
+	[Header("Others")]
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
 	[SerializeField] protected EnemyWeaponBase weapon;
 	[SerializeField] private GameObject deathExplosion;
+	protected bool isInCombat;
 
 	///Each enemy's STM instance.
 	private StateMachine enemyStateMachine;
@@ -79,10 +83,15 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 
 		enemyStateMachine = new StateMachine(this, states);
 		currentHealth = maxHealth;
+
+		isInCombat = false;
+		defaultVisionRange = visionRange;
 	}
 
 	protected void Update() {
-		vectorToPlayer = GetVectorFromAtoB(eyeTransform, Target.transform);
+		vectorToPlayer = GetVectorFromAtoB(eyeTransformPosition, Target.transform);
+		Debug.DrawRay(eyeTransformPosition.position, vectorToPlayer, Color.green);
+		Debug.DrawRay(eyeTransformPosition.position, eyeTransformPosition.forward, Color.red);
 		enemyStateMachine.Run();
 		if (audioSourceIdle.isPlaying == false) {
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
@@ -118,8 +127,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 
 	///Checks if the Enemy's Target is inside the specified field of view
 	private bool TargetIsInFOV(Vector3 v) {
-		float angleToTarget = Vector3.Angle(eyeTransform.forward, v.normalized);
-		if (angleToTarget >= fieldOfView) {
+		float angleToTarget = Vector3.Angle(eyeTransformPosition.forward, v.normalized);
+		if (angleToTarget <= fieldOfView/2) { //divide field of view by 2 because Vector3.Angle only goes 0-180 in a semicircle from front to back
 			return true;
 		}
 		else {
@@ -138,8 +147,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	}
 
 	///Is the line to the target obscured by something?
-	private bool CanSeeTarget(Vector3 v) {
-		Physics.Raycast(eyeTransform.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
+	protected bool CanSeeTarget(Vector3 v) {
+		Physics.Raycast(eyeTransformPosition.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
 		if (!hit.collider) {
 			return true;
 		}
@@ -154,7 +163,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// <returns></returns>
 	public bool TargetIsAttackable() {
 		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange) {
-			if (!Physics.SphereCast(gunTransform.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) {
+			if (!Physics.SphereCast(gunTransformPosition.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) {
 				return true;
 			}
 			else {
@@ -172,7 +181,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// <returns></returns>
 	public bool WeaponIsAimed() {
 		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
-		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransform.forward, Vector3.up);
+		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransformPosition.forward, Vector3.up);
 		float radAngle = Mathf.Acos((Vector3.Dot(sightToPlayer, gunAim)) / (sightToPlayer.magnitude * gunAim.magnitude));
 		float degrees = radAngle * (180 / Mathf.PI);
 		if (degrees < attackLimitDegrees) {
@@ -205,12 +214,32 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 		return v;
 	}
 
+	public IEnumerator ScanArea() {
+		Vector3 right = transform.right;
+		Vector3 left = transform.right * -1;
+		while (Vector3.Dot(transform.forward, right) < 0.9) {
+			transform.forward = Vector3.RotateTowards(transform.forward, right, Time.deltaTime, 0f);
+			yield return null;
+		}
+		while (Vector3.Dot(transform.forward, left) < 0.9) {
+			transform.forward = Vector3.RotateTowards(transform.forward, left, Time.deltaTime, 0f);
+			yield return null;
+		}
+	}
+
 	/// <summary>
 	/// Implements <c>TakeDamage()</c> from IPawn interface to deal damage to the enemy.
 	/// </summary>
 	/// <param name="amount">The amount of damage the enemy should take.</param>
 	/// <returns></returns>
 	public float TakeDamage(float amount) {
+		//Debug.Log("" + gameObject + " took damage.");
+		if (!isInCombat) {
+			EventSystem.Current.FireEvent(new EnemyHurt() {
+			Entity = this
+		});
+		//Debug.Log("" + this.gameObject.transform.parent.gameObject + "fired EH event");
+		}
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			Die();
@@ -239,9 +268,9 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 		});
 
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
-		
-		gameObject.SetActive(false);
-		Destroy(gameObject.transform.parent.gameObject, 2f);
+		StopAllCoroutines();
+		gameObject.transform.parent.gameObject.SetActive(false);
+		//Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
 	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {

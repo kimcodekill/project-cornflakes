@@ -1,25 +1,37 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
 public class MobileEnemy : EnemyBase
 {
+
 	[Header("NavAgent vars")]
-	protected NavMeshAgent agent;
 	[SerializeField] [Tooltip("How fast the agent should move.")] protected float agentMoveSpeed;
 	[SerializeField] [Tooltip("The agent's avoidance radius while not attacking.")] protected float defaultAgentAvoidanceRadius;
 	[SerializeField] [Tooltip("The agent's avoidance radius while attacking.")] protected float attackingAgentAvoidanceRadius;
+	protected NavMeshAgent agent;
 
 	[Header("AI/behaviour vars")]
 	[SerializeField] protected Transform[] waypoints;
+	[SerializeField] private float alertRange;
 	protected int currentWaypoint = 0;
+	private float waitForSpotTime = 3f;
+	protected bool wasHurtRecently;
 
 
 	protected new void Awake() {
 		agent = GetComponent<NavMeshAgent>();
 		base.Awake();
+	}
+
+	protected new void Start() {
+		EventSystem.Current.RegisterListener<EnemyHurt>(WasHurt);
+		EventSystem.Current.RegisterListener<EnemyHurt>(AlertNearbyEnemies);
+		wasHurtRecently = false;
+		agent.speed = agentMoveSpeed;
+		base.Start();
+		
 	}
 
 	/// <summary>
@@ -49,6 +61,15 @@ public class MobileEnemy : EnemyBase
 		}
 	}
 
+	protected IEnumerator GradualLookAtPlayer() {
+		while (Vector3.Angle(transform.forward, vectorToPlayer) > 5) {
+			transform.forward = Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f);
+			yield return null;
+		}
+		wasHurtRecently = false;
+		Debug.Log("" + gameObject.transform.parent.gameObject + " is looking at player");
+	}
+
 	/// <summary>
 	/// Finds a new random point on the NavMesh within range, used for the Soldier's search behaviour.
 	/// </summary>
@@ -64,4 +85,41 @@ public class MobileEnemy : EnemyBase
 		}
 		return finalPosition;
 	}
+
+	protected void WasHurt(Event e) {
+		EnemyHurt he = (EnemyHurt)e;
+		if (he.Entity.Equals(this)) {
+			if (!isInCombat && !wasHurtRecently) {
+				wasHurtRecently = true;
+				ReceiveAlert();
+			}
+		}
+	}
+
+	private void ReceiveAlert() {
+		StopAllCoroutines();
+		StartCoroutine(GradualLookAtPlayer());
+		//visionRange = 100f;
+	}
+
+	public void AlertNearbyEnemies(Event e) {
+		EnemyHurt he = (EnemyHurt)e;
+		if (!he.Entity.Equals(this) && this.gameObject.activeInHierarchy == true) {
+			float distance = Vector3.Distance(transform.position, he.Entity.gameObject.transform.position);
+			if (distance < alertRange) {
+				if (CanSeeTarget(GetVectorFromAtoB(transform, he.Entity.gameObject.transform))) {
+					ReceiveAlert();
+					StartCoroutine(WaitToSeePlayer());
+				}
+			}
+		}
+	}
+
+	private IEnumerator WaitToSeePlayer() {
+		yield return new WaitForSeconds(waitForSpotTime);
+		if (!isInCombat) {
+			StartPatrolBehaviour();
+		}
+	}
+
 }
