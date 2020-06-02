@@ -16,8 +16,9 @@ public class PlayerCamera : MonoBehaviour {
 	[SerializeField] [Tooltip("The speed with which the camera moves.")] private float lookSensitivity = 1f;
 	[SerializeField] [Tooltip("Camera radius for collision detection.")] private float camRadius = 0.25f; 
 	[SerializeField] [Tooltip("Minimum allowed distance between camera and objects behind it.")] private float minCollisionDistance;
-	[SerializeField] [Tooltip("The Player transform the camera attaches to.")] private Transform playerMesh;
+
 	private PlayerRenderer pr;
+	private Transform player;
 
 	// Since the StateMachine is responsible for cameraOffset now, 
 	// the value gets set through CameraState assetmenu instances /K
@@ -42,35 +43,48 @@ public class PlayerCamera : MonoBehaviour {
 	/// </summary>
 	public Camera Camera { get; private set; }
 
-	private void Start() {
+	private void OnEnable()
+	{
 		if (Instance == null)
+		{
 			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (Instance != this)
+		{
+			Destroy(gameObject);
+		}
+	}
 
+	private void Start() {
 		Camera = GetComponent<Camera>();
 		DebugManager.AddSection("CameraState", "");
-		pr = GetComponent<PlayerRenderer>();
+		pr = PlayerController.Instance.gameObject.GetComponent<PlayerRenderer>();
+		player = PlayerController.Instance.transform;
 		stateMachine = new StateMachine(this, states);
+		lookSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 	}
 
 	private void Update()
 	{
 		stateMachine.Run();
 		AccumulateRotation();
+
+		RotateCamera();
+		transform.position = player.transform.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
+		Debug.DrawRay(transform.position, transform.forward * 10);
 	}
 
-	// I don't fully understand why we're doing camera updates in LateUpdate, 
-	// but the STM will run in Update /K
 	//Camera updates rotation in LateUpdate so that we don't try to change the rotation while the player is moving in a previous direction during the same frame.
 	//This can otherwise lead to wonky movement effects. /E
-	private void FixedUpdate() {
-		RotateCamera();
-		transform.position = playerMesh.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
-		Debug.DrawRay(transform.position, transform.forward * 10);
+	private void LateUpdate() 
+	{
+		
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
 		pr.SetRenderMode(RenderMode.Opaque);
-		if (Physics.SphereCast(playerMesh.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
+		if (Physics.SphereCast(player.position, camRadius, relationVector.normalized, out RaycastHit hit, relationVector.magnitude + camRadius, collisionLayer)) {
 			if (hit.distance > minCollisionDistance) {
 				if (IsPlayerInFrontOfCamera()) {
 					pr.SetRenderMode(RenderMode.Transparent);
@@ -99,6 +113,7 @@ public class PlayerCamera : MonoBehaviour {
 
 	private void RotateCamera() {
 		transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+		//Debug.Log("Camera: " + transform.rotation.eulerAngles.y);
 	}
 
 	/// <summary>

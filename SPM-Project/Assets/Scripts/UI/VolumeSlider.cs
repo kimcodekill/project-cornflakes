@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
+
+public class VolumeSlider : MonoBehaviour {
+
+    public AudioMixer audioMixer;
+    public string exposedParameter;
+    [HideInInspector] public Slider slider;
+    
+    public void Awake() {
+        transform.root.GetComponent<MenuScript>().volumeSliders.Add(this);
+        slider = gameObject.GetComponent<Slider>();
+        slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+    }
+
+    public void SetInitialValue() {
+		slider.value = PlayerPrefs.GetFloat(exposedParameter);
+		audioMixer.SetFloat(exposedParameter, Mathf.Log10(slider.value) * 20);
+    }
+
+    public void ValueChangeCheck() {
+        audioMixer.SetFloat(exposedParameter, Mathf.Log10(slider.value) * 20);
+        PlayerPrefs.SetFloat(exposedParameter, slider.value);
+    }
+}

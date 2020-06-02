@@ -241,7 +241,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// </summary>
 	/// <param name="amount">The amount of damage the enemy should take.</param>
 	/// <returns></returns>
-	public float TakeDamage(float amount) {
+	public float TakeDamage(float amount, DamageType damageType) {
 		//Debug.Log("" + gameObject + " took damage.");
 		if (!isInCombat) {
 			EventSystem.Current.FireEvent(new EnemyHurt() {
@@ -272,9 +272,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	private void Die() {
 		StopAllCoroutines();
 		
-		EventSystem.Current.FireEvent(new EnemyDeathEvent() {
-			Source = gameObject,
-		});
+		EventSystem.Current.FireEvent(new EnemyDeathEvent(gameObject, maxHealth));
 
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
 		StopAllCoroutines();

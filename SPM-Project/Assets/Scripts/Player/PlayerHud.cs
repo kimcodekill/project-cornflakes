@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 //Author: Erik Pilström
@@ -13,27 +14,42 @@ public class PlayerHud : MonoBehaviour
 	[SerializeField] [Tooltip("The slider field for player healthbar.")] private Slider healthBar;
 	[SerializeField] [Tooltip("Text for bullets left in current magazine.")] private Text bulletsInMag; 
 	[SerializeField] [Tooltip("Text for bullets in reserve, not counting magazine.")] private Text bulletsInReserve;
+	[SerializeField] private TextMeshProUGUI[] carriedWeapons;
+	[SerializeField] private Material textMaterial;
+	[SerializeField] private Material highlightedTextMaterial;
 	[SerializeField] [Tooltip("Text for pick-up information")] private TextMeshProUGUI pickupText;
 
 	[Header("Hud behaviour controls")]
 	[SerializeField] [Tooltip("HUD border image.")] private Image hudBorder;
+	//K: This reference to PlayerController seems outdated
 	[SerializeField] [Tooltip("The Player the HUD belongs to.")] private PlayerController player;
+	
 	private Color defaultPanelColour = new Color(1, 1, 1, 0);
 	private float flashDuration = 0.1f;
 	private PlayerWeapon playerWeapon;
-	private Animator anim;
-	private List<TextMeshProUGUI> activepickupTexts = new List<TextMeshProUGUI>();
+	private int activeWeapon;
+	private List<TextMeshProUGUI> activePickupTexts = new List<TextMeshProUGUI>();
+	private ScoreHandler scoreHandler;
 
-	private void Start()
+
+	public ScoreHandler ScoreHandler { get => scoreHandler;}
+
+    private void Start()
     {
 		if (Instance == null) { Instance = this; }
 
 		hudBorder.color = defaultPanelColour;
 		playerWeapon = player.gameObject.GetComponent<PlayerWeapon>();
-		//anim = GetComponentInChildren<Animator>();
+		scoreHandler = GetComponentInChildren<ScoreHandler>();
+		/*foreach (TextMeshProUGUI weapon in carriedWeapons) {
+			weapon.gameObject.SetActive(false);
+		}*/
+		for (int i = 0; i < gameObject.GetComponentInParent<PlayerWeapon>().GetWeapons().Count; i++) {
+			carriedWeapons[i].gameObject.SetActive(true);
+		}
 	}
 
-    private void Update()
+	private void Update()
     {
 		UpdateHealthBar();
 		UpdateBulletCount();
@@ -62,18 +78,33 @@ public class PlayerHud : MonoBehaviour
 
 	}
 
-	public void ShowPickupText(string type, float amount) {
-		if (activepickupTexts.Count > 0) foreach (TextMeshProUGUI text in activepickupTexts) {
-				text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, text.rectTransform.anchoredPosition.y + 30);
-			}
-		else foreach (TextMeshProUGUI text in activepickupTexts) {
-				activepickupTexts.Remove(text);
-				Destroy(text.gameObject);
-			}
-		TextMeshProUGUI newText = Instantiate(pickupText, this.gameObject.transform.GetChild(0));
-		activepickupTexts.Add(newText);
+	public void NewCarriedWeapon(int weapon) {
+		carriedWeapons[weapon].gameObject.SetActive(true);
+		if (PlayerWeapon.Instance.GetWeapons().Count == 1) UpdateActiveWeapon(0);
+	}
 
-		if (amount != 0) newText.text = amount + " " + type + " picked up";
-		else newText.text = type + " picked up";
+	public void UpdateActiveWeapon(int weapon) {
+		carriedWeapons[activeWeapon].fontMaterial = textMaterial;
+		carriedWeapons[weapon].fontMaterial = highlightedTextMaterial;
+		activeWeapon = weapon;
+	}
+
+	public void ShowPickupText(string type, float amount, string wordchoice) {
+		if (activePickupTexts.Count > 0) {
+			for (int i = activePickupTexts.Count - 1; i >= 0; i--) {
+				TextMeshProUGUI text = activePickupTexts[i];
+				if (text.alpha == 0) {
+					activePickupTexts.Remove(text);
+					Destroy(text.gameObject);
+				}
+				else text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, text.rectTransform.anchoredPosition.y + 30);
+			}
+		}
+
+		TextMeshProUGUI newText = Instantiate(pickupText, transform.GetChild(0));
+		activePickupTexts.Add(newText);
+
+		if (amount != 0) newText.text = amount + " " + type + " " + wordchoice;
+		else newText.text = type + " " + wordchoice;
 	}
 }

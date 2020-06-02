@@ -14,23 +14,37 @@ public class HealthPickup : Pickup {
 	#region Serialized
 
 	[SerializeField] private float healAmount;
-	[SerializeField] [Tooltip("0-1f")] private Range spawnedHealthPercentageRange;
+	[SerializeField] [Tooltip("% of max health returned, 0-1f")] private Range spawnedHealthPercentageRange;
 
 	#endregion
 
 	protected override void OnPickup(Collider other) {
 		other.GetComponent<PlayerController>().Heal(healAmount);
-		other.GetComponentInChildren<PlayerHud>().ShowPickupText("health", healAmount);
+		other.GetComponentInChildren<PlayerHud>().ShowPickupText("health", healAmount, "restored");
 		other.GetComponent<PlayerController>().PlayAudioPitched(8, 0.7f, 0.8f, 1.3f);
 		Destroy(gameObject);
 	}
 
-	protected override bool IsValid(Collider other) {
-		return other.gameObject.CompareTag("Player") && PlayerController.Instance.PlayerCurrentHealth < PlayerController.Instance.PlayerMaxHealth;
+	protected override bool IsValid(Collider other)
+	{
+		if (other.gameObject.CompareTag("Player"))
+		{
+			float playerHealth = PlayerController.Instance.PlayerCurrentHealth;
+			float playerMaxHealth = PlayerController.Instance.PlayerMaxHealth;
+			if (playerHealth >= playerMaxHealth - 0.5)
+			{
+				other.GetComponentInChildren<PlayerHud>().ShowPickupText("Health", 0, "full");
+				return false;
+			}
+			if (playerHealth + healAmount > playerMaxHealth) healAmount = Mathf.Round(playerMaxHealth - playerHealth);
+
+			return true;
+		}
+		else return false;
 	}
 
 	protected override void OnSpawned() {
-		healAmount = PlayerController.Instance.PlayerMaxHealth * Random.Range(spawnedHealthPercentageRange.min, spawnedHealthPercentageRange.max);
+		healAmount = Mathf.Ceil(PlayerController.Instance.PlayerMaxHealth * Random.Range(spawnedHealthPercentageRange.min, spawnedHealthPercentageRange.max));
 	}
 
 	[System.Serializable]
