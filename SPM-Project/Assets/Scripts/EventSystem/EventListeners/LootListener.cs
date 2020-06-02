@@ -8,12 +8,12 @@ public class LootListener : MonoBehaviour {
 
 	private void OnEnemyDeath(Event e) {
 		EnemyDeathEvent ede = e as EnemyDeathEvent;
-		SpawnItem("Pickups/HealthPickup", ede.Source.transform.position);
+		SpawnItem("Pickups/HealthPickup", ede.DeadObject.transform.position);
 		ILootable il;
-		if ((il = ede.Source.GetComponent<ILootable>()) != null) {
+		if ((il = ede.DeadObject.GetComponent<ILootable>()) != null) {
 			string lootObjectPath;
 			if ((lootObjectPath = il.GetLootTable().Roll()) != null) {
-				SpawnItem(lootObjectPath, ede.Source.transform.position);
+				SpawnItem(lootObjectPath, ede.DeadObject.transform.position);
 			}
 		}
 	}

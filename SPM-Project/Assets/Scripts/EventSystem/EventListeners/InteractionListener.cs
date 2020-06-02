@@ -45,7 +45,7 @@ public class InteractionListener : MonoBehaviour {
 		DamageEvent de = (DamageEvent) e;
 		if (de.Entity != null && de.Damager != null)
 		{
-			de.Entity.TakeDamage(de.Damager.GetDamage());
+			de.Entity.TakeDamage(de.Damager.GetDamage(), DamageType.Bullet);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class InteractionListener : MonoBehaviour {
 		ExplosiveDamageEvent ede = e as ExplosiveDamageEvent;
 		if (ede.Entity != null && ede.Damager != null)
 		{
-			ede.Entity.TakeDamage(ede.Damager.GetDamage() * ede.DamageScale);
+			ede.Entity.TakeDamage(ede.Damager.GetDamage() * ede.DamageScale, DamageType.Explosive);
 		}
 	}
 }

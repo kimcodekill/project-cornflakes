@@ -31,12 +31,6 @@ public class GameOverListener : MonoBehaviour
     private void OnLevelEnd(Event e)
     {
         LevelEndEvent lee = (LevelEndEvent)e;
-        Debug.Log(e.Description);
-
-        foreach (Weapon w in PlayerWeapon.Instance.GetWeapons())
-        {
-            Debug.Log(w.ToString());
-        }
 
         //Not sure if this should be done here, probably should be sent to some other class that likes taking care of scenes
         LoadNextScene();
@@ -45,8 +39,7 @@ public class GameOverListener : MonoBehaviour
     private void OnPlayerDead(Event e)
     {
         PlayerDeadEvent pde = (PlayerDeadEvent)e;
-
-        Debug.Log(e.Description);        
+        
 
         ReloadCurrentScene();
     }
@@ -55,15 +48,15 @@ public class GameOverListener : MonoBehaviour
     {
         ObjectiveFailedEvent ofe = (ObjectiveFailedEvent)e;
 
-        Debug.Log("Objective failed, start Respawn logic");
-
         ReloadCurrentScene();
     }
 
     private void LoadNextScene()
     {
-        if (!nextSceneName.Equals(string.Empty)) { SceneManager.LoadScene(nextSceneName); }
-        else                                     { SceneManager.LoadScene(RootSceneName); }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        //if (!nextSceneName.Equals(string.Empty)) { SceneManager.LoadScene(nextSceneName); }
+        //else                                     { SceneManager.LoadScene(RootSceneName); }
     }
 
     //This just wraps the code inside it for prettifyness
