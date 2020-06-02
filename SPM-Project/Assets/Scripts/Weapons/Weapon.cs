@@ -295,8 +295,8 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
 	/// Fires an event and then lets the <c>Fire()</c> function assume control.
 	/// </summary>
-	public void DoFire(bool loop, bool interruptAudio) {
-		EventSystem.Current.FireEvent(new WeaponFiredEvent(shootAudio, PlayerWeapon.Instance.WeaponAudio, loop, interruptAudio));
+	public void DoFire(bool loop) {
+		EventSystem.Current.FireEvent(new WeaponFiredEvent(shootAudio, PlayerWeapon.Instance.WeaponAudio, loop));
 		Fire();
 	}
 
@@ -309,8 +309,8 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	}
 
 	//K: this really is a stupid wrapper but whatever
-	public void SwitchTo(bool interruptAudio) {
-		EventSystem.Current.FireEvent(new WeaponSwitchedEvent(switchAudio, PlayerWeapon.Instance.WeaponAudio, interruptAudio, this));
+	public void SwitchTo() {
+		EventSystem.Current.FireEvent(new WeaponSwitchedEvent(switchAudio, PlayerWeapon.Instance.WeaponAudio, this));
 	}
 
 	public int GetMaxAmmo()	{

@@ -12,7 +12,7 @@ public class WeaponReloadingState : WeaponState {
 
 	public override void Enter() {
 		DebugManager.UpdateRow("WeaponSTM", GetType().ToString());
-		EventSystem.Current.FireEvent(new WeaponReloadingEvent(Weapon.ReloadAudio, PlayerWeapon.Instance.WeaponAudio, true));
+		EventSystem.Current.FireEvent(new WeaponReloadingEvent(Weapon.ReloadAudio, PlayerWeapon.Instance.WeaponAudio));
 		startTime = Time.time;
 	}
 

@@ -16,7 +16,7 @@ public abstract class AudioEvent : Event
 
 public class WeaponFiredEvent : AudioEvent
 {
-    public WeaponFiredEvent(AudioClip audioClip, AudioSource audioSource, bool loop, bool interrupt) : base(audioClip, audioSource) 
+    public WeaponFiredEvent(AudioClip audioClip, AudioSource audioSource, bool loop) : base(audioClip, audioSource) 
     {
         Loop = loop;
     }
@@ -26,12 +26,12 @@ public class WeaponFiredEvent : AudioEvent
 
 public class WeaponReloadingEvent : AudioEvent
 {
-    public WeaponReloadingEvent(AudioClip audioClip, AudioSource audioSource, bool interrupt) : base(audioClip, audioSource) { }
+    public WeaponReloadingEvent(AudioClip audioClip, AudioSource audioSource) : base(audioClip, audioSource) { }
 }
 
 public class WeaponSwitchedEvent : AudioEvent
 {
-    public WeaponSwitchedEvent(AudioClip audioClip, AudioSource audioSource, bool interrupt, Weapon selectedWeapon) : base(audioClip, audioSource)
+    public WeaponSwitchedEvent(AudioClip audioClip, AudioSource audioSource, Weapon selectedWeapon) : base(audioClip, audioSource)
     {
         SelectedWeapon = selectedWeapon;
     }
@@ -41,5 +41,5 @@ public class WeaponSwitchedEvent : AudioEvent
 
 public class WeaponFireStoppedEvent : AudioEvent
 {
-    public WeaponFireStoppedEvent(AudioClip audioClip, AudioSource audioSource, bool interrupt) : base(audioClip, audioSource) { }
+    public WeaponFireStoppedEvent(AudioClip audioClip, AudioSource audioSource) : base(audioClip, audioSource) { }
 }

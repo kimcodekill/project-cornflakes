@@ -98,7 +98,7 @@ public class PlayerWeapon : MonoBehaviour {
 	/// <param name="index">The specified index.</param>
 	public void SwitchTo(int index) {
 		CurrentWeapon = weapons[index];
-		weapons[index].SwitchTo(true);
+		weapons[index].SwitchTo();
 		gameObject.GetComponentInChildren<PlayerHud>().UpdateActiveWeapon(index);
 	}
 

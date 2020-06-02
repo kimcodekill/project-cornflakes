@@ -38,7 +38,7 @@ public class AudioListener : MonoBehaviour {
 	{
 		WeaponFireStoppedEvent wfse = e as WeaponFireStoppedEvent;
 
-		PlayAlone(wfse.AudioSource, wfse.AudioClip);
+		if (wfse.AudioSource.isPlaying) { PlayAlone(wfse.AudioSource, wfse.AudioClip); }
 	}
 
 	private void PlayWeaponSwitch(Event e)

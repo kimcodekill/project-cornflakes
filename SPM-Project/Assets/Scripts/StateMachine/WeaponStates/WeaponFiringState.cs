@@ -33,7 +33,7 @@ public class WeaponFiringState : WeaponState {
 				if (!semiShot)
 				{
 					PlayerController.Instance.playerAnimator.SetTrigger("Shooting");
-					Weapon.DoFire(false, true);
+					Weapon.DoFire(false);
 					semiShot = true;
 				}
 				if ((Time.time - startTime) > Weapon.GetTimeBetweenShots())
@@ -47,14 +47,14 @@ public class WeaponFiringState : WeaponState {
 				{
 					if ((Time.time - startTime) > Weapon.GetTimeBetweenShots())
 					{
-						Weapon.DoFire(true, false);
+						Weapon.DoFire(true);
 						startTime = Time.time;
 					}
 				}
 				else
 				{
 					//K: wouldn't have to check this if our weapon audio was structured different but hey whatever
-					if (Weapon.ShotDecayAudio != null) { EventSystem.Current.FireEvent(new WeaponFireStoppedEvent(Weapon.ShotDecayAudio, PlayerWeapon.Instance.WeaponAudio, true)); }
+					if (Weapon.ShotDecayAudio != null) { EventSystem.Current.FireEvent(new WeaponFireStoppedEvent(Weapon.ShotDecayAudio, PlayerWeapon.Instance.WeaponAudio)); }
 					StateMachine.TransitionTo<WeaponIdleState>();
 				}
 			}
