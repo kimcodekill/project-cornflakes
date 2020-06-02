@@ -14,7 +14,7 @@ public class DebugTrigger : DebugTool
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            player.GetComponent<PlayerController>().TakeDamage(float.PositiveInfinity);
+            player.GetComponent<PlayerController>().TakeDamage(float.PositiveInfinity, DamageType.Instant);
         }
         
         if (Input.GetKeyDown(KeyCode.R))

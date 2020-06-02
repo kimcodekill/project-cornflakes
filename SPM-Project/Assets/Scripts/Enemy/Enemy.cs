@@ -180,7 +180,7 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	/// </summary>
 	/// <param name="amount">The amount of damage the enemy should take.</param>
 	/// <returns></returns>
-	public float TakeDamage(float amount) {
+	public float TakeDamage(float amount, DamageType damageType) {
 		currentHealth -= amount;
 		if (currentHealth <= 0) { Die(); }
 		return currentHealth;

@@ -21,7 +21,7 @@ public class Target : MonoBehaviour, IEntity
         return 0;
     }
 
-    public float TakeDamage(float amount)
+    public float TakeDamage(float amount, DamageType damageType)
     {
         takenDamage += amount;
         latestDamage = amount;
