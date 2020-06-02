@@ -3060,31 +3060,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScorePanel
       objectReference: {fileID: 0}
-    - target: {fileID: 3426526703496805402, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 3426526703496805402, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3426526703496805402, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3426526703496805402, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3426526703496805402, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3583548953250698660, guid: e0e41af4817717a4c8007b30834cc114,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3188,26 +3163,6 @@ PrefabInstance:
     - target: {fileID: 3583548953250698660, guid: e0e41af4817717a4c8007b30834cc114,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8968525881537072753, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8968525881537072753, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8968525881537072753, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8968525881537072753, guid: e0e41af4817717a4c8007b30834cc114,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

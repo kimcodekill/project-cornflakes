@@ -91,6 +91,7 @@ MonoBehaviour:
   scoreText: {fileID: 3426526703496805402}
   multiplierText: {fileID: 8968525881537072753}
   levelParTime: 120
+  levelBonusScale: 10
   multiplierTime: 5
 --- !u!1 &7738130632284803944
 GameObject:

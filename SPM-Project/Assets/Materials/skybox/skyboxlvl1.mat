@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: skyboxlevel1
+  m_Name: skyboxlvl1
   m_Shader: {fileID: 4800000, guid: 98ae20c724821c44fa53190dcc1bf941, type: 3}
   m_ShaderKeywords: _FOGBOTTOM_ON
   m_LightmapFlags: 4
@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Tex:
-        m_Texture: {fileID: 8900000, guid: 6d50edc1a9c63b149b89659e92c2cfd0, type: 3}
+        m_Texture: {fileID: 8900000, guid: 6ba391feeb8d8934285110818e12f839, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -66,28 +66,28 @@ Material:
     - _DstBlend: 0
     - _Exposure: 1
     - _FogBottom: 1
-    - _FogEnd: 0.25
+    - _FogEnd: 0.15
     - _FogIntens: 1
-    - _FogStart: 0.1
+    - _FogStart: 0.05
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
     - _MieIntens: 0
-    - _MieSize: 0.8
+    - _MieSize: 1
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rotation: 195
+    - _Rotation: 67
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDir: 0
+    - _SunDir: 183
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FogCol: {r: 0.45098042, g: 0.5411765, b: 0.6, a: 1}
+    - _FogCol: {r: 0.5254902, g: 0.3647059, b: 0.25882354, a: 1}
     - _MieTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
     - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
