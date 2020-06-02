@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
-  - tag: Rocket
-    prefab: {fileID: 6027274404732228482, guid: b8ab425d42c913148be9f870d6963c7e,
+  - tag: EnemyBullet
+    prefab: {fileID: 8805001218220254843, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
       type: 3}
     size: 10

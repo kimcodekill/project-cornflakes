@@ -3887,22 +3887,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectPooler
       objectReference: {fileID: 0}
-    - target: {fileID: 4202951134478951637, guid: c9aed765c2e5706498fecfb69b59b85b,
-        type: 3}
-      propertyPath: pools.Array.data[0].tag
-      value: EnemyBullet
-      objectReference: {fileID: 0}
-    - target: {fileID: 4202951134478951637, guid: c9aed765c2e5706498fecfb69b59b85b,
-        type: 3}
-      propertyPath: pools.Array.data[0].prefab
-      value: 
-      objectReference: {fileID: 8805001218220254843, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
-        type: 3}
-    - target: {fileID: 4202951134478951637, guid: c9aed765c2e5706498fecfb69b59b85b,
-        type: 3}
-      propertyPath: pools.Array.data[0].size
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9aed765c2e5706498fecfb69b59b85b, type: 3}
 --- !u!1 &2098673183

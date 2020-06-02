@@ -105,7 +105,7 @@ public class MobileEnemy : EnemyBase
 
 	public void ReactToNearbyHurtEnemy(Event e) {
 		EnemyHurt he = (EnemyHurt)e;
-		if (!he.Entity.Equals(this) && this.gameObject.activeInHierarchy == true) {
+	if (!he.Entity.Equals(this) && this.gameObject.activeInHierarchy == true) {
 			float distance = Vector3.Distance(transform.position, he.Entity.gameObject.transform.position);
 			if (distance < alertRange) {
 				if (CanSeeTarget(GetVectorFromAtoB(transform, he.Entity.gameObject.transform))) {

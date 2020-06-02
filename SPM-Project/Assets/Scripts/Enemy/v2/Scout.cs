@@ -95,7 +95,7 @@ public class Scout : MobileEnemy
 		while (agent.remainingDistance > 1.5f) {
 			yield return null;
 		}
-		Debug.Log("break");
+		//Debug.Log("break");
 		yield return StartCoroutine(ScanArea());
 		StartCoroutine(AvoidanceRadiusLerp(defaultAgentAvoidanceRadius));
 		HasFinishedSearching = true;
