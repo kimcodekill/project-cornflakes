@@ -12,7 +12,7 @@ public class ReverbZone : MonoBehaviour {
 
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
-            other.gameObject.GetComponentInChildren<PlayerCamera>().reverbZoned ++;
+            PlayerCamera.Instance.reverbZoned++;
             //other.gameObject.GetComponentInChildren<AudioReverbFilter>().reverbPreset = reverbPreset;
             //other.gameObject.GetComponentInChildren<AudioReverbFilter>().enabled = true;
             reverbSnapshot.TransitionTo(2);
@@ -21,9 +21,9 @@ public class ReverbZone : MonoBehaviour {
 
     void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
-            other.gameObject.GetComponentInChildren<PlayerCamera>().reverbZoned --;
+            PlayerCamera.Instance.reverbZoned--;
             //if (other.gameObject.GetComponentInChildren<PlayerCamera>().reverbZoned == 0) other.gameObject.GetComponentInChildren<AudioReverbFilter>().enabled = false;
-            if (other.gameObject.GetComponentInChildren<PlayerCamera>().reverbZoned == 0) defaultSnapshot.TransitionTo(2);
+            if (PlayerCamera.Instance.reverbZoned == 0) defaultSnapshot.TransitionTo(2);
         }
     }
 }

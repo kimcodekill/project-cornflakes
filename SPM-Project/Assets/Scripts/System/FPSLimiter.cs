@@ -16,7 +16,7 @@ public class FPSLimiter : MonoBehaviour {
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.F)) limitEnabled = !limitEnabled;
 		if (limitEnabled) Application.targetFrameRate = FPS;
-		else Application.targetFrameRate = 9999;
+		else Application.targetFrameRate = -1;
 	}
 
 }
