@@ -1,5 +1,4 @@
-﻿using UnityEditor.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
