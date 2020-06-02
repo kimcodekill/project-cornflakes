@@ -57,7 +57,7 @@ LightmapSettings:
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
-    m_BakeResolution: 10
+    m_BakeResolution: 8
     m_AtlasSize: 2048
     m_AO: 0
     m_AOMaxDistance: 1
@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: fc4da1cbc399a9b44918b46649f0d98f,
+  m_LightingDataAsset: {fileID: 112000000, guid: dff90c5ecb1056b4f8c060635a1c4b29,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -3008,6 +3008,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 558306173333814751, guid: e5ab36253f50b2345a1a72527c7d825d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 897675108530393616, guid: e5ab36253f50b2345a1a72527c7d825d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5ab36253f50b2345a1a72527c7d825d, type: 3}
