@@ -62,6 +62,7 @@ public class PlayerCamera : MonoBehaviour {
 		pr = PlayerController.Instance.gameObject.GetComponent<PlayerRenderer>();
 		player = PlayerController.Instance.transform;
 		stateMachine = new StateMachine(this, states);
+		lookSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 	}
 
 	private void Update()
