@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class EnemySoldier : MobileEnemy, ILootable {
+public class EnemySoldier : NavMeshEnemy, ILootable {
 
 	[SerializeField] [Tooltip("How far the Soldier should look while searching.")]public float searchRange;
 	[SerializeField] [Tooltip("How many search loops the Soldier should go through.")] private int searchLoops;

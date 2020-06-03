@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class MobileEnemy : EnemyBase
+public class NavMeshEnemy : EnemyBase
 {
 
 	[Header("NavAgent vars")]

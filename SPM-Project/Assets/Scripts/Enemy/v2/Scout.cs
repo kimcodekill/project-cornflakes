@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class Scout : MobileEnemy
+public class Scout : NavMeshEnemy
 {
 	[SerializeField] [Tooltip("What radius the Scout should use for avoidance while searching.")] private float searchingAvoidanceRadius;
 

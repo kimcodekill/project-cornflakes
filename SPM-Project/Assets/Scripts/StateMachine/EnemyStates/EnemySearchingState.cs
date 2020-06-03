@@ -12,7 +12,7 @@ public class EnemySearchingState : EnemyBaseState
 
 	public override void Run() {
 		if (Enemy.HasFinishedSearching == true) {
-			if (Enemy is MobileEnemy) StateMachine.TransitionTo<EnemyPatrollingState>();
+			if (Enemy is NavMeshEnemy) StateMachine.TransitionTo<EnemyPatrollingState>();
 			else StateMachine.TransitionTo<EnemyIdleState>();
 		}
 		base.Run();

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class Warrior : MobileEnemy
+public class Warrior : NavMeshEnemy
 {
 
 	private new void Start() {

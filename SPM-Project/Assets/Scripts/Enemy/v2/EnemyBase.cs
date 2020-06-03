@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.SocialPlatforms;
 
 //Author: Erik Pilström
-public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
+public class EnemyBase : MonoBehaviour, IEntity, ICapturable
+{
 	[Header("Health vars")]
 	[SerializeField] [Tooltip("This enemy's current health.")] private float currentHealth;
 	[SerializeField] [Tooltip("This enemy's max health.")] private float maxHealth;
@@ -26,7 +28,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	[SerializeField] [Tooltip("The spread this enemy's attacks should have, angle in degrees.")] protected float attackSpread;
 	[SerializeField] [Tooltip("The speed that this enemy should attack, RPM.")] protected float attackSpeedRPM;
 
-	
+
 	[HideInInspector] public AudioSource audioSource;
 	[HideInInspector] public AudioSource audioSourceIdle;
 	[Header("Sound vars")]
@@ -34,6 +36,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	[SerializeField] private AudioMixerGroup mixerGroup;
 	private int minSoundDelay = 5;
 	private int maxSoundDelay = 10;
+	private float soundDelay;
+	private float soundStartTime = 0f;
 
 	[Header("Others")]
 	[SerializeField] [Tooltip("This enemy's possible states.")] private State[] states;
@@ -64,18 +68,23 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// <summary>
 	/// Is this enemy a patroller?
 	/// </summary>
-	public bool IsPatroller { get; protected set; }
+	public bool IsPatroller { get; protected set; }  //Deprecated as of 2020-06-03 but leaving it for potential future use.
 
 	/// <summary>
 	/// Returns the origin of this enemy.
 	/// </summary>
 	public Vector3 Origin { get; private set; }
 
-	protected void Awake() {
+
+	protected void Awake()
+	{
 		Origin = transform.position;
 	}
 
-	protected void Start() {
+
+	protected void Start()
+	{
+		soundDelay = Random.Range(minSoundDelay, maxSoundDelay);
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = PlayerController.Instance;
 
@@ -90,18 +99,29 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 		defaultFoV = fieldOfView;
 	}
 
-	protected void Update() {
+	protected void Update()
+	{
 		vectorToPlayer = GetVectorFromAtoB(eyeTransformPosition, Target.transform);
-		Debug.DrawRay(eyeTransformPosition.position, vectorToPlayer, Color.green);
-		Debug.DrawRay(eyeTransformPosition.position, eyeTransformPosition.forward, Color.red);
+		//Debug.DrawRay(eyeTransformPosition.position, vectorToPlayer, Color.green);
+		//Debug.DrawRay(eyeTransformPosition.position, eyeTransformPosition.forward, Color.red);
 		enemyStateMachine.Run();
-		if (audioSourceIdle.isPlaying == false) {
+
+	}
+
+	private void FixedUpdate()
+	{
+		if (audioSourceIdle.isPlaying == false && Time.time - soundStartTime > soundDelay)
+		{
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
-			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
+			audioSourceIdle.Play();
+			soundStartTime = Time.time;
+			soundDelay = Random.Range(minSoundDelay, maxSoundDelay);
+
 		}
 	}
 
-	protected AudioSource CreateAudioSource(float volume) {
+	protected AudioSource CreateAudioSource(float volume)
+	{
 		AudioSource aSource = gameObject.AddComponent<AudioSource>();
 		aSource.spatialBlend = 1;
 		aSource.rolloffMode = AudioRolloffMode.Linear;
@@ -117,17 +137,22 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// </summary>
 	/// <param name="v"></param>
 	/// <returns></returns>
-	public bool TargetIsInSight() { //Checks if the Enemy's Target is in sight by checking the different sight factors.
-		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer)) {
+	public bool TargetIsInSight()
+	{ //Checks if the Enemy's Target is in sight by checking the different sight factors.
+		if (TargetIsInRange() && TargetIsInFOV(vectorToPlayer) && CanSeeTarget(vectorToPlayer))
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
 
-	protected virtual IEnumerator GradualLookAtPlayer() {
-		while (Vector3.Angle(transform.forward, vectorToPlayer) > 5) {
+	protected virtual IEnumerator GradualLookAtPlayer()
+	{
+		while (Vector3.Angle(transform.forward, vectorToPlayer) > 5)
+		{
 			transform.forward = Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
@@ -135,33 +160,42 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	}
 
 	///Checks if the Enemy's Target is inside the specified field of view
-	private bool TargetIsInFOV(Vector3 v) {
+	private bool TargetIsInFOV(Vector3 v)
+	{
 		float angleToTarget = Vector3.Angle(eyeTransformPosition.forward, v.normalized);
-		if (angleToTarget <= fieldOfView/2) { //divide field of view by 2 because Vector3.Angle only goes 0-180 in a semicircle from front to back
+		if (angleToTarget <= fieldOfView / 2)
+		{ //divide field of view by 2 because Vector3.Angle only goes 0-180 in a semicircle from front to back
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
 
 	///Is Target within sight range?
-	private bool TargetIsInRange() {
-		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange) {
+	private bool TargetIsInRange()
+	{
+		if (Vector3.Distance(transform.position, Target.transform.position) < visionRange)
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
 
 	///Is the line to the target obscured by something?
-	protected bool CanSeeTarget(Vector3 v) {
+	protected bool CanSeeTarget(Vector3 v)
+	{
 		Physics.Raycast(eyeTransformPosition.position, v, out RaycastHit hit, v.magnitude, ObscuringLayers);
-		if (!hit.collider) {
+		if (!hit.collider)
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
@@ -170,16 +204,21 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// Checks if the enemy can attack its target by SphereCasting from the given gun position, to the target, checking for collisions on the way.
 	/// </summary>
 	/// <returns></returns>
-	public bool TargetIsAttackable() {
-		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange) {
-			if (!Physics.SphereCast(gunTransformPosition.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers)) {
+	public bool TargetIsAttackable()
+	{
+		if (TargetIsInSight() && vectorToPlayer.magnitude <= attackRange)
+		{
+			if (!Physics.SphereCast(gunTransformPosition.position, 0.1f, vectorToPlayer, out _, vectorToPlayer.magnitude, ObscuringLayers))
+			{
 				return true;
 			}
-			else {
+			else
+			{
 				return false;
 			}
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
@@ -188,15 +227,18 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// Checks if the Enemy's weapon is aimed sufficiently towards the player.
 	/// </summary>
 	/// <returns></returns>
-	public bool WeaponIsAimed() {
+	public bool WeaponIsAimed()
+	{
 		Vector3 sightToPlayer = Vector3.ProjectOnPlane(vectorToPlayer.normalized, Vector3.up);
 		Vector3 gunAim = Vector3.ProjectOnPlane(gunTransformPosition.forward, Vector3.up);
 		float radAngle = Mathf.Acos((Vector3.Dot(sightToPlayer, gunAim)) / (sightToPlayer.magnitude * gunAim.magnitude));
 		float degrees = radAngle * (180 / Mathf.PI);
-		if (degrees < attackLimitDegrees) {
+		if (degrees < attackLimitDegrees)
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
@@ -207,7 +249,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// <param name="v1">The first vector.</param>
 	/// <param name="v2">The second vector.</param>
 	/// <returns>Velocity between v2 and v1.</returns>
-	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2) {
+	public Vector3 CalculateTargetVelocity(Vector3 v1, Vector3 v2)
+	{
 		Vector3 v = v2 - v1;
 		return v;
 	}
@@ -218,19 +261,23 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// <param name="A">Base transform.</param>
 	/// <param name="B">Target transform.</param>
 	/// <returns>The vector from A to B.</returns>
-	public Vector3 GetVectorFromAtoB(Transform A, Transform B) {
+	public Vector3 GetVectorFromAtoB(Transform A, Transform B)
+	{
 		Vector3 v = B.position - A.position;
 		return v;
 	}
 
-	public IEnumerator ScanArea() {
+	public IEnumerator ScanArea()
+	{
 		Vector3 right = transform.right;
 		Vector3 left = transform.right * -1;
-		while (Vector3.Dot(transform.forward, right) < 0.9) {
+		while (Vector3.Dot(transform.forward, right) < 0.9)
+		{
 			transform.forward = Vector3.RotateTowards(transform.forward, right, Time.deltaTime, 0f);
 			yield return null;
 		}
-		while (Vector3.Dot(transform.forward, left) < 0.9) {
+		while (Vector3.Dot(transform.forward, left) < 0.9)
+		{
 			transform.forward = Vector3.RotateTowards(transform.forward, left, Time.deltaTime, 0f);
 			yield return null;
 		}
@@ -241,16 +288,20 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// </summary>
 	/// <param name="amount">The amount of damage the enemy should take.</param>
 	/// <returns></returns>
-	public float TakeDamage(float amount, DamageType damageType) {
+	public float TakeDamage(float amount, DamageType damageType)
+	{
 		//Debug.Log("" + gameObject + " took damage.");
-		if (!isInCombat) {
-			EventSystem.Current.FireEvent(new EnemyHurt() {
-			Entity = this
-		});
-		//Debug.Log("" + this.gameObject.transform.parent.gameObject + "fired EH event");
+		if (!isInCombat)
+		{
+			EventSystem.Current.FireEvent(new EnemyHurt()
+			{
+				Entity = this
+			});
+			//Debug.Log("" + this.gameObject.transform.parent.gameObject + "fired EH event");
 		}
 		currentHealth -= amount;
-		if (currentHealth <= 0) {
+		if (currentHealth <= 0)
+		{
 			Die();
 		}
 		return currentHealth;
@@ -261,17 +312,20 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// </summary>
 	/// <param name="amount">The amount of healing the enemy should receive.</param>
 	/// <returns></returns>
-	public float Heal(float amount) {
+	public float Heal(float amount)
+	{
 		currentHealth += amount;
-		if (currentHealth > maxHealth) {
+		if (currentHealth > maxHealth)
+		{
 			currentHealth = maxHealth;
 		}
 		return currentHealth;
 	}
 
-	private void Die() {
+	private void Die()
+	{
 		StopAllCoroutines();
-		
+
 		EventSystem.Current.FireEvent(new EnemyDeathEvent(gameObject, maxHealth));
 
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
@@ -281,7 +335,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 		//Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
 
-	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch) {
+	public void PlayAudio(int clipIndex, float volume, float minPitch, float maxPitch)
+	{
 		audioSource.pitch = Random.Range(minPitch, maxPitch);
 		audioSource.PlayOneShot(audioClips[clipIndex], volume);
 	}
@@ -302,7 +357,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// Implements ICapturable, ran on checkpoint load.
 	/// </summary>
 	/// <param name="wasEnabled">Whether or not the loading of the GameObject resulted in it being enabled.</param>
-	public void OnLoad(bool wasEnabled) {
+	public void OnLoad(bool wasEnabled)
+	{
 		if (!wasEnabled) UnRegEventListeners();
 	}
 
@@ -310,7 +366,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
 	/// </summary>
 	/// <returns></returns>
-	public object GetPersistentCaptureID() {
+	public object GetPersistentCaptureID()
+	{
 		return Origin;
 	}
 
