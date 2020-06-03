@@ -1,11 +1,10 @@
-﻿using UnityEditor.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Co-Authors: Erik Pilström, Viktor Dahlberg, Joakim Linna
 public class PlayerController : MonoBehaviour, IEntity {
 
 	[SerializeField] [Tooltip("The player's possible states.")] private State[] states;
-	[SerializeField] [Tooltip("The player's camera.")] private PlayerCamera cam;
 	[SerializeField] [Tooltip("The player's HUD.")] private PlayerHud playerHud;
 	[SerializeField] private AudioClip[] audioClips;
 	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
@@ -14,6 +13,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
+	[Header("Debug")]
+	[SerializeField] private bool godMode;
 
 	/// <summary>
 	/// Singleton
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public static PlayerController Instance;
 
 	private StateMachine stateMachine;
+	private PlayerCamera cam;
 
 	/// <summary>
 	/// Returns the player's current health, but can never be set from outside the player script.
@@ -52,7 +54,16 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void OnEnable() {
-		if (Instance == null) Instance = this;
+		if (Instance == null) 
+		{ 
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+			SceneManager.sceneLoaded += OnSceneLoaded;
+
+			if (cam == null) { CreateCamera(); }
+		}
+		else if (Instance != this) Destroy(gameObject);
+
 	}
 
 	private void Start() {
@@ -60,6 +71,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PhysicsBody = GetComponent<PhysicsBody>();
 		Input = new CurrentInput();
 		stateMachine = new StateMachine(this, states);
+
 		/*audioPlayerIdle = gameObject.AddComponent<AudioSource>();
 		audioPlayerIdle.loop = true;
 		audioPlayerIdle.clip = audioClips[0];*/
@@ -74,8 +86,6 @@ public class PlayerController : MonoBehaviour, IEntity {
 		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 		playerAnimator.SetFloat("Speed", animVertical);
 		playerAnimator.SetFloat("Direction", animHorizontal);
-		float yRot = cam.transform.rotation.eulerAngles.y;
-		transform.rotation = Quaternion.Euler(0, yRot, 0);
 		Input.doJump = false;
 		Input.doDash = false;
 	}
@@ -85,6 +95,19 @@ public class PlayerController : MonoBehaviour, IEntity {
 		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
 		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+	}
+
+	private void LateUpdate()
+	{
+		//K: Moved these here so it's not as choppy
+		float yRot = cam.transform.rotation.eulerAngles.y;
+		transform.rotation = Quaternion.Euler(0, yRot, 0);
+		//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+	}
+
+	private void CreateCamera()
+	{
+		cam = Instantiate(Resources.Load("Player/PlayerCamera") as GameObject, transform.position, Quaternion.identity).GetComponent<PlayerCamera>();
 	}
 
 	/// <summary>
@@ -111,10 +134,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 	/// Makes the player take damage. Implements <c>IEntity.TakeDamage()</c>.
 	/// </summary>
 	/// <param name="amount">The amount of damage the player will take.</param>
-	public float TakeDamage(float amount) {
+	public float TakeDamage(float amount, DamageType damageType) {
 		playerHud.FlashColor(new Color(1, 0, 0, 0.5f));
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
-		PlayerCurrentHealth -= amount;
+		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
 			Die();
 		return PlayerCurrentHealth;
@@ -137,5 +160,26 @@ public class PlayerController : MonoBehaviour, IEntity {
 	public void PlayAudioPitched(int clipIndex, float volume, float minPitch, float maxPitch) {
 		audioSourceMain.pitch = Random.Range(minPitch, maxPitch);
 		audioSourceMain.PlayOneShot(audioClips[clipIndex], volume);
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
+		{
+			transform.position = PlayerSpawn.Instance.Position;
+
+			if(cam == null) { CreateCamera(); }
+
+			cam.InjectSetRotation(PlayerSpawn.Instance.Rotation.eulerAngles.x, PlayerSpawn.Instance.Rotation.eulerAngles.y);
+		}
+	}
+
+	void OnDestroy()
+	{
+		if (Instance == this)
+		{
+			SceneManager.sceneLoaded -= OnSceneLoaded;
+			Instance = null;
+		}
 	}
 }

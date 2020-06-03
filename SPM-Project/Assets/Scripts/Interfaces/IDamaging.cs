@@ -6,7 +6,13 @@ using UnityEngine;
 //Co Author: Joakim Linna
 
 public interface IDamaging {
-
+	
 	float GetDamage();
-	float GetExplosionDamage(Vector3 explosionCenter, Vector3 hitPos);
+}
+
+public enum DamageType
+{
+	Bullet,
+	Explosive,
+	Instant
 }

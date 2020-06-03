@@ -12,6 +12,7 @@ public class CheckPoint : MonoBehaviour, ICapturable {
 	private void CaptureMoment() {
 		gameObject.SetActive(false);
 		CaptureKeeper.NewLevel = false;
+		CaptureKeeper.LevelHasBeenCaptured = true;
 		CaptureKeeper.CreateCapture(this);
 	}
 

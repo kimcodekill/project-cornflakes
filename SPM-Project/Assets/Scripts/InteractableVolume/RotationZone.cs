@@ -6,9 +6,8 @@ public class RotationZone : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
-			other.gameObject.GetComponentInChildren<PlayerCamera>().InjectSetRotation(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y);
+			PlayerCamera.Instance.InjectSetRotation(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y);
 			gameObject.SetActive(false);
 		}
 	}
-
 }

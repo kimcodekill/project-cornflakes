@@ -16,21 +16,25 @@ public static class CaptureKeeper {
 			public Quaternion rotation;
 			public float health;
 			public int currentWeapon;
-		}
-		public struct WeaponStats {
-			public Weapon weapon;
-			public int ammoInMagazine;
-			public int ammoInReserve;
+			public float score;
+			public float startTime;
 		}
 		public PlayerStats Player;
-		public List<WeaponStats> Weapons;
+		public List<Weapon> Weapons;
 		public List<object> DichotomousGameObjects;
 	}
 
 	private static List<Capture> captures;
 
-
+	/// <summary>
+	/// If a scene load was triggered by a level transition rather than a death.
+	/// </summary>
 	public static bool NewLevel { get; set; }
+
+	/// <summary>
+	/// If this scene has been captured at least once
+	/// </summary>
+	public static bool LevelHasBeenCaptured { get; set; }
 
 	#endregion
 
@@ -38,34 +42,59 @@ public static class CaptureKeeper {
 
 	/// <summary>
 	/// Loads the latest capture.
+	/// If the current level is a new one we don't load weapons and dichotomous GameObjects.
 	/// </summary>
 	public static void LoadLatestCapture() {
 		if (captures == null) return;
 		Capture latestCapture = captures[captures.Count - 1];
-		LoadWeaponCapture(latestCapture.Weapons);
-		LoadPlayerCapture(latestCapture.Player);
-		if (!NewLevel) LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
+		if (!NewLevel) {
+			LoadWeaponCapture(latestCapture.Weapons);
+			LoadPlayerCapture(latestCapture.Player);
+		}
+		if (LevelHasBeenCaptured) {
+			LoadDichotomousGameObjectCapture(latestCapture.DichotomousGameObjects);
+		}
+		NewLevel = false;
 	}
 
+	/// <summary>
+	///	Sets the player position, rotation and current weapon according to the last checkpoint.
+	///	If a new scene is loaded, only the current weapon is set.
+	/// </summary>
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
-		if (!NewLevel) playerGameObject.transform.position = player.position;
-		if (!NewLevel) Camera.main.GetComponent<PlayerCamera>().InjectRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+		if (!NewLevel) {
+			playerGameObject.transform.position = player.position;
+			PlayerCamera.Instance.InjectSetRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
+		}
 		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
+		PlayerHud.Instance.ScoreHandler.Score = player.score;
+		PlayerHud.Instance.ScoreHandler.StartTime = player.startTime;
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);
 	}
 
-	private static void LoadWeaponCapture(List<Capture.WeaponStats> weapons) {
+	/// <summary>
+	/// Removes the players old weapons and replaces them with the ones equipped by the last checkpoint.
+	/// </summary>
+	private static void LoadWeaponCapture(List<Weapon> weapons) {
+		PlayerWeapon.Instance.ResetInventory();
+
 		for (int i = 0; i < weapons.Count; i++) {
-			Weapon weapon = weapons[i].weapon;
-			weapon.enabled = true;
-			weapon.Initialize();
-			weapon.AmmoInMagazine = weapons[i].ammoInMagazine;
-			weapon.AmmoInReserve = weapons[i].ammoInReserve;
-			PlayerWeapon.Instance.PickUpWeapon(weapon);
+			//Instantiate because we don't want the player to be able to modify captured weapons.
+			Weapon w = Object.Instantiate(weapons[i]);
+			w.Initialize(weapons[i].AmmoInMagazine, weapons[i].AmmoInReserve);
+			PlayerWeapon.Instance.PickUpWeapon(w);
 		}
+
+		//K: no better place to do this
+		if (PlayerWeapon.Instance.GetWeapons().Count == 0) { Reticle.Instance.Init(); }
 	}
 
+	/// <summary>
+	/// Disables dichotomous GameObjects according to their state by the last checkpoint.
+	/// Dichotomous - "dividing into two parts", a.k.a. we only care if these GameObjects are enabled or not,
+	/// no other information about them is saved.
+	/// </summary>
 	private static void LoadDichotomousGameObjectCapture(List<object> capturedGameObjects) {
 		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
 		for (int i = 0; i < gameObjects.Length; i++) {
@@ -97,21 +126,19 @@ public static class CaptureKeeper {
 			position = checkPointPosition,
 			rotation = checkPointRotation,
 			health = player.GetComponent<PlayerController>().PlayerCurrentHealth,
-			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon)
+			currentWeapon = PlayerWeapon.Instance.GetWeapons().IndexOf(PlayerWeapon.Instance.CurrentWeapon),
+			score = PlayerHud.Instance.ScoreHandler.Score,
+			startTime = PlayerHud.Instance.ScoreHandler.StartTime
 		}; 
 	}
 
-	private static List<Capture.WeaponStats> CaptureWeapons() {
-		List<Capture.WeaponStats> capturedWeapons = new List<Capture.WeaponStats>();
+	private static List<Weapon> CaptureWeapons() {
+		List<Weapon> capturedWeapons = new List<Weapon>();
 		List<Weapon> weapons = new List<Weapon>(PlayerWeapon.Instance.GetWeapons().ToArray());
 		for (int i = 0; i < weapons.Count; i++) {
-			Weapon w = weapons[i];
-			Object.DontDestroyOnLoad(w);
-			capturedWeapons.Add(new Capture.WeaponStats() {
-				weapon = w,
-				ammoInMagazine = weapons[i].AmmoInMagazine,
-				ammoInReserve = weapons[i].AmmoInReserve
-			});
+			Weapon w = Object.Instantiate(weapons[i]);
+			w.Initialize(weapons[i].AmmoInMagazine, weapons[i].AmmoInReserve);
+			capturedWeapons.Add(w);
 		}
 		return capturedWeapons;
 	}
@@ -144,21 +171,12 @@ public static class CaptureKeeper {
 	/// Removes all captures.
 	/// </summary>
 	public static void ClearCaptures() {
-		DestroyDontDestroyOnLoad();
 		captures = null;
 	}
 
 	#endregion
 
 	#region Helper Functions
-
-	private static void DestroyDontDestroyOnLoad() {
-		for (int i = 0; i < captures.Count; i++) {
-			for (int j = 0; j < captures.Count; j++) {
-				Object.Destroy(captures[i].Weapons[j].weapon.gameObject);
-			}
-		}
-	}
 
 	public static bool HasCapture() {
 		return captures != null && captures.Count > 0;
