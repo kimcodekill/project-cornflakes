@@ -3139,25 +3139,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4973509121775103993}
     m_Modifications:
+    - target: {fileID: 7726600148095561929, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
+        type: 3}
+      propertyPath: SoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: a96598606692bdd4b87737fc35f39c3d, type: 3}
     - target: {fileID: 8907849549593637676, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
         type: 3}
       propertyPath: m_Name
-      value: LobbyDialog
+      value: DistressDialog
       objectReference: {fileID: 0}
     - target: {fileID: 8907849549593637681, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.34
+      value: -9.99
       objectReference: {fileID: 0}
     - target: {fileID: 8907849549593637681, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.8
+      value: -279.11
       objectReference: {fileID: 0}
     - target: {fileID: 8907849549593637681, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 35.54
+      value: 92.16
       objectReference: {fileID: 0}
     - target: {fileID: 8907849549593637681, guid: 6df1bf6c3a9c97d4db50b75dc3aab997,
         type: 3}
