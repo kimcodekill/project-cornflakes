@@ -276,6 +276,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 
 		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
 		StopAllCoroutines();
+		UnRegEventListeners();
 		gameObject.transform.parent.gameObject.SetActive(false);
 		//Destroy(gameObject.transform.parent.gameObject, 2f);
 	}
@@ -312,4 +313,8 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	public object GetPersistentCaptureID() {
 		return Origin;
 	}
+
+	protected virtual void RegEventListeners() { }
+
+	public virtual void UnRegEventListeners() { }
 }

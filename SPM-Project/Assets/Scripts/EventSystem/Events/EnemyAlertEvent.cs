@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AggroTriggerEvent : Event
+public class EnemyAlertEvent : Event
 {
-	public EnemyBase Entity;
+	public EnemyBase AlertedEnemy;
 }

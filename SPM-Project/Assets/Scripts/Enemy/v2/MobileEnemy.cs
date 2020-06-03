@@ -26,8 +26,7 @@ public class MobileEnemy : EnemyBase
 	}
 
 	protected new void Start() {
-		EventSystem.Current.RegisterListener<EnemyHurt>(WasHurt);
-		EventSystem.Current.RegisterListener<EnemyHurt>(ReactToNearbyHurtEnemy);
+		RegEventListeners();
 		wasHurtRecently = false;
 		agent.speed = agentMoveSpeed;
 		base.Start();
@@ -100,15 +99,14 @@ public class MobileEnemy : EnemyBase
 	private void ReceiveAlert() {
 		StopAllCoroutines();
 		StartCoroutine(GradualLookAtPlayer());
-		//visionRange = 100f;
 	}
 
 	public void ReactToNearbyHurtEnemy(Event e) {
-		EnemyHurt he = (EnemyHurt)e;
-	if (!he.Entity.Equals(this) && this.gameObject.activeInHierarchy == true) {
-			float distance = Vector3.Distance(transform.position, he.Entity.gameObject.transform.position);
+		EnemyAlertEvent eae = (EnemyAlertEvent)e;
+	if (!eae.AlertedEnemy.Equals(this) /*&& this.gameObject.activeInHierarchy == true*/) {
+			float distance = Vector3.Distance(transform.position, eae.AlertedEnemy.gameObject.transform.position);
 			if (distance < alertRange) {
-				if (CanSeeTarget(GetVectorFromAtoB(transform, he.Entity.gameObject.transform))) {
+				if (CanSeeTarget(GetVectorFromAtoB(transform, eae.AlertedEnemy.gameObject.transform))) {
 					ReceiveAlert();
 					StartCoroutine(WaitToSeePlayer());
 				}
@@ -123,4 +121,13 @@ public class MobileEnemy : EnemyBase
 		}
 	}
 
+	protected override void RegEventListeners() {
+		EventSystem.Current.RegisterListener<EnemyHurt>(WasHurt);
+		EventSystem.Current.RegisterListener<EnemyAlertEvent>(ReactToNearbyHurtEnemy);
+	}
+
+	public override void UnRegEventListeners() {
+		EventSystem.Current.UnRegisterListener<EnemyAlertEvent>(ReactToNearbyHurtEnemy);
+		EventSystem.Current.UnRegisterListener<EnemyHurt>(WasHurt);
+	}
 }

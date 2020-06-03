@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 60
+  maxHealth: 50
   fieldOfView: 90
   visionRange: 40
   attackRange: 30
@@ -331,7 +331,7 @@ MonoBehaviour:
     m_Bits: 1536
   attackDamage: 5
   attackSpread: 5
-  attackSpeedRPM: 60
+  attackSpeedRPM: 120
   audioSource: {fileID: 0}
   audioSourceIdle: {fileID: 0}
   audioClips:

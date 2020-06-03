@@ -8,7 +8,7 @@ public class EnemyAlertedState : EnemyBaseState
 {
 	public override void Enter() {
 		Enemy.StartAlertedBehaviour();
-		
+		EventSystem.Current.FireEvent(new EnemyAlertEvent() { AlertedEnemy = Enemy });
 	}
 
 	public override void Run() {
