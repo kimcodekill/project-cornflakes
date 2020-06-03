@@ -960,6 +960,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 823115784}
     m_Modifications:
+    - target: {fileID: 204948523086988012, guid: 318ea9a4b5f347f468e6aceed8423533,
+        type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 228398004031177133, guid: 318ea9a4b5f347f468e6aceed8423533,
         type: 3}
       propertyPath: m_LocalPosition.x
