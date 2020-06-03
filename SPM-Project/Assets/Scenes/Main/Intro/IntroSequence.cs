@@ -36,7 +36,7 @@ public class IntroSequence : MonoBehaviour
         {
             StartCoroutine(SkipConfirmation());
         }
-        if (timeDelay < 3 && Input.GetKeyDown("space"))
+        if (timeDelay < 2.5 && Input.GetKeyDown("space"))
         {
             EndIntro();
         }
