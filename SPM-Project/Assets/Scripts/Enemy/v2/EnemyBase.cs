@@ -14,7 +14,6 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable
 
 	[Header("Sight vars")]
 	[SerializeField] [Tooltip("This enemy's sight cone's angle in degrees.")] private float fieldOfView;
-	private float defaultFoV;
 	[SerializeField] [Tooltip("How far this enemy should see.")] protected float visionRange;
 	protected float defaultVisionRange;
 	[SerializeField] [Tooltip("This enemy's maximum attack range.")] protected float attackRange;
@@ -96,7 +95,6 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable
 
 		isInCombat = false;
 		defaultVisionRange = visionRange;
-		defaultFoV = fieldOfView;
 	}
 
 	protected void Update()

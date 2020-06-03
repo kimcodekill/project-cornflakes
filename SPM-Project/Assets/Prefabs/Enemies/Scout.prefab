@@ -168,10 +168,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 35
+  maxHealth: 40
   fieldOfView: 120
-  visionRange: 40
-  attackRange: 20
+  visionRange: 30
+  attackRange: 30
   attackLimitDegrees: 10
   gunTransformPosition: {fileID: 663984045107055322}
   eyeTransformPosition: {fileID: 8556027833789450193}

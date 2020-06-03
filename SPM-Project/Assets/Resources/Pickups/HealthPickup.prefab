@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runTimeSpawnedPickupLifeTime: 10
-  healAmount: 25
+  healAmount: 20
   spawnedHealthPercentageRange:
-    min: 0.05
-    max: 0.1
+    min: 0.07
+    max: 0.12
