@@ -8106,11 +8106,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectPooler
       objectReference: {fileID: 0}
-    - target: {fileID: 4202951134478951637, guid: c9aed765c2e5706498fecfb69b59b85b,
-        type: 3}
-      propertyPath: pools.Array.data[0].size
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9aed765c2e5706498fecfb69b59b85b, type: 3}
 --- !u!1001 &1131368054

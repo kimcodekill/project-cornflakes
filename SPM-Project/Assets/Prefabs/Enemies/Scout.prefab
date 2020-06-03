@@ -124,11 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 2048
-  lineDuration: 0
-  useBulletProjectile: 1
   targetLeadFactor: 0.5
 --- !u!114 &7412699606268757047
 MonoBehaviour:

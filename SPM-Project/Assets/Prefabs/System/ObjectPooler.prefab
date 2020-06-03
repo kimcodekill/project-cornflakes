@@ -47,4 +47,4 @@ MonoBehaviour:
   - tag: EnemyBullet
     prefab: {fileID: 8805001218220254843, guid: ba6cc810ed13e604b8b7cc015bbb83a9,
       type: 3}
-    size: 10
+    size: 250

@@ -12,13 +12,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	private float damagePerShot;
 	private float weaponSpread;
 	private float attackRange;
-	[SerializeField] [Tooltip("Needs to check for collision with the player, thus needs the layer for the player.")] private LayerMask playerLayer;
-	private LineRenderer shotLine;
-	[SerializeField] [Tooltip ("For how long should the LineRenderer be drawn? Only applies to Raycast attacks.")] private float lineDuration;
-	//[SerializeField] [Tooltip("Which Bullet gameobject to instantiate.")] private Bullet bulletPrefab;
-	[SerializeField] [Tooltip ("Determines whether or not this weapon shoots bullet projectiles or raycasts.")] private bool useBulletProjectile;
-	[SerializeField] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
-	//^ Needs to be moved from this class to the Enemy to keep things centralised. Pass through SetParams() instead.
+	[SerializeField] [Range (0,1)] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
 	private Vector3 previousTargetDir;
 
 	/// <summary>
@@ -39,8 +33,6 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	private void Start() {
-		shotLine = GetComponent<LineRenderer>();
-		shotLine.enabled = false;
 		targetLeadFactor = Mathf.Clamp(targetLeadFactor, 0f, 1f);
 	}
 
@@ -81,24 +73,11 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	public void DoAttack() {
 		owner.PlayAudio(4, 1, 0.8f, 1.3f);
 		Vector3 attackVector = owner.GetVectorFromAtoB(owner.gunTransformPosition, owner.Target.transform);
-		if (useBulletProjectile) {
-			Vector3 collatedAttackVector = LeadTarget(attackVector);
-			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
-			GameObject bullet = ObjectPooler.Instance.SpawnFromPool("EnemyBullet", owner.gunTransformPosition.position, Quaternion.identity);
-			bullet.GetComponent<Bullet>().Initialize(owner.gunTransformPosition.position + spreadedAttack, this);
-		}
-		if (!useBulletProjectile) {
-			Vector3 spreadedAttack = RandomInCone(weaponSpread, attackVector.normalized) * attackRange;
-			shotLine.SetPosition(0, owner.gunTransformPosition.position);
-			shotLine.SetPosition(1, owner.gunTransformPosition.position + spreadedAttack);
-			if (Physics.Raycast(owner.gunTransformPosition.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
-				if (hit.collider.gameObject.GetComponent<PlayerController>()) {
-					shotLine.SetPosition(1, hit.point);
-					EventSystem.Current.FireEvent(new DamageEvent(owner.Target.gameObject.GetComponent<IEntity>(), this));
-				}
-			}
-		//StartCoroutine(RaycastShotEffect());
-		}
+
+		Vector3 collatedAttackVector = LeadTarget(attackVector);
+		Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
+		GameObject bullet = ObjectPooler.Instance.SpawnFromPool("EnemyBullet", owner.gunTransformPosition.position, Quaternion.identity);
+		bullet.GetComponent<Bullet>().Initialize(owner.gunTransformPosition.position + spreadedAttack, this);
 	}
 
 	private Vector3 LeadTarget(Vector3 attackVector) {
@@ -131,10 +110,5 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		return pointOnSphericalCap;
 	}
 
-	private IEnumerator RaycastShotEffect() {
-		shotLine.enabled = true;
-		yield return new WaitForSeconds(lineDuration);
-		shotLine.enabled = false;
-	}
 }
 

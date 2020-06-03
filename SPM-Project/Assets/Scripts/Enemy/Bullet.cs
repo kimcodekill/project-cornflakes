@@ -13,8 +13,6 @@ public class Bullet : MonoBehaviour {
 	private EnemyWeaponBase owner; //The weapon that fired this bullet.
 	private GameObject player;
 
-	public float ProjectileSpeed { get => projectileSpeed; }
-
 	/// <summary>
 	/// Gives the Bullet some number of starting values through parameters.
 	/// </summary>
@@ -31,10 +29,9 @@ public class Bullet : MonoBehaviour {
 		player = PlayerController.Instance.gameObject;
 	}
 
-	//The bullet is moved, and does collision detection, in FixedUpdate for better consistency and reduced performance overhead.
 	private void Update() {
 		RaycastHit hit;
-		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
+		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * projectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
 			if (hit.collider.gameObject.Equals(player)){
 				EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), owner) );
 			}
@@ -43,7 +40,7 @@ public class Bullet : MonoBehaviour {
 			//Destroy(hitGO, 0.5f);
 			gameObject.SetActive(false);
 		}
-		transform.position += travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime;
+		transform.position += travelVector.normalized * projectileSpeed * Time.fixedDeltaTime;
 	}
 
 }
