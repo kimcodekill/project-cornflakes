@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -82,8 +83,14 @@ public class PlayerHud : MonoBehaviour
 	}
 
 	public void ResetCarriedWeaponsUI(Scene s, LoadSceneMode lsm) {
+		List<Weapon> weps = PlayerWeapon.Instance.GetWeapons();
 		for (int i = 0; i < carriedWeapons.Length; i++) {
-			carriedWeapons[i].gameObject.SetActive(false);
+			Weapon w;
+			try {
+				w = weps[i];
+			} catch (ArgumentException) {
+				carriedWeapons[i].gameObject.SetActive(false);
+			}
 		}
 	}
 
