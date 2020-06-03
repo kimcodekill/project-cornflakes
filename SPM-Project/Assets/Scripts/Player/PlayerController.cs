@@ -86,8 +86,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 			stateMachine.Run();
 			animVertical = UnityEngine.Input.GetAxis("Vertical");
 			animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
-			playerAnimator.SetFloat("Speed", animVertical);
-			//playerAnimator.SetFloat("Direction", animHorizontal);
+			playerAnimator.SetFloat("Speed", animVertical == 0f ? Mathf.Abs(animHorizontal) : animVertical);
 			Input.doJump = false;
 			Input.doDash = false;
 		}
