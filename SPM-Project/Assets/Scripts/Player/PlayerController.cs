@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 			animVertical = UnityEngine.Input.GetAxis("Vertical");
 			animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 			playerAnimator.SetFloat("Speed", animVertical);
-			playerAnimator.SetFloat("Direction", animHorizontal);
+			//playerAnimator.SetFloat("Direction", animHorizontal);
 			Input.doJump = false;
 			Input.doDash = false;
 		}
