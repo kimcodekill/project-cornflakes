@@ -70,9 +70,7 @@ public abstract class Pickup : MonoBehaviour, ICapturable, ISpawnable {
 	/// <returns>Whether or not the pickup is valid.</returns>
 	protected virtual bool IsValid(Collider other) { return true; }
 
-	public bool InstanceIsCapturable() {
-		return true;
-	}
+	public void OnLoad(bool wasEnabled) { }
 
 	public object GetPersistentCaptureID() {
 		return transform.position;

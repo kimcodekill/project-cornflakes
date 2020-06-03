@@ -299,11 +299,11 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable {
 	public virtual void StopSearchBehaviour() { }
 
 	/// <summary>
-	/// Implements ICaptureable interface so that the enemy can be saved by the checkpoint system.
+	/// Implements ICapturable, ran on checkpoint load.
 	/// </summary>
-	/// <returns></returns>
-	public bool InstanceIsCapturable() {
-		return true;
+	/// <param name="wasEnabled">Whether or not the loading of the GameObject resulted in it being enabled.</param>
+	public void OnLoad(bool wasEnabled) {
+		if (!wasEnabled) UnRegEventListeners();
 	}
 
 	/// <summary>

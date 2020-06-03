@@ -5,6 +5,13 @@ using UnityEngine;
 //Author: Viktor Dahlberg
 public static class CaptureKeeper {
 
+	#region Helper Variables
+
+	private static readonly bool Enabled = true;
+	private static readonly bool Disabled = false;
+
+	#endregion
+
 	#region Bookkeeping
 
 	/// <summary>
@@ -99,7 +106,13 @@ public static class CaptureKeeper {
 		GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
 		for (int i = 0; i < gameObjects.Length; i++) {
 			ICapturable ic = gameObjects[i].GetComponent<ICapturable>();
-			if (ic != null && ic.InstanceIsCapturable() && !capturedGameObjects.Contains(ic.GetPersistentCaptureID())) gameObjects[i].SetActive(false);
+			if (ic != null) {
+				if (!capturedGameObjects.Contains(ic.GetPersistentCaptureID())) {
+					ic.OnLoad(Disabled);
+					gameObjects[i].SetActive(false);
+				}
+				else ic.OnLoad(Enabled);
+			}
 		}
 	}
 
@@ -148,7 +161,7 @@ public static class CaptureKeeper {
 		List<object> capturedGameObjects = new List<object>();
 		for (int i = 0; i < gameObjects.Length; i++) {
 			ICapturable ic = gameObjects[i].GetComponent<ICapturable>();
-			if (ic != null && ic.InstanceIsCapturable()) {
+			if (ic != null) {
 				capturedGameObjects.Add(ic.GetPersistentCaptureID());
 			}
 		}

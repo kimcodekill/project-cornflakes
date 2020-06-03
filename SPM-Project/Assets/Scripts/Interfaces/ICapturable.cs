@@ -10,10 +10,10 @@ using UnityEngine;
 public interface ICapturable {
 
 	/// <summary>
-	/// If this returns false, the instance of the class won't be captured, despite the class implementing the interface.
+	/// Ran on checkpoint load.
 	/// </summary>
-	/// <returns>Whether or not this object should be captured.</returns>
-	bool InstanceIsCapturable();
+	/// <param name="wasEnabled">Whether or not the loading of the GameObject resulted in it being enabled.</param>
+	void OnLoad(bool wasEnabled);
 
 	/// <summary>
 	/// Some form of UUID that can be associated with one and only GameObject at any time.
