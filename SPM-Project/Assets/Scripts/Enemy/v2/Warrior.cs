@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class Warrior : NavMeshEnemy
+public class Warrior : NavMeshEnemy, ILootable
 {
 
 	private new void Start() {
@@ -120,10 +120,10 @@ public class Warrior : NavMeshEnemy
 
 	public LootTable GetLootTable() {
 		return new LootTable {
-			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
-			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.3f : 0f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 1f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.5f : 0f,
 			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.2f : 0f,
-			[LootTable.Nothing] = 0.8f,
+			[LootTable.Nothing] = 0.0f,
 		};
 	}
 

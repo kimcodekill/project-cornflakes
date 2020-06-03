@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //Author: Erik Pilström
-public class Scout : NavMeshEnemy
+public class Scout : NavMeshEnemy, ILootable
 {
 	[SerializeField] [Tooltip("What radius the Scout should use for avoidance while searching.")] private float searchingAvoidanceRadius;
 
@@ -155,11 +155,10 @@ public class Scout : NavMeshEnemy
 
 	public LootTable GetLootTable() {
 		return new LootTable {
-			["Pickups/HealthPickup"] = 0.4f,
-			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.3f : 0f,
-			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.15f : 0f,
+			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.4f : 0f,
+			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.2f : 0f,
 			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.2f : 0f,
-			[LootTable.Nothing] = 0.8f,
+			[LootTable.Nothing] = 0.5f,
 		};
 	}
 
