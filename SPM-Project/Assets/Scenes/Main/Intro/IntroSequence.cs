@@ -21,6 +21,14 @@ public class IntroSequence : MonoBehaviour
         fadeImage.active = true;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            EndIntro();
+        }
+    }
+
     private IEnumerator IntroCoroutine()
     {
         audioSource.Play();
@@ -54,6 +62,11 @@ public class IntroSequence : MonoBehaviour
         fadeImage.GetComponent<Image>().CrossFadeAlpha(1f, 1.8f, true);
         dialogBox.active = false;
         yield return new WaitForSecondsRealtime(1.8f);
+        EndIntro();
+    }
+
+    private void EndIntro()
+    {
         EventSystem.Current.FireEvent(new LevelEndEvent()
         {
             Description = "Intro sequence finished"
