@@ -68,7 +68,7 @@ public static class CaptureKeeper {
 			playerGameObject.transform.position = player.position;
 			PlayerCamera.Instance.InjectSetRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		}
-		if (PlayerController.Instance.PlayerCurrentHealth < minHealth) PlayerController.Instance.PlayerCurrentHealth = minHealth;
+		if (player.health < minHealth) PlayerController.Instance.PlayerCurrentHealth = minHealth;
 		else PlayerController.Instance.PlayerCurrentHealth = player.health;
 		PlayerHud.Instance.ScoreHandler.Score = player.score;
 		PlayerHud.Instance.ScoreHandler.StartTime = player.startTime;
