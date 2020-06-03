@@ -11,13 +11,16 @@ public class VolumeSlider : MonoBehaviour {
     [HideInInspector] public Slider slider;
     
     public void Awake() {
-        transform.root.GetComponent<MenuScript>().volumeSliders.Add(this);
+        MenuScript rootMenu = transform.root.GetComponent<MenuScript>();
+        if (rootMenu != null) {rootMenu.volumeSliders.Add(this); }
+
         slider = gameObject.GetComponent<Slider>();
         slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        SetInitialValue();
     }
 
     public void SetInitialValue() {
-		slider.value = PlayerPrefs.GetFloat(exposedParameter);
+		slider.value = PlayerPrefs.GetFloat(exposedParameter, 1f);
 		audioMixer.SetFloat(exposedParameter, Mathf.Log10(slider.value) * 20);
     }
 

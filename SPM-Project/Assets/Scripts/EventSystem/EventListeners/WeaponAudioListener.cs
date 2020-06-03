@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioListener : MonoBehaviour {
+public class WeaponAudioListener : MonoBehaviour {
 
 	private void Start() {
 		EventSystem.Current.RegisterListener<WeaponReloadingEvent>(PlaySound);
