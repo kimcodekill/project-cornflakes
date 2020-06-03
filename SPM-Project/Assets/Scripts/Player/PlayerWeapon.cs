@@ -59,9 +59,13 @@ public class PlayerWeapon : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (weaponStateMachine != null) {
-			weaponStateMachine.Run();
-			DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
+		if (PauseMenu.GameRunning)
+		{
+			if (weaponStateMachine != null)
+			{
+				weaponStateMachine.Run();
+				DebugManager.UpdateRows("WeaponSTM", new int[] { 1, 2, 3 }, CurrentWeapon.ToString(), "Magazine: " + CurrentWeapon.AmmoInMagazine, "Reserve: " + CurrentWeapon.GetRemainingAmmoInReserve());
+			}
 		}
 	}
 

@@ -16,10 +16,11 @@ public class VolumeSlider : MonoBehaviour {
 
         slider = gameObject.GetComponent<Slider>();
         slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        SetInitialValue();
     }
 
     public void SetInitialValue() {
-		slider.value = PlayerPrefs.GetFloat(exposedParameter);
+		slider.value = PlayerPrefs.GetFloat(exposedParameter, 1f);
 		audioMixer.SetFloat(exposedParameter, Mathf.Log10(slider.value) * 20);
     }
 

@@ -1,22 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GamePaused;
+    public static bool GameRunning;
 
+    [Header("Panels")]
     [SerializeField] private GameObject pauseMenuPanel;
     [SerializeField] private GameObject settingsMenuPanel;
-    [SerializeField] private GameObject exitWarning;
+    [Obsolete("No current GameObject. Will throw nullref")]
+    [SerializeField] private GameObject exitWarning; 
+    [SerializeField] private GameObject playerHudPanel;
+    [Header("Audio")]
+    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private Toggle muteToggle;
+    [Header("Controls")]
+    [SerializeField] private Slider mouseSensitivity;
 
     private void Start()
     {
 #if UNITY_EDITOR
         CursorVisibility.Instance.IgnoreInput = true;
 #endif
+        muteToggle.SetIsOnWithoutNotify(PlayerPrefs.GetFloat("masterVolume", 0f) == -80f);
+        float s = PlayerPrefs.GetFloat("mouseSensitivity", 1f);
+        mouseSensitivity.SetValueWithoutNotify(s);
 
         Resume();
     }
@@ -31,8 +46,8 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePauseMenu()
     {
-        if(GamePaused) { Resume(); }
-        else { Pause(); }
+        if(GameRunning) { Pause(); }
+        else { Resume(); }
     }
 
     private void Pause()
@@ -40,15 +55,18 @@ public class PauseMenu : MonoBehaviour
         CursorVisibility.Instance.EnableCursor();
         Time.timeScale = 0f;
         pauseMenuPanel.SetActive(true);
-        GamePaused = true;
+        playerHudPanel.SetActive(false);
+        GameRunning = false;
     }
 
     private void Resume()
     {
         CursorVisibility.Instance.DisableCursor();
         Time.timeScale = 1f;
+        settingsMenuPanel.SetActive(false);
         pauseMenuPanel.SetActive(false);
-        GamePaused = false;
+        playerHudPanel.SetActive(true);
+        GameRunning = true;
     }
 
     public void ToggleSettingsMenu()
@@ -63,9 +81,23 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    public void SetSensitivity(float sensitivity)
+    {
+        PlayerPrefs.SetFloat("mouseSensitivity", sensitivity * 0.2f);
+    }
+
+    public void SetAudioMuted(bool mute)
+    {
+        audioMixer.SetFloat("masterVolume", mute ? -80 : 0);
+        PlayerPrefs.SetFloat("masterVolume", mute ? -80 : 0);
+    }
+
     public void ExitToMenu()
     {
-        Resume();
+        if (PlayerController.Instance != null) Destroy(PlayerController.Instance.gameObject);
+        CursorVisibility.Instance.EnableCursor();
+        Time.timeScale = 1f;
+        GameRunning = true;
         SceneManager.LoadScene(0);
     }
 
