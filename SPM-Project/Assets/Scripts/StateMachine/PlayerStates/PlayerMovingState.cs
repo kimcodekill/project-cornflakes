@@ -9,6 +9,7 @@ public class PlayerMovingState : PlayerGroundedState {
 
 	public override void Enter() {
 		Player.audioPlayerSteps.Play();
+		Player.playerAnimator.SetBool("Walking", true);
 
 		base.Enter();
 	}
@@ -19,12 +20,13 @@ public class PlayerMovingState : PlayerGroundedState {
 		else Player.PhysicsBody.AddForce(input * Acceleration, ForceMode.Acceleration);
 
 		Player.PhysicsBody.CapVelocity(TopSpeed);
-
+		
 		base.Run();
 	}
 
 	public override void Exit() {
 		Player.audioPlayerSteps.Stop();
+		Player.playerAnimator.SetBool("Walking", false);
 
 		base.Exit();
 	}

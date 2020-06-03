@@ -70,9 +70,8 @@ public static class CaptureKeeper {
 	/// </summary>
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
 		float minHealth = PlayerController.Instance.PlayerMaxHealth * 0.4f;
-		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
-		if (!NewLevel) {			
-			playerGameObject.transform.position = player.position;
+		if (!NewLevel) {
+			PlayerController.Instance.gameObject.transform.position = player.position;
 			PlayerCamera.Instance.InjectSetRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		}
 		if (player.health < minHealth) PlayerController.Instance.PlayerCurrentHealth = minHealth;

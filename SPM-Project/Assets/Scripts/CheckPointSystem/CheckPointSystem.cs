@@ -33,13 +33,13 @@ public class CheckPointSystem : MonoBehaviour {
 			NewGame = false;
 			CaptureKeeper.ClearCaptures();
 		}
-	}
-
-	private void OnSceneLoaded(Scene scene, LoadSceneMode lsm) {
-		if (lastSceneBuildIndex != scene.buildIndex) {
+		if (lastSceneBuildIndex != next.buildIndex) {
 			CaptureKeeper.NewLevel = true;
 			CaptureKeeper.LevelHasBeenCaptured = false;
 		}
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode lsm) {
 		CaptureKeeper.LoadLatestCapture();
 	}
 
