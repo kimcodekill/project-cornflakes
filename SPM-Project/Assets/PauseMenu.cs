@@ -100,6 +100,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ExitToMenu()
     {
+        AudioListener.pause = false;
         if (PlayerController.Instance != null) Destroy(PlayerController.Instance.gameObject);
         CursorVisibility.Instance.EnableCursor();
         Time.timeScale = 1f;
