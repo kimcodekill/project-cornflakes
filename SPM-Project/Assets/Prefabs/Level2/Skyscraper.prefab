@@ -72505,6 +72505,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpecialPickup
       objectReference: {fileID: 0}
+    - target: {fileID: 3769037659195360620, guid: 3746d56abc0603f46bb17350579e4835,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3746d56abc0603f46bb17350579e4835, type: 3}
 --- !u!4 &1620090441192224817 stripped
@@ -95679,6 +95684,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpecialPickup (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769037659195360620, guid: 3746d56abc0603f46bb17350579e4835,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3746d56abc0603f46bb17350579e4835, type: 3}
