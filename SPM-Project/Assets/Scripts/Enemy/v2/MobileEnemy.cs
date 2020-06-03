@@ -98,6 +98,7 @@ public class MobileEnemy : EnemyBase
 
 	private void ReceiveAlert() {
 		StopAllCoroutines();
+		agent.ResetPath();
 		StartCoroutine(GradualLookAtPlayer());
 	}
 

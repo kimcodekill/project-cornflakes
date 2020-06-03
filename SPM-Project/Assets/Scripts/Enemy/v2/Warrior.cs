@@ -46,7 +46,7 @@ public class Warrior : MobileEnemy
 	/// <returns></returns>
 	private IEnumerator Alerted() {
 		agent.destination = Target.transform.position;
-		while (!agent.pathPending && agent.remainingDistance > attackRange) {
+		while (!agent.pathPending && agent.remainingDistance > attackRange * 0.8f) {
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
