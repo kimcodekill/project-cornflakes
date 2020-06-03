@@ -21,17 +21,20 @@ public class PauseMenu : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Toggle muteToggle;
+    [SerializeField] private AudioClip buttonPressClip;
+    [SerializeField] private AudioClip buttonHoverClip;
     [Header("Controls")]
     [SerializeField] private Slider mouseSensitivity;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
-#if UNITY_EDITOR
+        audioSource = GetComponent<AudioSource>();
+
         CursorVisibility.Instance.IgnoreInput = true;
-#endif
         muteToggle.SetIsOnWithoutNotify(PlayerPrefs.GetFloat("masterVolume", 0f) == -80f);
-        float s = PlayerPrefs.GetFloat("mouseSensitivity", 1f);
-        mouseSensitivity.SetValueWithoutNotify(s);
+        mouseSensitivity.SetValueWithoutNotify(PlayerPrefs.GetFloat("mouseSensitivity", 1f));
 
         Resume();
     }
@@ -83,7 +86,7 @@ public class PauseMenu : MonoBehaviour
 
     public void SetSensitivity(float sensitivity)
     {
-        PlayerPrefs.SetFloat("mouseSensitivity", sensitivity * 0.2f);
+        PlayerPrefs.SetFloat("mouseSensitivity", sensitivity);
     }
 
     public void SetAudioMuted(bool mute)
@@ -107,5 +110,15 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Exited to desktop");
 #endif
         Application.Quit();
+    }
+
+    public void PlayButtonHover()
+    {
+        audioSource.PlayOneShot(buttonHoverClip);
+    }
+
+    public void PlayButtonClick()
+    {
+        audioSource.PlayOneShot(buttonPressClip);
     }
 }
