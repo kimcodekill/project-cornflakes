@@ -7,6 +7,7 @@ public class IntroSequence : MonoBehaviour
 {
     private AudioSource audioSource;
     [SerializeField] private GameObject fadeImage;
+    [SerializeField] private GameObject skipBox;
     [SerializeField] private AudioClip introClip;
     [SerializeField] private Text dialogText;
     [SerializeField] private GameObject dialogBox;
@@ -16,9 +17,10 @@ public class IntroSequence : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = introClip;
-        StartCoroutine(IntroCoroutine());
         dialogBox.active = false;
         fadeImage.active = true;
+        skipBox.active = false;
+        StartCoroutine(IntroCoroutine());
     }
 
     void Update()
@@ -32,11 +34,13 @@ public class IntroSequence : MonoBehaviour
     private IEnumerator IntroCoroutine()
     {
         audioSource.Play();
+        skipBox.active = true;
         yield return new WaitForSecondsRealtime(1f);
         fadeImage.GetComponent<Image>().CrossFadeAlpha(0, 5.0f, true);
         yield return new WaitForSecondsRealtime(2f);
         dialogText.GetComponent<Text>().text = "Five years";
         dialogBox.active = true;
+        skipBox.active = false;
         yield return new WaitForSecondsRealtime(1.5f);
         dialogText.GetComponent<Text>().text = "Five long years of war";
         yield return new WaitForSecondsRealtime(2.7f);

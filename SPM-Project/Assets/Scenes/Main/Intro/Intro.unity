@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 376109019}
   - component: {fileID: 376109021}
   - component: {fileID: 376109020}
+  - component: {fileID: 376109022}
   m_Layer: 5
   m_Name: skipBox
   m_TagString: Untagged
@@ -427,6 +428,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376109018}
   m_CullTransparentMesh: 0
+--- !u!114 &376109022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376109018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 682e68ffe1d3ea148aff53999809b44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &435269344
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,6 +907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 921684747}
+  skipBox: {fileID: 376109018}
   introClip: {fileID: 8300000, guid: 0b9a1452e334823468fb158032b47c13, type: 3}
   dialogText: {fileID: 435269346}
   dialogBox: {fileID: 5553214}
