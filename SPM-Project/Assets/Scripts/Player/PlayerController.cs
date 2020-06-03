@@ -10,9 +10,10 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
 	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
 	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
-	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	[SerializeField] public GameObject thrust1, thrust2, thrust3, dash1, dash2, dash3;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
+    private bool IsDying;
 	[Header("Debug")]
 	[SerializeField] private bool godMode;
 
@@ -147,18 +148,33 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
-			Die();
+            if (!IsDying)
+            {
+                Die();
+            }
+			
 		return PlayerCurrentHealth;
 	}
 
 	private void Die() {
 
-		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
-		EventSystem.Current.FireEvent(new PlayerDeadEvent()
-		{
-			Description = "Player fricking died, yo."
-		});
+        playerAnimator.SetTrigger("Dying");
+        Invoke("DoDie", 4);//playerAnimator.GetCurrentAnimatorClipInfo(5).Length);
+        IsDying = true;
+
 	}
+
+    private void DoDie() {
+
+        IsDying = false;
+
+        //Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
+        EventSystem.Current.FireEvent(new PlayerDeadEvent()
+        {
+
+            Description = "Player fricking died, yo."
+        });
+    }
 
 	public void PlayAudioMain(int clipIndex, float volume) {
 		audioSourceMain.pitch = 1;
