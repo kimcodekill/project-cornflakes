@@ -31,6 +31,7 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        audioSource.ignoreListenerPause = true;
 
         CursorVisibility.Instance.IgnoreInput = true;
         muteToggle.SetIsOnWithoutNotify(PlayerPrefs.GetFloat("masterVolume", 0f) == -80f);
@@ -55,6 +56,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Pause()
     {
+        AudioListener.pause = true;
         CursorVisibility.Instance.EnableCursor();
         Time.timeScale = 0f;
         pauseMenuPanel.SetActive(true);
@@ -64,6 +66,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Resume()
     {
+        AudioListener.pause = false;
         CursorVisibility.Instance.DisableCursor();
         Time.timeScale = 1f;
         settingsMenuPanel.SetActive(false);
