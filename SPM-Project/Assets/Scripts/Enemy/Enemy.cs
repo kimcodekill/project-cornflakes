@@ -39,8 +39,12 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	[HideInInspector] public AudioSource audioSourceIdle;
 	public AudioClip[] audioClips;
 	[SerializeField] private AudioMixerGroup mixerGroup;
+
 	private int minSoundDelay = 5;
 	private int maxSoundDelay = 10;
+	private int soundDelay;
+
+	private float soundStartTime = 0f;
 
 	/// <summary>
 	/// Returns this enemy's target.
@@ -67,6 +71,8 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	}
 
 	protected void Start() {
+		soundDelay = Random.Range(minSoundDelay, maxSoundDelay);
+
 		EnemyEquippedWeapon.SetParams(this, attackSpeedRPM, attackDamage, attackSpread, attackRange);
 		Target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
@@ -80,9 +86,16 @@ public class Enemy : MonoBehaviour, IEntity, ICapturable
 	protected void Update() {
 		vectorToPlayer = GetVectorToTarget(Target.transform, eyeTransform);
 		enemyStateMachine.Run();
-		if (audioSourceIdle.isPlaying == false) {
+	}
+
+	private void FixedUpdate()
+	{
+		if (audioSourceIdle.isPlaying == false && Time.time - soundStartTime > soundDelay)
+		{
 			audioSourceIdle.clip = audioClips[Random.Range(0, 4)];
-			audioSourceIdle.PlayDelayed(Random.Range(minSoundDelay, maxSoundDelay));
+			audioSourceIdle.Play();
+			soundStartTime = Time.time;
+			soundDelay = Random.Range(minSoundDelay, maxSoundDelay);
 		}
 	}
 
