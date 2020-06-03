@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("Audio Source component #1")] private AudioSource audioSourceMain;
 	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
 	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
-	[SerializeField] public GameObject thrust1, thrust2, dash1, dash2;
+	[SerializeField] public GameObject thrust1, thrust2, thrust3, dash1, dash2, dash3;
+	[SerializeField] [Tooltip("How long the player should be dead before game reloads")] private float deathTime = 3f;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
 	[Header("Debug")]
@@ -81,28 +82,36 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void FixedUpdate() {
-		stateMachine.Run();
-		animVertical = UnityEngine.Input.GetAxis("Vertical");
-		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
-		playerAnimator.SetFloat("Speed", animVertical);
-		playerAnimator.SetFloat("Direction", animHorizontal);
-		Input.doJump = false;
-		Input.doDash = false;
+		if (PauseMenu.GameRunning)
+		{
+			if (!playerAnimator.GetBool("Dying")) stateMachine.Run();
+			animVertical = UnityEngine.Input.GetAxis("Vertical");
+			animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+			playerAnimator.SetFloat("Speed", animVertical == 0f ? Mathf.Abs(animHorizontal) : animVertical);
+			Input.doJump = false;
+			Input.doDash = false;
+		}
 	}
 
 	private void Update() {
-		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
-		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
+		if (PauseMenu.GameRunning)
+		{
+			if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+			if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
-		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+			DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+		}
 	}
 
 	private void LateUpdate()
 	{
-		//K: Moved these here so it's not as choppy
-		float yRot = cam.transform.rotation.eulerAngles.y;
-		transform.rotation = Quaternion.Euler(0, yRot, 0);
-		//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+		if (PauseMenu.GameRunning)
+		{
+			//K: Moved these here so it's not as choppy
+			float yRot = cam.transform.rotation.eulerAngles.y;
+			if (!playerAnimator.GetBool("Dying")) transform.rotation = Quaternion.Euler(0, yRot, 0);
+			//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+		}
 	}
 
 	private void CreateCamera()
@@ -139,17 +148,21 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
-			Die();
+            if (!playerAnimator.GetBool("Dying")) Die();
 		return PlayerCurrentHealth;
 	}
 
 	private void Die() {
+        playerAnimator.SetBool("Dying", true);
+		Invoke("DoDie", deathTime);//playerAnimator.GetCurrentAnimatorClipInfo(5).Length);
+	}
 
-		//Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
-		EventSystem.Current.FireEvent(new PlayerDeadEvent()
-		{
-			Description = "Player fricking died, yo."
-		});
+    private void DoDie() {
+        //Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
+        EventSystem.Current.FireEvent(new PlayerDeadEvent()
+        {
+            Description = "Player fricking died, yo."
+        });
 	}
 
 	public void PlayAudioMain(int clipIndex, float volume) {
@@ -164,6 +177,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
+		playerAnimator.SetBool("Dying", false);
 		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
 		{
 			transform.position = PlayerSpawn.Instance.Position;
@@ -180,6 +194,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 			Instance = null;
+
+			if (cam != null) { Destroy(cam.gameObject); }
 		}
 	}
 }

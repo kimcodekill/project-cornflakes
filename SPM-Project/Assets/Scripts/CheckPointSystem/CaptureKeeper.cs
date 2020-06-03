@@ -62,12 +62,13 @@ public static class CaptureKeeper {
 	///	If a new scene is loaded, only the current weapon is set.
 	/// </summary>
 	private static void LoadPlayerCapture(Capture.PlayerStats player) {
-		GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
+		float minHealth = PlayerController.Instance.PlayerMaxHealth * 0.4f;
 		if (!NewLevel) {
-			playerGameObject.transform.position = player.position;
+			PlayerController.Instance.gameObject.transform.position = player.position;
 			PlayerCamera.Instance.InjectSetRotation(player.rotation.eulerAngles.x, player.rotation.eulerAngles.y);
 		}
-		playerGameObject.GetComponent<PlayerController>().PlayerCurrentHealth = player.health;
+		if (player.health < minHealth) PlayerController.Instance.PlayerCurrentHealth = minHealth;
+		else PlayerController.Instance.PlayerCurrentHealth = player.health;
 		PlayerHud.Instance.ScoreHandler.Score = player.score;
 		PlayerHud.Instance.ScoreHandler.StartTime = player.startTime;
 		if (player.currentWeapon != -1) PlayerWeapon.Instance.SwitchTo(player.currentWeapon);

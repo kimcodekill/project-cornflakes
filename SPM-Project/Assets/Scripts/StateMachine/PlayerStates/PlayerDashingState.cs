@@ -31,7 +31,8 @@ public class PlayerDashingState : PlayerState {
 	public override void Enter() {
 		Player.dash1.SetActive(true);
 		Player.dash2.SetActive(true);
-		Player.playerAnimator.SetTrigger("Dashing");
+        Player.dash3.SetActive(true);
+        Player.playerAnimator.SetTrigger("Dashing");
 		
 		charge = charge == null ? Player.GetComponent<Charge>() : charge;
 		
@@ -59,8 +60,9 @@ public class PlayerDashingState : PlayerState {
 	public override void Exit() {
 		Player.dash1.SetActive(false);
 		Player.dash2.SetActive(false);
-		
-		Player.PhysicsBody.SetAxisVelocity('y', 0f);
+        Player.dash3.SetActive(false);
+
+        Player.PhysicsBody.SetAxisVelocity('y', 0f);
 		Player.PhysicsBody.SetGravityEnabled(true);
 		dashed = false;
 		currentDashTime = 0f;

@@ -40,7 +40,8 @@ public abstract class PlayerState : State {
 	private void ToggleThrusters(bool enabled) {
 		Player.thrust1.SetActive(enabled);
 		Player.thrust2.SetActive(enabled);
-	}
+        Player.thrust3.SetActive(enabled);
+    }
 
 	[System.Serializable]
 	public struct Effects {

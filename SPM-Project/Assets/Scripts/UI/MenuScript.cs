@@ -29,6 +29,7 @@ public class MenuScript : MonoBehaviour {
 	private string name;
 
 	public void Awake() {
+		
 		SetPlayerPreferences("masterVolume", 0f);
 		SetPlayerPreferences("ambienceVolume", 1f);
 		SetPlayerPreferences("musicVolume", 1f);
@@ -42,10 +43,6 @@ public class MenuScript : MonoBehaviour {
 		panels[0].SetActive(true);
 		panels[1].SetActive(false);
 		panels[2].SetActive(false);
-		
-		foreach (VolumeSlider slider in volumeSliders) {
-			slider.SetInitialValue();
-		}
 
 		if (PlayerPrefs.GetFloat("masterVolume") == -80) muteAllToggle.isOn = true;
 		savedResolution = PlayerPrefs.GetInt("savedResolution", 0);
@@ -76,11 +73,12 @@ public class MenuScript : MonoBehaviour {
 			fullscreenToggle.isOn = false;
 			isFullscreen = false;
 		}
-		mouseSlider.value = PlayerPrefs.GetFloat("mouseSensitivity", 1) * 5;
+
+		mouseSlider.value = PlayerPrefs.GetFloat("mouseSensitivity", 0.5f);
 	}
 
 	public void SetPlayerPreferences(string prefString, float defaultValue) {
-		PlayerPrefs.SetFloat(prefString, PlayerPrefs.GetFloat(prefString, defaultValue));
+		if (!PlayerPrefs.HasKey(prefString)) { PlayerPrefs.SetFloat(prefString, defaultValue); }
 	}
 
 	public void SwitchPanel(int index) {
@@ -130,7 +128,7 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void MouseSensitivity(float sliderValue) {
-		PlayerPrefs.SetFloat("mouseSensitivity", sliderValue * 0.2f);
+		PlayerPrefs.SetFloat("mouseSensitivity", sliderValue);
 	}
 
 	public void ExitGame() {

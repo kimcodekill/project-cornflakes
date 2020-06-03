@@ -10,6 +10,11 @@ public class WeaponListener : MonoBehaviour {
 		//EventSystem.Current.RegisterListener<PickUpEvent>(OnPickUp);
 		EventSystem.Current.RegisterListener<WeaponPickUpEvent>(OnWeaponPickUp);
 		EventSystem.Current.RegisterListener<AmmoPickUpEvent>(OnAmmoPickUp);
+		EventSystem.Current.RegisterListener<WeaponFiredEvent>(OnWeaponFired);
+	}
+
+	private void OnWeaponFired(Event e) {
+		PlayerController.Instance.playerAnimator.SetTrigger("Shooting");
 	}
 
 	private void OnWeaponPickUp(Event e) {
