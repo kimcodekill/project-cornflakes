@@ -67,10 +67,7 @@ public class IntroSequence : MonoBehaviour
 
     private void EndIntro()
     {
-        EventSystem.Current.FireEvent(new LevelEndEvent()
-        {
-            Description = "Intro sequence finished"
-        });
+        EventSystem.Current.FireEvent(new LevelEndEvent(-1, Time.time));
     }
 
 }
