@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Author: Viktor Dahlberg
 public class EventSystem : MonoBehaviour {
@@ -19,6 +20,7 @@ public class EventSystem : MonoBehaviour {
 
 	private void OnEnable()
 	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
 		if(Current == null) { 
 			Current = this;
 			DontDestroyOnLoad(gameObject);
@@ -46,7 +48,10 @@ public class EventSystem : MonoBehaviour {
 	/// <typeparam name="T">The type of event the listener no longer should listen to.</typeparam>
 	/// <param name="eventListener">The callback function.</param>
 	public void UnRegisterListener<T>(EventListener eventListener) {
-		System.Type type = typeof(T);
+		UnRegisterListener(typeof(T), eventListener);
+	}
+
+	private void UnRegisterListener(System.Type type, EventListener eventListener) {
 		toRemove = toRemove ?? new Dictionary<System.Type, List<EventListener>>();
 		if (!toRemove.ContainsKey(type) || toRemove[type] == null) toRemove[type] = new List<EventListener>();
 		toRemove[type].Add(eventListener);
@@ -62,7 +67,6 @@ public class EventSystem : MonoBehaviour {
 		if (eventListeners == null || !eventListeners.ContainsKey(type) || eventListeners[type] == null) return;
 		for (int i = 0; i < eventListeners[type].Count; i++) {
 			eventListeners[type][i](e);
-			//Debug.Log(e + " sent to " + eventListeners[type][i].Target + ":" + eventListeners[type][i].Method.Name);
 		}
 	}
 
@@ -71,10 +75,20 @@ public class EventSystem : MonoBehaviour {
 		foreach (KeyValuePair<System.Type, List<EventListener>> kv in toRemove) {
 			for (int i = 0; i < toRemove[kv.Key].Count; i++) {
 				eventListeners[kv.Key].Remove(toRemove[kv.Key][i]);
-				//Debug.Log("Unregistered " + toRemove[kv.Key][i].Target + ":" + toRemove[kv.Key][i].Method.Name);
 			}
 		}
 
 		toRemove = null;
 	}
+
+	private void OnSceneLoaded(Scene s, LoadSceneMode lsm) {
+		if (eventListeners == null || eventListeners.Count == 0) return;
+		foreach (KeyValuePair<System.Type, List<EventListener>> kv in eventListeners) {
+			for (int i = 0; i < kv.Value.Count; i++) {
+				EventListener el = kv.Value[i];;
+				if (el.Target.Equals(null)) UnRegisterListener(kv.Key, el);
+			}
+		}
+	}
+
 }
