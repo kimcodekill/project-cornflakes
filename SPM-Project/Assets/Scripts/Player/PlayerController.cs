@@ -11,9 +11,9 @@ public class PlayerController : MonoBehaviour, IEntity {
 	[SerializeField] [Tooltip("Audio Source component #3")] public AudioSource audioPlayerSteps;
 	[SerializeField] [Tooltip("Audio Source component #4")] private AudioSource audioPlayerIdle;
 	[SerializeField] public GameObject thrust1, thrust2, thrust3, dash1, dash2, dash3;
+	[SerializeField] [Tooltip("How long the player should be dead before game reloads")] private float deathTime = 3f;
 	public Animator playerAnimator;
 	private float animHorizontal, animVertical;
-    private bool IsDying;
 	[Header("Debug")]
 	[SerializeField] private bool godMode;
 
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 	private void FixedUpdate() {
 		if (PauseMenu.GameRunning)
 		{
-			stateMachine.Run();
+			if (!playerAnimator.GetBool("Dying")) stateMachine.Run();
 			animVertical = UnityEngine.Input.GetAxis("Vertical");
 			animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
 			playerAnimator.SetFloat("Speed", animVertical == 0f ? Mathf.Abs(animHorizontal) : animVertical);
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{
 			//K: Moved these here so it's not as choppy
 			float yRot = cam.transform.rotation.eulerAngles.y;
-			transform.rotation = Quaternion.Euler(0, yRot, 0);
+			if (!playerAnimator.GetBool("Dying")) transform.rotation = Quaternion.Euler(0, yRot, 0);
 			//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
 		}
 	}
@@ -148,33 +148,22 @@ public class PlayerController : MonoBehaviour, IEntity {
 		PlayAudioPitched(Random.Range(5, 7), 0.5f, 0.8f, 1.3f);
 		if (!godMode) PlayerCurrentHealth -= amount;
 		if (PlayerCurrentHealth <= 0)
-            if (!IsDying)
-            {
-                Die();
-            }
-			
+            if (!playerAnimator.GetBool("Dying")) Die();
 		return PlayerCurrentHealth;
 	}
 
 	private void Die() {
-
-        playerAnimator.SetTrigger("Dying");
-        Invoke("DoDie", 4);//playerAnimator.GetCurrentAnimatorClipInfo(5).Length);
-        IsDying = true;
-
+        playerAnimator.SetBool("Dying", true);
+		Invoke("DoDie", deathTime);//playerAnimator.GetCurrentAnimatorClipInfo(5).Length);
 	}
 
     private void DoDie() {
-
-        IsDying = false;
-
         //Changed so player death now fires deathevent which (currently) reloads the scene instantly /K
         EventSystem.Current.FireEvent(new PlayerDeadEvent()
         {
-
             Description = "Player fricking died, yo."
         });
-    }
+	}
 
 	public void PlayAudioMain(int clipIndex, float volume) {
 		audioSourceMain.pitch = 1;
@@ -188,6 +177,7 @@ public class PlayerController : MonoBehaviour, IEntity {
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
+		playerAnimator.SetBool("Dying", false);
 		if (PlayerSpawn.Instance != null && !CaptureKeeper.LevelHasBeenCaptured)
 		{
 			transform.position = PlayerSpawn.Instance.Position;
