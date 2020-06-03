@@ -81,28 +81,37 @@ public class PlayerController : MonoBehaviour, IEntity {
 	}
 
 	private void FixedUpdate() {
-		stateMachine.Run();
-		animVertical = UnityEngine.Input.GetAxis("Vertical");
-		animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
-		playerAnimator.SetFloat("Speed", animVertical);
-		playerAnimator.SetFloat("Direction", animHorizontal);
-		Input.doJump = false;
-		Input.doDash = false;
+		if (PauseMenu.GameRunning)
+		{
+			stateMachine.Run();
+			animVertical = UnityEngine.Input.GetAxis("Vertical");
+			animHorizontal = UnityEngine.Input.GetAxis("Horizontal");
+			playerAnimator.SetFloat("Speed", animVertical);
+			playerAnimator.SetFloat("Direction", animHorizontal);
+			Input.doJump = false;
+			Input.doDash = false;
+		}
 	}
 
 	private void Update() {
-		if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
-		if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
+		if (PauseMenu.GameRunning)
+		{
+			if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Input.doJump = true;
+			if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift)) Input.doDash = true;
 
-		DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+			DebugManager.UpdateAll("Input", "Jump: " + Input.doJump, "Dash: " + Input.doDash);
+		}
 	}
 
 	private void LateUpdate()
 	{
-		//K: Moved these here so it's not as choppy
-		float yRot = cam.transform.rotation.eulerAngles.y;
-		transform.rotation = Quaternion.Euler(0, yRot, 0);
-		//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+		if (PauseMenu.GameRunning)
+		{
+			//K: Moved these here so it's not as choppy
+			float yRot = cam.transform.rotation.eulerAngles.y;
+			transform.rotation = Quaternion.Euler(0, yRot, 0);
+			//Debug.Log("Mesh: " + transform.rotation.eulerAngles.y);
+		}
 	}
 
 	private void CreateCamera()
@@ -180,6 +189,8 @@ public class PlayerController : MonoBehaviour, IEntity {
 		{
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 			Instance = null;
+
+			if (cam != null) { Destroy(cam.gameObject); }
 		}
 	}
 }

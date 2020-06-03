@@ -67,19 +67,15 @@ public class PlayerCamera : MonoBehaviour {
 
 	private void Update()
 	{
-		stateMachine.Run();
-		AccumulateRotation();
+		if (PauseMenu.GameRunning)
+		{
+			stateMachine.Run();
+			AccumulateRotation();
 
-		RotateCamera();
-		transform.position = player.transform.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
-		Debug.DrawRay(transform.position, transform.forward * 10);
-	}
-
-	//Camera updates rotation in LateUpdate so that we don't try to change the rotation while the player is moving in a previous direction during the same frame.
-	//This can otherwise lead to wonky movement effects. /E
-	private void LateUpdate() 
-	{
-		
+			RotateCamera();
+			transform.position = player.transform.position + GetAdjustedCameraPosition(transform.rotation * cameraOffset);
+			Debug.DrawRay(transform.position, transform.forward * 10);
+		}
 	}
 
 	private Vector3 GetAdjustedCameraPosition(Vector3 relationVector) {
@@ -163,5 +159,13 @@ public class PlayerCamera : MonoBehaviour {
 	/// <param name="sensitivty">How fast the camera rotates.</param>
 	public void SetSensitivity(float sensitivty) {
 		lookSensitivity = sensitivty;
+	}
+
+	void OnDestroy()
+	{
+		if (Instance == this)
+		{
+			Instance = null;
+		}
 	}
 }
