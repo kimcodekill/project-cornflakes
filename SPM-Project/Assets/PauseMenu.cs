@@ -90,6 +90,7 @@ public class PauseMenu : MonoBehaviour
     public void SetSensitivity(float sensitivity)
     {
         PlayerPrefs.SetFloat("mouseSensitivity", sensitivity);
+        PlayerCamera.Instance.SetSensitivity(sensitivity);
     }
 
     public void SetAudioMuted(bool mute)

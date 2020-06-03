@@ -35,7 +35,7 @@ public class MenuScript : MonoBehaviour {
 		SetPlayerPreferences("musicVolume", 1f);
 		SetPlayerPreferences("sfxVolume", 1f);
 		SetPlayerPreferences("voiceVolume", 1f);
-		SetPlayerPreferences("mouseSensitivity", 0.5f);
+		SetPlayerPreferences("mouseSensitivity", 1f);
 	}
 
 	public void Start() {
