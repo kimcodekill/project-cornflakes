@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -47,6 +48,8 @@ public class PlayerHud : MonoBehaviour
 		for (int i = 0; i < gameObject.GetComponentInParent<PlayerWeapon>().GetWeapons().Count; i++) {
 			carriedWeapons[i].gameObject.SetActive(true);
 		}
+
+		SceneManager.sceneLoaded += ResetCarriedWeaponsUI;
 	}
 
 	private void Update()
@@ -76,6 +79,12 @@ public class PlayerHud : MonoBehaviour
 	private void UpdateHealthBar() {
 		healthBar.value = player.PlayerCurrentHealth;
 
+	}
+
+	public void ResetCarriedWeaponsUI(Scene s, LoadSceneMode lsm) {
+		for (int i = 0; i < carriedWeapons.Length; i++) {
+			carriedWeapons[i].gameObject.SetActive(false);
+		}
 	}
 
 	public void NewCarriedWeapon(int weapon) {
