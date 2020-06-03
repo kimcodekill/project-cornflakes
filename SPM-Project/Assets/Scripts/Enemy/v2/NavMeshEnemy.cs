@@ -72,7 +72,7 @@ public class NavMeshEnemy : EnemyBase
 		
 		while (Vector3.Angle(transform.forward, vectorToPlayer) > 5)
 		{
-			transform.forward = Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f);
+			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
 		}
 		wasHurtRecently = false;
