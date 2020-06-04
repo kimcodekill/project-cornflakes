@@ -20,28 +20,6 @@ public abstract class EffectEvent : Event
     public readonly float Scale;
 }
 
-public abstract class WeaponEffectEvent : Event
-{
-    public AudioClip AudioClip;
-    public AudioSource AudioSource;
-}
-
-//Move to playerevent
-public class WeaponFiredEvent : WeaponEffectEvent {
-    
-}
-
-//Move to playerevent
-public class WeaponReloadingEvent : WeaponEffectEvent {
-
-}
-
-//Move to playerevent
-public class WeaponSwitchedEvent : WeaponEffectEvent
-{
-    public Weapon SelectedWeapon;
-}
-
 public class BulletHitEffectEvent : EffectEvent
 {
     public BulletHitEffectEvent(GameObject hitEffect, Vector3 worldPosition, Quaternion rotation, float scale) : base(worldPosition, rotation, scale) 

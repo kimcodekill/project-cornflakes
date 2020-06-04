@@ -938,8 +938,8 @@ MonoBehaviour:
   playerHudPanel: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: 3fa9793ed1744f849b801f2a37ad8c19, type: 2}
   muteToggle: {fileID: 4128072594751207560}
-  buttonPressClip: {fileID: 8300000, guid: 96b3ceb82f80da7448ee7a32db0255fc, type: 3}
-  buttonHoverClip: {fileID: 8300000, guid: ced2a215b5655c544a28a40125b8fc20, type: 3}
+  buttonPressClip: {fileID: 8300000, guid: 9e7a35826b9119b41a1bb66453702853, type: 3}
+  buttonHoverClip: {fileID: 8300000, guid: 626304d69359b17478e84aa2e7d84de9, type: 3}
   mouseSensitivity: {fileID: 4128072595214390520}
 --- !u!82 &359018867780164990
 AudioSource:

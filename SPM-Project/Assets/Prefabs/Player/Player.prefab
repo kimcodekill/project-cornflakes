@@ -2096,13 +2096,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db4b5d507fe558a4c8b7375400d537f8, type: 2}
   playerHud: {fileID: 7841059610537404106}
   audioClips:
-  - {fileID: 8300000, guid: 3bb0b18438964b04a89eb9476d3bc2e9, type: 3}
-  - {fileID: 8300000, guid: 20469f7d234826d4b9f52314f170c9d3, type: 3}
-  - {fileID: 8300000, guid: cfa94b4bcea54e645989109227e8737b, type: 3}
+  - {fileID: 8300000, guid: d9e08f3d4c15abb428e3770b7e159462, type: 3}
+  - {fileID: 8300000, guid: 8b57d08a122e449478ee1efee17b4aca, type: 3}
+  - {fileID: 8300000, guid: 34a3c500db0d44e4097b8c45156f8106, type: 3}
   - {fileID: 8300000, guid: 0a03819481600eb449a10eaa7918d7d1, type: 3}
-  - {fileID: 8300000, guid: afd0eb324f2f427418eb2dcf70c476ec, type: 3}
-  - {fileID: 8300000, guid: d7d40717eaa4b94499ffd9cab5da9c8f, type: 3}
-  - {fileID: 8300000, guid: 9363fb4bf0129d6438e0c60b73b7b1fa, type: 3}
+  - {fileID: 8300000, guid: f7d4f8f5feb785d4b8670ec360df91cd, type: 3}
+  - {fileID: 8300000, guid: 08a07b4e558d8bb4c915e70668fa6cf4, type: 3}
+  - {fileID: 8300000, guid: ee2ab1e35b350834cb8976db54cdae20, type: 3}
   - {fileID: 8300000, guid: 51b6f54f8e40ed7459f989ff23cb0883, type: 3}
   - {fileID: 8300000, guid: 38372ccb2edfbd84b97e847d1c32a5c8, type: 3}
   audioSourceMain: {fileID: 5486548003356286568}
@@ -2371,7 +2371,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2204877625951804816, guid: 3fa9793ed1744f849b801f2a37ad8c19,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 20469f7d234826d4b9f52314f170c9d3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8b57d08a122e449478ee1efee17b4aca, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -2468,7 +2468,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2204877625951804816, guid: 3fa9793ed1744f849b801f2a37ad8c19,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 3bb0b18438964b04a89eb9476d3bc2e9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d9e08f3d4c15abb428e3770b7e159462, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.75
   m_Pitch: 1
