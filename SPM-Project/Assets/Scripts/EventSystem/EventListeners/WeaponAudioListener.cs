@@ -24,7 +24,7 @@ public class WeaponAudioListener : MonoBehaviour {
 
 		if (wfe.Loop && wfe.AudioSource.clip != wfe.AudioClip)
 		{
-			Debug.Log("Started Loop");
+			//Debug.Log("Started Loop");
 			wfe.AudioSource.clip = wfe.AudioClip;
 			wfe.AudioSource.loop = true;
 			wfe.AudioSource.Play();
@@ -50,7 +50,7 @@ public class WeaponAudioListener : MonoBehaviour {
 
 	private void PlayAlone(AudioSource source, AudioClip clip)
 	{
-		Debug.Log("Started OneShot");
+		//Debug.Log("Started OneShot");
 		source.Stop();
 		source.clip = null;
 		source.loop = false;
