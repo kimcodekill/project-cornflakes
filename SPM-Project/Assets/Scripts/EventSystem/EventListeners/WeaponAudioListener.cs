@@ -1,18 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WeaponAudioListener : MonoBehaviour {
-
 	private void Start() {
-		EventSystem.Current.RegisterListener<WeaponReloadingEvent>(PlaySound);
-		EventSystem.Current.RegisterListener<WeaponFiredEvent>(PlaySound);
-		EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(PlaySound);
+		EventSystem.Current.RegisterListener<WeaponReloadingEvent>(PlayReload);
+		EventSystem.Current.RegisterListener<WeaponFiredEvent>(PlayWeaponFire);
+		EventSystem.Current.RegisterListener<WeaponFireStoppedEvent>(PlayWeaponFireDecay);
+		EventSystem.Current.RegisterListener<WeaponSwitchedEvent>(PlayWeaponSwitch);
 	}
 
-	private void PlaySound(Event e) {
-		WeaponEffectEvent wee = e as WeaponEffectEvent;
-		wee.AudioSource.PlayOneShot(wee.AudioClip);
+	private void PlayReload(Event e)
+	{
+		WeaponReloadingEvent wre = e as WeaponReloadingEvent;
+
+		PlayAlone(wre.AudioSource, wre.AudioClip);
 	}
 
+	private void PlayWeaponFire(Event e)
+	{
+		WeaponFiredEvent wfe = e as WeaponFiredEvent;
+
+		if (wfe.Loop && wfe.AudioSource.clip != wfe.AudioClip)
+		{
+			Debug.Log("Started Loop");
+			wfe.AudioSource.clip = wfe.AudioClip;
+			wfe.AudioSource.loop = true;
+			wfe.AudioSource.Play();
+		}
+		else if (!wfe.Loop) {
+			PlayAlone(wfe.AudioSource, wfe.AudioClip);
+		}
+	}
+
+	private void PlayWeaponFireDecay(Event e)
+	{
+		WeaponFireStoppedEvent wfse = e as WeaponFireStoppedEvent;
+
+		if (wfse.AudioSource.isPlaying) { PlayAlone(wfse.AudioSource, wfse.AudioClip); }
+	}
+
+	private void PlayWeaponSwitch(Event e)
+	{
+		WeaponSwitchedEvent wse = e as WeaponSwitchedEvent;
+
+		PlayAlone(wse.AudioSource, wse.AudioClip);
+	}
+
+	private void PlayAlone(AudioSource source, AudioClip clip)
+	{
+		Debug.Log("Started OneShot");
+		source.Stop();
+		source.clip = null;
+		source.loop = false;
+		source.PlayOneShot(clip);
+	}
 }

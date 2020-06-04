@@ -19,9 +19,9 @@ MonoBehaviour:
   bulletHitMask:
     serializedVersion: 2
     m_Bits: 1792
-  muzzle: {fileID: 0}
   reloadAudio: {fileID: 8300000, guid: 8fe696357b0d00340b6c6db373a5146d, type: 3}
-  shootAudio: {fileID: 8300000, guid: d3358f0471880f149b57f7623c4b127d, type: 3}
+  shootAudio: {fileID: 8300000, guid: a9c599e86c33d7e41baca15975a13bf1, type: 3}
+  shotDecayAudio: {fileID: 0}
   switchAudio: {fileID: 8300000, guid: 38a596d7217d8954c8725ebbcf12c4ca, type: 3}
   ammoType: 3
   fullAuto: 0

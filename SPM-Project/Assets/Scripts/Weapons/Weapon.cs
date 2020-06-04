@@ -108,6 +108,8 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	/// The sound to be played when reloading.
 	/// </summary>
 	public AudioClip ReloadAudio { get => reloadAudio; }
+
+	public AudioClip ShotDecayAudio { get => shotDecayAudio; }
 	
 	public Sprite Reticle { get => reticle; }
 	public GameObject Model { get => model; }
@@ -126,6 +128,7 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 	[Header("Sounds")]
 	[SerializeField] private AudioClip reloadAudio;
 	[SerializeField] private AudioClip shootAudio;
+	[SerializeField] private AudioClip shotDecayAudio;
 	[SerializeField] private AudioClip switchAudio;
 	[Header("Base Attributes")]
 	[SerializeField] private EAmmoType ammoType;
@@ -287,19 +290,17 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 		ammoInMagazine += canTakeAmount;
 	}
 
+	//K: this is a non necessary wrapper method
 	/// <summary>
 	/// Called when the weapon state machine enters the WeaponFiringState state and is cleared to fire.
 	/// Fires an event and then lets the <c>Fire()</c> function assume control.
 	/// </summary>
-	public void DoFire() {
-		EventSystem.Current.FireEvent(new WeaponFiredEvent() {
-			Description = this + " fired a shot",
-			AudioClip = shootAudio,
-			AudioSource = PlayerWeapon.Instance.WeaponAudio
-		});
+	public void DoFire(bool loop) {
+		EventSystem.Current.FireEvent(new WeaponFiredEvent(shootAudio, PlayerWeapon.Instance.WeaponAudio, loop));
 		Fire();
 	}
 
+	//K: this is a non necessary wrapper method.
 	/// <summary>
 	/// Logic for what actually happens when a weapon is fired.
 	/// </summary>
@@ -307,14 +308,9 @@ public abstract class Weapon : ScriptableObject, IDamaging {
 		AmmoInMagazine--;
 	}
 
+	//K: this really is a stupid wrapper but whatever
 	public void SwitchTo() {
-		EventSystem.Current.FireEvent(new WeaponSwitchedEvent()
-		{
-			Description = " switched to " + this,
-			AudioClip = switchAudio,
-			AudioSource = PlayerWeapon.Instance.WeaponAudio,
-			SelectedWeapon = this
-		});
+		EventSystem.Current.FireEvent(new WeaponSwitchedEvent(switchAudio, PlayerWeapon.Instance.WeaponAudio, this));
 	}
 
 	public int GetMaxAmmo()	{
