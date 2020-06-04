@@ -4523,14 +4523,14 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 1536
-  m_UseGeometry: 1
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.54
+  m_VoxelSize: 0.35
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 1236fc4d2cd6a1c49a5049000bcc73e2, type: 2}
 --- !u!1001 &692015361
@@ -6284,14 +6284,14 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 1536
-  m_UseGeometry: 1
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.38
+  m_VoxelSize: 0.25
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: c2c152012b451ba4590a4cf86005ddf0, type: 2}
 --- !u!4 &1054500613 stripped
@@ -8358,7 +8358,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1441824034}
   m_PrefabAsset: {fileID: 0}
-  m_RootOrder: 5
 --- !u!4 &1448331385 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3699840657431536582, guid: fb130d8fb22aff140ac7fdd168ad524a,
@@ -10643,20 +10642,6 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb130d8fb22aff140ac7fdd168ad524a, type: 3}
 --- !u!4 &1846736590 stripped
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 776975098343075325, guid: 4f73e78f0edd5774fbe8ae126c23848a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 776975098343075325, guid: 4f73e78f0edd5774fbe8ae126c23848a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4f73e78f0edd5774fbe8ae126c23848a, type: 3}
 Transform:
   m_CorrespondingSourceObject: {fileID: 3699840657431536582, guid: fb130d8fb22aff140ac7fdd168ad524a,
     type: 3}
