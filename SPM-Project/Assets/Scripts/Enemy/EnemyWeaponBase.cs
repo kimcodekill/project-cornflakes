@@ -72,6 +72,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// </summary>
 	public void DoAttack() {
 		owner.PlayAudio(4, 1, 0.8f, 1.3f);
+		if (owner.enemyAnimator != null) owner.enemyAnimator.SetTrigger("FireWeapon");
 		Vector3 attackVector = owner.GetVectorFromAtoB(owner.gunTransformPosition, owner.Target.transform);
 
 		Vector3 collatedAttackVector = LeadTarget(attackVector);

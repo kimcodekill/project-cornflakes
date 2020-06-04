@@ -43,6 +43,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable
 	[SerializeField] protected EnemyWeaponBase weapon;
 	[SerializeField] private GameObject deathExplosion;
 	protected bool isInCombat;
+	public Animator enemyAnimator;
 
 	///Each enemy's STM instance.
 	private StateMachine enemyStateMachine;
@@ -297,6 +298,7 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable
 			});
 			//Debug.Log("" + this.gameObject.transform.parent.gameObject + "fired EH event");
 		}
+		if (this is Scout || this is Warrior) enemyAnimator.SetTrigger("Hit");
 		currentHealth -= amount;
 		if (currentHealth <= 0)
 		{
@@ -326,7 +328,9 @@ public class EnemyBase : MonoBehaviour, IEntity, ICapturable
 
 		EventSystem.Current.FireEvent(new EnemyDeathEvent(gameObject, maxHealth));
 
-		EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position, Quaternion.identity, 1.0f));
+		if (this is Scout) EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position + new Vector3(0, 2.5f, 0), Quaternion.identity, 1.0f));
+		else if (this is Warrior) EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position + new Vector3(0, 3f, 0), Quaternion.identity, 1.0f));
+		else EventSystem.Current.FireEvent(new ExplosionEffectEvent(deathExplosion, transform.position + new Vector3(0, 1f, 0), Quaternion.identity, 1.0f));
 		StopAllCoroutines();
 		UnRegEventListeners();
 		gameObject.transform.parent.gameObject.SetActive(false);
