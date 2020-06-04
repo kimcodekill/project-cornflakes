@@ -159,7 +159,7 @@ public class NavMeshEnemy : EnemyBase
 
 	protected Vector3 FindNearestOnMesh(Vector3 input)
 	{
-		NavMesh.SamplePosition(input, out NavMeshHit hit, agent.height, NavMesh.AllAreas);
+		NavMesh.SamplePosition(input, out NavMeshHit hit, agent.height * 2f, NavMesh.AllAreas);
 		return hit.position;
 	}
 }
