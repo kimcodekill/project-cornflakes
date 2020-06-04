@@ -178,7 +178,7 @@ MonoBehaviour:
   ObscuringLayers:
     serializedVersion: 2
     m_Bits: 1536
-  attackDamage: 2
+  attackDamage: 1.75
   attackSpread: 4
   attackSpeedRPM: 180
   audioSource: {fileID: 0}
