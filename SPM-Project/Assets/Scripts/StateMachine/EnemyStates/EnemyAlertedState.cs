@@ -15,7 +15,7 @@ public class EnemyAlertedState : EnemyBaseState
 		if (Enemy.TargetIsAttackable()) { StateMachine.TransitionTo<EnemyAttackingState>(); }
 		if (!Enemy.TargetIsInSight()) {
 			if (Enemy is Scout) StateMachine.TransitionTo<EnemySearchingState>();
-			else if (Enemy is NavMeshEnemy) StateMachine.TransitionTo<EnemyPatrollingState>();
+			else if (Enemy is Warrior) StateMachine.TransitionTo<EnemyPatrollingState>();
 			else StateMachine.TransitionTo<EnemyIdleState>();
 			
 		}

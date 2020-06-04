@@ -44,7 +44,7 @@ public class Scout : NavMeshEnemy, ILootable
 	/// Scout Alerted-behaviour.
 	/// </summary>
 	private IEnumerator Alerted() {
-		agent.destination = FindNearestOnMesh(Target.transform.position);
+		agent.destination = Target.transform.position;
 		while (!agent.pathPending && agent.remainingDistance > attackRange * 0.8f) {
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
@@ -59,13 +59,13 @@ public class Scout : NavMeshEnemy, ILootable
 	private IEnumerator Attack() {
 
 		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
-			agent.destination = FindNearestOnMesh(Target.transform.position);
+			agent.destination = Target.transform.position;
 			yield return null;
 		}
 		agent.ResetPath();
 		while (!agent.hasPath) {
 			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
-				agent.destination = FindNearestOnMesh(Target.transform.position);
+				agent.destination = Target.transform.position;
 				yield return null;
 			}
 			agent.ResetPath();
@@ -83,11 +83,11 @@ public class Scout : NavMeshEnemy, ILootable
 	private IEnumerator Search() {
 		HasFinishedSearching = false;
 		Vector3 lastKnownPosition1, lastKnownPosition2;
-		lastKnownPosition1 = FindNearestOnMesh(Target.transform.position);
+		lastKnownPosition1 = Target.transform.position;
 		yield return new WaitForSeconds(0.25f);
-		lastKnownPosition2 = FindNearestOnMesh(Target.transform.position);
+		lastKnownPosition2 = Target.transform.position;
 		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
-		agent.destination = FindNearestOnMesh(targetLocation);
+		agent.destination = targetLocation;
 		//Debug.Log("" + agent.destination);
 		while (agent.pathPending) {
 			yield return null;
