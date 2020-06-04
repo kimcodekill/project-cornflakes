@@ -83,9 +83,9 @@ public class Scout : NavMeshEnemy, ILootable
 	private IEnumerator Search() {
 		HasFinishedSearching = false;
 		Vector3 lastKnownPosition1, lastKnownPosition2;
-		lastKnownPosition1 = Target.transform.position;
+		lastKnownPosition1 = FindNearestOnMesh(Target.transform.position);
 		yield return new WaitForSeconds(0.25f);
-		lastKnownPosition2 = Target.transform.position;
+		lastKnownPosition2 = FindNearestOnMesh(Target.transform.position);
 		Vector3 targetLocation = lastKnownPosition1 + CalculateTargetVelocity(lastKnownPosition1, lastKnownPosition2).normalized;
 		agent.destination = FindNearestOnMesh(targetLocation);
 		//Debug.Log("" + agent.destination);
