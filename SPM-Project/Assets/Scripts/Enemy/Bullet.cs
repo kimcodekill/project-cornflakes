@@ -11,8 +11,7 @@ public class Bullet : MonoBehaviour {
 	[SerializeField] [Tooltip("The layers that the bullet should be able to intersect with.")] private LayerMask bulletHitLayer;
 	//[SerializeField] [Tooltip("Particle effect to play on impact.")] private GameObject hitEffect;
 	private EnemyWeaponBase owner; //The weapon that fired this bullet.
-
-	public float ProjectileSpeed { get => projectileSpeed; }
+	private GameObject player;
 
 	/// <summary>
 	/// Gives the Bullet some number of starting values through parameters.
@@ -27,19 +26,21 @@ public class Bullet : MonoBehaviour {
 	private void Start() {
 		trail = GetComponent<TrailRenderer>();
 		trail.enabled = true;
+		player = PlayerController.Instance.gameObject;
 	}
 
-	//The bullet is moved, and does collision detection, in FixedUpdate for better consistency and reduced performance overhead.
-	private void FixedUpdate() {
+	private void Update() {
 		RaycastHit hit;
-		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
-			Destroy(gameObject);
-			if (hit.collider.gameObject.GetComponent<PlayerController>()){  //This could probably be done in a better way, running GetComponent every frame not very performant.
+		if(Physics.Raycast(transform.position, travelVector, out hit, (travelVector.normalized * projectileSpeed * Time.fixedDeltaTime).magnitude, bulletHitLayer)) {
+			if (hit.collider.gameObject.Equals(player)){
 				EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), owner) );
 			}
+
 			//GameObject hitGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal)); //Play the hit effect by instantiating/destroying the particle system.
 			//Destroy(hitGO, 0.5f);
+			gameObject.SetActive(false);
 		}
-		transform.position += travelVector.normalized * ProjectileSpeed * Time.fixedDeltaTime;
+		transform.position += travelVector.normalized * projectileSpeed * Time.fixedDeltaTime;
 	}
+
 }

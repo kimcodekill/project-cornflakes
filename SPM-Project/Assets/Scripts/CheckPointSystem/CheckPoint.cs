@@ -16,9 +16,7 @@ public class CheckPoint : MonoBehaviour, ICapturable {
 		CaptureKeeper.CreateCapture(this);
 	}
 
-	public bool InstanceIsCapturable() {
-		return true;
-	}
+	public void OnLoad(bool wasEnabled) { }
 
 	public object GetPersistentCaptureID() {
 		return transform.position;

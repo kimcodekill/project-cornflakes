@@ -4,21 +4,15 @@ using UnityEngine;
 
 //Author: Erik Pilström
 public class EnemyWeaponBase : MonoBehaviour, IDamaging {
-	//This class exists on its own, instead of implementing the Weapon-base that we use for player weapons
-	//because I needed to make it different enough that it feels like inheritance wasn't quite appropriate.
+	///This class exists on its own, instead of implementing the Weapon-base that we use for player weapons
+	///because I needed to make it different enough that it feels like inheritance wasn't quite appropriate.
 
-	public Enemy owner;
+	public EnemyBase owner;
 	private float fireRate;
 	private float damagePerShot;
 	private float weaponSpread;
 	private float attackRange;
-	[SerializeField] [Tooltip("Needs to check for collision with the player, thus needs the layer for the player.")] private LayerMask playerLayer;
-	private LineRenderer shotLine;
-	[SerializeField] [Tooltip ("For how long should the LineRenderer be drawn? Only applies to Raycast attacks.")] private float lineDuration;
-	[SerializeField] [Tooltip("Which Bullet gameobject to instantiate.")] private Bullet bulletPrefab;
-	[SerializeField] [Tooltip ("Determines whether or not this weapon shot fire bullet projectiles or raycasts.")] private bool useBulletProjectile;
-	[SerializeField] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
-	//^ Needs to be moved from this class to the Enemy to keep things centralised. Pass through SetParams() instead.
+	[SerializeField] [Range (0,1)] [Tooltip ("Determines how well the enemy should lead the target when firing.")] private float targetLeadFactor;
 	private Vector3 previousTargetDir;
 
 	/// <summary>
@@ -30,7 +24,7 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// <param name="damage">Damage per round.</param>
 	/// <param name="spreadAngle">The maximum spread of the enemy's attacks.</param>
 	/// <param name="range">How far the enemy shoots.</param>
-	public void SetParams(Enemy owner, float rof, float damage, float spreadAngle, float range) {
+	public void SetParams(EnemyBase owner, float rof, float damage, float spreadAngle, float range) {
 		this.owner = owner;
 		fireRate = rof;
 		damagePerShot = damage;
@@ -39,15 +33,13 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	}
 
 	private void Start() {
-		shotLine = GetComponent<LineRenderer>();
-		shotLine.enabled = false;
 		targetLeadFactor = Mathf.Clamp(targetLeadFactor, 0f, 1f);
 	}
 
 	/// <summary>
 	/// Implements IDamaging, accessed from a number of places to read how much damage the enemy will do.
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>The damage dealt per hit.</returns>
 	public float GetDamage() {
 		return damagePerShot;
 	}
@@ -62,7 +54,6 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// </summary>
 	/// <param name="pos"></param>
 	/// <param name="pos2"></param>
-	/// <returns></returns>
 	public float GetExplosionDamage(Vector3 pos, Vector3 pos2) {
 		return 0;
 	}
@@ -80,28 +71,14 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 	/// Can be done with either bullet projectile or raycast attack, as determined by the bool.
 	/// </summary>
 	public void DoAttack() {
-		//Debug.Log(owner.gameObject + " attacked");
-		Vector3 attackVector = owner.GetVectorToTarget(owner.Target.transform, owner.gunTransform);
-		if (useBulletProjectile) {
-			Vector3 collatedAttackVector = LeadTarget(attackVector);
-			Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
-			Bullet bullet = Instantiate(bulletPrefab, owner.gunTransform.position, Quaternion.identity);
-			//^ Going to change this to pull the bullets from our objectpooler instead, far more performant, but will leave for the time being. 
-			bullet.Initialize(owner.gunTransform.position + spreadedAttack, this);
-		}
-		if (!useBulletProjectile) {
-			Vector3 spreadedAttack = RandomInCone(weaponSpread, attackVector.normalized) * attackRange;
-			shotLine.SetPosition(0, owner.gunTransform.position);
-			shotLine.SetPosition(1, owner.gunTransform.position + spreadedAttack);
-			if (Physics.Raycast(owner.gunTransform.position, spreadedAttack, out RaycastHit hit, attackRange, playerLayer)) {
-				if (hit.collider.gameObject.GetComponent<PlayerController>()) {
-					shotLine.SetPosition(1, hit.point);
-					EventSystem.Current.FireEvent(new DamageEvent(owner.Target.gameObject.GetComponent<IEntity>(), this));
-				}
-			}
 		owner.PlayAudio(4, 1, 0.8f, 1.3f);
-		StartCoroutine(RaycastShotEffect());
-		}
+		if (owner.enemyAnimator != null) owner.enemyAnimator.SetTrigger("FireWeapon");
+		Vector3 attackVector = owner.GetVectorFromAtoB(owner.gunTransformPosition, owner.Target.transform);
+
+		Vector3 collatedAttackVector = LeadTarget(attackVector);
+		Vector3 spreadedAttack = RandomInCone(weaponSpread, collatedAttackVector.normalized) * attackRange;
+		GameObject bullet = ObjectPooler.Instance.SpawnFromPool("EnemyBullet", owner.gunTransformPosition.position, Quaternion.identity);
+		bullet.GetComponent<Bullet>().Initialize(owner.gunTransformPosition.position + spreadedAttack, this);
 	}
 
 	private Vector3 LeadTarget(Vector3 attackVector) {
@@ -134,10 +111,5 @@ public class EnemyWeaponBase : MonoBehaviour, IDamaging {
 		return pointOnSphericalCap;
 	}
 
-	private IEnumerator RaycastShotEffect() {
-		shotLine.enabled = true;
-		yield return new WaitForSeconds(lineDuration);
-		shotLine.enabled = false;
-	}
 }
 

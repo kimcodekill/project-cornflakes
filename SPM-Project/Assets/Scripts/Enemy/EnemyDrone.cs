@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Author: Erik Pilström
-public class EnemyDrone : Enemy, ILootable {
+public class EnemyDrone : EnemyBase, ILootable {
 
 	[SerializeField] [Tooltip("How far from its origin should the Drone patrol.")] private float patrolBungeeDistance;
 	[SerializeField] private SphereCollider body;
@@ -22,21 +22,19 @@ public class EnemyDrone : Enemy, ILootable {
 		}
 		return randomPos;
 	}
-
+	
 	/// <summary>
-	/// Drone's Patrol-behaviour.
+	/// Drone Idle-behaviour.
 	/// </summary>
-	/// <returns></returns>
-	private IEnumerator Patrol() {
+	private IEnumerator Idle() {
 		Vector3 newPos = FindRandomPosition(Origin, patrolBungeeDistance);
 		while (Vector3.Distance(transform.position, newPos) > 0.05f) {
 			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (newPos - transform.position), Time.deltaTime * 3f, 0f));
-			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * movementSpeed);
+			transform.position = Vector3.MoveTowards(transform.position, newPos, Time.deltaTime * 3/*movementSpeed*/);
 			yield return null;
 		}
-
 		yield return null;
-		StartCoroutine("Patrol");
+		StartCoroutine("Idle");
 	}
 
 	/// <summary>
@@ -54,21 +52,21 @@ public class EnemyDrone : Enemy, ILootable {
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Alerted() {
-		transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorToPlayer, Time.deltaTime * 5f, 0f));
+		
 		if ((Vector3.Distance(transform.position, Target.transform.position) > attackRange)) {
-			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * movementSpeed);
+			transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Time.deltaTime * 3/*movementSpeed*/);
 		}
 		yield return null;
 		StartCoroutine("Alerted");
 	}
 
 	//Behaviour transitions.
-	public override void StartPatrolBehaviour() {
-		StartCoroutine("Patrol");
+	public override void StartIdleBehaviour() {
+		StartCoroutine("Idle");
 	}
 
-	public override void StopPatrolBehaviour() {
-		StopCoroutine("Patrol");
+	public override void StopIdleBehaviour() {
+		StopCoroutine("Idle");
 	}
 
 	public override void StartAttackBehaviour() {
@@ -92,7 +90,7 @@ public class EnemyDrone : Enemy, ILootable {
 			["Pickups/Ammo/RocketsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Rockets) ? 0.2f : 0f,
 			["Pickups/Ammo/ShellsPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Shells) ? 0.2f : 0f,
 			["Pickups/Ammo/SpecialPickup"] = PlayerWeapon.Instance.HasWeaponOfAmmoType(Weapon.EAmmoType.Special) ? 0.2f : 0f,
-			[LootTable.Nothing] = 0.8f,
+			[LootTable.Nothing] = 0.75f,
 		};
 	}
 }
