@@ -51,7 +51,7 @@ public class NavMeshEnemy : EnemyBase
 	{
 		if (waypoints.Length == 0)
 			return;
-		agent.destination = waypoints[currentWaypoint].position;
+		agent.destination = FindNearestOnMesh(waypoints[currentWaypoint].position);
 		currentWaypoint = (currentWaypoint + 1) % waypoints.Length;
 	}
 
@@ -155,5 +155,11 @@ public class NavMeshEnemy : EnemyBase
 	{
 		EventSystem.Current.UnRegisterListener<EnemyAlertEvent>(ReactToNearbyAlerted);
 		EventSystem.Current.UnRegisterListener<EnemyHurt>(WasHurt);
+	}
+
+	protected Vector3 FindNearestOnMesh(Vector3 input)
+	{
+		NavMesh.SamplePosition(input, out NavMeshHit hit, agent.height, NavMesh.AllAreas);
+		return hit.position;
 	}
 }

@@ -45,7 +45,7 @@ public class Warrior : NavMeshEnemy, ILootable
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator Alerted() {
-		agent.destination = Target.transform.position;
+		agent.destination = FindNearestOnMesh(Target.transform.position);
 		while (!agent.pathPending && agent.remainingDistance > attackRange * 0.8f) {
 			transform.forward = Vector3.RotateTowards(transform.forward, new Vector3(vectorToPlayer.x, 0, vectorToPlayer.z), Time.deltaTime * 5f, 0f);
 			yield return null;
@@ -61,13 +61,13 @@ public class Warrior : NavMeshEnemy, ILootable
 	private IEnumerator Attack() {
 
 		while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
-			agent.destination = Target.transform.position;
+			agent.destination = FindNearestOnMesh(Target.transform.position);
 			yield return null;
 		}
 		agent.ResetPath();
 		while (!agent.hasPath) {
 			while (Vector3.Distance(transform.position, Target.transform.position) > attackRange * 0.75f) {
-				agent.destination = Target.transform.position;
+				agent.destination = FindNearestOnMesh(Target.transform.position);
 				yield return null;
 			}
 			agent.ResetPath();
