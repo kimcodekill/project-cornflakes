@@ -11,6 +11,7 @@ public class EffectListener : MonoBehaviour
     {
         EventSystem.Current.RegisterListener<BulletHitEffectEvent>(OnBulletHit);
         EventSystem.Current.RegisterListener<ExplosionEffectEvent>(OnExplosion);
+        EventSystem.Current.RegisterListener<BulletHitDataEffectEvent>(OnBulletHitData);
     }
 
     private void OnBulletHit(Event e)
@@ -21,7 +22,21 @@ public class EffectListener : MonoBehaviour
         //Instantiate(bhee.HitEffect, bhee.WorldPosition, Quaternion.identity).transform.forward = bhee.Forward;
     }
 
-    
+    private void OnBulletHitData(Event e)
+    {
+        BulletHitDataEffectEvent bhdee = e as BulletHitDataEffectEvent;
+        RaycastHit hit = bhdee.HitData;
+
+        GameObject g = ObjectPooler.Instance.SpawnFromPool("BulletHoleDecal", hit.point, Quaternion.identity);
+        g.transform.forward = -hit.normal;
+        //print("pre: " + DebugStatic.StringifyV3(g.transform.localScale));
+
+        g.transform.parent = hit.transform;
+
+        //g.transform.localScale = s;
+        //print("post: " + DebugStatic.StringifyV3(g.transform.localScale));
+    }
+
     private void OnExplosion(Event e)
     {
         ExplosionEffectEvent eee = e as ExplosionEffectEvent;

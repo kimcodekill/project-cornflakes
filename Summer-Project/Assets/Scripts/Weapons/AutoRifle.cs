@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 //Author: Viktor Dahlberg
 /// <summary>
@@ -42,9 +43,21 @@ public class AutoRifle : Weapon {
 
 			if (hit.collider != null)
 			{
-				EventSystem.Current.FireEvent(new DamageEvent(hit.collider.GetComponent<IEntity>(), this));
+				IEntity entity = hit.collider.GetComponent<IEntity>();
 
-				EventSystem.Current.FireEvent(new BulletHitEffectEvent(HitDecal, hit.point, -hit.normal));
+				
+
+				if (entity != null)
+                {
+					EventSystem.Current.FireEvent(new DamageEvent(entity, this));
+				}
+				else
+				{
+					//EventSystem.Current.FireEvent(new BulletHitEffectEvent(HitDecal, hit.point, -hit.normal));
+				}
+
+				EventSystem.Current.FireEvent(new BulletHitDataEffectEvent(HitDecal, hit.point, -hit.normal, hit));
+
 
 				RenderBullet(this, hit.point);
 			}

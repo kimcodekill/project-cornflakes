@@ -29,6 +29,18 @@ public class BulletHitEffectEvent : EffectEvent
 
 }
 
+public class BulletHitDataEffectEvent : EffectEvent
+{
+    public BulletHitDataEffectEvent(GameObject hitEffect, Vector3 worldPosition, Vector3 forward, RaycastHit hitData) : base(worldPosition, forward)
+    {
+        HitEffect = hitEffect;
+        HitData = hitData;
+    }
+
+    public readonly GameObject HitEffect;
+    public readonly RaycastHit HitData;
+}
+
 public class ExplosionEffectEvent : EffectEvent
 {
     public ExplosionEffectEvent(GameObject explosionEffect, Vector3 worldPosition, Vector3 forward, float scale) : base(worldPosition, forward) 
